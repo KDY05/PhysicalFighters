@@ -43,9 +43,9 @@ public class Fittingroom extends AbilityBase {
         Player p = Event.getPlayer();
         World w = p.getWorld();
         for (int i = 0; i < (Bukkit.getOnlinePlayers()).size(); i++) {
-            if ((t[i].getGameMode() != GameMode.CREATIVE) && (t[i] != p) && (t[i].getItemInHand().getType() != Material.AIR)) {
-                w.dropItem(t[i].getLocation(), t[i].getItemInHand());
-                t[i].getInventory().remove(t[i].getItemInHand());
+            if ((t[i].getGameMode() != GameMode.CREATIVE) && (t[i] != p) && (t[i].getInventory().getItemInMainHand().getType() != Material.AIR)) {
+                w.dropItem(t[i].getLocation(), t[i].getInventory().getItemInMainHand());
+                t[i].getInventory().remove(t[i].getInventory().getItemInMainHand());
             }
         }
         Bukkit.broadcastMessage(org.bukkit.ChatColor.AQUA + p.getName() +

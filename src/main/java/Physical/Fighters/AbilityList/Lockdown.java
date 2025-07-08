@@ -26,7 +26,7 @@ public class Lockdown extends AbilityBase implements CommandInterface {
                 "자신과 60칸 이내 거리에 있어야 사용할수 있으며 게임 시작후",
                 "능력 제한 시간동안은 이 능력을 사용할 수 없습니다.");
         InitAbility(80, 60, true);
-        cm.RegisterCommand(this);
+        commandManager.RegisterCommand(this);
     }
 
     @Override

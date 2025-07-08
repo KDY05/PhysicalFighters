@@ -1,21 +1,15 @@
 package Physical.Fighters.AbilityList;
 
 import Physical.Fighters.MainModule.AbilityBase;
-import Physical.Fighters.MainModule.AbilityBase.Rank;
-import Physical.Fighters.MainModule.AbilityBase.Type;
-import Physical.Fighters.MainModule.CommandManager;
 import Physical.Fighters.MainModule.EventManager;
 import Physical.Fighters.MajorModule.AbilityList;
 import Physical.Fighters.MinerModule.CommandInterface;
 import Physical.Fighters.MinerModule.EventData;
 import Physical.Fighters.PhysicalFighters;
 
-import java.util.ArrayList;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -36,7 +30,7 @@ public class Assimilation
             InitAbility(0, 0, true);
             EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
             EventManager.onEntityDeath.add(new EventData(this, 1));
-            cm.RegisterCommand(this);
+            commandManager.RegisterCommand(this);
         }
     }
 

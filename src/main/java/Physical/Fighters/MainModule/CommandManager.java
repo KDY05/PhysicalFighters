@@ -17,9 +17,9 @@ import javax.annotation.Nonnull;
 public class CommandManager implements CommandExecutor {
     private final LinkedList<CommandInterface> CommandEventHandler = new LinkedList<>();
 
-    public CommandManager(PhysicalFighters va) {
-        Objects.requireNonNull(va.getCommand("va")).setExecutor(this);
-        Objects.requireNonNull(va.getCommand("showmethemoney")).setExecutor(this);
+    public CommandManager(PhysicalFighters plugin) {
+        Objects.requireNonNull(plugin.getCommand("va")).setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("showmethemoney")).setExecutor(this);
     }
 
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] data) {

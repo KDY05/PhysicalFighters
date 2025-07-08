@@ -1,8 +1,10 @@
 package Physical.Fighters;
 
+import Physical.Fighters.MainModule.AbilityBase;
 import Physical.Fighters.MainModule.CommandManager;
 import Physical.Fighters.MainModule.EventManager;
 import Physical.Fighters.MajorModule.AbilityList;
+import Physical.Fighters.MinerModule.ACC;
 import Physical.Fighters.Script.MainScripter;
 
 import java.util.Timer;
@@ -15,7 +17,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 
 public class PhysicalFighters extends JavaPlugin {
-    public static int BuildNumber = 170802;
+    public static int BuildNumber = 20250708;
+
     public static boolean Invincibility = false;
     public static boolean DefaultArmed = true;
     public static boolean SRankUsed = true;
@@ -53,17 +56,52 @@ public class PhysicalFighters extends JavaPlugin {
     public static boolean change = false;
     public static Logger log = Logger.getLogger("Minecraft");
     public static Timer TracerTimer;
-    public CommandManager cm;
+    public CommandManager commandManager;
     public MainScripter scripter;
     public AbilityList A_List;
 
     public void onEnable() {
-        Physical.Fighters.MinerModule.ACC.DefaultItem =
-                Material.IRON_INGOT;
+        ACC.DefaultItem = Material.IRON_INGOT;
+
         log.info(String.format("(!)빌드정보 " + BuildNumber));
         log.info("(!)Edit By 염료");
-        this.cm = new CommandManager(this);
+
+        this.commandManager = new CommandManager(this);
         getServer().getPluginManager().registerEvents(new EventManager(), this);
+
+        loadConfigs();
+
+        log.info("(!)능력을 초기화합니다.");
+        AbilityBase.InitAbilityBase(this, this.commandManager);
+        this.A_List = new AbilityList();
+
+        log.info("(!)스크립터를 초기화합니다.");
+        this.scripter = new MainScripter(this, this.commandManager);
+        if ((Invincibility) && (EarlyInvincibleTime <= 0)) {
+            log.info("(!)초반무적이 1분으로 설정됩니다. [E.시간이 0분 이하입니다]");
+            EarlyInvincibleTime = 1;
+        }
+        if (RestrictionTime < 0) {
+            log.info("(!)제약 시간 값은 0보다 커야합니다. 0으로 설정됩니다.");
+            RestrictionTime = 0;
+        }
+        log.info(String.format("(!)능력 %d개가 등록되있습니다.", AbilityList.AbilityList.size() - 1));
+        if (Kimiedition) {
+            log.info("(!)극한모드 적용");
+        }
+        if (Specialability) {
+            log.info("(!)안좋은 능력을 제거합니다.");
+        }
+        if (Gods) {
+            log.info("(!)'신' 등급 활성화!");
+        }
+        if (AutoSave) {
+            for (World w : Bukkit.getServer().getWorlds())
+                w.setAutoSave(true);
+        }
+    }
+
+    private void loadConfigs() {
         log.info("(!)기본설정 로드중입니다.");
         getConfig().options().copyDefaults(true);
         saveConfig();
@@ -99,37 +137,11 @@ public class PhysicalFighters extends JavaPlugin {
         AllowND = getConfig().getBoolean("자연사허용");
         LOL = getConfig().getBoolean("팀전");
         change = getConfig().getBoolean("10분마다능력변경");
-        log.info("(!)능력을 초기화합니다.");
-        Physical.Fighters.MainModule.AbilityBase.InitAbilityBase(this, this.cm);
-        this.A_List = new AbilityList();
-        log.info("(!)스크립터를 초기화합니다.");
-        this.scripter = new MainScripter(this, this.cm);
-        if ((Invincibility) && (EarlyInvincibleTime <= 0)) {
-            log.info("(!)초반무적이 1분으로 설정됩니다. [E.시간이 0분 이하입니다]");
-            EarlyInvincibleTime = 1;
-        }
-        if (RestrictionTime < 0) {
-            log.info("(!)제약 시간 값은 0보다 커야합니다. 0으로 설정됩니다.");
-            RestrictionTime = 0;
-        }
-        log.info(String.format("(!)능력 %d개가 등록되있습니다.", AbilityList.AbilityList.size() - 1));
-        if (Kimiedition) {
-            log.info("(!)극한모드 적용");
-        }
-        if (Specialability) {
-            log.info("(!)안좋은 능력을 제거합니다.");
-        }
-        if (Gods) {
-            log.info("(!)'신' 등급 활성화!");
-        }
-        if (AutoSave) {
-            for (World w : Bukkit.getServer().getWorlds())
-                w.setAutoSave(true);
-        }
     }
 
     public void onDisable() {
-        TracerTimer.cancel();
+        if (TracerTimer != null)
+            TracerTimer.cancel();
         log.info("(!)플러그인을 종료합니다.");
     }
 

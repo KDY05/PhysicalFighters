@@ -31,16 +31,16 @@ public class Nasus extends AbilityBase {
             if ((e.getDamager() instanceof Player)) {
                 Player p = (Player) e.getDamager();
                 if ((PlayerCheck(p)) &&
-                        (p.getItemInHand().getType() == Material.WOODEN_HOE)) {
+                        (p.getInventory().getItemInMainHand().getType() == Material.WOODEN_HOE)) {
                     int dmg = this.stack / 10;
                     e.setDamage(dmg);
-                    p.getItemInHand().setDurability((short) 0);
+                    p.getInventory().getItemInMainHand().setDurability((short) 0);
                 }
             }
         }
         if (CustomData == 1) {
             PlayerInteractEvent e = (PlayerInteractEvent) event;
-            if ((e.getPlayer().getItemInHand().getType() == Material.WOODEN_HOE) &&
+            if ((e.getPlayer().getInventory().getItemInMainHand().getType() == Material.WOODEN_HOE) &&
                     (PlayerCheck(e.getPlayer())) &&
                     (e.getAction() == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK) && (
                     (e.getClickedBlock().getType() == Material.SHORT_GRASS) || (e.getClickedBlock().getType() == Material.DIRT))) {

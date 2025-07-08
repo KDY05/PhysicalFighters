@@ -49,7 +49,7 @@ public class Multishot extends AbilityBase {
             case 0:
                 ProjectileLaunchEvent Event0 = (ProjectileLaunchEvent) event;
                 if (((Event0.getEntity().getShooter() instanceof Player)) &&
-                        ((Event0.getEntity() instanceof Arrow)) && (((Player) Event0.getEntity().getShooter()).getItemInHand().getType() == Material.BOW)) {
+                        ((Event0.getEntity() instanceof Arrow)) && (((Player) Event0.getEntity().getShooter()).getInventory().getItemInMainHand().getType() == Material.BOW)) {
                     Arrow a = (Arrow) Event0.getEntity();
                     if (PlayerCheck((Player) a.getShooter())) {
                         return 0;

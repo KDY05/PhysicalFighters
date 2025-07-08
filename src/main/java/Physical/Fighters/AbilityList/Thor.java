@@ -48,7 +48,7 @@ public class Thor extends AbilityBase {
         if (CustomData == 1) {
             PlayerInteractEvent Event = (PlayerInteractEvent) event;
             if ((PlayerCheck(Event.getPlayer())) && (ItemCheck(m().getType())) && (!EventManager.DamageGuard)) {
-                Event.getPlayer().getItemInHand().setDurability((short) 0);
+                Event.getPlayer().getInventory().getItemInMainHand().setDurability((short) 0);
                 return 0;
             }
         }
@@ -57,9 +57,9 @@ public class Thor extends AbilityBase {
             if ((PlayerCheck(e.getDamager())) && ((e.getEntity() instanceof LivingEntity))) {
                 Player p = (Player) e.getDamager();
                 LivingEntity t = (LivingEntity) e.getEntity();
-                if ((p.getItemInHand().getType() == m().getType()) &&
-                        (p.getItemInHand().hasItemMeta()) &&
-                        (p.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.YELLOW + "묠니르"))) {
+                if ((p.getInventory().getItemInMainHand().getType() == m().getType()) &&
+                        (p.getInventory().getItemInMainHand().hasItemMeta()) &&
+                        (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.YELLOW + "묠니르"))) {
                     e.setDamage(8);
                     if (this.Attack > 0) {
                         t.damage(3 * this.Attack);
@@ -67,7 +67,7 @@ public class Thor extends AbilityBase {
                         p.sendMessage(ChatColor.YELLOW + "묠니르에 농축된 번개의 데미지를 추가로 입혔습니다.");
                         this.Attack = 0;
                     }
-                    p.getItemInHand().setDurability((short) 0);
+                    p.getInventory().getItemInMainHand().setDurability((short) 0);
                 }
             }
         }

@@ -47,7 +47,7 @@ public class Infighter
         EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
         Player p = (Player) e.getDamager();
         Player t = (Player) e.getEntity();
-        if (p.getItemInHand().getType() == Material.AIR) {
+        if (p.getInventory().getItemInMainHand().getType() == Material.AIR) {
             Random r = new Random();
             int dmg = 5 + r.nextInt(12);
             e.setDamage(dmg);

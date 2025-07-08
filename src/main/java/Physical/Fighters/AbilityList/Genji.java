@@ -64,7 +64,7 @@ public class Genji
         if (CustomData == 4) {
             PlayerInteractEvent e = (PlayerInteractEvent) event;
             if ((PlayerCheck(e.getPlayer())) &&
-                    (isSword(e.getPlayer().getItemInHand())) && (this.po)) {
+                    (isSword(e.getPlayer().getInventory().getItemInMainHand())) && (this.po)) {
                 BlockIterator bi = new BlockIterator(e.getPlayer(), 6);
                 while (bi.hasNext()) {
                     Block bb = bi.next();

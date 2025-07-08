@@ -48,7 +48,7 @@ public class Paladin
         if (CustomData == 0) {
             PlayerInteractEvent e = (PlayerInteractEvent) event;
             if ((PlayerCheck(e.getPlayer())) &&
-                    (isSword(e.getPlayer().getItemInHand()))) {
+                    (isSword(e.getPlayer().getInventory().getItemInMainHand()))) {
                 BlockIterator bi = new BlockIterator(e.getPlayer(), 6);
                 Random r = new Random();
                 int i = r.nextInt(10) + 10;

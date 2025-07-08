@@ -22,10 +22,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-@SuppressWarnings("unused")
 public abstract class AbilityBase {
-    protected static CommandManager cm;
-    protected static PhysicalFighters va;
+
+    protected static PhysicalFighters plugin;
+    protected static CommandManager commandManager;
     public static int AbilityCount = 0;
     public static final RestrictionTimer restrictionTimer = new RestrictionTimer();
     private Rank rank;
@@ -39,6 +39,11 @@ public abstract class AbilityBase {
     private DurationTimer DTimer;
     private boolean RunAbility = true;
     private ShowText showtext = ShowText.All_Text;
+
+    public static void InitAbilityBase(PhysicalFighters plugin, CommandManager commandManager) {
+        AbilityBase.plugin = plugin;
+        AbilityBase.commandManager = commandManager;
+    }
 
     public abstract int A_Condition(Event paramEvent, int paramInt);
 
@@ -170,8 +175,8 @@ public abstract class AbilityBase {
         return e instanceof Player && PlayerCheck((Player) e);
     }
 
-    public final boolean ItemCheck(Material itemID) {
-        return GetPlayer().getItemInHand().getType() == itemID;
+    public final boolean ItemCheck(Material material) {
+        return GetPlayer().getInventory().getItemInMainHand().getType() == material;
     }
 
     public final void AbilityExcute(Event event) {
@@ -189,19 +194,17 @@ public abstract class AbilityBase {
                         (this.type == Type.Active_Immediately)) {
                     if (this.DTimer.GetTimerRunning()) {
                         GetPlayer().sendMessage(
-                                String.format(ChatColor.WHITE + "%d초" +
-                                                ChatColor.GREEN +
-                                                " 후 지속시간이 끝납니다.",
-                                        this.DTimer.GetCount()));
+                            String.format(ChatColor.WHITE + "%d초"
+                                + ChatColor.GREEN + " 후 지속시간이 끝납니다.",
+                                    this.DTimer.GetCount()));
                         return true;
                     }
                     if (this.CTimer.GetTimerRunning()) {
                         if (GetShowText() != ShowText.No_CoolDownText) {
                             GetPlayer().sendMessage(
-                                    String.format(ChatColor.WHITE + "%d초" +
-                                                    ChatColor.RED +
-                                                    " 후 능력을 다시 사용하실 수 있습니다.",
-                                            this.CTimer.GetCount()));
+                                String.format(ChatColor.WHITE + "%d초" +
+                                    ChatColor.RED + " 후 능력을 다시 사용하실 수 있습니다.",
+                                    this.CTimer.GetCount()));
                         }
                         return true;
                     }
@@ -325,17 +328,13 @@ public abstract class AbilityBase {
         return null;
     }
 
-    public static void InitAbilityBase(PhysicalFighters va, CommandManager cm) {
-        AbilityBase.va = va;
-        AbilityBase.cm = cm;
-    }
-
     public enum Rank {
-        SSS(ChatColor.GOLD + "Special Rank"), SS(ChatColor.GRAY + "SS Rank"), S(
-                ChatColor.RED + "S Rank"), A(ChatColor.GREEN + "A Rank"), B(
-                ChatColor.BLUE + "B Rank"), C(ChatColor.YELLOW + "C Rank"), F(
-                ChatColor.BLACK + "F Rank"), FF(ChatColor.BLACK + "개가 싸놓은 똥"), GOD(
-                ChatColor.WHITE + "신");
+        SSS(ChatColor.GOLD + "Special Rank"), SS(ChatColor.GRAY + "SS Rank"),
+        S(ChatColor.RED + "S Rank"), A(ChatColor.GREEN + "A Rank"),
+        B(ChatColor.BLUE + "B Rank"), C(ChatColor.YELLOW + "C Rank"),
+        F(ChatColor.BLACK + "F Rank"), FF(ChatColor.BLACK + "개가 싸놓은 똥"),
+        GOD(ChatColor.WHITE + "신");
+
         private final String s;
 
         Rank(String s) {
@@ -347,8 +346,10 @@ public abstract class AbilityBase {
         }
     }
 
-    public final boolean isSword(ItemStack is) {
-        return (is.getType() == Material.WOODEN_SWORD) || (is.getType() == Material.STONE_SWORD) || (is.getType() == Material.GOLDEN_SWORD) || (is.getType() == Material.IRON_SWORD) || (is.getType() == Material.DIAMOND_SWORD);
+    public final boolean isSword(ItemStack item) {
+        return (item.getType() == Material.WOODEN_SWORD) || (item.getType() == Material.STONE_SWORD)
+                || (item.getType() == Material.GOLDEN_SWORD) || (item.getType() == Material.IRON_SWORD)
+                || (item.getType() == Material.DIAMOND_SWORD);
     }
 
     public void ExplosionDMG(Player p, int distance, int dmg) {

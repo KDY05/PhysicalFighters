@@ -64,8 +64,6 @@ public class Phoenix extends AbilityBase {
                 Player killed = Event0.getEntity();
                 EventManager.invsave.put(killed, killed.getInventory()
                         .getContents());
-                EventManager.arsave.put(killed, killed.getInventory()
-                        .getArmorContents());
                 Event0.getDrops().clear();
                 if (this.AbilityUse) {
                     Bukkit.broadcastMessage(ChatColor.RED +
@@ -89,15 +87,10 @@ public class Phoenix extends AbilityBase {
                 break;
             case 1:
                 PlayerRespawnEvent Event1 = (PlayerRespawnEvent) event;
-                ItemStack[] ar = (ItemStack[]) EventManager.arsave.get(Event1.getPlayer());
                 ItemStack[] inv = (ItemStack[]) EventManager.invsave.get(Event1.getPlayer());
-                if (ar != null) {
-                    Event1.getPlayer().getInventory().setArmorContents(ar);
-                }
                 if (inv != null) {
                     Event1.getPlayer().getInventory().setContents(inv);
                 }
-                EventManager.arsave.remove(Event1.getPlayer());
                 EventManager.invsave.remove(Event1.getPlayer());
                 if (!this.AbilityUse) {
                     Bukkit.broadcastMessage(ChatColor.GREEN +

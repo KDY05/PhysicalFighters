@@ -37,9 +37,9 @@ public class Zombie extends Physical.Fighters.MainModule.AbilityBase {
         } else if (CustomData == 1) {
             EntityDamageByEntityEvent Event1 = (EntityDamageByEntityEvent) event;
             if ((PlayerCheck(Event1.getEntity())) &&
-                    (((HumanEntity) Event1.getDamager()).getItemInHand()
+                    (((HumanEntity) Event1.getDamager()).getInventory().getItemInMainHand()
                             .getType() != Physical.Fighters.MinerModule.ACC.DefaultItem)) {
-                if (((HumanEntity) Event1.getDamager()).getItemInHand()
+                if (((HumanEntity) Event1.getDamager()).getInventory().getItemInMainHand()
                         .getType().getId() != Material.GOLD_INGOT.getId()) {
                     return 2;
                 }
