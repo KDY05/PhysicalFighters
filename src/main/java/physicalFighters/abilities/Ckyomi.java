@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -10,7 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Ckyomi extends AbilityBase {
+public class Ckyomi extends Ability {
     public Ckyomi() {
         InitAbility("츠쿠요미", Type.Passive_AutoMatic, Rank.A, new String[]{
                 "상대를 공격하면 상대에게 5초간 혼란효과와 디버프를 줍니다."});

@@ -1,7 +1,7 @@
 package physicalFighters.abilities;
 
 import physicalFighters.PhysicalFighters;
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 
 import org.bukkit.Bukkit;
@@ -11,9 +11,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import physicalFighters.utils.ACC;
 
-public class Fittingroom extends AbilityBase {
+public class Fittingroom extends Ability {
     public Fittingroom() {
         if (!PhysicalFighters.Toner) {
             InitAbility(
@@ -30,7 +29,7 @@ public class Fittingroom extends AbilityBase {
         if (!EventManager.DamageGuard) {
             PlayerInteractEvent Event = (PlayerInteractEvent) event;
             if ((isOwner(Event.getPlayer())) &&
-                    (isValidItem(ACC.DefaultItem)))
+                    (isValidItem(Ability.DefaultItem)))
                 return 0;
         }
         return -1;

@@ -1,15 +1,15 @@
 package physicalFighters.utils;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+import physicalFighters.PhysicalFighters;
 
 public abstract class TimerBase {
-    private Timer timer;
-    private boolean Running = false;
-    private boolean ReverseTimer = false;
-    private int Count = 0;
-    private int MaxCount = 0;
-    private boolean Infinity = false;
+    private BukkitTask task;
+    private boolean running = false;
+    private boolean reverse = false;
+    private int count = 0;
+    private int maxCount = 0;
 
     public abstract void EventStartTimer();
 
@@ -20,80 +20,58 @@ public abstract class TimerBase {
     public void FinalEventEndTimer() {
     }
 
-    public final void SetTimerData(int MaxCount, boolean Reverse) {
-        this.MaxCount = MaxCount;
-        this.ReverseTimer = Reverse;
+    public final int getCount() {
+        return count;
     }
 
-    public final int GetCount() {
-        return Count;
+    public final void setCount(int c) {
+        count = c;
     }
 
-    public final void SetCount(int c) {
-        Count = c;
+    public final boolean isRunning() {
+        return running;
     }
 
-    public final boolean GetTimerRunning() {
-        return Running;
-    }
-
-    public final void StartTimer() {
-        StartTimer(MaxCount, ReverseTimer);
-    }
-
-    public final void StartTimer(int MaxCount) {
-        StartTimer(MaxCount, false);
-    }
-
-    public final void StartTimer(int MaxCount, boolean Reverse) {
-        StartTimer(MaxCount, Reverse, 1000);
-    }
-
-    public final void StartTimer(int MaxCount, boolean Reverse, int period) {
-        timer = new Timer();
-        timer.schedule(new CustomTimerTask(), 0, period);
-        Running = true;
-        SetTimerData(MaxCount, Reverse);
-        Count = 0;
-        if (Reverse)
-            Count = MaxCount;
-        if (MaxCount == -1)
-            Infinity = true;
+    public final void startTimer(int maxCount, boolean reverse) {
+        running = true;
+        this.maxCount = maxCount;
+        this.reverse = reverse;
+        count = reverse ? maxCount : 0;
+        
+        task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                EventRunningTimer(count);
+                if (TimerBase.this.reverse) {
+                    if (count <= 0) {
+                        endTimer();
+                        return;
+                    }
+                    --count;
+                } else {
+                    if (count >= TimerBase.this.maxCount) {
+                        endTimer();
+                        return;
+                    }
+                    ++count;
+                }
+            }
+        }.runTaskTimer(PhysicalFighters.getPlugin(), 0L, 20L);
+        
         EventStartTimer();
     }
 
-    public final void EndTimer() {
-        StopTimer();
+    public final void endTimer() {
+        stopTimer();
         EventEndTimer();
     }
 
-    public final void StopTimer() {
-        if (timer != null)
-            timer.cancel();
-        Count = 0;
-        Running = false;
+    public final void stopTimer() {
+        if (task != null)
+            task.cancel();
+        count = 0;
+        running = false;
         FinalEventEndTimer();
     }
 
-    private final class CustomTimerTask extends TimerTask {
-        @Override
-        public void run() {
-            EventRunningTimer(Count);
-            if (!Infinity) {
-                if (ReverseTimer) {
-                    if (Count <= 0) {
-                        EndTimer();
-                        return;
-                    }
-                    --Count;
-                } else {
-                    if (Count >= MaxCount) {
-                        EndTimer();
-                        return;
-                    }
-                    ++Count;
-                }
-            }
-        }
-    }
 }

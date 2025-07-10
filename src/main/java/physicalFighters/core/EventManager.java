@@ -1,6 +1,6 @@
 package physicalFighters.core;
 
-import physicalFighters.core.AbilityBase.Type;
+import physicalFighters.core.Ability.Type;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 import physicalFighters.scripts.MainScripter;
@@ -30,8 +30,8 @@ import org.bukkit.inventory.meta.Damageable;
 
 public class EventManager implements Listener {
 
-    public static ArrayList<AbilityBase> LeftHandEvent = new ArrayList<>();
-    public static ArrayList<AbilityBase> RightHandEvent = new ArrayList<>();
+    public static ArrayList<Ability> LeftHandEvent = new ArrayList<>();
+    public static ArrayList<Ability> RightHandEvent = new ArrayList<>();
     public static HashMap<Player, ItemStack[]> invsave = new HashMap<>();
     public static boolean DamageGuard = false;
 
@@ -71,8 +71,7 @@ public class EventManager implements Listener {
     public static void onFoodLevelChange(FoodLevelChangeEvent event) {
         if (PhysicalFighters.NoFoodMode) {
             // 배고픔 무한
-            event.setFoodLevel(20);
-            event.setCancelled(true);
+            event.setFoodLevel(19);
             return;
         }
         AbilityExcuter(onFoodLevelChange, event);
@@ -122,7 +121,7 @@ public class EventManager implements Listener {
                 }
                 
                 // 데스 메시지
-                PhysicalFighters.log.info(pde.getDeathMessage());
+                PhysicalFighters.getPlugin().getLogger().info(pde.getDeathMessage());
                 if (killer != null) {
                     // 타살인 경우
                     if (PhysicalFighters.KillerOutput) {
@@ -157,7 +156,6 @@ public class EventManager implements Listener {
                 handItem.setItemMeta(damageable);
             }
         }
-
         // 능력서 사용
         if (handItem.getType() == Material.ENCHANTED_BOOK) {
             if (handItem.hasItemMeta() && Objects.requireNonNull(
@@ -181,19 +179,19 @@ public class EventManager implements Listener {
     public static void usebook(Player p, int abicode) {
         if (p == null || abicode < 0 || abicode >= AbilityList.AbilityList.size())
             return;
-        AbilityBase ability = AbilityList.AbilityList.get(abicode);
+        Ability ability = AbilityList.AbilityList.get(abicode);
         if (PhysicalFighters.AbilityOverLap) {
-            if (ability.getAbilityType() == AbilityBase.Type.Active_Continue ||
-                ability.getAbilityType() == AbilityBase.Type.Active_Immediately) {
-                for (AbilityBase ab : AbilityList.AbilityList) {
-                    if (ab.isOwner(p) && (ab.getAbilityType() == AbilityBase.Type.Active_Continue ||
-                                            ab.getAbilityType() == AbilityBase.Type.Active_Immediately)) {
+            if (ability.getAbilityType() == Ability.Type.Active_Continue ||
+                ability.getAbilityType() == Ability.Type.Active_Immediately) {
+                for (Ability ab : AbilityList.AbilityList) {
+                    if (ab.isOwner(p) && (ab.getAbilityType() == Ability.Type.Active_Continue ||
+                                            ab.getAbilityType() == Ability.Type.Active_Immediately)) {
                         ab.setPlayer(null, true);
                     }
                 }
             }
         } else {
-            for (AbilityBase ab : AbilityList.AbilityList) {
+            for (Ability ab : AbilityList.AbilityList) {
                 if (ab.isOwner(p)) {
                     ab.setPlayer(null, true);
                 }

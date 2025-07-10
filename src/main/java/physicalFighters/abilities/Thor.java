@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class Thor extends AbilityBase {
+public class Thor extends Ability {
     int Attack = 0;
 
     public Thor() {

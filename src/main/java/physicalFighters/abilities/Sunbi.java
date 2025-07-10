@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Sunbi
-        extends AbilityBase {
+        extends Ability {
     public Sunbi() {
         InitAbility("나그네", Type.Active_Immediately, Rank.S, new String[]{
                 "쉬프트를 누르고 앉으면 지나가던 나그네가 엣헴! 하며 주위의 사람들이 나그네에게 체력을 바칩니다. ",

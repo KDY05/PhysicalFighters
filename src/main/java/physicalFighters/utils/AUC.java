@@ -1,61 +1,70 @@
 package physicalFighters.utils;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.AbilityList;
 import physicalFighters.PhysicalFighters;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public final class AUC {
-    public static void InfoTextOut(Player p) {
-        AbilityBase a;
+
+    public static void showInfoText(Player p) {
+        Ability ability;
         if (AbilityList.assimilation.getPlayer() == p) {
-            a = AbilityList.assimilation;
+            ability = AbilityList.assimilation;
         } else {
-            a = AbilityBase.FindAbility(p);
+            ability = Ability.FindAbility(p);
         }
-        if (a != null) {
-            p.sendMessage(ChatColor.GREEN + "---------------");
-            p.sendMessage(ChatColor.GOLD + "- 능력 정보 -");
-            p.sendMessage(ChatColor.DARK_AQUA + "참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.");
-            if (PhysicalFighters.ReverseMode) {
-                p.sendMessage(ChatColor.AQUA + a.getAbilityName() + ChatColor.WHITE + " [" + a.getRank().getText() + ChatColor.WHITE + "] ");
-            } else
-                p.sendMessage(ChatColor.AQUA + a.getAbilityName() + ChatColor.WHITE + " [" + TypeTextOut(a) + "] " + a.getRank().getText());
-            for (int l = 0; l < a.getGuide().length; l++) {
-                p.sendMessage(a.getGuide()[l]);
-            }
-            if (!PhysicalFighters.ReverseMode)
-                p.sendMessage(TimerTextOut(a));
-            p.sendMessage(ChatColor.GREEN + "---------------");
+        if (ability == null) {
+            p.sendMessage(ChatColor.RED + "능력이 없거나 옵저버입니다.");
             return;
         }
-        p.sendMessage(ChatColor.RED + "능력이 없거나 옵저버입니다.");
+        p.sendMessage(ChatColor.GREEN + "---------------");
+        p.sendMessage(ChatColor.GOLD + "- 능력 정보 -");
+        p.sendMessage(ChatColor.DARK_AQUA + "참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.");
+        if (PhysicalFighters.ReverseMode) {
+            p.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
+                    + " [" + ability.getRank().getText() + ChatColor.WHITE + "] ");
+        } else {
+            p.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
+                    + " [" + showTypeText(ability) + "] " + ability.getRank().getText());
+        }
+        for (int l = 0; l < ability.getGuide().length; l++) {
+            p.sendMessage(ability.getGuide()[l]);
+        }
+        if (!PhysicalFighters.ReverseMode)
+            p.sendMessage(showTimerText(ability));
+        p.sendMessage(ChatColor.GREEN + "---------------");
     }
 
-    public static String TypeTextOut(AbilityBase ab) {
-        AbilityBase.Type type = ab.getAbilityType();
-        if (!ab.getRunAbility()) return ChatColor.RED + "능력 비활성화됨" + ChatColor.WHITE;
-        if (type == AbilityBase.Type.Active_Continue)
+    public static String showTypeText(Ability ability) {
+        Ability.Type type = ability.getAbilityType();
+        if (!ability.getRunAbility()) return ChatColor.RED + "능력 비활성화됨" + ChatColor.WHITE;
+        if (type == Ability.Type.Active_Continue)
             return ChatColor.GREEN + "액티브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "지속" + ChatColor.WHITE;
-        if (type == AbilityBase.Type.Active_Immediately)
+        if (type == Ability.Type.Active_Immediately)
             return ChatColor.GREEN + "액티브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "즉발" + ChatColor.WHITE;
-        if (type == AbilityBase.Type.Passive_AutoMatic)
+        if (type == Ability.Type.Passive_AutoMatic)
             return ChatColor.GREEN + "패시브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "자동" + ChatColor.WHITE;
-        if (type == AbilityBase.Type.Passive_Manual)
+        if (type == Ability.Type.Passive_Manual)
             return ChatColor.GREEN + "패시브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "수동" + ChatColor.WHITE;
         return "Unknown";
     }
 
-    public static String TimerTextOut(AbilityBase data) {
-        if (data.getAbilityType() == AbilityBase.Type.Active_Continue)
-            return String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / " + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "%d초", data.getCoolDown(), data.getDuration());
-        if (data.getAbilityType() == AbilityBase.Type.Active_Immediately)
-            return String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / " + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음", data.getCoolDown());
-        if (data.getAbilityType() == AbilityBase.Type.Passive_AutoMatic)
-            return ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "없음 / " + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음";
-        if (data.getAbilityType() == AbilityBase.Type.Passive_Manual)
-            return ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "없음 / " + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음";
+    public static String showTimerText(Ability ability) {
+        if (ability.getAbilityType() == Ability.Type.Active_Continue)
+            return String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / "
+                    + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "%d초", ability.getCoolDown(), ability.getDuration());
+        if (ability.getAbilityType() == Ability.Type.Active_Immediately)
+            return String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / "
+                    + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음", ability.getCoolDown());
+        if (ability.getAbilityType() == Ability.Type.Passive_AutoMatic)
+            return ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "없음 / "
+                    + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음";
+        if (ability.getAbilityType() == Ability.Type.Passive_Manual)
+            return ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "없음 / "
+                    + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음";
         return "None";
     }
+
 }

@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 
@@ -11,7 +10,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Aegis extends AbilityBase {
+public class Aegis extends Ability {
     public Aegis() {
         InitAbility("이지스", Type.Active_Continue, Rank.A,
                 "능력 사용시 일정시간동안 무적이 됩니다. 무적은 대부분의",
@@ -25,7 +24,7 @@ public class Aegis extends AbilityBase {
     public int A_Condition(Event event, int CustomData) {
         if (!PhysicalFighters.ReverseMode) {
             PlayerInteractEvent Event = (PlayerInteractEvent) event;
-            if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard)
+            if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard)
                 return 0;
         } else {
             EntityDamageEvent Event = (EntityDamageEvent) event;

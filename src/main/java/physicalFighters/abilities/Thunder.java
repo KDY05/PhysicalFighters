@@ -1,15 +1,14 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Thunder
-        extends AbilityBase {
+        extends Ability {
     public static boolean ppon = false;
 
     public Thunder() {
@@ -23,7 +22,7 @@ public class Thunder
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent e = (PlayerInteractEvent) event;
-            if ((isOwner(e.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+            if ((isOwner(e.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
                 return 0;
             }
         }

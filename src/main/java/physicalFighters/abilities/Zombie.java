@@ -7,11 +7,10 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import physicalFighters.core.AbilityBase;
-import physicalFighters.utils.ACC;
+import physicalFighters.core.Ability;
 import physicalFighters.utils.EventData;
 
-public class Zombie extends AbilityBase {
+public class Zombie extends Ability {
     public Zombie() {
         InitAbility("좀비", Type.Passive_AutoMatic,
                 Rank.B, new String[]{"모든 데미지의 반을 흡수합니다.",
@@ -41,7 +40,7 @@ public class Zombie extends AbilityBase {
             EntityDamageByEntityEvent Event1 = (EntityDamageByEntityEvent) event;
             if ((isOwner(Event1.getEntity())) &&
                     (((HumanEntity) Event1.getDamager()).getInventory().getItemInMainHand()
-                            .getType() != ACC.DefaultItem)) {
+                            .getType() != Ability.DefaultItem)) {
                 if (((HumanEntity) Event1.getDamager()).getInventory().getItemInMainHand()
                         .getType().getId() != Material.GOLD_INGOT.getId()) {
                     return 2;

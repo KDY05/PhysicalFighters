@@ -1,6 +1,5 @@
 package physicalFighters.scripts;
 
-import physicalFighters.core.AbilityBase;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.TimerBase;
 import physicalFighters.PhysicalFighters;
@@ -15,16 +14,16 @@ public class S_GameProgress {
 
     public S_GameProgress(MainScripter ms) {
         this.ms = ms;
-        this.EarlyInvincibleTime = (PhysicalFighters.EarlyInvincibleTime * 60);
+        this.EarlyInvincibleTime = PhysicalFighters.EarlyInvincibleTime * 60;
     }
 
     public void GameProgress() {
-        this.stimer.StartTimer(99999999);
+        this.stimer.startTimer(99999999, false);
     }
 
     public void GameProgressStop() {
         this.gcon = false;
-        this.stimer.StopTimer();
+        this.stimer.stopTimer();
     }
 
     public final class S_ScriptTimer extends TimerBase {
@@ -84,7 +83,6 @@ public class S_GameProgress {
                 Bukkit.broadcastMessage(ChatColor.GREEN +
                         "초반 무적이 해제되었습니다. 이제 데미지를 입습니다.");
                 EventManager.DamageGuard = false;
-                AbilityBase.restrictionTimer.StartTimer();
             }
         }
 

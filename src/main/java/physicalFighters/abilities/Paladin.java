@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.BlockIterator;
 
 public class Paladin
-        extends AbilityBase {
+        extends Ability {
     boolean candmg = true;
 
     public Paladin() {

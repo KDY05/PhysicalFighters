@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.Vector;
 import physicalFighters.PhysicalFighters;
 import org.bukkit.ChatColor;
@@ -14,7 +13,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Guard
-        extends AbilityBase {
+        extends Ability {
     public Guard() {
         if (!PhysicalFighters.Toner) {
             InitAbility("목둔", Type.Active_Immediately, Rank.A, new String[]{
@@ -34,7 +33,7 @@ public class Guard
         Vector targetvec = new Vector(loc.getX(), loc.getY(), loc.getZ());
         if ((!EventManager.DamageGuard) &&
                 (isOwner(Event.getPlayer())) &&
-                (isValidItem(ACC.DefaultItem)) &&
+                (isValidItem(Ability.DefaultItem)) &&
                 (Event.getPlayer().getTargetBlock(null, 0).getType() != Material.BEDROCK)) {
             if ((playervec.distance(targetvec) <= 40.0D) && (b.getY() != 0)) {
                 return 0;

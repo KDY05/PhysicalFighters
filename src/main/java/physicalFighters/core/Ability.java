@@ -1,9 +1,5 @@
 package physicalFighters.core;
 
-import physicalFighters.timers.CoolDownTimer;
-import physicalFighters.timers.DurationTimer;
-import physicalFighters.timers.RestrictionTimer;
-import physicalFighters.utils.ACC;
 import physicalFighters.PhysicalFighters;
 
 import java.util.Arrays;
@@ -19,11 +15,13 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import physicalFighters.utils.TimerBase;
 
-public abstract class AbilityBase {
+public abstract class Ability {
 
     protected static PhysicalFighters plugin;
     protected static CommandManager commandManager;
+    protected static Material DefaultItem = Material.IRON_INGOT;
 
     public static int AbilityCount = 0;
     public static final RestrictionTimer restrictionTimer = new RestrictionTimer();
@@ -51,8 +49,7 @@ public abstract class AbilityBase {
         SSS(ChatColor.GOLD + "Special Rank"), SS(ChatColor.GRAY + "SS Rank"),
         S(ChatColor.RED + "S Rank"), A(ChatColor.GREEN + "A Rank"),
         B(ChatColor.BLUE + "B Rank"), C(ChatColor.YELLOW + "C Rank"),
-        F(ChatColor.BLACK + "F Rank"), FF(ChatColor.BLACK + "개가 싸놓은 똥"),
-        GOD(ChatColor.WHITE + "신");
+        F(ChatColor.BLACK + "F Rank"), GOD(ChatColor.WHITE + "신");
 
         private final String s;
 
@@ -66,8 +63,8 @@ public abstract class AbilityBase {
     }
 
     public static void InitAbilityBase(PhysicalFighters plugin, CommandManager commandManager) {
-        AbilityBase.plugin = plugin;
-        AbilityBase.commandManager = commandManager;
+        Ability.plugin = plugin;
+        Ability.commandManager = commandManager;
     }
 
     protected final void InitAbility(String AbilityName, Type type, Rank rank, String... Manual) {
@@ -130,8 +127,8 @@ public abstract class AbilityBase {
     }
 
     public final void setPlayer(Player p, boolean textout) {
-        this.DTimer.StopTimer();
-        this.CTimer.StopTimer();
+        this.DTimer.stopTimer();
+        this.CTimer.stopTimer();
         if (this.player != null) {
             if (textout) {
                 this.player.sendMessage(String.format(ChatColor.RED + "%s" +
@@ -168,8 +165,8 @@ public abstract class AbilityBase {
         return getPlayer().getInventory().getItemInMainHand().getType() == material;
     }
 
-    public static AbilityBase FindAbility(Player p) {
-        for (AbilityBase a : AbilityList.AbilityList)
+    public static Ability FindAbility(Player p) {
+        for (Ability a : AbilityList.AbilityList)
             if (a.isOwner(p))
                 return a;
         return null;
@@ -178,19 +175,19 @@ public abstract class AbilityBase {
     // Timer Managing
 
     public final void cancelDTimer() {
-        this.DTimer.StopTimer();
+        this.DTimer.stopTimer();
     }
 
     public final void cancelCTimer() {
-        this.CTimer.StopTimer();
+        this.CTimer.stopTimer();
     }
 
     public void setCool(int i) {
-        this.CTimer.SetCount(i);
+        this.CTimer.setCount(i);
     }
 
     public int getCool() {
-        return this.CTimer.GetCount();
+        return this.CTimer.getCount();
     }
 
     // Getter, Setter
@@ -234,7 +231,7 @@ public abstract class AbilityBase {
     }
 
     public final boolean getDurationState() {
-        return this.DTimer.GetTimerRunning();
+        return this.DTimer.isRunning();
     }
 
     public final void setRunAbility(boolean RunAbility) {
@@ -258,31 +255,31 @@ public abstract class AbilityBase {
             if (cd != -1) {
                 if ((this.type == Type.Active_Continue) ||
                         (this.type == Type.Active_Immediately)) {
-                    if (this.DTimer.GetTimerRunning()) {
+                    if (this.DTimer.isRunning()) {
                         getPlayer().sendMessage(
                             String.format(ChatColor.WHITE + "%d초"
                                 + ChatColor.GREEN + " 후 지속시간이 끝납니다.",
-                                    this.DTimer.GetCount()));
+                                    this.DTimer.getCount()));
                         return true;
                     }
-                    if (this.CTimer.GetTimerRunning()) {
+                    if (this.CTimer.isRunning()) {
                         if (getShowText() != ShowText.No_CoolDownText) {
                             getPlayer().sendMessage(
                                 String.format(ChatColor.WHITE + "%d초" +
                                     ChatColor.RED + " 후 능력을 다시 사용하실 수 있습니다.",
-                                    this.CTimer.GetCount()));
+                                    this.CTimer.getCount()));
                         }
                         return true;
                     }
                     if (getShowText() != ShowText.Custom_Text)
-                        getPlayer().sendMessage(ACC.DefaultAbilityUsed);
+                        getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "능력을 사용했습니다.");
                 }
                 if (this.type == Type.Active_Immediately) {
                     A_Effect(event, cd);
                     if (getCoolDown() != 0)
-                        this.CTimer.StartTimer(getCoolDown(), true);
+                        this.CTimer.startTimer(getCoolDown(), true);
                 } else if (this.type == Type.Active_Continue) {
-                    this.DTimer.StartTimer(getDuration(), true);
+                    this.DTimer.startTimer(getDuration(), true);
                 } else {
                     A_Effect(event, cd);
                 }
@@ -306,7 +303,7 @@ public abstract class AbilityBase {
     }
 
     public final boolean AbilityDuratinEffect(Event event, int CustomData) {
-        if ((this.player != null) && (this.DTimer.GetTimerRunning())) {
+        if ((this.player != null) && (this.DTimer.isRunning())) {
             A_Effect(event, CustomData);
             return true;
         }
@@ -354,4 +351,75 @@ public abstract class AbilityBase {
                 t.damage(dmg);
         }
     }
+
+    public static final class CoolDownTimer extends TimerBase {
+        private final Ability ab;
+
+        public CoolDownTimer(Ability ab) {
+            this.ab = ab;
+        }
+
+        public void EventStartTimer() {
+            this.ab.A_CoolDownStart();
+        }
+
+        public void EventRunningTimer(int count) {
+            if (((count <= 3) && (count >= 1) && (this.ab.getShowText() == ShowText.All_Text))
+                    || (this.ab.getShowText() == ShowText.No_DurationText)) {
+                this.ab.getPlayer().sendMessage(String.format(ChatColor.RED + "%d초 뒤" + ChatColor.WHITE + " 능력사용이 가능합니다.", count));
+            }
+        }
+
+        public void EventEndTimer() {
+            this.ab.A_CoolDownEnd();
+            if (this.ab.getShowText() != ShowText.Custom_Text) {
+                this.ab.getPlayer().sendMessage(ChatColor.AQUA + "다시 능력을 사용할 수 있습니다.");
+            }
+        }
+    }
+
+    public static final class DurationTimer extends TimerBase {
+        private final Ability ab;
+        private final CoolDownTimer ctimer;
+
+        public DurationTimer(Ability ab, CoolDownTimer ctimer) {
+            this.ab = ab;
+            this.ctimer = ctimer;
+        }
+
+        public void EventStartTimer() {
+            this.ab.A_DurationStart();
+        }
+
+        public void EventRunningTimer(int count) {
+            if (((count <= 3) && (count >= 1) && (this.ab.getShowText() == ShowText.All_Text))
+                    || (this.ab.getShowText() == ShowText.No_CoolDownText)) {
+                this.ab.getPlayer().sendMessage(String.format(ChatColor.GREEN + "지속 시간" + ChatColor.WHITE + " %d초 전", count));
+            }
+        }
+
+        public void EventEndTimer() {
+            this.ab.A_DurationEnd();
+            if (this.ab.getShowText() != ShowText.Custom_Text)
+                this.ab.getPlayer().sendMessage(ChatColor.GREEN + "능력 지속시간이 끝났습니다.");
+            this.ctimer.startTimer(this.ab.getCoolDown(), true);
+        }
+
+        public void FinalEventEndTimer() {
+            this.ab.A_FinalDurationEnd();
+        }
+    }
+
+    public static final class RestrictionTimer extends TimerBase {
+        public void EventStartTimer() {
+        }
+
+        public void EventRunningTimer(int count) {
+        }
+
+        public void EventEndTimer() {
+            Bukkit.broadcastMessage(ChatColor.GREEN + "일부 능력의 제약이 해제되었습니다.");
+        }
+    }
+
 }

@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 
@@ -20,7 +19,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Akainu
-        extends AbilityBase {
+        extends Ability {
     public static Block[][][] B = new Block[5][5][3];
     public static Material[][][] M = new Material[5][5][3];
 
@@ -40,7 +39,7 @@ public class Akainu
             PlayerInteractEvent Event = (PlayerInteractEvent) event;
             if ((!EventManager.DamageGuard) &&
                     (isOwner(Event.getPlayer())) &&
-                    (isValidItem(ACC.DefaultItem)) &&
+                    (isValidItem(Ability.DefaultItem)) &&
                     (Event.getPlayer().getTargetBlock(null, 0).getType() != Material.BEDROCK)) {
                 return 0;
             }

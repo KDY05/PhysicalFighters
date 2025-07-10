@@ -1,13 +1,9 @@
 name: PhysicalFighters
 main: physicalFighters.PhysicalFighters
-version: '1.0.0'
+version: ${version}
 api-version: '1.21'
 commands:
   va:
     description: This is a demo command.
-    permission:
-    usage: /<command>
   showmethemoney:
     description: This is a demo command.
-    permission:
-    usage: /<command>

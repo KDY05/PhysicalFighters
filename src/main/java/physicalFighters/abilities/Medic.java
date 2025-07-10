@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import org.bukkit.ChatColor;
@@ -12,7 +11,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Medic extends AbilityBase {
+public class Medic extends Ability {
     public Medic() {
         InitAbility("메딕", Type.Active_Immediately, Rank.B, new String[]{
                 "철괴 왼클릭시 맞은 사람의 체력이 6 회복됩니다.", "철괴 오른클릭시 자신의 체력을 6 회복합니다.",
@@ -28,14 +27,14 @@ public class Medic extends AbilityBase {
                 EntityDamageByEntityEvent Event1 = (EntityDamageByEntityEvent) event;
                 if (((Event1.getEntity() instanceof Player)) &&
                         (isOwner(Event1.getDamager())) &&
-                        (isValidItem(ACC.DefaultItem))) {
+                        (isValidItem(Ability.DefaultItem))) {
                     return 0;
                 }
                 break;
             case 1:
                 PlayerInteractEvent Event2 = (PlayerInteractEvent) event;
                 if ((isOwner(Event2.getPlayer())) &&
-                        (isValidItem(ACC.DefaultItem))) {
+                        (isValidItem(Ability.DefaultItem))) {
                     return 1;
                 }
                 break;

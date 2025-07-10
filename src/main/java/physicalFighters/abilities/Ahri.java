@@ -1,7 +1,7 @@
 package physicalFighters.abilities;
 
 import physicalFighters.PhysicalFighters;
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -23,7 +23,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class Ahri extends AbilityBase {
+public class Ahri extends Ability {
     public Ahri() {
         if (PhysicalFighters.SRankUsed) {
             InitAbility("아리", Type.Active_Immediately, Rank.SS,

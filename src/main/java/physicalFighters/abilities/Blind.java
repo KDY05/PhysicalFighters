@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
@@ -11,7 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Blind extends AbilityBase {
+public class Blind extends Ability {
     public Blind() {
         if (!PhysicalFighters.Specialability) {
             InitAbility("블라인드", Type.Passive_AutoMatic, Rank.C, new String[]{

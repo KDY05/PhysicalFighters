@@ -1,7 +1,7 @@
 package physicalFighters.abilities;
 
 import physicalFighters.PhysicalFighters;
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class Tranceball extends AbilityBase {
+public class Tranceball extends Ability {
     public Tranceball() {
         if (PhysicalFighters.SRankUsed) {
             InitAbility("트랜스볼", Type.Passive_Manual, Rank.SS, new String[]{

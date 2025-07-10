@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 
@@ -21,7 +20,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Devil
-        extends AbilityBase {
+        extends Ability {
     public Devil() {
         if (PhysicalFighters.Gods) {
             InitAbility("악마", Type.Active_Immediately, Rank.GOD, new String[]{
@@ -38,7 +37,7 @@ public class Devil
         if (CustomData == 0) {
             EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
             if ((!EventManager.DamageGuard) &&
-                    (isOwner(Event.getDamager())) && ((Event.getEntity() instanceof Player)) && (isValidItem(ACC.DefaultItem))) {
+                    (isOwner(Event.getDamager())) && ((Event.getEntity() instanceof Player)) && (isValidItem(Ability.DefaultItem))) {
                 return 0;
             }
         } else if (CustomData == 3) {

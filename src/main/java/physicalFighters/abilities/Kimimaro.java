@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -19,7 +19,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Kimimaro extends AbilityBase {
+public class Kimimaro extends Ability {
     public Kimimaro() {
         InitAbility("키미마로", Type.Passive_Manual, Rank.SS, new String[]{
                 "뼈다귀로 상대를 공격할시에 강한 데미지를 주고,",

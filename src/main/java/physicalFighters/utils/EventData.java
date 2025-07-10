@@ -1,16 +1,16 @@
 package physicalFighters.utils;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 
 public class EventData {
-    public AbilityBase ab;
+    public Ability ab;
     public int parameter;
 
-    public EventData(AbilityBase ab) {
+    public EventData(Ability ab) {
         this(ab, 0);
     }
 
-    public EventData(AbilityBase ab, int parameter) {
+    public EventData(Ability ab, int parameter) {
         this.ab = ab;
         this.parameter = parameter;
     }

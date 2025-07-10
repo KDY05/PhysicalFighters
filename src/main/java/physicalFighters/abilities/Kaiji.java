@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class Kaiji extends AbilityBase {
+public class Kaiji extends Ability {
     public Kaiji() {
         if (!PhysicalFighters.Toner) {
             InitAbility("카이지", Type.Passive_Manual, Rank.S, new String[]{

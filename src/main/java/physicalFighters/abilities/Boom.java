@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -14,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Boom extends AbilityBase {
+public class Boom extends Ability {
     public Boom() {
         InitAbility("붐포인트", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴 왼쪽클릭시 20초간 자신의 주변에 있는적을을 폭발시킵니다."});
@@ -25,7 +24,7 @@ public class Boom extends AbilityBase {
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         if ((!EventManager.DamageGuard) &&
-                (isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem))) {
+                (isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
             return 0;
         }
         return -1;

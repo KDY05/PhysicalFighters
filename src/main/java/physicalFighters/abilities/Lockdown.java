@@ -8,13 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import physicalFighters.PhysicalFighters;
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.utils.CommandInterface;
 import physicalFighters.utils.Vector;
 
 
-public class Lockdown extends AbilityBase implements CommandInterface {
-    private AbilityBase victim;
+public class Lockdown extends Ability implements CommandInterface {
+    private Ability victim;
     private CommandSender sender;
     private String[] data;
 
@@ -32,7 +32,7 @@ public class Lockdown extends AbilityBase implements CommandInterface {
     @Override
     public int A_Condition(Event event, int CustomData) {
         if (sender instanceof Player p && isOwner(p)) {
-            if (!AbilityBase.restrictionTimer.GetTimerRunning()) {
+            if (!Ability.restrictionTimer.isRunning()) {
                 if (Bukkit.getServer().getPlayerExact(data[1]) != null) {
                     Player pn = Bukkit.getServer().getPlayerExact(data[1]);
                     if (pn != null && p.getName().equals(pn.getName())) {
@@ -40,7 +40,7 @@ public class Lockdown extends AbilityBase implements CommandInterface {
                         data = null;
                         return -1;
                     }
-                    victim = AbilityBase.FindAbility(pn);
+                    victim = Ability.FindAbility(pn);
                     if (victim != null) {
                         Vector vec = new Vector(p.getLocation());
                         if (pn != null && vec.distance(pn.getLocation()) <= 60) {

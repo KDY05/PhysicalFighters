@@ -2,12 +2,11 @@ package physicalFighters.core;
 
 import java.util.ArrayList;
 
-import Physical.Fighters.abilities.*;
 import physicalFighters.abilities.*;
 
 @SuppressWarnings("unused")
 public class AbilityList {
-    public static final ArrayList<AbilityBase> AbilityList = new ArrayList<>();
+    public static final ArrayList<Ability> AbilityList = new ArrayList<>();
     public static final Feather feather = new Feather();
     public static final Blaze blaze = new Blaze();
     public static final Shadow shadow = new Shadow();

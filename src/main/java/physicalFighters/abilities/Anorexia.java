@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
@@ -10,7 +10,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
-public class Anorexia extends AbilityBase {
+public class Anorexia extends Ability {
     public Anorexia() {
         if (!PhysicalFighters.Specialability) {
             InitAbility("거식증", Type.Passive_AutoMatic, Rank.A, new String[]{

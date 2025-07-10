@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.core.AbilityList;
 import physicalFighters.utils.EventData;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-public class Mirroring extends AbilityBase {
+public class Mirroring extends Ability {
     public Mirroring() {
         if ((!PhysicalFighters.Toner) &&
                 (!PhysicalFighters.Specialability)) {

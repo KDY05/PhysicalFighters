@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 
 import org.bukkit.Location;
@@ -9,10 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
-public class Fireball extends AbilityBase {
+public class Fireball extends Ability {
     public Fireball() {
         InitAbility("파이어볼", Type.Active_Immediately, Rank.B, new String[]{
                 "바라보는 방향에 약한 화염구를 날립니다."});
@@ -25,7 +24,7 @@ public class Fireball extends AbilityBase {
         switch (CustomData) {
             case 0:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
-                if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard)
+                if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard)
                     return 0;
                 break;
             case 1:

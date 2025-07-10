@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -25,7 +25,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-public class Multishot extends AbilityBase {
+public class Multishot extends Ability {
     public Multishot() {
         InitAbility("멀티샷", Type.Active_Immediately, Rank.A,
                 "죽거나 게임 시작시 화살 한묶음이 고정적으로 주어집니다.",

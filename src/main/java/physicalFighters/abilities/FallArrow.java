@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class FallArrow extends AbilityBase {
+public class FallArrow extends Ability {
     public FallArrow() {
         if (PhysicalFighters.SRankUsed) {
             InitAbility("중력화살", Type.Passive_Manual, Rank.S, new String[]{

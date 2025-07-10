@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.Vector;
 
 import java.util.Timer;
@@ -17,7 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Pagi extends AbilityBase {
+public class Pagi extends Ability {
     public Pagi() {
         InitAbility("패기", Type.Active_Immediately, Rank.SS, new String[]{
                 "능력 사용시 20초간 10칸 안에 있는 적에게 5초마다 강한데미지를 줍니다."});
@@ -28,7 +27,7 @@ public class Pagi extends AbilityBase {
     public int A_Condition(Event event, int CustomData) {
         if (!EventManager.DamageGuard) {
             PlayerInteractEvent Event = (PlayerInteractEvent) event;
-            if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)))
+            if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)))
                 return 0;
         }
         return -1;

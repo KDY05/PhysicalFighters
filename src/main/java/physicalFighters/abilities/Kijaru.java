@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import java.util.Timer;
@@ -17,7 +16,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-public class Kijaru extends AbilityBase {
+public class Kijaru extends Ability {
     public Kijaru() {
         InitAbility("키자루", Type.Active_Immediately, Rank.SS,
                 "철괴로 타격을 당한 상대를 빛의 속도로 타격합니다.",
@@ -38,7 +37,7 @@ public class Kijaru extends AbilityBase {
             }
         } else {
             EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-            if ((isOwner(Event.getDamager())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard)
+            if ((isOwner(Event.getDamager())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard)
                 return 0;
         }
         return -1;

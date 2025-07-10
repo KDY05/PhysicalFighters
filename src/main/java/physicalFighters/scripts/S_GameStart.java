@@ -1,6 +1,6 @@
 package physicalFighters.scripts;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.AbilityList;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.TimerBase;
@@ -12,19 +12,21 @@ import org.bukkit.inventory.ItemStack;
 public final class S_GameStart {
     private final MainScripter ms;
     private final S_ScriptTimer stimer = new S_ScriptTimer();
+    private final PhysicalFighters plugin;
     public static int PlayDistanceBuffer = 0;
 
-    public S_GameStart(MainScripter ms) {
+    public S_GameStart(MainScripter ms, PhysicalFighters plugin) {
         this.ms = ms;
+        this.plugin = plugin;
     }
 
     public void GameStart() {
-        this.stimer.StartTimer(15);
+        this.stimer.startTimer(15, false);
     }
 
     public void GameStartStop() {
-        this.stimer.StopTimer();
-        AbilityBase.restrictionTimer.StopTimer();
+        this.stimer.stopTimer();
+        Ability.restrictionTimer.stopTimer();
     }
 
     private void RespawnTeleport() {
@@ -106,7 +108,7 @@ public final class S_GameStart {
         public void EventRunningTimer(int count) {
             switch (count) {
                 case 0:
-                    S_GameStart.this.ms.s_GameWarnning.GameWarnningStop();
+                    S_GameStart.this.ms.s_GameWarning.GameWarnningStop();
                     break;
                 case 3:
                     Bukkit.broadcastMessage(ChatColor.WHITE +
@@ -133,28 +135,26 @@ public final class S_GameStart {
                 case 15:
                     Bukkit.broadcastMessage(ChatColor.GREEN + "게임이 시작되었습니다. ");
                     int c = 0;
-                    PhysicalFighters.log.info("플레이어들의 능력");
-                    for (AbilityBase a : AbilityList.AbilityList) {
+                    plugin.getLogger().info("플레이어들의 능력");
+                    for (Ability a : AbilityList.AbilityList) {
                         if (a.getPlayer() != null) {
-                            PhysicalFighters.log.info(String.format("%d. %s - %s",
+                            plugin.getLogger().info(String.format("%d. %s - %s",
                                     c, a.getPlayer().getName(), a.getAbilityName()));
                             c++;
                         }
                     }
-                    PhysicalFighters.log.info("-------------------------");
+                    plugin.getLogger().info("-------------------------");
                     if (PhysicalFighters.Invincibility) {
-                        Bukkit.broadcastMessage("시작 직후 " +
-                                PhysicalFighters.EarlyInvincibleTime +
-                                "분간은 무적입니다.");
+                        Bukkit.broadcastMessage("시작 직후 " + PhysicalFighters.EarlyInvincibleTime
+                                + "분간은 무적입니다.");
                         EventManager.DamageGuard = true;
                     } else {
                         Bukkit.broadcastMessage(ChatColor.RED + "초반 무적은 작동하지 않습니다.");
                     }
                     if (PhysicalFighters.RestrictionTime != 0) {
-                        AbilityBase.restrictionTimer.StartTimer(PhysicalFighters.RestrictionTime * 60);
+                        Ability.restrictionTimer.startTimer(PhysicalFighters.RestrictionTime * 60, false);
                     } else {
-                        Bukkit.broadcastMessage(ChatColor.YELLOW +
-                                "제약 카운트는 동작하지 않습니다.");
+                        Bukkit.broadcastMessage(ChatColor.YELLOW + "제약 카운트는 동작하지 않습니다.");
                     }
                     S_GameStart.this.RespawnTeleport();
                     S_GameStart.PlayDistanceBuffer = MainScripter.PlayerList.size() * 50;
@@ -169,7 +169,7 @@ public final class S_GameStart {
                                 !PhysicalFighters.NoAnimal);
                         wl.setPVP(true);
                     }
-                    for (AbilityBase b : AbilityList.AbilityList) {
+                    for (Ability b : AbilityList.AbilityList) {
                         b.setRunAbility(true);
                         b.setPlayer(b.getPlayer(), false);
                     }

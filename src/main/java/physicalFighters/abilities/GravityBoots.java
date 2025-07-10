@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import java.util.Timer;
@@ -19,7 +18,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class GravityBoots extends AbilityBase {
+public class GravityBoots extends Ability {
     Block b = null;
     Material bt;
 
@@ -38,7 +37,7 @@ public class GravityBoots extends AbilityBase {
         switch (CustomData) {
             case 0:
                 PlayerInteractEvent e = (PlayerInteractEvent) event;
-                if ((isOwner(e.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+                if ((isOwner(e.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
                     Player p = e.getPlayer();
                     if (p.getInventory().getBoots() == null) {
                         if (p.getLocation().distance(p.getTargetBlock(null, 0).getLocation()) < 30.0D) {

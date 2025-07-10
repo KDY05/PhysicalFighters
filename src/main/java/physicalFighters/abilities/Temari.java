@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 
 import java.util.Timer;
@@ -11,9 +11,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import physicalFighters.utils.ACC;
 
-public class Temari extends AbilityBase {
+public class Temari extends Ability {
     public Temari() {
         InitAbility("테마리", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴 왼쪽클릭시 20초간 자신의 주변에 있는 적들을 공중으로 날려버립니다."});
@@ -24,7 +23,7 @@ public class Temari extends AbilityBase {
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         if ((!EventManager.DamageGuard) &&
-                (isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem))) {
+                (isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
             return 0;
         }
         return -1;

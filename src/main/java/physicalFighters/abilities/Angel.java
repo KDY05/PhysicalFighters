@@ -1,9 +1,8 @@
 package physicalFighters.abilities;
 
 import physicalFighters.PhysicalFighters;
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import java.util.Timer;
@@ -16,7 +15,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-public class Angel extends AbilityBase {
+public class Angel extends Ability {
     public static String pp = "false";
     public static boolean ppon = false;
 
@@ -34,7 +33,7 @@ public class Angel extends AbilityBase {
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-            if ((isOwner(Event.getDamager())) && (isValidItem(ACC.DefaultItem)) &&
+            if ((isOwner(Event.getDamager())) && (isValidItem(Ability.DefaultItem)) &&
                     (!EventManager.DamageGuard) &&
                     (pp == "false") && (!ppon)) {
                 return 0;

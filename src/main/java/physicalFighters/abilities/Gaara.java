@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.PhysicalFighters;
 
 import java.util.Timer;
@@ -18,7 +17,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Gaara
-        extends AbilityBase {
+        extends Ability {
     public Gaara() {
         if (!PhysicalFighters.Toner) {
             InitAbility("가아라", Type.Active_Immediately, Rank.B, new String[]{
@@ -34,7 +33,7 @@ public class Gaara
         Block b = p.getTargetBlock(null, 0);
         Location loc = b.getLocation();
         Location ploc = p.getLocation();
-        if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem))) {
+        if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
             if ((loc.distance(ploc) <= 40.0D) && (b.getY() != 0)) {
                 if (!EventManager.DamageGuard)
                     return 0;

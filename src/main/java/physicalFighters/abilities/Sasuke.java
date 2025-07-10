@@ -1,15 +1,14 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class Sasuke extends AbilityBase {
+public class Sasuke extends Ability {
     public Sasuke() {
         InitAbility("사스케", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴로 상대를 타격시에 치도리를 사용해 상대를 엄청난 데미지로 감전시킵니다."});
@@ -19,7 +18,7 @@ public class Sasuke extends AbilityBase {
 
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if ((isOwner(Event.getDamager())) && (isValidItem(ACC.DefaultItem)) &&
+        if ((isOwner(Event.getDamager())) && (isValidItem(Ability.DefaultItem)) &&
                 (!EventManager.DamageGuard)) {
             return 0;
         }

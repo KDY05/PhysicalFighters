@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import java.util.Random;
@@ -12,7 +11,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Zoro extends AbilityBase {
+public class Zoro extends Ability {
     int dama = 0;
 
     public Zoro() {
@@ -36,7 +35,7 @@ public class Zoro extends AbilityBase {
             }
         } else if (CustomData == 0) {
             PlayerInteractEvent Event1 = (PlayerInteractEvent) event;
-            if ((isOwner(Event1.getPlayer())) && (isValidItem(ACC.DefaultItem))) {
+            if ((isOwner(Event1.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
                 return 0;
             }
         }

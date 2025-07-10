@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
@@ -16,7 +16,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Infighter
-        extends AbilityBase {
+        extends Ability {
     public Infighter() {
         if (PhysicalFighters.SRankUsed) {
             InitAbility("인파이터", Type.Passive_AutoMatic, Rank.A, new String[]{
@@ -49,7 +49,7 @@ public class Infighter
             if (Math.random() <= 0.1D) {
                 t.getWorld().createExplosion(t.getLocation(), 0.0F);
                 Location l1 = p.getLocation();
-                AbilityBase.goVelocity(t, l1, -3);
+                Ability.goVelocity(t, l1, -3);
             }
             if (Math.random() <= 0.2D) {
                 t.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 100, 0), true);

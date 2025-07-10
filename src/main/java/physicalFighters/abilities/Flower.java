@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 
@@ -13,7 +12,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Flower extends AbilityBase {
+public class Flower extends Ability {
     public Flower() {
         if (PhysicalFighters.SRankUsed) {
             InitAbility("흡혈초", Type.Active_Immediately, Rank.SS, new String[]{
@@ -31,7 +30,7 @@ public class Flower extends AbilityBase {
                 EntityDamageByEntityEvent Event1 = (EntityDamageByEntityEvent) event;
                 if (((Event1.getEntity() instanceof Player)) &&
                         (isOwner(Event1.getDamager())) &&
-                        (isValidItem(ACC.DefaultItem)) &&
+                        (isValidItem(Ability.DefaultItem)) &&
                         (!EventManager.DamageGuard)) {
                     return 1;
                 }
@@ -40,7 +39,7 @@ public class Flower extends AbilityBase {
                 PlayerInteractEvent Event2 = (PlayerInteractEvent) event;
                 if ((isOwner(Event2.getPlayer())) &&
                         (((Damageable) getPlayer()).getHealth() >= 16.0D) &&
-                        (isValidItem(ACC.DefaultItem))) {
+                        (isValidItem(Ability.DefaultItem))) {
                     return 2;
                 }
                 break;

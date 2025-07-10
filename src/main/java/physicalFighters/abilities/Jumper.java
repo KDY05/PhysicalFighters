@@ -1,7 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
-import physicalFighters.utils.ACC;
+import physicalFighters.core.Ability;
 import physicalFighters.utils.Vector;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -12,7 +11,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Jumper
-        extends AbilityBase {
+        extends Ability {
     public Jumper() {
         InitAbility("점퍼", Type.Active_Immediately, Rank.B, new String[]{
                 "최대 40칸 거리를 순간이동 할수 있습니다.",
@@ -25,7 +24,7 @@ public class Jumper
 
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem))) {
+        if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
             Player p = Event.getPlayer();
             Block b = p.getTargetBlock(null, 0);
             Location loc = b.getLocation();

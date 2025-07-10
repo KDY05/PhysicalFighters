@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import java.util.HashMap;
@@ -16,7 +15,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class ExplosionPa extends AbilityBase {
+public class ExplosionPa extends Ability {
     LinkedList<String> gigong = new LinkedList();
     HashMap<String, Location> pLoc = new HashMap();
 
@@ -36,7 +35,7 @@ public class ExplosionPa extends AbilityBase {
             case 0:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
                 if ((isOwner(Event.getPlayer())) &&
-                        (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard)
+                        (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard)
                     return 0;
                 break;
             case 1:

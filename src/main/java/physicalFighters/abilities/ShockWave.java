@@ -1,13 +1,13 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class ShockWave extends AbilityBase {
+public class ShockWave extends Ability {
     public ShockWave() {
         InitAbility("쇼크웨이브", Type.Active_Immediately, Rank.A, new String[]{
                 "자신이 보고있는 방향으로 막강한 직선 충격포를 쏩니다.",

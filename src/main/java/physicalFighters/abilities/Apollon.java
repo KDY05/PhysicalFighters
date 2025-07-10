@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.PhysicalFighters;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,7 +10,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Apollon
-        extends AbilityBase {
+        extends Ability {
     public Apollon() {
         if ((!PhysicalFighters.Toner) &&
                 (PhysicalFighters.SRankUsed)) {
@@ -25,7 +24,7 @@ public class Apollon
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         if ((!EventManager.DamageGuard) &&
-                (isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem))) {
+                (isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
             return 0;
         }
         return -1;

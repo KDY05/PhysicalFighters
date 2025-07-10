@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -10,7 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Poison extends AbilityBase {
+public class Poison extends Ability {
     public Poison() {
         InitAbility("포이즌", Type.Passive_AutoMatic, Rank.B, new String[]{
                 "자신에게 공격받은 사람은 3초간 독에 감염됩니다."});

@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 
@@ -15,7 +14,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Hulk extends AbilityBase {
+public class Hulk extends Ability {
     boolean playerhulk = false;
     int playerhealth = 20;
 
@@ -58,7 +57,7 @@ public class Hulk extends AbilityBase {
             case 1:
                 PlayerInteractEvent Event2 = (PlayerInteractEvent) event;
                 if ((isOwner(Event2.getPlayer())) &&
-                        (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+                        (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
                     return 0;
                 }
                 break;

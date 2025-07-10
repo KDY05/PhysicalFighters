@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -9,7 +9,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffectType;
 
-public class Slower extends AbilityBase {
+public class Slower extends Ability {
     public Slower() {
         InitAbility("슬로워", Type.Passive_AutoMatic, Rank.C, new String[]{
                 "자신에게 공격받은 사람은 그 1.5초간 느려집니다,"});

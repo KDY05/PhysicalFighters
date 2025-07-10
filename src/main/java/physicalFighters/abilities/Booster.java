@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Booster extends AbilityBase {
+public class Booster extends Ability {
     public Booster() {
         InitAbility("부스터", Type.Passive_AutoMatic, Rank.B, new String[]{
                 "공격시에 딜레이가 매우 낮습니다. 단 당신의 데미지는 3~6로 랜덤입니다."});

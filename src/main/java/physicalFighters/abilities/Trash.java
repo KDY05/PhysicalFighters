@@ -1,26 +1,22 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 
-public class Trash extends AbilityBase {
+public class Trash extends Ability {
     public Trash() {
-        if ((!PhysicalFighters.Toner) &&
-                (PhysicalFighters.SRankUsed) &&
-                (!PhysicalFighters.Specialability)) {
-            InitAbility("쓰레기", Type.Active_Immediately, Rank.FF, new String[]{
+        if ((!PhysicalFighters.Toner) && (PhysicalFighters.SRankUsed) && (!PhysicalFighters.Specialability)) {
+            InitAbility("쓰레기", Type.Active_Immediately, Rank.F,
                     "능력 사용시 체력을 소비하여 1분간 허약해집니다.",
-                    "철괴로 상대를 타격시 1%확률로 능력을 서로 바꿉니다."});
+                    "철괴로 상대를 타격시 1%확률로 능력을 서로 바꿉니다.");
             InitAbility(10, 0, true);
             EventManager.onEntityDamageByEntity.add(new EventData(this));
             registerRightClickEvent();
@@ -35,8 +31,9 @@ public class Trash extends AbilityBase {
                     if (Math.random() <= 0.01D) {
                         Player p1 = (Player) Event0.getDamager();
                         Player p2 = (Player) Event0.getEntity();
-                        AbilityBase a = AbilityBase.FindAbility(p1);
-                        AbilityBase a2 = AbilityBase.FindAbility(p2);
+                        Ability a = Ability.FindAbility(p1);
+                        Ability a2 = Ability.FindAbility(p2);
+                        if (a == null || a2 == null) break;
                         a2.setPlayer(p1, false);
                         a.setPlayer(p2, false);
                         a2.setRunAbility(true);
@@ -48,7 +45,7 @@ public class Trash extends AbilityBase {
                 break;
             case 1:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
-                if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem))) {
+                if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
                     return 0;
                 }
                 break;
@@ -59,14 +56,7 @@ public class Trash extends AbilityBase {
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         Player p = Event.getPlayer();
-        p.setHealth(((Damageable) p).getHealth() - 4);
-        p.addPotionEffect(new PotionEffect(org.bukkit.potion.PotionEffectType.WEAKNESS, 1200,
-                0), true);
+        p.setHealth(p.getHealth() - 4);
+        p.addPotionEffect(new PotionEffect(org.bukkit.potion.PotionEffectType.WEAKNESS, 1200, 0));
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Trash.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

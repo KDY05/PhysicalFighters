@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.PhysicalFighters;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
@@ -12,7 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 public class Fallingarrow
-        extends AbilityBase {
+        extends Ability {
     public Fallingarrow() {
         if (!PhysicalFighters.Specialability) {
             InitAbility("낙하화살", Type.Active_Immediately, Rank.A, new String[]{
@@ -25,7 +24,7 @@ public class Fallingarrow
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         if ((isOwner(Event.getPlayer())) &&
-                (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+                (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
             return 0;
         }
         return -1;

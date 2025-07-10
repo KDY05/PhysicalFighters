@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 
 import java.util.Map;
 
@@ -11,9 +11,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import physicalFighters.utils.ACC;
 
-public class ReverseAlchemy extends AbilityBase {
+public class ReverseAlchemy extends Ability {
     public ReverseAlchemy() {
         InitAbility("반 연금술", Type.Active_Immediately, Rank.C, new String[]{
                 "제련된 금을 철괴와 1:1, 다이아몬드와 3:1 비율로 교환합니다.",
@@ -30,7 +29,7 @@ public class ReverseAlchemy extends AbilityBase {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         if (isOwner(Event.getPlayer())) {
             PlayerInventory inv = Event.getPlayer().getInventory();
-            if (isValidItem(ACC.DefaultItem)) {
+            if (isValidItem(Ability.DefaultItem)) {
                 switch (CustomData) {
                     case 0:
                         if (inv.contains(Material.GOLD_INGOT, 1)) {

@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 
@@ -15,7 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Bishop extends AbilityBase {
+public class Bishop extends Ability {
     private final int DurationTime = 300;
 
     public Bishop() {
@@ -36,7 +35,7 @@ public class Bishop extends AbilityBase {
                 EntityDamageByEntityEvent Event1 = (EntityDamageByEntityEvent) event;
                 if (((Event1.getEntity() instanceof Player)) &&
                         (isOwner(Event1.getDamager())) && !EventManager.DamageGuard) {
-                    if (isValidItem(ACC.DefaultItem))
+                    if (isValidItem(Ability.DefaultItem))
                         return 0;
                     if (isValidItem(Material.GOLD_INGOT)) {
                         return 2;
@@ -46,7 +45,7 @@ public class Bishop extends AbilityBase {
             case 1:
                 PlayerInteractEvent Event2 = (PlayerInteractEvent) event;
                 if ((isOwner(Event2.getPlayer())) &&
-                        (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+                        (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
                     return 1;
                 }
                 break;

@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
@@ -10,7 +10,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class Explosion extends AbilityBase {
+public class Explosion extends Ability {
     public Explosion() {
         if (!PhysicalFighters.Toner) {
             InitAbility("익스플로젼", Type.Passive_Manual, Rank.B, new String[]{

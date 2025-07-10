@@ -1,7 +1,7 @@
 package physicalFighters.abilities;
 
 import physicalFighters.PhysicalFighters;
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 
 import org.bukkit.Bukkit;
@@ -10,9 +10,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import physicalFighters.utils.ACC;
 
-public class Time2 extends AbilityBase {
+public class Time2 extends Ability {
     public Time2() {
         if (!PhysicalFighters.Specialability) {
             InitAbility("시간을 지배하는 자", Type.Active_Immediately, Rank.A, new String[]{
@@ -24,7 +23,7 @@ public class Time2 extends AbilityBase {
 
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+        if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
             return 0;
         }
         return -1;

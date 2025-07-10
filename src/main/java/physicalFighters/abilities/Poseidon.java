@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 
@@ -19,7 +18,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Poseidon
-        extends AbilityBase {
+        extends Ability {
     public Poseidon() {
         if ((!PhysicalFighters.Toner) &&
                 (PhysicalFighters.SRankUsed)) {
@@ -37,7 +36,7 @@ public class Poseidon
             PlayerInteractEvent Event = (PlayerInteractEvent) event;
             if ((!EventManager.DamageGuard) &&
                     (isOwner(Event.getPlayer())) &&
-                    (isValidItem(ACC.DefaultItem)) &&
+                    (isValidItem(Ability.DefaultItem)) &&
                     (Event.getPlayer().getTargetBlock(null, 0).getType() != Material.BEDROCK)) {
                 return 0;
             }

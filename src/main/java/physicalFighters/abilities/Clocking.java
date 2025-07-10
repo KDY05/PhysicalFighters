@@ -1,14 +1,13 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import physicalFighters.utils.ACC;
 
-public class Clocking extends AbilityBase {
+public class Clocking extends Ability {
     public Clocking() {
         InitAbility("클로킹", Type.Active_Continue, Rank.A, new String[]{
                 "능력 사용시 일정시간동안 다른 사람에게 보이지 않습니다.",
@@ -19,7 +18,7 @@ public class Clocking extends AbilityBase {
 
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)))
+        if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)))
             return 0;
         return -1;
     }

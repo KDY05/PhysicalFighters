@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import java.util.Timer;
@@ -15,7 +14,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Fly
-        extends AbilityBase {
+        extends Ability {
     public Fly() {
         InitAbility("플라이", Type.Active_Immediately, Rank.GOD, new String[]{
                 "철괴를 휘두를시에 10초간 하늘을 날라다닐 수 있습니다.",
@@ -28,7 +27,7 @@ public class Fly
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent Event = (PlayerInteractEvent) event;
-            if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem))) {
+            if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
                 return 0;
             }
         } else if (CustomData == 3) {

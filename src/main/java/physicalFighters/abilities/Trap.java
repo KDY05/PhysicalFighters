@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import java.util.List;
@@ -21,7 +20,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class Trap extends AbilityBase {
+public class Trap extends Ability {
     public static Block[] trap = new Block[6];
     public static int traps = 0;
 
@@ -42,7 +41,7 @@ public class Trap extends AbilityBase {
         switch (CustomData) {
             case 0:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
-                if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+                if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
                     return 0;
                 }
                 break;

@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 
 import java.util.Timer;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Aokizi extends AbilityBase {
+public class Aokizi extends Ability {
     public Aokizi() {
         InitAbility("아오키지", Type.Active_Immediately,
                 Rank.S, new String[]{

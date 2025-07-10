@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Demigod extends AbilityBase {
+public class Demigod extends Ability {
     public Demigod() {
         if (PhysicalFighters.SRankUsed) {
             InitAbility("데미갓", Type.Passive_AutoMatic, Rank.S, new String[]{

@@ -1,9 +1,8 @@
 package physicalFighters.abilities;
 
 import physicalFighters.PhysicalFighters;
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import org.bukkit.Bukkit;
@@ -12,7 +11,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class Time extends AbilityBase {
+public class Time extends Ability {
     public Time() {
         if (!PhysicalFighters.Specialability) {
             InitAbility("타임", Type.Active_Continue, Rank.A, new String[]{
@@ -26,7 +25,7 @@ public class Time extends AbilityBase {
 
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+        if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
             return 0;
         }
         return -1;

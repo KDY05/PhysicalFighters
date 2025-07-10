@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
 import physicalFighters.core.EventManager;
-import physicalFighters.core.AbilityBase;
-import physicalFighters.utils.ACC;
+import physicalFighters.core.Ability;
 
 import java.util.LinkedList;
 
@@ -12,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Magnet extends AbilityBase {
+public class Magnet extends Ability {
     public Magnet() {
         InitAbility("자석", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴를 들고 왼쪽클릭시, 20칸안에 있는 모든 적을 자신의 방향으로,",
@@ -26,12 +25,12 @@ public class Magnet extends AbilityBase {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         switch (CustomData) {
             case 0:
-                if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+                if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
                     return 0;
                 }
                 break;
             case 1:
-                if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+                if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
                     return 1;
                 }
                 break;

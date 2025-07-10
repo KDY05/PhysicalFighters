@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 
 import org.bukkit.Bukkit;
@@ -10,9 +10,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import physicalFighters.utils.ACC;
 
-public class SuperFan extends AbilityBase {
+public class SuperFan extends Ability {
     public SuperFan() {
         InitAbility("선풍기", Type.Active_Immediately, Rank.B, new String[]{
                 "철괴를 들고 왼쪽클릭하면 바라보는 방향의 플레이어들을  날려버립니다.",
@@ -24,7 +23,7 @@ public class SuperFan extends AbilityBase {
 
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+        if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
             return 0;
         }
         return -1;

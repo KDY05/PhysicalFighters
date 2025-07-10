@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
@@ -10,7 +10,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-public class Nonuck extends AbilityBase {
+public class Nonuck extends Ability {
     public Nonuck() {
         if (PhysicalFighters.SRankUsed) {
             InitAbility("무통증", Type.Passive_AutoMatic, Rank.S, new String[]{

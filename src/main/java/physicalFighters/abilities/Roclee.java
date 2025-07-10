@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import org.bukkit.Location;
@@ -10,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class Roclee extends AbilityBase {
+public class Roclee extends Ability {
     public Roclee() {
         InitAbility("록리", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴로 상대를 타격할시 맞은사람을 매우빠른속도로 높이 띄웁니다."});
@@ -20,7 +19,7 @@ public class Roclee extends AbilityBase {
 
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if ((isOwner(Event.getDamager())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+        if ((isOwner(Event.getDamager())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
             return 0;
         }
         return -1;

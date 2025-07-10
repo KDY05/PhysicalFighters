@@ -6,10 +6,10 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.utils.EventData;
 
-public class Shadow extends AbilityBase {
+public class Shadow extends Ability {
     public Shadow() {
         InitAbility("그림자", Type.Passive_AutoMatic, Rank.C, new String[]{
                 "몬스터가 절대로 공격을 하지 않습니다. 생명체로부터", "공격받을시 5% 확률로 데미지를 받지않고",

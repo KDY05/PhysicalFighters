@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 
 import java.util.LinkedList;
 import java.util.Timer;
@@ -15,7 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Pressure extends AbilityBase {
+public class Pressure extends Ability {
     public Pressure() {
         InitAbility("압력", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴로 왼쪽클릭시 20칸 이내의 모든 적을 강한 압력으로 압축시킵니다.",
@@ -26,7 +25,7 @@ public class Pressure extends AbilityBase {
 
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+        if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
             return 0;
         }
         return -1;

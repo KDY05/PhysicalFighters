@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -20,7 +20,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class PoisonArrow extends AbilityBase {
+public class PoisonArrow extends Ability {
     public PoisonArrow() {
         InitAbility("독화살", Type.Passive_Manual, Rank.B, new String[]{
                 "죽거나 게임 시작시 화살 한묶음이 고정적으로 주어집니다.", "화살에 맞은 적은 6초간 독에걸립니다."});

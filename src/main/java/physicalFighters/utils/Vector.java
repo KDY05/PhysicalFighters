@@ -75,8 +75,7 @@ public class Vector {
     }
 
     public double distance(Vector pt) {
-        return
-                Math.sqrt(Math.pow(pt.x - this.x, 2.0D) +
+        return Math.sqrt(Math.pow(pt.x - this.x, 2.0D) +
                         Math.pow(pt.y - this.y, 2.0D) +
                         Math.pow(pt.z - this.z, 2.0D));
     }

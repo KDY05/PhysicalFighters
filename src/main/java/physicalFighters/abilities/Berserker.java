@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class Berserker extends AbilityBase {
+public class Berserker extends Ability {
     public Berserker() {
         InitAbility("광전사", Type.Passive_Manual, Rank.A, new String[]{
                 "체력이 70% 이하로 떨어지면 데미지가 1.5배로 증폭되며",

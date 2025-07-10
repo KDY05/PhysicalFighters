@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import java.util.List;
@@ -21,7 +20,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class Teleporter extends AbilityBase {
+public class Teleporter extends Ability {
     static String signName = null;
     static Location signLoc = null;
 
@@ -44,7 +43,7 @@ public class Teleporter extends AbilityBase {
             case 0:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
                 if ((isOwner(Event.getPlayer())) && !EventManager.DamageGuard &&
-                        (isValidItem(ACC.DefaultItem))) {
+                        (isValidItem(Ability.DefaultItem))) {
                     if ((signName != null) && (signLoc != null)) {
                         return 0;
                     }

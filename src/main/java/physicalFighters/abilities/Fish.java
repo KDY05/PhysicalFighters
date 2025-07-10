@@ -1,7 +1,7 @@
 package physicalFighters.abilities;
 
 import physicalFighters.core.EventManager;
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.utils.EventData;
 
 import org.bukkit.Material;
@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class Fish extends AbilityBase {
+public class Fish extends Ability {
     public Fish() {
         InitAbility("강태공", Type.Passive_Manual, Rank.A, new String[]{
                 "낚싯대로 상대를 타격시 상대에게 강한 데미지를 주고, 매우 낮은 확률로 물고기를 얻습니다.",

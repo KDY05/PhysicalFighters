@@ -1,15 +1,14 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class NuclearPunch extends AbilityBase {
+public class NuclearPunch extends Ability {
     public NuclearPunch() {
         InitAbility("핵 펀치", Type.Active_Immediately, Rank.A, new String[]{
                 "철괴로 타격을 당한 상대가 매우 멀리 넉백당합니다.", "동시에 데미지 20을 받습니다."});
@@ -19,7 +18,7 @@ public class NuclearPunch extends AbilityBase {
 
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if ((isOwner(Event.getDamager())) && (isValidItem(ACC.DefaultItem))) {
+        if ((isOwner(Event.getDamager())) && (isValidItem(Ability.DefaultItem))) {
             return 0;
         }
         return -1;

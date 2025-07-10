@@ -1,6 +1,6 @@
 package physicalFighters.scripts;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.AbilityList;
 import physicalFighters.utils.TimerBase;
 import physicalFighters.PhysicalFighters;
@@ -26,7 +26,7 @@ public final class S_GameReady {
             if (MainScripter.Scenario == MainScripter.ScriptStatus.NoPlay) {
                 MainScripter.Scenario = MainScripter.ScriptStatus.ScriptStart;
                 Bukkit.broadcastMessage(ChatColor.YELLOW + "(!)잠시 후 게임을 시작합니다.");
-                this.stimer.StartTimer(9);
+                this.stimer.startTimer(9, false);
             } else {
                 p.sendMessage(ChatColor.RED + "(!)이미 게임이 시작되어있습니다.");
             }
@@ -35,11 +35,10 @@ public final class S_GameReady {
     }
 
     public void GameReadyStop() {
-        this.stimer.StopTimer();
+        this.stimer.stopTimer();
     }
 
-    public final class S_ScriptTimer
-            extends TimerBase {
+    public final class S_ScriptTimer extends TimerBase {
         public S_ScriptTimer() {
         }
 
@@ -54,7 +53,7 @@ public final class S_GameReady {
                     Player[] templist = Bukkit.getOnlinePlayers().toArray(new Player[0]);
                     for (int l = 0; l < templist.length; l++) {
                         if (!S_GameReady.this.mainscripter.ExceptionList.contains(templist[l])) {
-                            if (l < AbilityBase.GetAbilityCount()) {
+                            if (l < Ability.GetAbilityCount()) {
                                 MainScripter.PlayerList.add(templist[l]);
                                 Bukkit.broadcastMessage(String.format(
                                         ChatColor.GREEN + "%d. " + ChatColor.WHITE + "%s",
@@ -68,7 +67,7 @@ public final class S_GameReady {
                     }
                     S_GameReady.this.peoplecount =
                             (templist.length - S_GameReady.this.mainscripter.ExceptionList.size());
-                    if (S_GameReady.this.peoplecount <= AbilityBase.GetAbilityCount()) {
+                    if (S_GameReady.this.peoplecount <= Ability.GetAbilityCount()) {
                         Bukkit.broadcastMessage(String.format(ChatColor.YELLOW +
                                 "총 인원수 : %d명 ", S_GameReady.this.peoplecount));
                     } else {
@@ -82,7 +81,7 @@ public final class S_GameReady {
                         Bukkit.broadcastMessage(ChatColor.RED +
                                 "경고, 실질 플레이어가 없습니다. 게임 강제 종료.");
                         MainScripter.Scenario = MainScripter.ScriptStatus.NoPlay;
-                        S_GameReady.this.stimer.StopTimer();
+                        S_GameReady.this.stimer.stopTimer();
                         Bukkit.broadcastMessage(ChatColor.GRAY + "모든 설정이 취소됩니다.");
                         MainScripter.PlayerList.clear();
                         return;
@@ -100,7 +99,7 @@ public final class S_GameReady {
                     if (!PhysicalFighters.NoAbilitySetting) {
                         Bukkit.broadcastMessage(ChatColor.GRAY +
                                 "능력 설정 초기화 및 추첨 준비...");
-                        for (AbilityBase ab : AbilityList.AbilityList) {
+                        for (Ability ab : AbilityList.AbilityList) {
                             ab.setRunAbility(false);
                             ab.setPlayer(null, false);
                         }
@@ -109,16 +108,16 @@ public final class S_GameReady {
                         Bukkit.broadcastMessage("시작전에 능력이 이미 부여되었다면 보존됩니다.");
                         S_GameReady.this.mainscripter.OKSign.clear();
                         S_GameReady.this.mainscripter.OKSign.addAll(MainScripter.PlayerList);
-                        for (AbilityBase ab : AbilityList.AbilityList) {
+                        for (Ability ab : AbilityList.AbilityList) {
                             ab.setRunAbility(true);
                         }
                         S_GameReady.this.mainscripter.s_GameStart.GameStart();
-                        StopTimer();
+                        stopTimer();
                     }
                     break;
                 case 9:
                     MainScripter.Scenario = MainScripter.ScriptStatus.AbilitySelect;
-                    if (S_GameReady.this.peoplecount < AbilityBase.GetAbilityCount()) {
+                    if (S_GameReady.this.peoplecount < Ability.GetAbilityCount()) {
                         for (Player p : MainScripter.PlayerList)
                             if (RandomAbility(p) == null) {
                                 p.sendMessage(ChatColor.RED + "경고, 능력의 갯수가 부족합니다.");
@@ -133,7 +132,7 @@ public final class S_GameReady {
                         for (Player p : S_GameReady.this.mainscripter.ExceptionList) {
                             p.sendMessage(ChatColor.GREEN + "능력 추첨중입니다");
                         }
-                        S_GameReady.this.mainscripter.s_GameWarnning.GameWarnningStart();
+                        S_GameReady.this.mainscripter.s_GameWarning.GameWarnningStart();
                     } else {
                         Bukkit.broadcastMessage(ChatColor.AQUA +
                                 "능력 갯수보다 플레이어 수가 같거나 많으므로 즉시 확정됩니다.");
@@ -158,8 +157,8 @@ public final class S_GameReady {
         public void EventEndTimer() {
         }
 
-        private AbilityBase RandomAbility(Player p) {
-            ArrayList<AbilityBase> Alist = new ArrayList<>();
+        private Ability RandomAbility(Player p) {
+            ArrayList<Ability> Alist = new ArrayList<>();
             Random r = new Random();
             int Findex = r.nextInt(AbilityList.AbilityList.size() - 1);
             int saveindex;

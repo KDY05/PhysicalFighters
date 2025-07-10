@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class Blitzcrank extends AbilityBase {
+public class Blitzcrank extends Ability {
     public Blitzcrank() {
         if (PhysicalFighters.SRankUsed) {
             InitAbility("블리츠크랭크", Type.Active_Immediately, Rank.SS, new String[]{

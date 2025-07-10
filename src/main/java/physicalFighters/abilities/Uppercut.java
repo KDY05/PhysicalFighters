@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -9,7 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class Uppercut extends AbilityBase {
+public class Uppercut extends Ability {
     public Uppercut() {
         InitAbility("어퍼컷", Type.Active_Immediately, Rank.A, new String[]{
                 "플레이어를 공격하면 피격플레이어는 공중으로 아주 높이 뜨게됩니다."});

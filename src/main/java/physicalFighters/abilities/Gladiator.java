@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 
@@ -17,7 +16,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Gladiator extends AbilityBase {
+public class Gladiator extends Ability {
     public Gladiator() {
         if ((!PhysicalFighters.Toner) &&
                 (PhysicalFighters.SRankUsed)) {
@@ -32,7 +31,7 @@ public class Gladiator extends AbilityBase {
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
         if ((!EventManager.DamageGuard) &&
-                (isOwner(Event.getDamager())) && ((Event.getEntity() instanceof Player)) && (isValidItem(ACC.DefaultItem))) {
+                (isOwner(Event.getDamager())) && ((Event.getEntity() instanceof Player)) && (isValidItem(Ability.DefaultItem))) {
             return 0;
         }
         return -1;

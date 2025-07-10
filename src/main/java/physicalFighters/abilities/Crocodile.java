@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.PhysicalFighters;
 
 import java.util.Timer;
@@ -20,7 +19,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Crocodile extends AbilityBase {
+public class Crocodile extends Ability {
     public Crocodile() {
         if (PhysicalFighters.SRankUsed) {
             InitAbility("크로커다일", Type.Active_Immediately, Rank.S, new String[]{
@@ -36,12 +35,12 @@ public class Crocodile extends AbilityBase {
         switch (CustomData) {
             case 0:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
-                if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+                if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
                     return 0;
                 }
             case 1:
                 PlayerInteractEvent Event1 = (PlayerInteractEvent) event;
-                if ((isOwner(Event1.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard)
+                if ((isOwner(Event1.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard)
                     return 1;
                 break;
         }

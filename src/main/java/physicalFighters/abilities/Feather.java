@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Feather extends AbilityBase {
+public class Feather extends Ability {
     public Feather() {
         if (!PhysicalFighters.Specialability) {
             InitAbility("깃털", Type.Passive_AutoMatic, Rank.C, new String[]{

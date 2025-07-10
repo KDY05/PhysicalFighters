@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
@@ -9,7 +9,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-public class Blaze extends AbilityBase {
+public class Blaze extends Ability {
     public Blaze() {
         if (!PhysicalFighters.Specialability) {
             InitAbility("블레이즈", Type.Passive_AutoMatic, Rank.C, new String[]{

@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import org.bukkit.entity.Arrow;
@@ -14,7 +13,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Poksi
-        extends AbilityBase {
+        extends Ability {
     public Poksi() {
         InitAbility("이슈타르의 링", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴로 능력을 사용합니다.",
@@ -30,7 +29,7 @@ public class Poksi
             case 1:
                 PlayerInteractEvent Event0 = (PlayerInteractEvent) event;
                 if ((!EventManager.DamageGuard) &&
-                        (isOwner(Event0.getPlayer())) && (isValidItem(ACC.DefaultItem))) {
+                        (isOwner(Event0.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
                     return 10;
                 }
                 break;

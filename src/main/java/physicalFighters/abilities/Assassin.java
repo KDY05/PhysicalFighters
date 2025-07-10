@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Assassin
-        extends AbilityBase {
+        extends Ability {
     public Assassin() {
         InitAbility("어쌔신", Type.Passive_AutoMatic, Rank.C,
                 "뒤에서 공격할시에 데미지를 두배로 입히고 눈을 가립니다.");

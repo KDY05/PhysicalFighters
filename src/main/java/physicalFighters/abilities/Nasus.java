@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 
 import org.bukkit.Material;
@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import physicalFighters.utils.EventData;
 
-public class Nasus extends AbilityBase {
+public class Nasus extends Ability {
     int stack = 0;
 
     public Nasus() {

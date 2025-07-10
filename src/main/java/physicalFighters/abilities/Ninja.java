@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import org.bukkit.ChatColor;
@@ -14,7 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Ninja
-        extends AbilityBase {
+        extends Ability {
     public Ninja() {
         InitAbility("닌자", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴 왼쪽클릭시 매우 빠르게 화살을 발사합니다. ",
@@ -30,7 +29,7 @@ public class Ninja
             case 0:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
                 if ((!EventManager.DamageGuard) && (isOwner(Event.getPlayer())) &&
-                        (isValidItem(ACC.DefaultItem))) {
+                        (isValidItem(Ability.DefaultItem))) {
                     return 0;
                 }
                 break;

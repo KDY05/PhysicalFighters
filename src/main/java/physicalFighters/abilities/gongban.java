@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import java.util.Timer;
@@ -15,7 +14,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class gongban extends AbilityBase {
+public class gongban extends Ability {
     public static boolean ppon = false;
 
     public gongban() {
@@ -30,7 +29,7 @@ public class gongban extends AbilityBase {
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent e = (PlayerInteractEvent) event;
-            if ((isOwner(e.getPlayer())) && (isValidItem(ACC.DefaultItem)) && !EventManager.DamageGuard) {
+            if ((isOwner(e.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
                 return 0;
             }
         }

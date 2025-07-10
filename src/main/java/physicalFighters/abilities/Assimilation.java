@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.core.AbilityList;
 import physicalFighters.utils.CommandInterface;
@@ -16,17 +16,17 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 public class Assimilation
-        extends AbilityBase implements CommandInterface {
+        extends Ability implements CommandInterface {
     private boolean ActiveAss = false;
 
     public Assimilation() {
         if (PhysicalFighters.SRankUsed) {
-            InitAbility("흡수", Type.Passive_Manual, Rank.S, new String[]{
+            InitAbility("흡수", Type.Passive_Manual, Rank.S,
                     "자신이 죽인 사람의 능력을 흡수합니다. 액티브 능력은",
                     "1개만 가능합니다. 미러링도 흡수가 가능하며 데스 노트의 경우",
                     "이미 능력을 썼더라도 다시 쓸수 있습니다. 자신에게 타격받은",
                     "사람은 배고픔이 빠르게 감소합니다. \"/va a\" 명령으로",
-                    "자신이 흡수한 능력을 볼수 있습니다.", "흡수가 가능한 능력의 갯수에는 제한이 없습니다."});
+                    "자신이 흡수한 능력을 볼수 있습니다.", "흡수가 가능한 능력의 갯수에는 제한이 없습니다.");
             InitAbility(0, 0, true);
             EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
             EventManager.onEntityDeath.add(new EventData(this, 1));
@@ -55,16 +55,14 @@ public class Assimilation
         switch (CustomData) {
             case 0:
                 EntityDamageByEntityEvent Event0 = (EntityDamageByEntityEvent) event;
-                if ((Event0.getEntity() instanceof Player)) {
-                    Player p = (Player) Event0.getEntity();
+                if ((Event0.getEntity() instanceof Player p)) {
                     p.setSaturation(0.0F);
                 }
                 break;
             case 1:
                 EntityDeathEvent Event1 = (EntityDeathEvent) event;
-                if ((Event1.getEntity() instanceof Player)) {
-                    Player p = (Player) Event1.getEntity();
-                    AbilityBase a = AbilityBase.FindAbility(p);
+                if ((Event1.getEntity() instanceof Player p)) {
+                    Ability a = Ability.FindAbility(p);
                     if (a != null) {
                         a.cancelCTimer();
                         a.cancelDTimer();
@@ -104,7 +102,7 @@ public class Assimilation
         if (((sender instanceof Player)) && (isOwner((Player) sender)) &&
                 (data[0].equalsIgnoreCase("a")) && (data.length == 1)) {
             sender.sendMessage(ChatColor.GREEN + "-- 당신이 소유한 능력 --");
-            for (AbilityBase a : AbilityList.AbilityList) {
+            for (Ability a : AbilityList.AbilityList) {
                 if (a.isOwner(getPlayer())) {
                     getPlayer().sendMessage(a.getAbilityName());
                 }
@@ -114,9 +112,3 @@ public class Assimilation
         return false;
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Assimilation.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

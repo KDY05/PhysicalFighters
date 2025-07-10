@@ -1,6 +1,6 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.PhysicalFighters;
 
@@ -9,9 +9,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import physicalFighters.utils.ACC;
 
-public class Enel extends AbilityBase {
+public class Enel extends Ability {
     public Enel() {
         if (PhysicalFighters.SRankUsed) {
             InitAbility("갓 에넬", Type.Active_Immediately, Rank.S, new String[]{
@@ -24,7 +23,7 @@ public class Enel extends AbilityBase {
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         if ((!EventManager.DamageGuard) &&
-                (isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem))) {
+                (isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
             return 0;
         }
         return -1;

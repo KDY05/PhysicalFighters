@@ -1,9 +1,8 @@
 package physicalFighters.abilities;
 
 import physicalFighters.PhysicalFighters;
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 import physicalFighters.utils.EventData;
 
 import org.bukkit.ChatColor;
@@ -16,7 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class CP9 extends AbilityBase {
+public class CP9 extends Ability {
     public CP9() {
         if (PhysicalFighters.SRankUsed) {
             InitAbility(
@@ -40,7 +39,7 @@ public class CP9 extends AbilityBase {
                 EntityDamageByEntityEvent Event1 = (EntityDamageByEntityEvent) event;
                 if (((Event1.getEntity() instanceof Player)) &&
                         (isOwner(Event1.getDamager())) &&
-                        (isValidItem(ACC.DefaultItem)) &&
+                        (isValidItem(Ability.DefaultItem)) &&
                         (!EventManager.DamageGuard)) {
                     return 1;
                 }
@@ -48,7 +47,7 @@ public class CP9 extends AbilityBase {
             case 1:
                 PlayerInteractEvent Event2 = (PlayerInteractEvent) event;
                 if ((isOwner(Event2.getPlayer())) &&
-                        (isValidItem(ACC.DefaultItem))) {
+                        (isValidItem(Ability.DefaultItem))) {
                     return 2;
                 }
                 break;

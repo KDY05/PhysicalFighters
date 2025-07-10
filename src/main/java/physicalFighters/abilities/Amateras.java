@@ -1,8 +1,7 @@
 package physicalFighters.abilities;
 
-import physicalFighters.core.AbilityBase;
+import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.utils.ACC;
 
 import java.util.Timer;
 
@@ -14,7 +13,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Amateras
-        extends AbilityBase {
+        extends Ability {
     Timer timer = new Timer();
 
     public Amateras() {
@@ -27,7 +26,7 @@ public class Amateras
 
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if ((isOwner(Event.getPlayer())) && (isValidItem(ACC.DefaultItem)) &&
+        if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) &&
                 (!EventManager.DamageGuard)) {
             return 0;
         }
