@@ -3,7 +3,6 @@ package physicalFighters.abilities;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
-import physicalFighters.PhysicalFighters;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,14 +17,11 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Gladiator extends Ability {
     public Gladiator() {
-        if ((!PhysicalFighters.Toner) &&
-                (PhysicalFighters.SRankUsed)) {
-            InitAbility("글레디에이터", Type.Active_Immediately, Rank.SSS, new String[]{
-                    "상대를 철괴로 타격할시에 천공의 투기장으로 이동하여 10초간 1:1 대결을 펼칩니다.",
-                    "이때 상대는 다양한 디버프를 받고, 당신은 버프를 받습니다."});
-            InitAbility(60, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this));
-        }
+        InitAbility("글레디에이터", Type.Active_Immediately, Rank.SSS, new String[]{
+                "상대를 철괴로 타격할시에 천공의 투기장으로 이동하여 10초간 1:1 대결을 펼칩니다.",
+                "이때 상대는 다양한 디버프를 받고, 당신은 버프를 받습니다."});
+        InitAbility(60, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 
     public int A_Condition(Event event, int CustomData) {

@@ -18,20 +18,17 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Akainu
-        extends Ability {
+public class Akainu extends Ability {
     public static Block[][][] B = new Block[5][5][3];
     public static Material[][][] M = new Material[5][5][3];
 
     public Akainu() {
-        if ((!PhysicalFighters.Toner) &&
-                (PhysicalFighters.SRankUsed)) {
-            InitAbility("아카이누", Type.Active_Immediately, Rank.SS, new String[]{
-                    "바라보는 곳의 땅을 3초동안 용암으로 바꿔버립니다.", "3초 뒤에 용암이 굳으며 땅속에 갇힙니다.", "용암속에서 데미지를 받지 않습니다."});
-            InitAbility(30, 0, true);
-            registerLeftClickEvent();
-            EventManager.onEntityDamage.add(new EventData(this, 3));
-        }
+        InitAbility("아카이누", Type.Active_Immediately, Rank.SS,
+                "바라보는 곳의 땅을 3초동안 용암으로 바꿔버립니다.",
+                "3초 뒤에 용암이 굳으며 땅속에 갇힙니다.", "용암속에서 데미지를 받지 않습니다.");
+        InitAbility(30, 0, true);
+        registerLeftClickEvent();
+        EventManager.onEntityDamage.add(new EventData(this, 3));
     }
 
     public int A_Condition(Event event, int CustomData) {
@@ -100,9 +97,3 @@ public class Akainu
         }
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Akainu.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

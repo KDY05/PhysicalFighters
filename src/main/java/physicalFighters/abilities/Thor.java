@@ -20,16 +20,13 @@ public class Thor extends Ability {
     int Attack = 0;
 
     public Thor() {
-        if ((!PhysicalFighters.Toner) &&
-                (PhysicalFighters.SRankUsed)) {
-            InitAbility("토르", Type.Active_Immediately, Rank.GOD, new String[]{
-                    "금도끼는 묠니르입니다. 묠니르의 기본데미지는 8입니다.",
-                    "묠니르를 들고 우클릭시 묠니르에 번개의 힘을 내리치며 주변의 플레이어에게 5의 데미지를 주고,",
-                    "다음 공격에 +3의 데미지를 농축시킵니다. (6번까지 중첩됩니다.)"});
-            InitAbility(8, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
-            registerRightClickEvent();
-        }
+        InitAbility("토르", Type.Active_Immediately, Rank.GOD, new String[]{
+                "금도끼는 묠니르입니다. 묠니르의 기본데미지는 8입니다.",
+                "묠니르를 들고 우클릭시 묠니르에 번개의 힘을 내리치며 주변의 플레이어에게 5의 데미지를 주고,",
+                "다음 공격에 +3의 데미지를 농축시킵니다. (6번까지 중첩됩니다.)"});
+        InitAbility(8, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        registerRightClickEvent();
     }
 
     public ItemStack m() {

@@ -17,18 +17,14 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Poseidon
-        extends Ability {
+public class Poseidon extends Ability {
     public Poseidon() {
-        if ((!PhysicalFighters.Toner) &&
-                (PhysicalFighters.SRankUsed)) {
-            InitAbility("포세이돈", Type.Active_Immediately, Rank.SS, new String[]{
-                    "바라보는곳에 거대한 어항을 만들어 가둡니다.", "물에서 숨을 쉴 수 있습니다."});
-            InitAbility(60, 0, true);
-            registerLeftClickEvent();
-            EventManager.onEntityDamage.add(new EventData(this, 3));
-            EventManager.onPlayerMoveEvent.add(new EventData(this, 4));
-        }
+        InitAbility("포세이돈", Type.Active_Immediately, Rank.SS, new String[]{
+                "바라보는곳에 거대한 어항을 만들어 가둡니다.", "물에서 숨을 쉴 수 있습니다."});
+        InitAbility(60, 0, true);
+        registerLeftClickEvent();
+        EventManager.onEntityDamage.add(new EventData(this, 3));
+        EventManager.onPlayerMoveEvent.add(new EventData(this, 4));
     }
 
     public int A_Condition(Event event, int CustomData) {

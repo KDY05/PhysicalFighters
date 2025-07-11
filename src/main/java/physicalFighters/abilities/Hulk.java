@@ -3,7 +3,6 @@ package physicalFighters.abilities;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
-import physicalFighters.PhysicalFighters;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -19,15 +18,13 @@ public class Hulk extends Ability {
     int playerhealth = 20;
 
     public Hulk() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("헐크", Type.Active_Immediately, Rank.SSS,
-                    "철괴 오른쪽클릭시에 30초간 매우 강해집니다.",
-                    "버프를 받으며, 모든 데미지를 반으로 줄여받으며, 일부 액티브능력을 무시합니다.",
-                    "당신의 데미지는 1.5배가 되며, 당신의 공격 범위가 넓어집니다.");
-            InitAbility(180, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this));
-            registerRightClickEvent();
-        }
+        InitAbility("헐크", Type.Active_Immediately, Rank.SSS,
+                "철괴 오른쪽클릭시에 30초간 매우 강해집니다.",
+                "버프를 받으며, 모든 데미지를 반으로 줄여받으며, 일부 액티브능력을 무시합니다.",
+                "당신의 데미지는 1.5배가 되며, 당신의 공격 범위가 넓어집니다.");
+        InitAbility(180, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        registerRightClickEvent();
     }
 
     @Override

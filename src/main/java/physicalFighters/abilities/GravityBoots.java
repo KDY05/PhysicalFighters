@@ -1,5 +1,6 @@
 package physicalFighters.abilities;
 
+import physicalFighters.PhysicalFighters;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
@@ -23,10 +24,11 @@ public class GravityBoots extends Ability {
     Material bt;
 
     public GravityBoots() {
-        InitAbility("중력장화", Type.Active_Immediately, Rank.S, new String[]{
+        if (PhysicalFighters.Specialability) return;
+        InitAbility("중력장화", Type.Active_Immediately, Rank.S,
                 "아무것도 신지않고, 철괴로 왼쪽클릭을 하면, 바라보는 블럭에 10초간 청금석이 생깁니다.",
                 "능력사용자를 제외한 청금석 주변의 플레이어는 지속 데미지와 함께 청금석으로 끌려옵니다.",
-                "아무것도 신지않고있는 경우 낙하데미지를 받지 않습니다."});
+                "아무것도 신지않고있는 경우 낙하데미지를 받지 않습니다.");
         InitAbility(40, 10, true);
         registerLeftClickEvent();
         EventManager.onEntityDamage.add(new EventData(this, 1));

@@ -1,6 +1,5 @@
 package physicalFighters.abilities;
 
-import physicalFighters.PhysicalFighters;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 
@@ -14,15 +13,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Fittingroom extends Ability {
     public Fittingroom() {
-        if (!PhysicalFighters.Toner) {
-            InitAbility(
-                    "탈의실",
-                    Type.Active_Immediately,
-                    Rank.SSS,
-                    new String[]{"능력 사용시 자기 자신을 제외한 모든 플레이어가 손에 쥐고있는 아이템을 떨어뜨립니다."});
-            InitAbility(160, 0, true);
-            registerLeftClickEvent();
-        }
+        InitAbility("탈의실", Type.Active_Immediately, Rank.SSS,
+                "능력 사용시 자기 자신을 제외한 모든 플레이어가 손에 쥐고있는 아이템을 떨어뜨립니다.");
+        InitAbility(160, 0, true);
+        registerLeftClickEvent();
     }
 
     public int A_Condition(Event event, int CustomData) {
@@ -50,9 +44,3 @@ public class Fittingroom extends Ability {
                 "님이 능력을 사용해 모든 플레이어의 무장을 해체시켰습니다.");
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Fittingroom.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

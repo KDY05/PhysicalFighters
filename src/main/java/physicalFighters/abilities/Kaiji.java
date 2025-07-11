@@ -22,15 +22,13 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class Kaiji extends Ability {
     public Kaiji() {
-        if (!PhysicalFighters.Toner) {
-            InitAbility("카이지", Type.Passive_Manual, Rank.S, new String[]{
-                    "다이아몬드로 상대를 타격할시에 30%확률로 상대를 즉사시키고,", "70%확률로 사망합니다."});
-            InitAbility(20, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
-            EventManager.onPlayerDropItem.add(new EventData(this, 1));
-            EventManager.onPlayerRespawn.add(new EventData(this, 2));
-            EventManager.onEntityDeath.add(new EventData(this, 3));
-        }
+        InitAbility("카이지", Type.Passive_Manual, Rank.S,
+                "다이아몬드로 상대를 타격할시에 30%확률로 상대를 즉사시키고,", "70%확률로 사망합니다.");
+        InitAbility(20, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.onPlayerDropItem.add(new EventData(this, 1));
+        EventManager.onPlayerRespawn.add(new EventData(this, 2));
+        EventManager.onEntityDeath.add(new EventData(this, 3));
     }
 
     public int A_Condition(Event event, int CustomData) {
@@ -74,8 +72,7 @@ public class Kaiji extends Ability {
                 if (Math.random() <= 0.3D) {
                     p.damage(5000);
                     Bukkit.broadcastMessage(String.format(ChatColor.RED +
-                            "%s님이  카'의지'에 능력에 의지가 꺾였습니다.", new Object[]{
-                            p.getName()}));
+                            "%s님이  카'의지'에 능력에 의지가 꺾였습니다.", p.getName()));
                     if (PhysicalFighters.AutoKick) {
                         p.kickPlayer("카이지에 의해 사망했습니다.");
                         if (PhysicalFighters.AutoBan)
@@ -84,8 +81,8 @@ public class Kaiji extends Ability {
                 } else {
                     getPlayer().damage(5000);
                     Bukkit.broadcastMessage(String.format(ChatColor.RED +
-                            "%s님이  도박하다가 손목이 날라갔습니다.", new Object[]{
-                            getPlayer().getName()}));
+                            "%s님이 도박하다가 손목이 날라갔습니다.",
+                            getPlayer().getName()));
                     if (PhysicalFighters.AutoKick) {
                         getPlayer().kickPlayer("카이지에 의해 사망했습니다.");
                         if (PhysicalFighters.AutoBan)
@@ -107,7 +104,7 @@ public class Kaiji extends Ability {
                 EntityDeathEvent Event3 = (EntityDeathEvent) event;
                 List<ItemStack> itemlist = Event3.getDrops();
                 for (int l = 0; l < itemlist.size(); l++) {
-                    if (((ItemStack) itemlist.get(l)).getType() == Material.DIAMOND)
+                    if (itemlist.get(l).getType() == Material.DIAMOND)
                         itemlist.remove(l);
                 }
         }
@@ -121,9 +118,3 @@ public class Kaiji extends Ability {
         p.getInventory().setItem(8, new ItemStack(Material.DIAMOND, 1));
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Kaiji.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

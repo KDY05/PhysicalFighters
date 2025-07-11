@@ -3,7 +3,6 @@ package physicalFighters.abilities;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.Vector;
-import physicalFighters.PhysicalFighters;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,15 +11,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Guard
-        extends Ability {
+public class Guard extends Ability {
     public Guard() {
-        if (!PhysicalFighters.Toner) {
-            InitAbility("목둔", Type.Active_Immediately, Rank.A, new String[]{
-                    "능력을 사용하면 나무 벽을 설치해 상대를 가둘 수 있다."});
-            InitAbility(30, 0, true);
-            registerLeftClickEvent();
-        }
+        InitAbility("목둔", Type.Active_Immediately, Rank.A,
+                "능력을 사용하면 나무 벽을 설치해 상대를 가둘 수 있다.");
+        InitAbility(30, 0, true);
+        registerLeftClickEvent();
     }
 
     public int A_Condition(Event event, int CustomData) {
@@ -38,7 +34,7 @@ public class Guard
             if ((playervec.distance(targetvec) <= 40.0D) && (b.getY() != 0)) {
                 return 0;
             }
-            p.sendMessage(String.format(ChatColor.RED + "거리가 너무 멉니다.", new Object[0]));
+            p.sendMessage(String.format(ChatColor.RED + "거리가 너무 멉니다."));
         }
         return -1;
     }
@@ -137,9 +133,3 @@ public class Guard
         }
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Guard.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

@@ -1,35 +1,42 @@
-# 설정 알아서하세요 ><
+# PhysicalFighters Configuration
 
-시작시 능력 추첨 안함: false
-시작시 인벤토리 초기화 안함: false
-시작시 리스폰으로 이동: false
-시작후 팁 출력함: true
-시작후 초반 무적: false
-초반 무적 시간(분 단위): 10
-일부 능력 금지 시간(분 단위, 0은 사용 안함): 10
+# 사망 시 자동 퇴장
+AutoKick: true
+# 사망시 자동 밴 (AutoKick이 활성화여야 작동)
+AutoBan: false
+# 사망 시 죽인 사람 공개
+KillerOutput: true
 
-사망시 자동으로 킥: true
-사망시 자동으로 밴(킥이 활성화 되어야 가능): true
+# 시작 시 인벤토리 초기화
+ClearInventory: true
+# 시작 시 리스폰으로 이동
+Respawn: false
+# 초반 무적 시간 (분 단위, 0 이상 정수)
+EarlyInvincibleTime: 10
+# 일부 능력 금지 시간 (분 단위, 0 이상 정수)
+RestrictionTime: 15
+# 시작 시 능력 추첨 생략
+NoAbilitySetting: false
 
-레벨 지급: true
-레벨 설정: 222
-책장 지급: false
-기본 무장 제공: true
-나무 지급: false
+# 기본 지급 레벨 (0 이상 정수)
+SetLev: 60
+# 기본 무장
+DefaultArmed: false
+# 기본 책장 지급
+TableGive: false
+# 기본 나무 지급
+WoodGive: false
 
-내구도 무한: true
-배고픔 무한 모드(관련 능력은 알아서 상향됨): true
+# 배고픔 무한 모드
+NoFoodMode: false
+# 내구도 무한 모드
+InfinityDur: false
+# 몬스터 공격력 반감 모드
+HalfMonsterDamage: false
 
-난이도 자동으로 Easy로 설정: true
-몬스터의 공격력 반감: true
-S랭크 능력 사용: true
-죽을 경우 죽인 사람을 보여줌: true
-일정시간마다 좌표 표시: true
-동물 비활성화: false
-퀵 스타트 모드: true
-인벤토리 세이브: false
-능력 중복 가능: false
-극한모드: false
-스페셜능력모드: false
-신등급활성화: true
-토너먼트능력자: false
+# 인기 능력만 사용
+Specialability: true
+# 능력 중복 가능
+AbilityOverLap: false
+# 팁 출력
+PrintTip: true

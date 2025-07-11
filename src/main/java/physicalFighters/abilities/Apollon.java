@@ -12,13 +12,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class Apollon
         extends Ability {
     public Apollon() {
-        if ((!PhysicalFighters.Toner) &&
-                (PhysicalFighters.SRankUsed)) {
-            InitAbility("아폴론", Type.Active_Immediately, Rank.SS, new String[]{
-                    "바라보는 방향에 불구덩이를 만듭니다."});
-            InitAbility(40, 0, true);
-            registerLeftClickEvent();
-        }
+        InitAbility("아폴론", Type.Active_Immediately, Rank.SS, new String[]{
+                "바라보는 방향에 불구덩이를 만듭니다."});
+        InitAbility(40, 0, true);
+        registerLeftClickEvent();
     }
 
     public int A_Condition(Event event, int CustomData) {

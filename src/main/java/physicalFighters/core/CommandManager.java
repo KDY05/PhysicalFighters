@@ -10,7 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 
@@ -19,7 +18,6 @@ public class CommandManager implements CommandExecutor {
 
     public CommandManager(PhysicalFighters plugin) {
         Objects.requireNonNull(plugin.getCommand("va")).setExecutor(this);
-        Objects.requireNonNull(plugin.getCommand("showmethemoney")).setExecutor(this);
     }
 
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] data) {
@@ -44,12 +42,6 @@ public class CommandManager implements CommandExecutor {
                 sender.sendMessage(ChatColor.YELLOW + "[0]/va dura : " + ChatColor.WHITE + "내구도무한을 설정합니다.");
                 return true;
             }
-        }
-        if ((command.getName().equals("showmethemoney")) &&
-                (sender.isOp()) && ((sender instanceof Player p))) {
-            p.setLevel(p.getLevel() + 60);
-            p.sendMessage(ChatColor.GREEN + "역시 대출은 램램머니!");
-            return true;
         }
         return false;
     }

@@ -1,5 +1,6 @@
 package physicalFighters.abilities;
 
+import physicalFighters.PhysicalFighters;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
@@ -29,6 +30,7 @@ public class TwistedFate extends Ability {
     Timer tt = new Timer();
 
     public TwistedFate() {
+        if (PhysicalFighters.Specialability) return;
         InitAbility("트위스티드 페이트", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴를 들고 우클릭시 카드를 뽑으며, 좌클릭시 바라보는 방향으로 카드를 날립니다.",
                 "카드는 순서대로 빨강색, 파랑색, 황금색이 있습니다.",

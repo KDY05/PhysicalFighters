@@ -352,6 +352,8 @@ public abstract class Ability {
         }
     }
 
+    // Timer Classes
+
     public static final class CoolDownTimer extends TimerBase {
         private final Ability ab;
 

@@ -88,17 +88,14 @@ public final class S_GameReady {
                     }
                     break;
                 case 3:
-                    Bukkit.broadcastMessage(String.format(ChatColor.DARK_RED +
-                            "Physical Fighters"));
-                    Bukkit.broadcastMessage(String.format(
-                            ChatColor.RED + "VER. %d", PhysicalFighters.BuildNumber));
-                    Bukkit.broadcastMessage(ChatColor.GREEN + "제작 : " +
-                            ChatColor.WHITE + "염료");
+                    Bukkit.broadcastMessage(String.format(ChatColor.DARK_RED + "Physical Fighters"));
+                    Bukkit.broadcastMessage(String.format(ChatColor.RED + "VER. %d", PhysicalFighters.BuildNumber));
+                    Bukkit.broadcastMessage(ChatColor.GREEN + "제작 : " + ChatColor.WHITE + "염료");
+                    Bukkit.broadcastMessage(ChatColor.GREEN + "업데이트 : " + ChatColor.WHITE + "어라랍");
                     break;
                 case 7:
                     if (!PhysicalFighters.NoAbilitySetting) {
-                        Bukkit.broadcastMessage(ChatColor.GRAY +
-                                "능력 설정 초기화 및 추첨 준비...");
+                        Bukkit.broadcastMessage(ChatColor.GRAY + "능력 설정 초기화 및 추첨 준비...");
                         for (Ability ab : AbilityList.AbilityList) {
                             ab.setRunAbility(false);
                             ab.setPlayer(null, false);

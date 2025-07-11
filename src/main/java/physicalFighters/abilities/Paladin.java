@@ -1,5 +1,6 @@
 package physicalFighters.abilities;
 
+import physicalFighters.PhysicalFighters;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
@@ -20,6 +21,7 @@ public class Paladin
     boolean candmg = true;
 
     public Paladin() {
+        if (PhysicalFighters.Specialability) return;
         InitAbility("팔라딘", Type.Passive_AutoMatic, Rank.A, new String[]{
                 "칼을 들었을 때 다수의 적에게 10~20의 랜덤데미지를 가하며 사거리가 두배가 됩니다. 단, 공격속도가 감소합니다."});
         InitAbility(0, 0, true);

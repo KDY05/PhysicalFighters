@@ -29,42 +29,41 @@ public class Tracer extends Ability {
     LinkedList<Integer> H = new LinkedList<>();
 
     public Tracer() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("트레이서", Type.Active_Immediately, Rank.S,
-                    "1.철괴를 들고 쉬프트를 누르면 바라보는 방향으로 짧게 순간이동합니다.",
-                    "- 5초마다 코어가 하나씩 충전되며, 3개까지 충전됩니다.",
-                    "2.철괴를 들고 우클릭시 자신의 모든 상태를 4초전으로 돌립니다. (쿨타임:40초)",
-                    "*낙하데미지를 받지않습니다.");
-            InitAbility(40, 0, true);
-            EventManager.onPlayerToggleSneakEvent.add(new EventData(this));
-            registerRightClickEvent();
-            EventManager.onEntityDamage.add(new EventData(this, 3));
-            PhysicalFighters.TracerTimer = new Timer();
-            PhysicalFighters.TracerTimer.schedule(new TimerTask() {
-                public void run() {
-                    if (Tracer.this.hasPlayer()) {
-                        if (Tracer.this.core < 3) {
-                            Tracer.this.aaa += 1;
-                            if (Tracer.this.aaa == 5) {
-                                Tracer.this.core += 1;
-                                Tracer.this.getPlayer().sendMessage(ChatColor.AQUA + "▶".repeat(Math.max(0, Tracer.this.core)));
-                                Tracer.this.aaa = 0;
-                            }
+        if (PhysicalFighters.Specialability) return;
+        InitAbility("트레이서", Type.Active_Immediately, Rank.S,
+                "1.철괴를 들고 쉬프트를 누르면 바라보는 방향으로 짧게 순간이동합니다.",
+                "- 5초마다 코어가 하나씩 충전되며, 3개까지 충전됩니다.",
+                "2.철괴를 들고 우클릭시 자신의 모든 상태를 4초전으로 돌립니다. (쿨타임:40초)",
+                "*낙하데미지를 받지않습니다.");
+        InitAbility(40, 0, true);
+        EventManager.onPlayerToggleSneakEvent.add(new EventData(this));
+        registerRightClickEvent();
+        EventManager.onEntityDamage.add(new EventData(this, 3));
+        PhysicalFighters.TracerTimer = new Timer();
+        PhysicalFighters.TracerTimer.schedule(new TimerTask() {
+            public void run() {
+                if (Tracer.this.hasPlayer()) {
+                    if (Tracer.this.core < 3) {
+                        Tracer.this.aaa += 1;
+                        if (Tracer.this.aaa == 5) {
+                            Tracer.this.core += 1;
+                            Tracer.this.getPlayer().sendMessage(ChatColor.AQUA + "▶".repeat(Math.max(0, Tracer.this.core)));
+                            Tracer.this.aaa = 0;
                         }
-                        if (Tracer.this.getPlayer().isOnline()) {
-                            Tracer.this.L.add(Tracer.this.getPlayer().getLocation());
-                            Tracer.this.H.add((int) getPlayer().getHealth());
-                            if (Tracer.this.L.size() > 4) {
-                                Tracer.this.L.removeFirst();
-                            }
-                            if (Tracer.this.H.size() > 4) {
-                                Tracer.this.H.removeFirst();
-                            }
+                    }
+                    if (Tracer.this.getPlayer().isOnline()) {
+                        Tracer.this.L.add(Tracer.this.getPlayer().getLocation());
+                        Tracer.this.H.add((int) getPlayer().getHealth());
+                        if (Tracer.this.L.size() > 4) {
+                            Tracer.this.L.removeFirst();
+                        }
+                        if (Tracer.this.H.size() > 4) {
+                            Tracer.this.H.removeFirst();
                         }
                     }
                 }
-            }, 1000L, 1000L);
-        }
+            }
+        }, 1000L, 1000L);
     }
 
     public int A_Condition(Event event, int CustomData) {
@@ -135,7 +134,7 @@ public class Tracer extends Ability {
                 Objects.requireNonNull(tol.getWorld()).playEffect(tol, Effect.ENDER_SIGNAL, 1);
                 e.getPlayer().sendMessage("능력을 사용하여 4초전으로 되돌립니다.");
             } else {
-                e.getPlayer().sendMessage("타이머로 좌표를 불러오는데 오류가 발생했다고 염료한테 말하세요.");
+                e.getPlayer().sendMessage("타이머로 좌표를 불러오는데 오류가 발생했습니다.");
             }
         }
     }

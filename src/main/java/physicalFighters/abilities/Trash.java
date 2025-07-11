@@ -3,7 +3,6 @@ package physicalFighters.abilities;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
-import physicalFighters.PhysicalFighters;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -13,14 +12,12 @@ import org.bukkit.potion.PotionEffect;
 
 public class Trash extends Ability {
     public Trash() {
-        if ((!PhysicalFighters.Toner) && (PhysicalFighters.SRankUsed) && (!PhysicalFighters.Specialability)) {
-            InitAbility("쓰레기", Type.Active_Immediately, Rank.F,
-                    "능력 사용시 체력을 소비하여 1분간 허약해집니다.",
-                    "철괴로 상대를 타격시 1%확률로 능력을 서로 바꿉니다.");
-            InitAbility(10, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this));
-            registerRightClickEvent();
-        }
+        InitAbility("쓰레기", Type.Active_Immediately, Rank.F,
+                "능력 사용시 체력을 소비하여 1분간 허약해집니다.",
+                "철괴로 상대를 타격시 1%확률로 능력을 서로 바꿉니다.");
+        InitAbility(10, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        registerRightClickEvent();
     }
 
     public int A_Condition(Event event, int CustomData) {

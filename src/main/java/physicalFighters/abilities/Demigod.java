@@ -3,7 +3,6 @@ package physicalFighters.abilities;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
-import physicalFighters.PhysicalFighters;
 
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
@@ -14,13 +13,11 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Demigod extends Ability {
     public Demigod() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("데미갓", Type.Passive_AutoMatic, Rank.S, new String[]{
-                    "반은 인간, 반은 신인 능력자입니다.",
-                    "데미지를 받으면 일정 확률로 10초간 랜덤 버프가 발동됩니다."});
-            InitAbility(0, 0, true);
-            EventManager.onEntityDamage.add(new EventData(this));
-        }
+        InitAbility("데미갓", Type.Passive_AutoMatic, Rank.S, new String[]{
+                "반은 인간, 반은 신인 능력자입니다.",
+                "데미지를 받으면 일정 확률로 10초간 랜덤 버프가 발동됩니다."});
+        InitAbility(0, 0, true);
+        EventManager.onEntityDamage.add(new EventData(this));
     }
 
     public int A_Condition(Event event, int CustomData) {

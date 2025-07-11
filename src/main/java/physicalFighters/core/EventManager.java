@@ -8,7 +8,6 @@ import physicalFighters.scripts.MainScripter.ScriptStatus;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Objects;
 
 import org.bukkit.Bukkit;
@@ -32,7 +31,6 @@ public class EventManager implements Listener {
 
     public static ArrayList<Ability> LeftHandEvent = new ArrayList<>();
     public static ArrayList<Ability> RightHandEvent = new ArrayList<>();
-    public static HashMap<Player, ItemStack[]> invsave = new HashMap<>();
     public static boolean DamageGuard = false;
 
     @EventHandler
@@ -55,9 +53,8 @@ public class EventManager implements Listener {
             }
         }
         if (event instanceof EntityDamageByEntityEvent byEntityEvent) {
-            // 몬스터애게 입히는 대미지 50% 감소
-            if (PhysicalFighters.HalfMonsterDamage &&
-                    !(byEntityEvent.getDamager() instanceof Player))
+            // 몬스터애게 받는 대미지 50% 감소
+            if (PhysicalFighters.HalfMonsterDamage && !(byEntityEvent.getDamager() instanceof Player))
                 byEntityEvent.setDamage(byEntityEvent.getDamage() / 2);
             AbilityExcuter(onEntityDamageByEntity, event);
         }
@@ -71,7 +68,7 @@ public class EventManager implements Listener {
     public static void onFoodLevelChange(FoodLevelChangeEvent event) {
         if (PhysicalFighters.NoFoodMode) {
             // 배고픔 무한
-            event.setFoodLevel(19);
+            event.setFoodLevel(20);
             return;
         }
         AbilityExcuter(onFoodLevelChange, event);
@@ -80,63 +77,38 @@ public class EventManager implements Listener {
 
 
     @EventHandler
-    public static void onPlayerRespawn(PlayerRespawnEvent event) {
-        // 인벤 세이브 처리
-        if (PhysicalFighters.InventorySave &&
-                !AbilityList.phoenix.isOwner(event.getPlayer())) {
-            ItemStack[] inv = invsave.get(event.getPlayer());
-            if (inv != null) {
-                event.getPlayer().getInventory().setContents(inv);
-            }
-            invsave.remove(event.getPlayer());
-        }
-        AbilityExcuter(onPlayerRespawn, event);
-    }
-    public static ArrayList<EventData> onPlayerRespawn = new ArrayList<>();
-
-
-    @EventHandler
     public static void onEntityDeath(EntityDeathEvent event) {
         if (MainScripter.Scenario == ScriptStatus.GameStart && event instanceof PlayerDeathEvent pde) {
             Player victim = (Player) event.getEntity();
             Player killer = victim.getKiller();
+            victim.getInventory().clear();
 
-            // 인벤세이브 처리
-            if (PhysicalFighters.InventorySave && !AbilityList.phoenix.isOwner(victim)) {
-                invsave.put(victim, victim.getInventory().getContents());
-                pde.getDrops().clear();
-            }
-
-            // 타살 또는 자연사 허용하지 않는 경우만 처리
-            if (killer != null || !PhysicalFighters.AllowND) {
-                victim.getInventory().clear();
-                
-                // 킥, 밴 처리
-                if (PhysicalFighters.AutoKick && !AbilityList.phoenix.isOwner(victim)) {
-                    if (PhysicalFighters.AutoBan && !victim.isOp()) {
-                        victim.ban("당신은 죽었습니다. 다시 들어오실 수 없습니다.", (Date) null, null, true);
-                    } else {
-                        victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
-                    }
-                }
-                
-                // 데스 메시지
-                PhysicalFighters.getPlugin().getLogger().info(pde.getDeathMessage());
-                if (killer != null) {
-                    // 타살인 경우
-                    if (PhysicalFighters.KillerOutput) {
-                        pde.setDeathMessage(ChatColor.GREEN + killer.getName() + ChatColor.WHITE + "님이 "
-                                + ChatColor.RED + victim.getName() + ChatColor.WHITE + "님의 살겠다는 의지를 꺾었습니다.");
-                    } else {
-                        pde.setDeathMessage(ChatColor.RED + victim.getName() +
-                                ChatColor.WHITE + "님이 누군가에게 살해당했습니다.");
-                    }
+            // 킥, 밴 처리
+            if (PhysicalFighters.AutoKick && !AbilityList.phoenix.isOwner(victim)) {
+                if (PhysicalFighters.AutoBan && !victim.isOp()) {
+                    victim.ban("당신은 죽었습니다. 다시 들어오실 수 없습니다.", (Date) null, null, true);
                 } else {
-                    // 자연사인 경우
-                    pde.setDeathMessage(ChatColor.RED + victim.getName() +
-                            ChatColor.WHITE + "님이 대자연에 의해 의지를 꺾였습니다.");
+                    victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
                 }
             }
+
+            // 데스 메시지
+            PhysicalFighters.getPlugin().getLogger().info(pde.getDeathMessage());
+            if (killer != null) {
+                // 타살인 경우
+                if (PhysicalFighters.KillerOutput) {
+                    pde.setDeathMessage(ChatColor.GREEN + killer.getName() + ChatColor.WHITE + "님이 "
+                            + ChatColor.RED + victim.getName() + ChatColor.WHITE + "님의 살겠다는 의지를 꺾었습니다.");
+                } else {
+                    pde.setDeathMessage(ChatColor.RED + victim.getName() +
+                            ChatColor.WHITE + "님이 누군가에게 살해당했습니다.");
+                }
+            } else {
+                // 자연사인 경우
+                pde.setDeathMessage(ChatColor.RED + victim.getName() +
+                        ChatColor.WHITE + "님이 대자연에 의해 의지를 꺾였습니다.");
+            }
+
         }
         AbilityExcuter(onEntityDeath, event);
     }
@@ -148,7 +120,6 @@ public class EventManager implements Listener {
         _AbilityEventFilter(event);
         Player p = event.getPlayer();
         ItemStack handItem = p.getInventory().getItemInMainHand();
-
         // 도구 내구도 무한
         if (PhysicalFighters.InfinityDur) {
             if (handItem.getItemMeta() instanceof Damageable damageable) {
@@ -249,6 +220,13 @@ public class EventManager implements Listener {
             AbilityExcuter(onPlayerPickupItem, event);
     }
     public static ArrayList<EventData> onPlayerPickupItem = new ArrayList<>();
+
+
+    @EventHandler
+    public static void onPlayerRespawn(PlayerRespawnEvent event) {
+        AbilityExcuter(onPlayerRespawn, event);
+    }
+    public static ArrayList<EventData> onPlayerRespawn = new ArrayList<>();
 
 
     @EventHandler

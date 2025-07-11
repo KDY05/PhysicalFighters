@@ -12,12 +12,10 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public class Nonuck extends Ability {
     public Nonuck() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("무통증", Type.Passive_AutoMatic, Rank.S, new String[]{
-                    "플레이어에게 타격당할시에 80%확률로 넉백을 무시합니다."});
-            InitAbility(0, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this));
-        }
+        InitAbility("무통증", Type.Passive_AutoMatic, Rank.S, new String[]{
+                "플레이어에게 타격당할시에 80%확률로 넉백을 무시합니다."});
+        InitAbility(0, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 
     public int A_Condition(Event event, int CustomData) {

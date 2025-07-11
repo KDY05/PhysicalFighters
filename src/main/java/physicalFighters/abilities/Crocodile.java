@@ -2,7 +2,6 @@ package physicalFighters.abilities;
 
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.PhysicalFighters;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,14 +20,12 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Crocodile extends Ability {
     public Crocodile() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("크로커다일", Type.Active_Immediately, Rank.S, new String[]{
-                    "철괴 왼쪽클릭시 자신의 주변의 있는 블력을 모래로 바꿔버립니다.",
-                    "철괴 오른쪽클릭시 모래 주변에 있는 적에게 일정시간동안 모래바람을 일으킵니다."});
-            InitAbility(30, 0, true);
-            registerLeftClickEvent();
-            registerRightClickEvent();
-        }
+        InitAbility("크로커다일", Type.Active_Immediately, Rank.S, new String[]{
+                "철괴 왼쪽클릭시 자신의 주변의 있는 블력을 모래로 바꿔버립니다.",
+                "철괴 오른쪽클릭시 모래 주변에 있는 적에게 일정시간동안 모래바람을 일으킵니다."});
+        InitAbility(30, 0, true);
+        registerLeftClickEvent();
+        registerRightClickEvent();
     }
 
     public int A_Condition(Event event, int CustomData) {

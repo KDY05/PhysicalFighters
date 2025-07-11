@@ -22,15 +22,13 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class FallArrow extends Ability {
     public FallArrow() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("중력화살", Type.Passive_Manual, Rank.S, new String[]{
-                    "화살에 맞은 플레이어는 공중으로 뜹니다. [추가타 가능]"});
-            InitAbility(0, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
-            EventManager.onPlayerDropItem.add(new EventData(this, 1));
-            EventManager.onPlayerRespawn.add(new EventData(this, 2));
-            EventManager.onEntityDeath.add(new EventData(this, 3));
-        }
+        InitAbility("중력화살", Type.Passive_Manual, Rank.S, new String[]{
+                "화살에 맞은 플레이어는 공중으로 뜹니다. [추가타 가능]"});
+        InitAbility(0, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.onPlayerDropItem.add(new EventData(this, 1));
+        EventManager.onPlayerRespawn.add(new EventData(this, 2));
+        EventManager.onEntityDeath.add(new EventData(this, 3));
     }
 
     public int A_Condition(Event event, int CustomData) {

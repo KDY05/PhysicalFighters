@@ -22,15 +22,13 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class Blitzcrank extends Ability {
     public Blitzcrank() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("블리츠크랭크", Type.Active_Immediately, Rank.SS, new String[]{
-                    "눈덩이를 던져, 맞은 적을 자신에게 끌어당깁니다."});
-            InitAbility(1, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
-            EventManager.onPlayerDropItem.add(new EventData(this, 1));
-            EventManager.onPlayerRespawn.add(new EventData(this, 2));
-            EventManager.onEntityDeath.add(new EventData(this, 3));
-        }
+        InitAbility("블리츠크랭크", Type.Active_Immediately, Rank.SS, new String[]{
+                "눈덩이를 던져, 맞은 적을 자신에게 끌어당깁니다."});
+        InitAbility(1, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.onPlayerDropItem.add(new EventData(this, 1));
+        EventManager.onPlayerRespawn.add(new EventData(this, 2));
+        EventManager.onEntityDeath.add(new EventData(this, 3));
     }
 
     public int A_Condition(Event event, int CustomData) {

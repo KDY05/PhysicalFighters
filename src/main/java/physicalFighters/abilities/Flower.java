@@ -14,14 +14,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Flower extends Ability {
     public Flower() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("흡혈초", Type.Active_Immediately, Rank.SS, new String[]{
-                    "철괴 왼클릭시 맞은 사람의 체력을 흡수합니다.",
-                    "철괴 오른클릭시 자신의 체력을 소비해 레벨을 얻습니다."});
-            InitAbility(5, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this));
-            registerRightClickEvent();
-        }
+        InitAbility("흡혈초", Type.Active_Immediately, Rank.SS, new String[]{
+                "철괴 왼클릭시 맞은 사람의 체력을 흡수합니다.",
+                "철괴 오른클릭시 자신의 체력을 소비해 레벨을 얻습니다."});
+        InitAbility(5, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        registerRightClickEvent();
     }
 
     public int A_Condition(Event event, int CustomData) {

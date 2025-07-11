@@ -25,15 +25,14 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class Ahri extends Ability {
     public Ahri() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("아리", Type.Active_Immediately, Rank.SS,
-                    "눈덩이를 던져, 맞은 적을 자신에게 무작정 걸어오게 만듭니다.");
-            InitAbility(20, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
-            EventManager.onPlayerDropItem.add(new EventData(this, 1));
-            EventManager.onPlayerRespawn.add(new EventData(this, 2));
-            EventManager.onEntityDeath.add(new EventData(this, 3));
-        }
+        if (PhysicalFighters.Specialability) return;
+        InitAbility("아리", Type.Active_Immediately, Rank.SS,
+                "눈덩이를 던져, 맞은 적을 자신에게 무작정 걸어오게 만듭니다.");
+        InitAbility(20, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.onPlayerDropItem.add(new EventData(this, 1));
+        EventManager.onPlayerRespawn.add(new EventData(this, 2));
+        EventManager.onEntityDeath.add(new EventData(this, 3));
     }
 
     public int A_Condition(Event event, int CustomData) {

@@ -22,18 +22,12 @@ public final class AUC {
         p.sendMessage(ChatColor.GREEN + "---------------");
         p.sendMessage(ChatColor.GOLD + "- 능력 정보 -");
         p.sendMessage(ChatColor.DARK_AQUA + "참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.");
-        if (PhysicalFighters.ReverseMode) {
-            p.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
-                    + " [" + ability.getRank().getText() + ChatColor.WHITE + "] ");
-        } else {
-            p.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
-                    + " [" + showTypeText(ability) + "] " + ability.getRank().getText());
-        }
+        p.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
+                + " [" + showTypeText(ability) + "] " + ability.getRank().getText());
         for (int l = 0; l < ability.getGuide().length; l++) {
             p.sendMessage(ability.getGuide()[l]);
         }
-        if (!PhysicalFighters.ReverseMode)
-            p.sendMessage(showTimerText(ability));
+        p.sendMessage(showTimerText(ability));
         p.sendMessage(ChatColor.GREEN + "---------------");
     }
 

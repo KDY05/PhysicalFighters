@@ -15,18 +15,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Infighter
-        extends Ability {
+public class Infighter extends Ability {
     public Infighter() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("인파이터", Type.Passive_AutoMatic, Rank.A, new String[]{
-                    "주먹으로 모든것을 해결하는 능력입니다.",
-                    "주먹으로 공격하면 대상에게 큰 충격을 받습니다.",
-                    "10%확률로 폭발이 일어나며 대상이 넉백됩니다.",
-                    "20%의 확률로 대상을 5초간 그로기상태로 만듭니다."});
-            InitAbility(0, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this));
-        }
+        if (PhysicalFighters.Specialability) return;
+        InitAbility("인파이터", Type.Passive_AutoMatic, Rank.A, new String[]{
+                "주먹으로 모든것을 해결하는 능력입니다.",
+                "주먹으로 공격하면 대상에게 큰 충격을 받습니다.",
+                "10%확률로 폭발이 일어나며 대상이 넉백됩니다.",
+                "20%의 확률로 대상을 5초간 그로기상태로 만듭니다."});
+        InitAbility(0, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 
     public int A_Condition(Event event, int CustomData) {

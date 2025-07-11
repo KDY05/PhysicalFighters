@@ -22,29 +22,19 @@ public class Aegis extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        if (!PhysicalFighters.ReverseMode) {
-            PlayerInteractEvent Event = (PlayerInteractEvent) event;
-            if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard)
-                return 0;
-        } else {
-            EntityDamageEvent Event = (EntityDamageEvent) event;
-            if (isOwner(Event.getEntity()))
-                return 0;
-        }
+        PlayerInteractEvent Event = (PlayerInteractEvent) event;
+        if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard)
+            return 0;
         return -1;
     }
 
     @Override
     public void A_Effect(Event event, int CustomData) {
         EntityDamageEvent Event = (EntityDamageEvent) event;
-        if (!PhysicalFighters.ReverseMode) {
-            if (isOwner(Event.getEntity())) {
-                Player p = (Player) Event.getEntity();
-                p.setFireTicks(0);
-                Event.setCancelled(true);
-            }
-        } else {
-            Event.setDamage((int) (Event.getDamage() * 1000.0D));
+        if (isOwner(Event.getEntity())) {
+            Player p = (Player) Event.getEntity();
+            p.setFireTicks(0);
+            Event.setCancelled(true);
         }
     }
 }

@@ -15,9 +15,9 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class Fish extends Ability {
     public Fish() {
-        InitAbility("강태공", Type.Passive_Manual, Rank.A, new String[]{
-                "낚싯대로 상대를 타격시 상대에게 강한 데미지를 주고, 매우 낮은 확률로 물고기를 얻습니다.",
-                "물고기를 들고 상대를 타격시에, 더욱더 강한 데미지를 줍니다."});
+        InitAbility("강태공", Type.Passive_Manual, Rank.A,
+                "낚싯대로 상대를 타격 시 강한 데미지를 주고, 매우 낮은 확률로 물고기를 얻습니다.",
+                "물고기를 들고 상대를 타격 시에, 더욱 더 강한 데미지를 줍니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         EventManager.onPlayerDropItem.add(new EventData(this, 1));
@@ -28,17 +28,16 @@ public class Fish extends Ability {
         switch (CustomData) {
             case 0:
                 EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-                if ((isOwner(Event.getDamager())) &&
-                        (isValidItem(Material.FISHING_ROD)))
+                if (isOwner(Event.getDamager()) && isValidItem(Material.FISHING_ROD))
                     return 0;
-                if ((isOwner(Event.getDamager())) && (isValidItem(Material.COD))) {
+                if (isOwner(Event.getDamager()) && isValidItem(Material.COD)) {
                     return 3;
                 }
                 break;
             case 1:
                 PlayerDropItemEvent Event1 = (PlayerDropItemEvent) event;
-                if ((isOwner(Event1.getPlayer())) &&
-                        (Event1.getItemDrop().getItemStack().getType() == Material.FISHING_ROD)) {
+                if (isOwner(Event1.getPlayer()) &&
+                        Event1.getItemDrop().getItemStack().getType() == Material.FISHING_ROD) {
                     PlayerInventory inv = Event1.getPlayer().getInventory();
                     if (!inv.contains(Material.FISHING_ROD, 1)) {
                         return 1;
@@ -72,8 +71,7 @@ public class Fish extends Ability {
             case 2:
                 PlayerRespawnEvent Event2 = (PlayerRespawnEvent) event;
                 Event2.getPlayer().sendMessage(org.bukkit.ChatColor.GREEN + "낚싯대가 지급됩니다.");
-                Event2.getPlayer().getInventory()
-                        .setItem(8, new ItemStack(Material.FISHING_ROD, 1));
+                Event2.getPlayer().getInventory().addItem(new ItemStack(Material.FISHING_ROD, 1));
                 break;
             case 3:
                 EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
@@ -82,18 +80,10 @@ public class Fish extends Ability {
     }
 
     public void A_SetEvent(Player p) {
-        p.getInventory().setItem(8,
-                new ItemStack(Material.FISHING_ROD, 1));
+        p.getInventory().addItem(new ItemStack(Material.FISHING_ROD, 1));
     }
 
     public void A_ResetEvent(Player p) {
-        p.getInventory().setItem(8,
-                new ItemStack(Material.FISHING_ROD, 1));
+        p.getInventory().addItem(new ItemStack(Material.FISHING_ROD, 1));
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Fish.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

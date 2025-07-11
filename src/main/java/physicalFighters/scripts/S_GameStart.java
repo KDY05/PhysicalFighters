@@ -40,8 +40,11 @@ public final class S_GameStart {
             p.setExp(0.0F);
             p.setHealth((int) 20.0D);
             p.setSaturation(10.0F);
-            if (!PhysicalFighters.NoClearInventory)
+            p.setLevel(PhysicalFighters.Setlev);
+
+            if (PhysicalFighters.ClearInventory) {
                 p.getInventory().clear();
+            }
             if (PhysicalFighters.Respawn) {
                 p.teleport(l);
             }
@@ -50,31 +53,10 @@ public final class S_GameStart {
                 p.getInventory().setChestplate(new ItemStack(Material.CHAINMAIL_CHESTPLATE, 1));
                 p.getInventory().setLeggings(new ItemStack(Material.GOLDEN_LEGGINGS, 1));
                 p.getInventory().setBoots(new ItemStack(Material.GOLDEN_BOOTS, 1));
-                p.getInventory().setItem(0, new ItemStack(Material.GOLDEN_SWORD, 1));
+                p.getInventory().addItem(new ItemStack(Material.GOLDEN_SWORD, 1));
                 p.getInventory().addItem(new ItemStack(Material.IRON_INGOT, 64));
                 p.getInventory().addItem(new ItemStack(Material.GOLD_INGOT, 64));
-            } else if (!PhysicalFighters.NoClearInventory) {
-                p.getInventory().setHelmet(null);
-                p.getInventory().setChestplate(null);
-                p.getInventory().setLeggings(null);
-                p.getInventory().setBoots(null);
-            }
-            if (PhysicalFighters.MaxLevelSurvival) {
-                p.setLevel(PhysicalFighters.Setlev);
-            }
-            if (PhysicalFighters.Kimiedition) {
-                p.getInventory().setHelmet(new ItemStack(Material.DIAMOND_HELMET, 1));
-                p.getInventory().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE, 1));
-                p.getInventory().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS, 1));
-                p.getInventory().setBoots(new ItemStack(Material.DIAMOND_BOOTS, 1));
-                p.getInventory().setItem(0, new ItemStack(Material.DIAMOND_SWORD, 1));
-                p.getInventory().addItem(new ItemStack(Material.IRON_INGOT, 64));
-                p.getInventory().addItem(new ItemStack(Material.GOLD_INGOT, 64));
-                p.setLevel(500);
-            }
-            if (PhysicalFighters.Specialability) {
-                Bukkit.broadcastMessage(ChatColor.GREEN + "인기있는 능력만 적용됩니다.");
-                PhysicalFighters.Specialability = true;
+                Bukkit.broadcastMessage(ChatColor.GREEN + "기본 무장이 제공됩니다.");
             }
             if (PhysicalFighters.TableGive) {
                 p.getInventory().addItem(new ItemStack(Material.ENCHANTING_TABLE, 1));
@@ -83,14 +65,9 @@ public final class S_GameStart {
             if (PhysicalFighters.WoodGive) {
                 p.getInventory().addItem(new ItemStack(Material.OAK_LOG, 64));
             }
-        }
-        if (PhysicalFighters.DefaultArmed) {
-            Bukkit.broadcastMessage(ChatColor.GREEN + "기본 무장이 제공됩니다.");
-        } else {
-            Bukkit.broadcastMessage(ChatColor.RED + "기본 무장이 제공되지 않습니다.");
-        }
-        if (PhysicalFighters.MaxLevelSurvival) {
-            Bukkit.broadcastMessage(ChatColor.GREEN + "만렙 서바이벌 모드입니다. 아이템 제공.");
+            if (PhysicalFighters.Specialability) {
+                Bukkit.broadcastMessage(ChatColor.GREEN + "인기있는 능력만 적용됩니다.");
+            }
         }
         for (Player p : this.ms.ExceptionList) {
             p.teleport(l);
@@ -111,8 +88,7 @@ public final class S_GameStart {
                     S_GameStart.this.ms.s_GameWarning.GameWarnningStop();
                     break;
                 case 3:
-                    Bukkit.broadcastMessage(ChatColor.WHITE +
-                            "모든 플레이어들의 능력을 확정했습니다.");
+                    Bukkit.broadcastMessage(ChatColor.WHITE + "모든 플레이어들의 능력을 확정했습니다.");
                     break;
                 case 5:
                     Bukkit.broadcastMessage(ChatColor.YELLOW + "잠시 후 게임이 시작됩니다.");
@@ -144,7 +120,7 @@ public final class S_GameStart {
                         }
                     }
                     plugin.getLogger().info("-------------------------");
-                    if (PhysicalFighters.Invincibility) {
+                    if (PhysicalFighters.EarlyInvincibleTime != 0) {
                         Bukkit.broadcastMessage("시작 직후 " + PhysicalFighters.EarlyInvincibleTime
                                 + "분간은 무적입니다.");
                         EventManager.DamageGuard = true;
@@ -162,11 +138,7 @@ public final class S_GameStart {
                     for (World wl : w) {
                         wl.setTime(1L);
                         wl.setStorm(false);
-                        if (PhysicalFighters.AutoDifficultySetting)
-                            wl.setDifficulty(org.bukkit.Difficulty.EASY);
                         wl.setWeatherDuration(0);
-                        wl.setSpawnFlags(wl.getAllowMonsters(),
-                                !PhysicalFighters.NoAnimal);
                         wl.setPVP(true);
                     }
                     for (Ability b : AbilityList.AbilityList) {
@@ -174,9 +146,6 @@ public final class S_GameStart {
                         b.setPlayer(b.getPlayer(), false);
                     }
                     S_GameStart.this.ms.s_GameProgress.GameProgress();
-                    if (!PhysicalFighters.AutoCoordinateOutput) {
-                        break;
-                    }
             }
         }
 

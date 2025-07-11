@@ -13,12 +13,11 @@ import org.bukkit.util.Vector;
 public class Fallingarrow
         extends Ability {
     public Fallingarrow() {
-        if (!PhysicalFighters.Specialability) {
-            InitAbility("낙하화살", Type.Active_Immediately, Rank.A, new String[]{
-                    "바라보는곳에 빠른속도로 화살 16발을 내리꽂습니다. [실내에서 사용이 안될 수 있습니다.]"});
-            InitAbility(3, 0, true);
-            registerLeftClickEvent();
-        }
+        if (PhysicalFighters.Specialability) return;
+        InitAbility("낙하화살", Type.Active_Immediately, Rank.A,
+                "바라보는곳에 빠른속도로 화살 16발을 내리꽂습니다. [실내에서 사용이 안될 수 있습니다.]");
+        InitAbility(3, 0, true);
+        registerLeftClickEvent();
     }
 
     public int A_Condition(Event event, int CustomData) {
@@ -40,22 +39,12 @@ public class Fallingarrow
             for (int j = -1; j <= 2; j++) {
                 Location l = p.getTargetBlock(null, 0).getLocation();
                 l.setX(l.getX() + 0.5D * i);
-                if (l.getY() + 10.0D > 250.0D) {
-                    l.setY(250.0D);
-                } else {
-                    l.setY(l.getY() + 10.0D);
-                }
+                l.setY(Math.min(l.getY() + 10.0D, 250.0D));
                 l.setZ(l.getZ() + 0.5D * j);
-                Arrow a = (Arrow) p.getWorld().spawn(l, Arrow.class);
+                Arrow a = p.getWorld().spawn(l, Arrow.class);
                 a.setVelocity(v);
                 a.setShooter(p);
             }
         }
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Fallingarrow.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

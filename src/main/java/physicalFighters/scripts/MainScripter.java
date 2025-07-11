@@ -6,8 +6,6 @@ import physicalFighters.core.EventManager;
 import physicalFighters.utils.AUC;
 import physicalFighters.PhysicalFighters;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 import org.bukkit.Bukkit;
@@ -41,7 +39,7 @@ public class MainScripter implements CommandInterface {
         this.plugin = plugin;
         this.s_GameReady = new S_GameReady(this);
         this.s_GameStart = new S_GameStart(this, plugin);
-        this.s_GameProgress = new S_GameProgress(this);
+        this.s_GameProgress = new S_GameProgress();
         this.s_GameWarning = new S_GameWarning(this);
     }
 
@@ -114,17 +112,6 @@ public class MainScripter implements CommandInterface {
         } else if (data[0].equalsIgnoreCase("dura")) {
             vadura(sender);
         }
-        else if (data[0].equalsIgnoreCase("염료")) {
-            if (sender instanceof Player p) {
-                try {
-                    vaeasteregg(p);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                return true;
-            }
-            sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        }
 
         return true;
     }
@@ -151,7 +138,6 @@ public class MainScripter implements CommandInterface {
                             code, ability.getAbilityName()));
                 }
             }
-            sender.sendMessage(ChatColor.GOLD + "================");
         } catch (NumberFormatException e) {
             sender.sendMessage(ChatColor.RED + "페이지가 올바르지 않습니다.");
         }
@@ -341,8 +327,7 @@ public class MainScripter implements CommandInterface {
     public final void vamaker(CommandSender p) {
         if (!p.isOp()) return;
         p.sendMessage(ChatColor.DARK_RED + "Physical Fighters 제작자");
-        p.sendMessage(ChatColor.RED +
-                " 본 모드는 '제온'님이 배포하신 'VisualAbility'의 모듈을 사용하고있습니다. " + ChatColor.WHITE);
+        p.sendMessage(ChatColor.RED + " 본 플러그인은 제온님이 배포한 VisualAbility의 모듈을 사용합니다. ");
     }
 
     public final void vaskip(CommandSender p) {
@@ -385,23 +370,6 @@ public class MainScripter implements CommandInterface {
         pn.kickPlayer("관리자가 당신의 의지를 꺾었습니다.");
         Bukkit.broadcastMessage(String.format(ChatColor.GRAY +
                 "%s님이 %s님을 사망처리했습니다.", p.getName(), pn.getName()));
-    }
-
-    public final void vaeasteregg(Player p) throws IOException {
-        File f = new File("yeomryo.love");
-        if (!f.exists()) {
-            if (!PhysicalFighters.easteregg) {
-                p.sendMessage("이스터에그의 히든능력이 적용되었습니다.");
-                PhysicalFighters.easteregg = true;
-                if (f.createNewFile())
-                    plugin.getLogger().info("yeomryo.love 파일이 생성되었습니다.");
-                Bukkit.reload();
-            } else {
-                p.sendMessage("이미 히든능력이 사용되고 있습니다.(없애려면 폴더의 yeomryo.love파일을 제거해주세요.)");
-            }
-        } else {
-            p.sendMessage("하이!");
-        }
     }
 
     public final void vaelist(CommandSender p) {

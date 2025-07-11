@@ -15,18 +15,15 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Bishop extends Ability {
-    private final int DurationTime = 300;
-
     public Bishop() {
-        if (!PhysicalFighters.Specialability) {
-            InitAbility("비숍", Type.Active_Immediately, Rank.B, new String[]{
-                    "철괴 왼클릭시 맞은 사람에게 각종 축복을 겁니다.", "철괴 오른클릭시 자신에게 각종 축복을 겁니다.",
-                    "금괴를 적에게 왼클릭시 각종 저주를 겁니다.", "세 기능은 쿨타임을 공유하며 모든 효과 지속시간은",
-                    "15초입니다."});
-            InitAbility(30, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this));
-            registerRightClickEvent();
-        }
+        if (PhysicalFighters.Specialability) return;
+        InitAbility("비숍", Type.Active_Immediately, Rank.B,
+                "철괴 왼클릭시 맞은 사람에게 각종 축복을 겁니다.", "철괴 오른클릭시 자신에게 각종 축복을 겁니다.",
+                "금괴를 적에게 왼클릭시 각종 저주를 겁니다.", "세 기능은 쿨타임을 공유하며 모든 효과 지속시간은",
+                "15초입니다.");
+        InitAbility(30, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        registerRightClickEvent();
     }
 
     public int A_Condition(Event event, int CustomData) {
@@ -59,17 +56,17 @@ public class Bishop extends Ability {
                 EntityDamageByEntityEvent Event0 = (EntityDamageByEntityEvent) event;
                 Player p0 = (Player) Event0.getEntity();
                 p0.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,
-                        300, 0), true);
+                        300, 0));
                 p0.addPotionEffect(new PotionEffect(
-                        PotionEffectType.RESISTANCE, 300, 0), true);
+                        PotionEffectType.RESISTANCE, 300, 0));
                 p0.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST,
-                        300, 0), true);
+                        300, 0));
                 p0.addPotionEffect(new PotionEffect(
-                        PotionEffectType.WATER_BREATHING, 300, 0), true);
+                        PotionEffectType.WATER_BREATHING, 300, 0));
                 p0.addPotionEffect(new PotionEffect(PotionEffectType.HASTE,
-                        300, 0), true);
+                        300, 0));
                 p0.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
-                        300, 0), true);
+                        300, 0));
                 p0.sendMessage(ChatColor.GREEN + "비숍이 당신에게 축복을 걸었습니다. 15초 지속.");
                 Event0.setCancelled(true);
                 break;
@@ -77,37 +74,31 @@ public class Bishop extends Ability {
                 PlayerInteractEvent Event1 = (PlayerInteractEvent) event;
                 Player p1 = Event1.getPlayer();
                 p1.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,
-                        300, 0), true);
+                        300, 0));
                 p1.addPotionEffect(new PotionEffect(
-                        PotionEffectType.RESISTANCE, 300, 0), true);
+                        PotionEffectType.RESISTANCE, 300, 0));
                 p1.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST,
-                        300, 0), true);
+                        300, 0));
                 p1.addPotionEffect(new PotionEffect(
-                        PotionEffectType.WATER_BREATHING, 300, 0), true);
+                        PotionEffectType.WATER_BREATHING, 300, 0));
                 p1.addPotionEffect(new PotionEffect(PotionEffectType.HASTE,
-                        300, 0), true);
+                        300, 0));
                 p1.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
-                        300, 0), true);
+                        300, 0));
                 p1.sendMessage(ChatColor.GREEN + "자신에게 축복을 걸었습니다. 15초 지속.");
                 break;
             case 2:
                 EntityDamageByEntityEvent Event2 = (EntityDamageByEntityEvent) event;
                 Player p2 = (Player) Event2.getEntity();
                 p2.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,
-                        300, 0), true);
+                        300, 0));
                 p2.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,
-                        300, 0), true);
+                        300, 0));
                 p2.addPotionEffect(new PotionEffect(PotionEffectType.POISON,
-                        300, 0), true);
+                        300, 0));
                 p2.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE,
-                        300, 0), true);
+                        300, 0));
                 p2.sendMessage(ChatColor.RED + "비숍이 당신에게 저주를 걸었습니다. 15초 지속.");
         }
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Bishop.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

@@ -1,6 +1,5 @@
 package physicalFighters.abilities;
 
-import physicalFighters.PhysicalFighters;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
@@ -22,15 +21,13 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class Tranceball extends Ability {
     public Tranceball() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("트랜스볼", Type.Passive_Manual, Rank.SS, new String[]{
-                    "눈덩이를 던져, 맞은 적과 위치를 바꿉니다."});
-            InitAbility(1, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
-            EventManager.onPlayerDropItem.add(new EventData(this, 1));
-            EventManager.onPlayerRespawn.add(new EventData(this, 2));
-            EventManager.onEntityDeath.add(new EventData(this, 3));
-        }
+        InitAbility("트랜스볼", Type.Passive_Manual, Rank.SS, new String[]{
+                "눈덩이를 던져, 맞은 적과 위치를 바꿉니다."});
+        InitAbility(1, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.onPlayerDropItem.add(new EventData(this, 1));
+        EventManager.onPlayerRespawn.add(new EventData(this, 2));
+        EventManager.onEntityDeath.add(new EventData(this, 3));
     }
 
     public int A_Condition(Event event, int CustomData) {

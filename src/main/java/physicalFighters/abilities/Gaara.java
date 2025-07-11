@@ -4,9 +4,6 @@ import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.PhysicalFighters;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,16 +12,14 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
-public class Gaara
-        extends Ability {
+public class Gaara extends Ability {
     public Gaara() {
-        if (!PhysicalFighters.Toner) {
-            InitAbility("가아라", Type.Active_Immediately, Rank.B, new String[]{
-                    "능력을 사용하면 모래를 떨어뜨리고 폭발시킨다."});
-            InitAbility(30, 0, true);
-            registerLeftClickEvent();
-        }
+        InitAbility("가아라", Type.Active_Immediately, Rank.B,
+                "철괴 좌클릭 시 바라보는 방향에 모래를 떨어뜨리고 폭발시킨다.");
+        InitAbility(30, 0, true);
+        registerLeftClickEvent();
     }
 
     public int A_Condition(Event event, int CustomData) {
@@ -38,7 +33,7 @@ public class Gaara
                 if (!EventManager.DamageGuard)
                     return 0;
             } else
-                p.sendMessage(String.format(ChatColor.RED + "거리가 너무 멉니다.", new Object[0]));
+                p.sendMessage(String.format(ChatColor.RED + "거리가 너무 멉니다."));
         }
         return -1;
     }
@@ -48,9 +43,8 @@ public class Gaara
         Player p = Event.getPlayer();
         Location l1 = p.getTargetBlock(null, 0).getLocation();
         Location l2 = p.getTargetBlock(null, 0).getLocation();
-        Timer timer = new Timer();
         Block block = Event.getPlayer().getTargetBlock(null, 0);
-        timer.schedule(new ExplosionTimer(block), 4000L);
+        new ExplosionTimer(block).runTaskLater(PhysicalFighters.getPlugin(), 80L);
         for (int j = 4; j <= 8; j++) {
             l2.setY(l1.getY() + j);
             for (int i = 0; i <= 3; i++) {
@@ -96,7 +90,7 @@ public class Gaara
         }
     }
 
-    class ExplosionTimer extends TimerTask {
+    static class ExplosionTimer extends BukkitRunnable {
         World world;
         Location location;
 
@@ -105,6 +99,7 @@ public class Gaara
             this.location = block.getLocation();
         }
 
+        @Override
         public void run() {
             this.world.createExplosion(this.location, 5.0F);
             this.world.createExplosion(this.location, 5.0F);
@@ -112,9 +107,3 @@ public class Gaara
         }
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Gaara.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

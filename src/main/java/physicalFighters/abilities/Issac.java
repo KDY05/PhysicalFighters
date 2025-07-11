@@ -1,5 +1,6 @@
 package physicalFighters.abilities;
 
+import physicalFighters.PhysicalFighters;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
@@ -21,6 +22,7 @@ public class Issac
     private Material item;
 
     public Issac() {
+        if (PhysicalFighters.Specialability) return;
         InitAbility("아이작", Type.Active_Immediately, Rank.S, new String[]{
                 "금괴를 들고 우클릭시 눈물을 발사합니다.",
                 "철괴 하나당 5개의 눈물을 발사할 수 있습니다.",

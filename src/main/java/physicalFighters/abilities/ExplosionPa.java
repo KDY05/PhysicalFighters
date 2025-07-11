@@ -1,5 +1,6 @@
 package physicalFighters.abilities;
 
+import physicalFighters.PhysicalFighters;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
@@ -20,6 +21,7 @@ public class ExplosionPa extends Ability {
     HashMap<String, Location> pLoc = new HashMap();
 
     public ExplosionPa() {
+        if (PhysicalFighters.Specialability) return;
         InitAbility(
                 "기공파",
                 Type.Active_Immediately,

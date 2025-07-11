@@ -6,6 +6,7 @@ import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,17 +22,16 @@ import org.bukkit.potion.PotionEffectType;
 public class Phoenix extends Ability {
     private int ReviveCounter = 0;
     private boolean AbilityUse = false;
+    public static HashMap<Player, ItemStack[]> invsave = new HashMap<>();
 
     public Phoenix() {
-        if (!PhysicalFighters.Toner) {
-            InitAbility("불사조", Type.Passive_Manual, Rank.A, new String[]{
-                    "자연사할시 무제한으로 인벤토리를 잃지 않고 부활합니다.",
-                    "타인에게 사망할 경우 1회에 한하여 자연사와 같이 부활합니다.",
-                    "부활시 자신의 능력이 모두에게 알려지게 됩니다.", "하지만 이 능력도 데스노트만은 막을수 없을것입니다."});
-            InitAbility(0, 0, true);
-            EventManager.onEntityDeath.add(new EventData(this, 0));
-            EventManager.onPlayerRespawn.add(new EventData(this, 1));
-        }
+        InitAbility("불사조", Type.Passive_Manual, Rank.A,
+                "자연사할시 무제한으로 인벤토리를 잃지 않고 부활합니다.",
+                "타인에게 사망할 경우 1회에 한하여 자연사와 같이 부활합니다.",
+                "부활시 자신의 능력이 모두에게 알려지게 됩니다.", "하지만 이 능력도 데스노트만은 막을수 없을것입니다.");
+        InitAbility(0, 0, true);
+        EventManager.onEntityDeath.add(new EventData(this, 0));
+        EventManager.onPlayerRespawn.add(new EventData(this, 1));
     }
 
     public int A_Condition(Event event, int CustomData) {
@@ -56,12 +56,10 @@ public class Phoenix extends Ability {
             case 0:
                 PlayerDeathEvent Event0 = (PlayerDeathEvent) event;
                 Player killed = Event0.getEntity();
-                EventManager.invsave.put(killed, killed.getInventory()
-                        .getContents());
+                invsave.put(killed, killed.getInventory().getContents());
                 Event0.getDrops().clear();
                 if (this.AbilityUse) {
-                    Bukkit.broadcastMessage(ChatColor.RED +
-                            "불사조가 죽었습니다. 더 이상 부활할수 없습니다.");
+                    Bukkit.broadcastMessage(ChatColor.RED + "불사조가 죽었습니다. 더 이상 부활할수 없습니다.");
                     if (PhysicalFighters.AutoKick) {
                         if (PhysicalFighters.AutoBan) {
                             killed.ban("탈락", (Date) null, null, false);
@@ -71,46 +69,38 @@ public class Phoenix extends Ability {
                         }
                     }
                 } else {
-                    Bukkit.broadcastMessage(ChatColor.GREEN +
-                            "불사조가 죽었습니다. 다시 부활할 수 있습니다.");
+                    Bukkit.broadcastMessage(ChatColor.GREEN + "불사조가 죽었습니다. 다시 부활할 수 있습니다.");
                 }
-                if ((killed.getKiller() instanceof Player)) {
+                if (killed.getKiller() != null) {
                     this.AbilityUse = true;
                 }
                 this.ReviveCounter += 1;
                 break;
             case 1:
                 PlayerRespawnEvent Event1 = (PlayerRespawnEvent) event;
-                ItemStack[] inv = (ItemStack[]) EventManager.invsave.get(Event1.getPlayer());
+                ItemStack[] inv = invsave.get(Event1.getPlayer());
                 if (inv != null) {
                     Event1.getPlayer().getInventory().setContents(inv);
                 }
-                EventManager.invsave.remove(Event1.getPlayer());
+                invsave.remove(Event1.getPlayer());
                 if (!this.AbilityUse) {
-                    Bukkit.broadcastMessage(ChatColor.GREEN +
-                            "불사조가 부활하였습니다. 부활 횟수 : " +
-                            String.valueOf(this.ReviveCounter) + "회");
+                    Bukkit.broadcastMessage(ChatColor.GREEN + "불사조가 부활하였습니다. 부활 횟수 : " +
+                            this.ReviveCounter + "회");
                 }
                 Event1.getPlayer().addPotionEffect(
-                        new PotionEffect(PotionEffectType.HASTE,
-                                600, 0), true);
+                        new PotionEffect(PotionEffectType.HASTE, 600, 0));
                 Event1.getPlayer().addPotionEffect(
-                        new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 600,
-                                0), true);
+                        new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 600, 0));
                 Event1.getPlayer().addPotionEffect(
-                        new PotionEffect(PotionEffectType.JUMP_BOOST, 600, 0), true);
+                        new PotionEffect(PotionEffectType.JUMP_BOOST, 600, 0));
                 Event1.getPlayer().addPotionEffect(
-                        new PotionEffect(PotionEffectType.SPEED, 600, 0), true);
+                        new PotionEffect(PotionEffectType.SPEED, 600, 0));
                 Event1.getPlayer().addPotionEffect(
-                        new PotionEffect(PotionEffectType.WATER_BREATHING, 600,
-                                0), true);
-                Event1.getPlayer()
-                        .addPotionEffect(
-                                new PotionEffect(PotionEffectType.REGENERATION,
-                                        600, 0), true);
+                        new PotionEffect(PotionEffectType.WATER_BREATHING, 600, 0));
                 Event1.getPlayer().addPotionEffect(
-                        new PotionEffect(PotionEffectType.RESISTANCE,
-                                600, 0), true);
+                        new PotionEffect(PotionEffectType.REGENERATION, 600, 0));
+                Event1.getPlayer().addPotionEffect(
+                        new PotionEffect(PotionEffectType.RESISTANCE, 600, 0));
         }
     }
 
@@ -119,9 +109,3 @@ public class Phoenix extends Ability {
         this.AbilityUse = false;
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Phoenix.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

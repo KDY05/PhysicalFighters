@@ -1,5 +1,6 @@
 package physicalFighters.abilities;
 
+import physicalFighters.PhysicalFighters;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import org.bukkit.Bukkit;
@@ -7,11 +8,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Thunder
-        extends Ability {
+public class Thunder extends Ability {
     public static boolean ppon = false;
 
     public Thunder() {
+        if (PhysicalFighters.Specialability) return;
         InitAbility("썬더볼트", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴 좌클릭으로 능력을 사용합니다.",
                 "주변 5칸의 플레이어에게 데미지를 줍니다."});

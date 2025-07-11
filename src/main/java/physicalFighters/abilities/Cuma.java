@@ -3,7 +3,6 @@ package physicalFighters.abilities;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
-import physicalFighters.PhysicalFighters;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -11,12 +10,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Cuma extends Ability {
     public Cuma() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("바솔로뮤 쿠마", Type.Passive_AutoMatic, Rank.S, new String[]{
-                    "일정 확률르 받은 공격을 상대에게 되돌려주며, 공격받을시 상대를 뒤로 넉백시킵니다."});
-            InitAbility(0, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this));
-        }
+        InitAbility("바솔로뮤 쿠마", Type.Passive_AutoMatic, Rank.S, new String[]{
+                "일정 확률르 받은 공격을 상대에게 되돌려주며, 공격받을시 상대를 뒤로 넉백시킵니다."});
+        InitAbility(0, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 
     public int A_Condition(Event event, int CustomData) {

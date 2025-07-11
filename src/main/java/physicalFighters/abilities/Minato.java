@@ -22,15 +22,13 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class Minato extends Ability {
     public Minato() {
-        if (PhysicalFighters.SRankUsed) {
-            InitAbility("미나토", Type.Passive_Manual, Rank.S, new String[]{
-                    "눈덩이를 던져, 맞은 적에게 텔레포트합니다."});
-            InitAbility(1, 0, true);
-            EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
-            EventManager.onPlayerDropItem.add(new EventData(this, 1));
-            EventManager.onPlayerRespawn.add(new EventData(this, 2));
-            EventManager.onEntityDeath.add(new EventData(this, 3));
-        }
+        InitAbility("미나토", Type.Passive_Manual, Rank.S, new String[]{
+                "눈덩이를 던져, 맞은 적에게 텔레포트합니다."});
+        InitAbility(1, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.onPlayerDropItem.add(new EventData(this, 1));
+        EventManager.onPlayerRespawn.add(new EventData(this, 2));
+        EventManager.onEntityDeath.add(new EventData(this, 3));
     }
 
     public int A_Condition(Event event, int CustomData) {
