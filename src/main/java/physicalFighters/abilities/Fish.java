@@ -16,8 +16,9 @@ import org.bukkit.inventory.PlayerInventory;
 public class Fish extends Ability {
     public Fish() {
         InitAbility("강태공", Type.Passive_Manual, Rank.A,
-                "낚싯대로 상대를 타격 시 강한 데미지를 주고, 매우 낮은 확률로 물고기를 얻습니다.",
-                "물고기를 들고 상대를 타격 시에, 더욱 더 강한 데미지를 줍니다.");
+                "낚싯대로 상대를 타격 시 강한 데미지를 주고, 낮은 확률로 전용 물고기를 얻습니다.",
+                "물고기를 들고 상대를 타격 시에, 더욱 강한 데미지를 줍니다.",
+                "(!) 공격 속도에 영향을 받지 않습니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         EventManager.onPlayerDropItem.add(new EventData(this, 1));
@@ -57,8 +58,8 @@ public class Fish extends Ability {
         switch (CustomData) {
             case 0:
                 EntityDamageByEntityEvent Event0 = (EntityDamageByEntityEvent) event;
-                Event0.setDamage(Event0.getDamage() + 7);
-                if (Math.random() <= 0.05D) {
+                Event0.setDamage(7.0);
+                if (Math.random() <= 0.03) {
                     Event0.getEntity().getWorld().dropItemNaturally(Event0.getEntity().getLocation(),
                             new ItemStack(Material.COD));
                 }
@@ -75,7 +76,7 @@ public class Fish extends Ability {
                 break;
             case 3:
                 EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-                Event.setDamage(Event.getDamage() + 12);
+                Event.setDamage(10.5);
         }
     }
 

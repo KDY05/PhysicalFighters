@@ -95,8 +95,6 @@ public class MainScripter implements CommandInterface {
             vadebug(sender);
         } else if (data[0].equalsIgnoreCase("skip")) {
             vaskip(sender);
-        } else if (data[0].equalsIgnoreCase("maker")) {
-            vamaker(sender);
         } else if (data[0].equalsIgnoreCase("uti")) {
             vauti(sender);
         } else if (data[0].equalsIgnoreCase("abi")) {
@@ -324,12 +322,6 @@ public class MainScripter implements CommandInterface {
                 "[Debug] 모든 능력을 강제로 확정시킵니다.");
     }
 
-    public final void vamaker(CommandSender p) {
-        if (!p.isOp()) return;
-        p.sendMessage(ChatColor.DARK_RED + "Physical Fighters 제작자");
-        p.sendMessage(ChatColor.RED + " 본 플러그인은 제온님이 배포한 VisualAbility의 모듈을 사용합니다. ");
-    }
-
     public final void vaskip(CommandSender p) {
         if (!p.isOp()) return;
         if (Scenario == ScriptStatus.AbilitySelect) {
@@ -350,7 +342,7 @@ public class MainScripter implements CommandInterface {
             a.cancelCTimer();
         }
         Bukkit.broadcastMessage(String.format(ChatColor.GRAY +
-                        "관리자 %s님이 쿨타임및 지속시간을 초기화했습니다.", p.getName()));
+                        "관리자 %s님이 쿨타임 및 지속시간을 초기화했습니다.", p.getName()));
     }
 
     public final void vakill(CommandSender p, String[] d) {

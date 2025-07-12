@@ -1,5 +1,7 @@
 package physicalFighters.abilities;
 
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
@@ -10,8 +12,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Cuma extends Ability {
     public Cuma() {
-        InitAbility("바솔로뮤 쿠마", Type.Passive_AutoMatic, Rank.S, new String[]{
-                "일정 확률르 받은 공격을 상대에게 되돌려주며, 공격받을시 상대를 뒤로 넉백시킵니다."});
+        InitAbility("바솔로뮤 쿠마", Type.Passive_AutoMatic, Rank.S,
+                "피격 시 상대를 넉백시키며, 일정 확률로 받은 공격을 상대에게 되돌려줍니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
@@ -26,22 +28,14 @@ public class Cuma extends Ability {
 
     public void A_Effect(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        Player p = (Player) Event.getEntity();
-        Player pn = (Player) Event.getDamager();
+        Player caster = (Player) Event.getEntity();
+        LivingEntity target = (LivingEntity) Event.getDamager();
         if (Math.random() <= 0.15D) {
-            pn.damage(Event.getDamage());
+            target.damage(Event.getDamage());
             Event.setCancelled(true);
         }
-        pn.getWorld().createExplosion(pn.getLocation(), 0.0F);
-        pn.setVelocity(pn.getVelocity().add(
-                p.getLocation().toVector()
-                        .subtract(pn.getLocation().toVector()).normalize()
-                        .multiply(-1)));
+        target.getWorld().createExplosion(target.getLocation(), 0.0F);
+        Vector knockback = target.getLocation().toVector().subtract(caster.getLocation().toVector()).normalize();
+        target.setVelocity(target.getVelocity().add(knockback));
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Cuma.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

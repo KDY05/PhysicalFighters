@@ -1,5 +1,7 @@
 package physicalFighters.abilities;
 
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 
@@ -14,38 +16,34 @@ import java.util.Objects;
 public class Enel extends Ability {
     public Enel() {
         InitAbility("갓 에넬", Type.Active_Immediately, Rank.S,
-                "바라보는 방향으로 번개를 연속발사합니다.");
+                "바라보는 방향으로 번개를 발사하여 강한 범위 데미지를 줍니다.");
         InitAbility(30, 0, true);
         registerLeftClickEvent();
     }
 
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if (!EventManager.DamageGuard &&
-                isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem)) {
-            return 0;
-        }
-        return -1;
+        if (EventManager.DamageGuard ||
+                !isOwner(Event.getPlayer()) || !isValidItem(Ability.DefaultItem))
+            return -1;
+        return 0;
     }
 
     public void A_Effect(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Location l = Event.getPlayer().getLocation();
-        Location l2 = Event.getPlayer().getLocation();
-        double degrees = Math.toRadians(-(l.getYaw() % 360.0F));
-        for (int i = 1; i < 5; i++) {
-            l2.setX(l.getX() + i + 4.0D * Math.sin(degrees));
-            l2.setZ(l.getZ() + i + 4.0D * Math.cos(degrees));
-            Objects.requireNonNull(l2.getWorld()).strikeLightning(l2);
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player != getPlayer()) {
-                    Location loc = player.getLocation();
-                    if (l2.getWorld().getBlockAt(l2).getLocation().distance(loc) <= 3.0
-                            && !EventManager.DamageGuard) {
-                        player.damage(15);
-                    }
-                }
-            }
+        PlayerInteractEvent e = (PlayerInteractEvent) event;
+        Player caster = e.getPlayer();
+
+        Location startLoc = caster.getLocation();
+        Vector direction = caster.getLocation().getDirection();
+
+        for (int i = 3; i <= 10; i++) {
+            Location lightningLoc = startLoc.clone().add(direction.clone().multiply(i));
+            Objects.requireNonNull(lightningLoc.getWorld()).strikeLightning(lightningLoc);
+            caster.getWorld().getNearbyEntities(lightningLoc, 2, 2, 2).stream()
+                    .filter(entity -> entity instanceof LivingEntity)
+                    .map(entity -> (LivingEntity) entity)
+                    .filter(entity -> entity != caster)
+                    .forEach(entity -> entity.damage(20));
         }
     }
 }

@@ -1,5 +1,6 @@
 package physicalFighters.core;
 
+import org.bukkit.inventory.PlayerInventory;
 import physicalFighters.PhysicalFighters;
 
 import java.util.Arrays;
@@ -126,6 +127,34 @@ public abstract class Ability {
         EventManager.RightHandEvent.add(this);
     }
 
+    public boolean removeOneItem(Player player, Material material) {
+        PlayerInventory inventory = player.getInventory();
+        for (int i = 0; i < inventory.getSize(); i++) {
+            ItemStack item = inventory.getItem(i);
+            if (item != null && item.getType() == material) {
+                int amount = item.getAmount();
+                if (amount > 1) {
+                    item.setAmount(amount - 1);
+                } else {
+                    inventory.setItem(i, null);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public final boolean isValidItem(Material material) {
+        return getPlayer().getInventory().getItemInMainHand().getType() == material;
+    }
+
+    public static Ability FindAbility(Player p) {
+        for (Ability a : AbilityList.AbilityList)
+            if (a.isOwner(p)) return a;
+        return null;
+    }
+
+
     public final void setPlayer(Player p, boolean textout) {
         this.DTimer.stopTimer();
         this.CTimer.stopTimer();
@@ -159,17 +188,6 @@ public abstract class Ability {
 
     public final boolean isOwner(Entity e) {
         return e instanceof Player && isOwner((Player) e);
-    }
-
-    public final boolean isValidItem(Material material) {
-        return getPlayer().getInventory().getItemInMainHand().getType() == material;
-    }
-
-    public static Ability FindAbility(Player p) {
-        for (Ability a : AbilityList.AbilityList)
-            if (a.isOwner(p))
-                return a;
-        return null;
     }
 
     // Timer Managing
@@ -246,6 +264,10 @@ public abstract class Ability {
         return this.showtext;
     }
 
+    public static int getAbilityCount() {
+        return AbilityCount;
+    }
+
     public final boolean AbilityExcute(Event event, int CustomData) {
         if ((this.player != null) && (this.RunAbility)) {
             int cd = A_Condition(event, CustomData);
@@ -289,6 +311,16 @@ public abstract class Ability {
         return false;
     }
 
+    public final boolean AbilityDuratinEffect(Event event, int CustomData) {
+        if ((this.player != null) && (this.DTimer.isRunning())) {
+            A_Effect(event, CustomData);
+            return true;
+        }
+        return false;
+    }
+
+    // Uncommon Utils (will be merged to specific ability)
+
     public final void goPlayerVelocity(Player p1, Player p2, int value) {
         p1.setVelocity(p1.getVelocity().add(
                 p2.getLocation().toVector()
@@ -301,20 +333,6 @@ public abstract class Ability {
                 lo.toVector().subtract(p1.getLocation().toVector()).normalize()
                         .multiply(value)));
     }
-
-    public final boolean AbilityDuratinEffect(Event event, int CustomData) {
-        if ((this.player != null) && (this.DTimer.isRunning())) {
-            A_Effect(event, CustomData);
-            return true;
-        }
-        return false;
-    }
-
-    public static int GetAbilityCount() {
-        return AbilityCount;
-    }
-
-    // Uncommon Utils (will be merged to specific ability)
 
     public final boolean isSword(ItemStack item) {
         return (item.getType() == Material.WOODEN_SWORD) || (item.getType() == Material.STONE_SWORD)

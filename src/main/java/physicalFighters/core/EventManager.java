@@ -137,11 +137,6 @@ public class EventManager implements Listener {
                 p.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
             }
         }
-        // 당근 사용 (이스터에그?)
-        else if (handItem.getType() == Material.CARROT) {
-            p.setLevel(222);
-            p.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-        }
 
         AbilityExcuter(onPlayerInteract, event);
     }
@@ -178,13 +173,11 @@ public class EventManager implements Listener {
     private static void AbilityExcuter(ArrayList<EventData> ED, Event event) {
         for (EventData ed : ED) {
             if (ed.ab.getAbilityType() == Type.Active_Continue) {
-                if (ed.ab.AbilityDuratinEffect(event, ed.parameter)) {
+                if (ed.ab.AbilityDuratinEffect(event, ed.parameter))
                     return;
-                }
             } else {
-                if (ed.ab.AbilityExcute(event, ed.parameter)) {
+                if (ed.ab.AbilityExcute(event, ed.parameter))
                     return;
-                }
             }
         }
     }

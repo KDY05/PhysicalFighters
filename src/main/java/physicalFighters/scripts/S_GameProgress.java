@@ -29,7 +29,7 @@ public class S_GameProgress {
                 printTip(count);
             if (count > 0 && count % 600 == 0) {
                 Bukkit.broadcastMessage(ChatColor.DARK_RED + "Physical Fighters");
-                Bukkit.broadcastMessage(ChatColor.GRAY + "빌드 넘버 : " + PhysicalFighters.BuildNumber);
+                Bukkit.broadcastMessage(ChatColor.GRAY + "빌드 넘버 " + PhysicalFighters.BuildNumber);
             }
             if (PhysicalFighters.EarlyInvincibleTime == 0) return;
             int remainingSeconds = S_GameProgress.this.EarlyInvincibleTime - count;

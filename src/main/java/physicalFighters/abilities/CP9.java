@@ -1,5 +1,6 @@
 package physicalFighters.abilities;
 
+import org.bukkit.entity.LivingEntity;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
@@ -15,10 +16,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class CP9 extends Ability {
     public CP9() {
-        InitAbility("CP9", Type.Active_Immediately, Rank.S,
-                "철괴로 상대 타격 시 6의 고정 데미지를 줍니다.",
-                "철괴 우클릭시 폭발과 함께 바라보는 방향으로 빠르게 전진합니다.",
-                "(점프와 사용하면 효율적) 낙하데미지를 받지않습니다.");
+        InitAbility("CP9", Type.Active_Immediately, Rank.SS,
+                "지건 - 철괴로 상대 타격 시 6의 고정 데미지를 줍니다.",
+                "월보 - 철괴 우클릭 시 바라보는 방향으로 빠르게 전진합니다.",
+                "(점프와 함께 사용 시 멀리 이동) * 낙하 데미지 면역");
         InitAbility(15, 0, true);
         registerRightClickEvent();
         EventManager.onEntityDamageByEntity.add(new EventData(this));
@@ -29,7 +30,7 @@ public class CP9 extends Ability {
         switch (CustomData) {
             case 0:
                 EntityDamageByEntityEvent Event1 = (EntityDamageByEntityEvent) event;
-                if (Event1.getEntity() instanceof Player && isOwner(Event1.getDamager()) &&
+                if (Event1.getEntity() instanceof LivingEntity && isOwner(Event1.getDamager()) &&
                         isValidItem(Ability.DefaultItem) && !EventManager.DamageGuard) {
                     return 1;
                 }
@@ -55,10 +56,10 @@ public class CP9 extends Ability {
         switch (CustomData) {
             case 1:
                 EntityDamageByEntityEvent Event1 = (EntityDamageByEntityEvent) event;
-                Player p1 = (Player) Event1.getEntity();
-                p1.setHealth(p1.getHealth() - 6);
+                LivingEntity entity = (LivingEntity) Event1.getEntity();
+                entity.setHealth(Math.max(0, entity.getHealth() - 6));
                 getPlayer().sendMessage(String.format(ChatColor.RED +
-                        "%s님에게 지건을 사용했습니다.", p1.getName()));
+                        "%s에게 지건을 사용했습니다.", entity.getName()));
                 break;
             case 2:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;

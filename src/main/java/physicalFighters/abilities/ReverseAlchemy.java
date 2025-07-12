@@ -14,12 +14,11 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class ReverseAlchemy extends Ability {
     public ReverseAlchemy() {
-        InitAbility("반 연금술", Type.Active_Immediately, Rank.C, new String[]{
+        InitAbility("반 연금술", Type.Active_Immediately, Rank.C,
                 "제련된 금을 철괴와 1:1, 다이아몬드와 3:1 비율로 교환합니다.",
-                "철은 왼클릭, 다이아몬드는 오른클릭으로 사용합니다.",
+                "철은 좌클릭, 다이아몬드는 우클릭으로 사용합니다.",
                 "비록 철괴로 능력을 작동시키지만 금괴는 갖고 있어야 합니다.",
-                "금괴를 들고 오른클릭시 금괴를 하나 소모하여 자신의 체력과",
-                "포만감을 모두 채워줍니다."});
+                "금괴를 우클릭으로 하나 소모하여 자신의 체력과 포만감을 모두 채웁니다.");
         InitAbility(2, 0, true, ShowText.No_Text);
         registerLeftClickEvent();
         registerRightClickEvent();
@@ -54,34 +53,27 @@ public class ReverseAlchemy extends Ability {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         switch (CustomData) {
             case 0:
-                Event.getPlayer().getInventory().removeItem(new ItemStack[]{new ItemStack(Material.GOLD_INGOT, 1)});
-                GiveItem(Event.getPlayer(), Material.IRON_INGOT, 1);
+                Event.getPlayer().getInventory().removeItem(new ItemStack(Material.GOLD_INGOT, 1));
+                GiveItem(Event.getPlayer(), Material.IRON_INGOT);
                 break;
             case 1:
-                Event.getPlayer().getInventory().removeItem(new ItemStack[]{new ItemStack(Material.GOLD_INGOT, 3)});
-                GiveItem(Event.getPlayer(), Material.DIAMOND, 1);
+                Event.getPlayer().getInventory().removeItem(new ItemStack(Material.GOLD_INGOT, 3));
+                GiveItem(Event.getPlayer(), Material.DIAMOND);
                 break;
             case 2:
-                Event.getPlayer().getInventory().removeItem(new ItemStack[]{new ItemStack(Material.GOLD_INGOT, 1)});
+                Event.getPlayer().getInventory().removeItem(new ItemStack(Material.GOLD_INGOT, 1));
                 Event.getPlayer().setHealth(20);
                 Event.getPlayer().setFoodLevel(20);
                 Event.getPlayer().setSaturation(5.0F);
         }
-        Event.getPlayer().updateInventory();
     }
 
-    private void GiveItem(Player p, Material item, int amount) {
+    private void GiveItem(Player p, Material item) {
         PlayerInventory inv = p.getInventory();
-        Map<Integer, ItemStack> overflow = inv.addItem(new ItemStack[]{new ItemStack(item, amount)});
+        Map<Integer, ItemStack> overflow = inv.addItem(new ItemStack(item, 1));
         for (ItemStack is : overflow.values()) {
             p.getWorld().dropItemNaturally(p.getLocation(), is);
             p.sendMessage(ChatColor.RED + "경고, 인벤토리 공간이 부족합니다.");
         }
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\ReverseAlchemy.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

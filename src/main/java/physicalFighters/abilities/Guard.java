@@ -27,9 +27,8 @@ public class Guard extends Ability {
         Location ploc = p.getLocation();
         Vector playervec = new Vector(ploc.getX(), ploc.getY(), ploc.getZ());
         Vector targetvec = new Vector(loc.getX(), loc.getY(), loc.getZ());
-        if ((!EventManager.DamageGuard) &&
-                (isOwner(Event.getPlayer())) &&
-                (isValidItem(Ability.DefaultItem)) &&
+        if (!EventManager.DamageGuard && isOwner(Event.getPlayer())
+                && isValidItem(Ability.DefaultItem) &&
                 (Event.getPlayer().getTargetBlock(null, 0).getType() != Material.BEDROCK)) {
             if ((playervec.distance(targetvec) <= 40.0D) && (b.getY() != 0)) {
                 return 0;
@@ -49,41 +48,41 @@ public class Guard extends Ability {
             for (int i = 0; i <= 5; i++) {
                 l2.setX(l1.getX() + i);
                 if (p.getWorld().getBlockAt(l2).getType() != Material.BEDROCK)
-                    p.getWorld().getBlockAt(l2).setType(Material.OAK_WOOD);
+                    p.getWorld().getBlockAt(l2).setType(Material.OAK_PLANKS);
                 for (int k = 0; k <= 5; k++) {
                     l2.setZ(l1.getZ() + k);
                     if (p.getWorld().getBlockAt(l2).getType() != Material.BEDROCK)
-                        p.getWorld().getBlockAt(l2).setType(Material.OAK_WOOD);
+                        p.getWorld().getBlockAt(l2).setType(Material.OAK_PLANKS);
                 }
             }
             for (int i = 0; i <= 5; i++) {
                 l2.setX(l1.getX() - i);
                 if (p.getWorld().getBlockAt(l2).getType() != Material.BEDROCK)
-                    p.getWorld().getBlockAt(l2).setType(Material.OAK_WOOD);
+                    p.getWorld().getBlockAt(l2).setType(Material.OAK_PLANKS);
                 for (int k = 0; k <= 5; k++) {
                     l2.setZ(l1.getZ() - k);
                     if (p.getWorld().getBlockAt(l2).getType() != Material.BEDROCK)
-                        p.getWorld().getBlockAt(l2).setType(Material.OAK_WOOD);
+                        p.getWorld().getBlockAt(l2).setType(Material.OAK_PLANKS);
                 }
             }
             for (int i = 0; i <= 5; i++) {
                 l2.setX(l1.getX() - i);
                 if (p.getWorld().getBlockAt(l2).getType() != Material.BEDROCK)
-                    p.getWorld().getBlockAt(l2).setType(Material.OAK_WOOD);
+                    p.getWorld().getBlockAt(l2).setType(Material.OAK_PLANKS);
                 for (int k = 0; k <= 5; k++) {
                     l2.setZ(l1.getZ() + k);
                     if (p.getWorld().getBlockAt(l2).getType() != Material.BEDROCK)
-                        p.getWorld().getBlockAt(l2).setType(Material.OAK_WOOD);
+                        p.getWorld().getBlockAt(l2).setType(Material.OAK_PLANKS);
                 }
             }
             for (int i = 0; i <= 5; i++) {
                 l2.setX(l1.getX() + i);
                 if (p.getWorld().getBlockAt(l2).getType() != Material.BEDROCK)
-                    p.getWorld().getBlockAt(l2).setType(Material.OAK_WOOD);
+                    p.getWorld().getBlockAt(l2).setType(Material.OAK_PLANKS);
                 for (int k = 0; k <= 5; k++) {
                     l2.setZ(l1.getZ() - k);
                     if (p.getWorld().getBlockAt(l2).getType() != Material.BEDROCK)
-                        p.getWorld().getBlockAt(l2).setType(Material.OAK_WOOD);
+                        p.getWorld().getBlockAt(l2).setType(Material.OAK_PLANKS);
                 }
             }
         }
