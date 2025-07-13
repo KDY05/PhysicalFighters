@@ -247,7 +247,7 @@ public class MainScripter implements CommandInterface {
         ItemMeta im = is.getItemMeta();
         if (im != null) {
             im.setDisplayName(ChatColor.GOLD + "[능력서]" + ChatColor.WHITE + abicode + "." + ChatColor.AQUA + ability.getAbilityName());
-            im.setLore(ability.getGuide2());
+            im.setLore(new LinkedList<>(Arrays.asList(ability.getGuide())));
         }
         is.setItemMeta(im);
         p.getInventory().addItem(is);
@@ -353,7 +353,7 @@ public class MainScripter implements CommandInterface {
         }
         Player pn = Bukkit.getServer().getPlayerExact(d[1]);
         if (pn == null)  return;
-        Ability a = Ability.FindAbility(pn);
+        Ability a = AUC.FindAbility(pn);
         if (a != null) {
             a.cancelDTimer();
             a.cancelCTimer();

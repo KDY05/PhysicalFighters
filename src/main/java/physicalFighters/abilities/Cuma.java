@@ -18,19 +18,22 @@ public class Cuma extends Ability {
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if (isOwner(Event.getEntity()) && !EventManager.DamageGuard) {
+        if (isOwner(Event.getEntity()) && !EventManager.DamageGuard
+                && Event.getEntity() instanceof LivingEntity) {
             return 0;
         }
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
         Player caster = (Player) Event.getEntity();
         LivingEntity target = (LivingEntity) Event.getDamager();
-        if (Math.random() <= 0.15D) {
+        if (Math.random() <= 0.20) {
             target.damage(Event.getDamage());
             Event.setCancelled(true);
         }

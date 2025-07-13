@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import physicalFighters.utils.AUC;
 
 public class Temari extends Ability {
     public Temari() {
@@ -53,7 +54,7 @@ public class Temari extends Ability {
                         if ((p.getLocation().distance(p1[i].getLocation()) <= 10.0D) && (lo.getY() != 0.0D)) {
                             Location loc2 = p1[i].getLocation();
                             loc2.setY(lo.getY() + 4.0D);
-                            Temari.goVelocity(p1[i], loc2, 1);
+                            AUC.goVelocity(p1[i], loc2, 1);
                         }
                     }
             }

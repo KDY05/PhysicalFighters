@@ -2,6 +2,7 @@ package physicalFighters.abilities;
 
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
+import physicalFighters.utils.AUC;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 
@@ -47,7 +48,7 @@ public class Infighter extends Ability {
             if (Math.random() <= 0.1D) {
                 t.getWorld().createExplosion(t.getLocation(), 0.0F);
                 Location l1 = p.getLocation();
-                Ability.goVelocity(t, l1, -3);
+                AUC.goVelocity(t, l1, -3);
             }
             if (Math.random() <= 0.2D) {
                 t.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 100, 0), true);

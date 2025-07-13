@@ -3,6 +3,7 @@ package physicalFighters.abilities;
 import org.bukkit.entity.LivingEntity;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
+import physicalFighters.utils.AUC;
 import physicalFighters.utils.EventData;
 
 import org.bukkit.Bukkit;
@@ -141,7 +142,7 @@ public class MachineGun extends Ability {
         isReloading = true;
         player.sendMessage("장전 중... [3초 소요]");
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (removeOneItem(player, AMMO_ITEM)) {
+            if (AUC.removeOneItem(player, AMMO_ITEM)) {
                 currentBullets = MAGAZINE_SIZE;
                 player.sendMessage(ChatColor.GREEN + "재장전 완료");
             } else {

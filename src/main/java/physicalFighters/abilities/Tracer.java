@@ -42,7 +42,7 @@ public class Tracer extends Ability {
         PhysicalFighters.TracerTimer = new Timer();
         PhysicalFighters.TracerTimer.schedule(new TimerTask() {
             public void run() {
-                if (Tracer.this.hasPlayer()) {
+                if (getPlayer() != null) {
                     if (Tracer.this.core < 3) {
                         Tracer.this.aaa += 1;
                         if (Tracer.this.aaa == 5) {

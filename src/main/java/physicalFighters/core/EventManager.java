@@ -171,12 +171,15 @@ public class EventManager implements Listener {
 
 
     private static void AbilityExcuter(ArrayList<EventData> ED, Event event) {
-        for (EventData ed : ED) {
-            if (ed.ab.getAbilityType() == Type.Active_Continue) {
-                if (ed.ab.AbilityDuratinEffect(event, ed.parameter))
+        for (EventData eventData : ED) {
+            Ability ability = eventData.ability;
+            if (ability.getAbilityType() == Type.Active_Continue) {
+                if (ability.getPlayer() != null && ability.getDurationState()) {
+                    ability.A_Effect(event, eventData.parameter);
                     return;
+                }
             } else {
-                if (ed.ab.AbilityExcute(event, ed.parameter))
+                if (ability.AbilityExcute(event, eventData.parameter))
                     return;
             }
         }

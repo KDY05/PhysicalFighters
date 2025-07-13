@@ -13,6 +13,8 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+// TODO: 낚시로 얻을 수 없는 전용 물고기를 구현
+
 public class Fish extends Ability {
     public Fish() {
         InitAbility("강태공", Type.Passive_Manual, Rank.A,
@@ -25,6 +27,7 @@ public class Fish extends Ability {
         EventManager.onPlayerRespawn.add(new EventData(this, 2));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
@@ -54,15 +57,14 @@ public class Fish extends Ability {
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
                 EntityDamageByEntityEvent Event0 = (EntityDamageByEntityEvent) event;
                 Event0.setDamage(7.0);
-                if (Math.random() <= 0.03) {
-                    Event0.getEntity().getWorld().dropItemNaturally(Event0.getEntity().getLocation(),
-                            new ItemStack(Material.COD));
-                }
+                if (Math.random() > 0.03) break;
+                getPlayer().getInventory().addItem(new ItemStack(Material.COD));
                 break;
             case 1:
                 PlayerDropItemEvent Event1 = (PlayerDropItemEvent) event;
@@ -80,10 +82,12 @@ public class Fish extends Ability {
         }
     }
 
+    @Override
     public void A_SetEvent(Player p) {
         p.getInventory().addItem(new ItemStack(Material.FISHING_ROD, 1));
     }
 
+    @Override
     public void A_ResetEvent(Player p) {
         p.getInventory().addItem(new ItemStack(Material.FISHING_ROD, 1));
     }

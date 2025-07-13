@@ -6,9 +6,6 @@ import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -31,6 +28,7 @@ public class Gladiator extends Ability {
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
         if (!EventManager.DamageGuard && isOwner(Event.getDamager())
@@ -40,6 +38,7 @@ public class Gladiator extends Ability {
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
         LivingEntity target = (LivingEntity) Event.getEntity();

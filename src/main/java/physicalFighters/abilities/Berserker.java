@@ -17,6 +17,7 @@ public class Berserker extends Ability {
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
         if (!isOwner(Event.getDamager())) return -1;
@@ -28,6 +29,7 @@ public class Berserker extends Ability {
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
         switch (CustomData) {

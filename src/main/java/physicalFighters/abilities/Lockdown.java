@@ -9,9 +9,11 @@ import org.bukkit.event.Event;
 
 import physicalFighters.PhysicalFighters;
 import physicalFighters.core.Ability;
+import physicalFighters.utils.AUC;
 import physicalFighters.utils.CommandInterface;
 import physicalFighters.utils.Vector;
 
+// TODO: 아직 테스트 안 됨
 
 public class Lockdown extends Ability implements CommandInterface {
     private Ability victim;
@@ -40,7 +42,7 @@ public class Lockdown extends Ability implements CommandInterface {
                         data = null;
                         return -1;
                     }
-                    victim = Ability.FindAbility(pn);
+                    victim = AUC.FindAbility(pn);
                     if (victim != null) {
                         Vector vec = new Vector(p.getLocation());
                         if (pn != null && vec.distance(pn.getLocation()) <= 60) {

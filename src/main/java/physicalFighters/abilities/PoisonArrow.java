@@ -31,6 +31,7 @@ public class PoisonArrow extends Ability {
         EventManager.onEntityDeath.add(new EventData(this, 2));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
@@ -52,6 +53,7 @@ public class PoisonArrow extends Ability {
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
@@ -76,11 +78,13 @@ public class PoisonArrow extends Ability {
         }
     }
 
+    @Override
     public void A_SetEvent(Player p) {
         p.getInventory().setItem(8, new ItemStack(Material.ARROW, 64));
         p.getInventory().setItem(7, new ItemStack(Material.BOW, 1));
     }
 
+    @Override
     public void A_ResetEvent(Player p) {
         p.getInventory().removeItem(new ItemStack(Material.ARROW, 64));
     }

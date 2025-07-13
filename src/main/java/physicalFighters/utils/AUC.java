@@ -1,10 +1,18 @@
 package physicalFighters.utils;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import physicalFighters.core.Ability;
 import physicalFighters.core.AbilityList;
 import physicalFighters.PhysicalFighters;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import javax.annotation.Nullable;
 
 public final class AUC {
 
@@ -13,7 +21,7 @@ public final class AUC {
         if (AbilityList.assimilation.getPlayer() == p) {
             ability = AbilityList.assimilation;
         } else {
-            ability = Ability.FindAbility(p);
+            ability = FindAbility(p);
         }
         if (ability == null) {
             p.sendMessage(ChatColor.RED + "능력이 없거나 옵저버입니다.");
@@ -60,6 +68,58 @@ public final class AUC {
             return ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "없음 / "
                     + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음";
         return "None";
+    }
+
+    @Nullable
+    public static Location getTargetLocation(Player p, int bound) {
+        Location location = null;
+        Location eyeLoc = p.getEyeLocation();
+        for (double distance = 0.5; distance <= bound; distance += 0.5) {
+            Location checkLoc = eyeLoc.clone().add(eyeLoc.getDirection().multiply(distance));
+            Block checkBlock = p.getWorld().getBlockAt(checkLoc);
+            if (checkBlock.getType().isSolid() || checkBlock.getType() == Material.WATER) {
+                location = checkBlock.getLocation().clone();
+                break;
+            }
+        }
+        return location;
+    }
+
+    public static Ability FindAbility(Player p) {
+        for (Ability a : AbilityList.AbilityList)
+            if (a.isOwner(p)) return a;
+        return null;
+    }
+
+    public static void goVelocity(Player p1, Location lo, int value) {
+        p1.setVelocity(p1.getVelocity().add(lo.toVector()
+                        .subtract(p1.getLocation().toVector()).normalize()
+                        .multiply(value)));
+    }
+
+    public static boolean removeOneItem(Player player, Material material) {
+        PlayerInventory inventory = player.getInventory();
+        for (int i = 0; i < inventory.getSize(); i++) {
+            ItemStack item = inventory.getItem(i);
+            if (item != null && item.getType() == material) {
+                int amount = item.getAmount();
+                if (amount > 1) {
+                    item.setAmount(amount - 1);
+                } else {
+                    inventory.setItem(i, null);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void splashDamage(Player caster, Location location, double bound, double damage) {
+        caster.getWorld().getNearbyEntities(location, bound, bound, bound).stream()
+                .filter(entity -> entity instanceof LivingEntity)
+                .map(entity -> (LivingEntity) entity)
+                .filter(entity -> entity != caster)
+                .forEach(entity -> entity.damage(damage, caster));
     }
 
 }

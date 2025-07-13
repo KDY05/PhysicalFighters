@@ -2,7 +2,6 @@ package physicalFighters.abilities;
 
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
-import physicalFighters.PhysicalFighters;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -13,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import physicalFighters.utils.AUC;
 
 public class Gaara extends Ability {
 
@@ -26,6 +26,7 @@ public class Gaara extends Ability {
         registerLeftClickEvent();
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         Player p = Event.getPlayer();
@@ -34,19 +35,8 @@ public class Gaara extends Ability {
             return -1;
         }
 
-        // 플레이어 시선을 따라가며 첫 번째 블록 찾기
-        Location eyeLoc = p.getEyeLocation();
-        targetLocation = null;
-        for (double distance = 0.5; distance <= 40.0; distance += 0.5) {
-            Location checkLoc = eyeLoc.clone().add(eyeLoc.getDirection().multiply(distance));
-            Block checkBlock = p.getWorld().getBlockAt(checkLoc);
-            if (checkBlock.getType().isSolid()) {
-                targetLocation = checkBlock.getLocation().clone();
-                break;
-            }
-        }
+        targetLocation = AUC.getTargetLocation(p, 40);
 
-        // 40블록 내에 블록을 찾지 못한 경우
         if (targetLocation == null) {
             p.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
             return -1;
@@ -55,6 +45,7 @@ public class Gaara extends Ability {
         return 0;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         Player p = Event.getPlayer();

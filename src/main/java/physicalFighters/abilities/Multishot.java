@@ -1,5 +1,6 @@
 package physicalFighters.abilities;
 
+import org.bukkit.entity.AbstractArrow;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
@@ -32,6 +33,7 @@ public class Multishot extends Ability {
         EventManager.onEntityDeath.add(new EventData(this, 3));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
@@ -65,6 +67,7 @@ public class Multishot extends Ability {
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
@@ -80,6 +83,7 @@ public class Multishot extends Ability {
                             1.5F, 10.0F);
                     arrow.setVelocity(arrow.getVelocity().multiply(3.0));
                     arrow.setShooter(shooter);
+                    arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
                 }
                 break;
             case 1:
@@ -104,11 +108,13 @@ public class Multishot extends Ability {
         }
     }
 
+    @Override
     public void A_SetEvent(Player p) {
         p.getInventory().setItem(8, new ItemStack(Material.ARROW, 64));
         p.getInventory().setItem(7, new ItemStack(Material.BOW, 1));
     }
 
+    @Override
     public void A_ResetEvent(Player p) {
         p.getInventory().removeItem(new ItemStack(Material.ARROW, 64));
     }

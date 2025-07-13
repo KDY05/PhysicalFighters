@@ -1,6 +1,5 @@
 package physicalFighters.abilities;
 
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
@@ -12,9 +11,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import physicalFighters.utils.AUC;
 
 public class Luffy extends Ability {
-
     public Luffy() {
         InitAbility("루피", Type.Active_Immediately, Rank.S,
                 "철괴를 들고 좌클릭 시 주먹질을 합니다.",
@@ -38,40 +37,32 @@ public class Luffy extends Ability {
     @Override
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player p = Event.getPlayer();
-
+        Player caster = Event.getPlayer();
         switch (CustomData) {
             case 1:
-                Location origin = p.getLocation();
+                Location origin = caster.getLocation();
                 Vector direction = origin.getDirection();
-
                 for (int i = 2; i <= 5; i++) {
                     Location blockLoc = origin.clone().add(direction.clone().multiply(i));
                     Block targetBlock = blockLoc.getBlock();
-
                     if (targetBlock.getType() != Material.SANDSTONE) {
                         Material originalType = targetBlock.getType();
                         targetBlock.setType(Material.SANDSTONE);
                         Bukkit.getScheduler().runTaskLater(plugin,
                                 () -> targetBlock.setType(originalType), 5L);
                     }
-
-                    p.getWorld().getNearbyEntities(blockLoc, 2.5, 2.5, 2.5).stream()
-                            .filter(entity -> entity instanceof LivingEntity)
-                            .map(entity -> (LivingEntity) entity)
-                            .filter(entity -> entity != p)
-                            .forEach(entity -> entity.damage(2, p));
+                    AUC.splashDamage(caster, blockLoc, 2.5, 2);
                 }
                 break;
-
             case 2:
-                p.setHealth(p.getHealth() - 5);
-                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 600, 0));
-                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
-                p.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 200, 0));
-                p.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 600, 0));
-                p.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 600, 0));
-                p.sendMessage(ChatColor.GREEN + "기어세컨드를 사용하였습니다.");
+                caster.setHealth(caster.getHealth() - 5);
+                caster.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 600, 0));
+                caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
+                caster.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 200, 0));
+                caster.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 600, 0));
+                caster.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 600, 0));
+                caster.sendMessage(ChatColor.GREEN + "기어세컨드를 사용하였습니다.");
+                break;
         }
     }
 

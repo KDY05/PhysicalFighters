@@ -2,6 +2,7 @@ package physicalFighters.abilities;
 
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
+import physicalFighters.utils.AUC;
 import physicalFighters.utils.EventData;
 
 import java.util.Timer;
@@ -49,7 +50,7 @@ public class Kijaru extends Ability {
         Location l2 = Event.getEntity().getLocation();
         l2.setY(Event.getEntity().getLocation().getY() + 1.0D);
         Event.getEntity().teleport(l2);
-        goPlayerVelocity((Player) Event.getEntity(), (Player) Event.getDamager(), -10);
+        AUC.goVelocity((Player) Event.getEntity(), Event.getDamager().getLocation(), -10);
         Event.getEntity().getWorld().createExplosion(Event.getEntity().getLocation(), 0.0F);
         Timer timer = new Timer();
         timer.schedule(new Kizaru(Event.getDamager(), Event.getEntity()), 1000L);

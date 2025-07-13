@@ -1,15 +1,14 @@
 package physicalFighters.abilities;
 
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import physicalFighters.utils.AUC;
 
 import java.util.Objects;
 
@@ -21,6 +20,7 @@ public class Enel extends Ability {
         registerLeftClickEvent();
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         if (EventManager.DamageGuard ||
@@ -29,6 +29,7 @@ public class Enel extends Ability {
         return 0;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent e = (PlayerInteractEvent) event;
         Player caster = e.getPlayer();
@@ -39,11 +40,7 @@ public class Enel extends Ability {
         for (int i = 3; i <= 10; i++) {
             Location lightningLoc = startLoc.clone().add(direction.clone().multiply(i));
             Objects.requireNonNull(lightningLoc.getWorld()).strikeLightning(lightningLoc);
-            caster.getWorld().getNearbyEntities(lightningLoc, 2, 2, 2).stream()
-                    .filter(entity -> entity instanceof LivingEntity)
-                    .map(entity -> (LivingEntity) entity)
-                    .filter(entity -> entity != caster)
-                    .forEach(entity -> entity.damage(20));
+            AUC.splashDamage(caster, lightningLoc, 2, 20);
         }
     }
 }

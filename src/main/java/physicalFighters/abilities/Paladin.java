@@ -3,6 +3,7 @@ package physicalFighters.abilities;
 import physicalFighters.PhysicalFighters;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
+import physicalFighters.utils.AUC;
 import physicalFighters.utils.EventData;
 
 import java.util.Random;
@@ -50,13 +51,13 @@ public class Paladin
         if (CustomData == 0) {
             PlayerInteractEvent e = (PlayerInteractEvent) event;
             if ((isOwner(e.getPlayer())) &&
-                    (isSword(e.getPlayer().getInventory().getItemInMainHand()))) {
+                    (e.getPlayer().getInventory().getItemInMainHand().getType().name().endsWith("_SWORD"))) {
                 BlockIterator bi = new BlockIterator(e.getPlayer(), 6);
                 Random r = new Random();
                 int i = r.nextInt(10) + 10;
                 while (bi.hasNext()) {
                     Block bb = bi.next();
-                    ExplosionDMG(e.getPlayer(), bb.getLocation(), 3, i);
+                    AUC.splashDamage(e.getPlayer(), bb.getLocation(), 3, i);
                 }
                 e.getPlayer().sendMessage(ChatColor.GREEN + "" + i + "의 데미지를 가했습니다.");
                 this.candmg = false;

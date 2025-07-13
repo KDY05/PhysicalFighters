@@ -2,6 +2,7 @@ package physicalFighters.abilities;
 
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
+import physicalFighters.utils.AUC;
 import physicalFighters.utils.EventData;
 
 import org.bukkit.entity.Player;
@@ -13,36 +14,35 @@ import org.bukkit.potion.PotionEffect;
 public class Trash extends Ability {
     public Trash() {
         InitAbility("쓰레기", Type.Active_Immediately, Rank.F,
-                "능력 사용시 체력을 소비하여 1분간 허약해집니다.",
-                "철괴로 상대를 타격시 1%확률로 능력을 서로 바꿉니다.");
+                "철괴 우클릭 시 체력을 소비하여 1분간 허약해집니다.",
+                "철괴로 상대를 타격시 3% 확률로 능력을 서로 바꿉니다.");
         InitAbility(10, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
         registerRightClickEvent();
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
                 EntityDamageByEntityEvent Event0 = (EntityDamageByEntityEvent) event;
-                if (isOwner(Event0.getDamager())) {
-                    if (Math.random() <= 0.01D) {
-                        Player p1 = (Player) Event0.getDamager();
-                        Player p2 = (Player) Event0.getEntity();
-                        Ability a = Ability.FindAbility(p1);
-                        Ability a2 = Ability.FindAbility(p2);
-                        if (a == null || a2 == null) break;
-                        a2.setPlayer(p1, false);
-                        a.setPlayer(p2, false);
-                        a2.setRunAbility(true);
-                        a.setRunAbility(true);
-                        p1.sendMessage("당신은 쓰레기 능력을 사용해 상대방과 능력을 바꿨습니다.");
-                        p2.sendMessage("당신은 쓰레기 능력에 의해 쓰레기가 되었습니다.");
-                    }
+                if (!isOwner(Event0.getDamager())) break;
+                if (Math.random() > 0.03D) break;
+                if (Event0.getDamager() instanceof Player caster && Event0.getEntity() instanceof Player target) {
+                    Ability casterAbility = AUC.FindAbility(caster);
+                    Ability targetAbility = AUC.FindAbility(target);
+                    if (casterAbility == null || targetAbility == null) break;
+                    targetAbility.setPlayer(caster, false);
+                    casterAbility.setPlayer(target, false);
+                    targetAbility.setRunAbility(true);
+                    casterAbility.setRunAbility(true);
+                    caster.sendMessage("당신은 쓰레기 능력을 사용해 상대방과 능력을 바꿨습니다.");
+                    target.sendMessage("당신은 쓰레기 능력에 의해 쓰레기가 되었습니다.");
                 }
                 break;
             case 1:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
-                if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
+                if (isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem)) {
                     return 0;
                 }
                 break;
@@ -50,6 +50,7 @@ public class Trash extends Ability {
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         Player p = Event.getPlayer();

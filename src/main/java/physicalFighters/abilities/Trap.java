@@ -25,9 +25,9 @@ public class Trap extends Ability {
     public static int traps = 0;
 
     public Trap() {
-        InitAbility("부비트랩", Type.Passive_Manual, Rank.S, new String[]{
+        InitAbility("부비트랩", Type.Passive_Manual, Rank.S,
                 "처음 시작시에 소울샌드가 주어집니다. 소울샌드는 버릴 수 없습니다.",
-                "소울샌드는 최대 5개까지 설치가 가능하며, 철괴 왼쪽클릭으로 수동으로 폭발시킬 수 있습니다."});
+                "소울샌드는 최대 5개까지 설치가 가능하며, 철괴 왼쪽클릭으로 수동으로 폭발시킬 수 있습니다.");
         InitAbility(0, 0, true);
         registerLeftClickEvent();
         EventManager.onBlockPlaceEvent.add(new EventData(this, 1));
@@ -98,7 +98,7 @@ public class Trap extends Ability {
                         trap[4].getWorld().createExplosion(trap[4].getLocation(), 3.0F);
                     }
                     Event.getPlayer().sendMessage(String.format(ChatColor.AQUA + "모든 폭발물을 폭발시켰습니다. 터진 폭발물 : " +
-                            ChatColor.WHITE + "%d개", new Object[]{Integer.valueOf(traps)}));
+                            ChatColor.WHITE + "%d개", traps));
                     traps = 0;
                     for (int i = 0; i < 5; i++) {
                         if (trap[i] != null) {
@@ -113,7 +113,7 @@ public class Trap extends Ability {
                 BlockPlaceEvent Event1 = (BlockPlaceEvent) event;
                 if (traps < 5) {
                     Event1.getPlayer().sendMessage(String.format(ChatColor.AQUA + "폭발물을 설치했습니다. 폭발물 : " +
-                            ChatColor.WHITE + "(%d/5)", new Object[]{Integer.valueOf(traps + 1)}));
+                            ChatColor.WHITE + "(%d/5)", traps + 1));
                     traps += 1;
                     trap[traps] = Event1.getBlock();
                     PlayerInventory inv = Event1.getPlayer().getInventory();
@@ -129,7 +129,7 @@ public class Trap extends Ability {
                 BlockBreakEvent Event6 = (BlockBreakEvent) event;
                 if (traps >= 0) {
                     Event6.getPlayer().sendMessage(String.format(ChatColor.AQUA + "폭발물이 제거되었습니다. 폭발물 : " +
-                            ChatColor.WHITE + "(%d/5)", new Object[]{Integer.valueOf(traps - 1)}));
+                            ChatColor.WHITE + "(%d/5)", traps - 1));
                     traps -= 1;
                     trap[traps] = Event6.getBlock();
                     PlayerInventory inv = Event6.getPlayer().getInventory();
@@ -157,11 +157,7 @@ public class Trap extends Ability {
             case 5:
                 EntityDeathEvent Event5 = (EntityDeathEvent) event;
                 List<ItemStack> itemlist = Event5.getDrops();
-                for (int l = 0; l < itemlist.size(); l++) {
-                    if (((ItemStack) itemlist.get(l)).getType() == Material.SOUL_SAND) {
-                        itemlist.remove(l);
-                    }
-                }
+                itemlist.removeIf(item -> item.getType() == Material.SOUL_SAND);
         }
     }
 
@@ -169,9 +165,3 @@ public class Trap extends Ability {
         p.getInventory().setItem(8, new ItemStack(Material.SOUL_SAND, 1));
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Trap.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

@@ -2,8 +2,8 @@ package physicalFighters.abilities;
 
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
+import physicalFighters.utils.AUC;
 import physicalFighters.utils.EventData;
-import physicalFighters.PhysicalFighters;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -75,7 +75,7 @@ public class Thor extends Ability {
             org.bukkit.Location loc = p.getLocation();
             w.strikeLightningEffect(loc);
             w.strikeLightningEffect(loc);
-            ExplosionDMG(loc, 3, 5);
+            AUC.splashDamage(p, loc, 3, 5);
             if (this.Attack < 6) {
                 this.Attack += 1;
                 p.sendMessage(ChatColor.YELLOW + "묠니르에 농축된 번개 : (" + this.Attack + "/6)");

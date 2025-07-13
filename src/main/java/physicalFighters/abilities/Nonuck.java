@@ -17,16 +17,17 @@ public class Nonuck extends Ability {
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if (isOwner(Event.getEntity()) &&
-                (Event.getCause() == DamageCause.ENTITY_ATTACK || Event.getCause() == DamageCause.PROJECTILE)
-                && (Math.random() <= 0.8D) && !EventManager.DamageGuard) {
+        if (isOwner(Event.getEntity()) && (Math.random() <= 0.8D) && !EventManager.DamageGuard
+                && (Event.getCause() == DamageCause.ENTITY_ATTACK || Event.getCause() == DamageCause.PROJECTILE)) {
             return 0;
         }
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
         Player p = (Player) Event.getEntity();

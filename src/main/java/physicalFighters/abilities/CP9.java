@@ -26,6 +26,7 @@ public class CP9 extends Ability {
         EventManager.onEntityDamage.add(new EventData(this, 3));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
@@ -52,6 +53,7 @@ public class CP9 extends Ability {
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         switch (CustomData) {
             case 1:

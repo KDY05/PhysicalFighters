@@ -23,6 +23,7 @@ public class Roclee extends Ability {
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
         if (isOwner(Event.getDamager()) && isValidItem(Ability.DefaultItem) && !EventManager.DamageGuard) {
@@ -31,6 +32,7 @@ public class Roclee extends Ability {
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
         LivingEntity target = (LivingEntity) e.getEntity();

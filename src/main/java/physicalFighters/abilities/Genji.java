@@ -1,7 +1,11 @@
 package physicalFighters.abilities;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
+import physicalFighters.utils.AUC;
 import physicalFighters.utils.EventData;
 import physicalFighters.PhysicalFighters;
 
@@ -58,12 +62,18 @@ public class Genji extends Ability {
         if (CustomData == 4) {
             PlayerInteractEvent e = (PlayerInteractEvent) event;
             if ((isOwner(e.getPlayer())) &&
-                    (isSword(e.getPlayer().getInventory().getItemInMainHand())) && (this.po)) {
+                    (e.getPlayer().getInventory().getItemInMainHand().getType().name().endsWith("_SWORD")) && (this.po)) {
                 BlockIterator bi = new BlockIterator(e.getPlayer(), 6);
                 while (bi.hasNext()) {
                     Block bb = bi.next();
-                    ExplosionDMGPotion(e.getPlayer(), bb.getLocation(), 3, 5, PotionEffectType.WITHER, 20, 2);
-                    ExplosionDMGPotion(e.getPlayer(), bb.getLocation(), 3, 0, PotionEffectType.SLOWNESS, 20, 2);
+                    AUC.splashDamage(e.getPlayer(), bb.getLocation(), 3, 5);
+                    for (Player target : Bukkit.getOnlinePlayers()) {
+                        if (target != e.getPlayer() && bb.getLocation().distance(target.getLocation()) <= 3) {
+                            target.getWorld().strikeLightning(target.getLocation());
+                            target.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 2));
+                            target.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20, 2));
+                        }
+                    }
                 }
             }
         }
@@ -90,7 +100,12 @@ public class Genji extends Ability {
                 Block bb = bi.next();
                 if ((bb.getType().isSolid()) && (bb.getType() != Material.AIR)) break;
                 b = bb;
-                ExplosionDMGL(e.getPlayer(), b.getLocation(), 2, 20);
+                AUC.splashDamage(e.getPlayer(), b.getLocation(), 2, 20);
+                for (Player target : Bukkit.getOnlinePlayers()) {
+                    if (target != e.getPlayer() && b.getLocation().distance(target.getLocation()) <= 2) {
+                        target.getWorld().strikeLightning(target.getLocation());
+                    }
+                }
             }
             Location l = b.getLocation();
             l.setPitch(s.getPitch());

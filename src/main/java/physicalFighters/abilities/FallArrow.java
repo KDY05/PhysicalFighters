@@ -2,8 +2,8 @@ package physicalFighters.abilities;
 
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
+import physicalFighters.utils.AUC;
 import physicalFighters.utils.EventData;
-import physicalFighters.PhysicalFighters;
 
 import java.util.List;
 
@@ -80,7 +80,7 @@ public class FallArrow extends Ability {
                 Location l1 = Event0.getEntity().getLocation();
                 Location l2 = Event0.getEntity().getLocation();
                 l2.setY(l1.getY() + 4.0D);
-                goVelocity(p, l2, 1);
+                AUC.goVelocity(p, l2, 1);
                 Event0.getEntity().getWorld()
                         .createExplosion(Event0.getEntity().getLocation(), 0.0F);
                 p.teleport(l2);

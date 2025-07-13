@@ -3,9 +3,9 @@ package physicalFighters.abilities;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.core.AbilityList;
+import physicalFighters.utils.AUC;
 import physicalFighters.utils.CommandInterface;
 import physicalFighters.utils.EventData;
-import physicalFighters.PhysicalFighters;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -60,7 +60,7 @@ public class Assimilation
             case 1:
                 EntityDeathEvent Event1 = (EntityDeathEvent) event;
                 if ((Event1.getEntity() instanceof Player p)) {
-                    Ability a = Ability.FindAbility(p);
+                    Ability a = AUC.FindAbility(p);
                     if (a != null) {
                         a.cancelCTimer();
                         a.cancelDTimer();

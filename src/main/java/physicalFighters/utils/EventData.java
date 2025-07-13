@@ -3,15 +3,15 @@ package physicalFighters.utils;
 import physicalFighters.core.Ability;
 
 public class EventData {
-    public Ability ab;
+    public Ability ability;
     public int parameter;
 
-    public EventData(Ability ab) {
-        this(ab, 0);
+    public EventData(Ability ability) {
+        this(ability, 0);
     }
 
-    public EventData(Ability ab, int parameter) {
-        this.ab = ab;
+    public EventData(Ability ability, int parameter) {
+        this.ability = ability;
         this.parameter = parameter;
     }
 }

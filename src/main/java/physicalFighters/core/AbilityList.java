@@ -43,7 +43,7 @@ public class AbilityList {
     public static final Cuma cuma = new Cuma(); // 바솔로뮤 쿠마
     public static final ReverseAlchemy reversealchemy = new ReverseAlchemy(); // 반연금술
     public static final Lockdown lockdown = new Lockdown(); // 봉인
-    public static final Trap trap = new Trap(); // 부비트랩
+//    public static final Trap trap = new Trap(); // 부비트랩
     public static final Booster booster = new Booster(); // 부스터
     public static final Phoenix phoenix = new Phoenix(); // 불사조
     public static final Boom Boom = new Boom(); // 붐포인트
@@ -62,7 +62,7 @@ public class AbilityList {
     public static final Trash trash = new Trash(); // 쓰레기
     // ㅇ
     public static final Ahri Ahri = new Ahri(); // 아리
-    public static final Amateras amateras = new Amateras(); // 아마테라스
+//    public static final Amateras amateras = new Amateras(); // 아마테라스
     public static final Aokizi aokizi = new Aokizi(); // 아오키지
     public static final Issac issac = new Issac(); // 아이작
     public static final Archer archer = new Archer(); // 아쳐

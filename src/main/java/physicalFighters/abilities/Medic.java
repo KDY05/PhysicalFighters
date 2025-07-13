@@ -23,6 +23,7 @@ public class Medic extends Ability {
         registerRightClickEvent();
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
@@ -42,6 +43,7 @@ public class Medic extends Ability {
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         switch (CustomData) {
             case 0:

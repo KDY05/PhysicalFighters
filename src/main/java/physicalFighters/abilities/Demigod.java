@@ -19,6 +19,7 @@ public class Demigod extends Ability {
         EventManager.onEntityDamage.add(new EventData(this));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageEvent Event = (EntityDamageEvent) event;
         if (!EventManager.DamageGuard && isOwner(Event.getEntity())) {
@@ -27,6 +28,7 @@ public class Demigod extends Ability {
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         EntityDamageEvent Event = (EntityDamageEvent) event;
         Player p1 = (Player) Event.getEntity();
