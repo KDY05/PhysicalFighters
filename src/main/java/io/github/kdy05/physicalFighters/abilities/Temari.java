@@ -1,0 +1,71 @@
+package io.github.kdy05.physicalFighters.abilities;
+
+import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.EventManager;
+
+import java.util.Timer;
+
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.player.PlayerInteractEvent;
+import io.github.kdy05.physicalFighters.utils.AUC;
+
+public class Temari extends Ability {
+    public Temari() {
+        InitAbility("테마리", Type.Active_Immediately, Rank.S, new String[]{
+                "철괴 왼쪽클릭시 20초간 자신의 주변에 있는 적들을 공중으로 날려버립니다."});
+        InitAbility(60, 0, true);
+        registerLeftClickEvent();
+    }
+
+    public int A_Condition(Event event, int CustomData) {
+        PlayerInteractEvent Event = (PlayerInteractEvent) event;
+        if ((!EventManager.DamageGuard) &&
+                (isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
+            return 0;
+        }
+        return -1;
+    }
+
+    public void A_Effect(Event event, int CustomData) {
+        PlayerInteractEvent Event = (PlayerInteractEvent) event;
+        Timer timer = new Timer();
+        timer.schedule(new Pauck(Event.getPlayer().getName()), 500L, 1500L);
+    }
+
+    class Pauck extends java.util.TimerTask {
+        private int num = 0;
+        private String name = null;
+
+        public Pauck(String name1) {
+            this.name = name1;
+        }
+
+        public void run() {
+            Player[] p1 = Bukkit.getOnlinePlayers().toArray(new Player[0]);
+            Player p = Bukkit.getPlayer(this.name);
+            if (p != null) {
+                for (int i = 0; i < (Bukkit.getOnlinePlayers().toArray(new Player[0])).length; i++)
+                    if ((p1[i] != p) && (p1[i].getGameMode() != GameMode.CREATIVE)) {
+                        Location lo = p1[i].getLocation();
+                        if ((p.getLocation().distance(p1[i].getLocation()) <= 10.0D) && (lo.getY() != 0.0D)) {
+                            Location loc2 = p1[i].getLocation();
+                            loc2.setY(lo.getY() + 4.0D);
+                            AUC.goVelocity(p1[i], loc2, 1);
+                        }
+                    }
+            }
+            if (this.num > 16) cancel();
+            this.num += 1;
+        }
+    }
+}
+
+
+/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Temari.class
+ * Java compiler version: 6 (50.0)
+ * JD-Core Version:       0.7.1
+ */

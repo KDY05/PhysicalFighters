@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'physicalFighters'
+group = 'io.github.kdy05'
 version = '1.0.0'
 
 repositories {
