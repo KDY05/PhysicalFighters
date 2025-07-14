@@ -29,8 +29,8 @@ public class Trash extends Ability {
                 if (!isOwner(Event0.getDamager())) break;
                 if (Math.random() > 0.03D) break;
                 if (Event0.getDamager() instanceof Player caster && Event0.getEntity() instanceof Player target) {
-                    Ability casterAbility = AUC.FindAbility(caster);
-                    Ability targetAbility = AUC.FindAbility(target);
+                    Ability casterAbility = AUC.findAbility(caster);
+                    Ability targetAbility = AUC.findAbility(target);
                     if (casterAbility == null || targetAbility == null) break;
                     targetAbility.setPlayer(caster, false);
                     casterAbility.setPlayer(target, false);

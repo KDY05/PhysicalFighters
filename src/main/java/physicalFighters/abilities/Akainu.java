@@ -4,7 +4,6 @@ import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.AUC;
 import physicalFighters.utils.EventData;
-import physicalFighters.PhysicalFighters;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -92,7 +91,7 @@ public class Akainu extends Ability {
         Location center = targetLocation.clone();
         saveAndReplaceBlocks(world, center);
         placeLava(world, center);
-        new LavaRestoreTask().runTaskLater(PhysicalFighters.getPlugin(), RESTORE_DELAY);
+        new LavaRestoreTask().runTaskLater(plugin, RESTORE_DELAY);
         caster.sendMessage(ChatColor.GOLD + "용암 지대를 만들었습니다!");
 
         targetLocation = null;

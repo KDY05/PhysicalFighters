@@ -21,7 +21,7 @@ public final class AUC {
         if (AbilityList.assimilation.getPlayer() == p) {
             ability = AbilityList.assimilation;
         } else {
-            ability = FindAbility(p);
+            ability = findAbility(p);
         }
         if (ability == null) {
             p.sendMessage(ChatColor.RED + "능력이 없거나 옵저버입니다.");
@@ -85,15 +85,16 @@ public final class AUC {
         return location;
     }
 
-    public static Ability FindAbility(Player p) {
+    @Nullable
+    public static Ability findAbility(Player p) {
         for (Ability a : AbilityList.AbilityList)
             if (a.isOwner(p)) return a;
         return null;
     }
 
-    public static void goVelocity(Player p1, Location lo, int value) {
-        p1.setVelocity(p1.getVelocity().add(lo.toVector()
-                        .subtract(p1.getLocation().toVector()).normalize()
+    public static void goVelocity(LivingEntity entity, Location loc, int value) {
+        entity.setVelocity(entity.getVelocity().add(loc.toVector()
+                        .subtract(entity.getLocation().toVector()).normalize()
                         .multiply(value)));
     }
 

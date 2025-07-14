@@ -60,7 +60,7 @@ public class Assimilation
             case 1:
                 EntityDeathEvent Event1 = (EntityDeathEvent) event;
                 if ((Event1.getEntity() instanceof Player p)) {
-                    Ability a = AUC.FindAbility(p);
+                    Ability a = AUC.findAbility(p);
                     if (a != null) {
                         a.cancelCTimer();
                         a.cancelDTimer();
@@ -96,9 +96,9 @@ public class Assimilation
         this.ActiveAss = false;
     }
 
-    public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] data) {
+    public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] args) {
         if (((sender instanceof Player)) && (isOwner((Player) sender)) &&
-                (data[0].equalsIgnoreCase("a")) && (data.length == 1)) {
+                (args[0].equalsIgnoreCase("a")) && (args.length == 1)) {
             sender.sendMessage(ChatColor.GREEN + "-- 당신이 소유한 능력 --");
             for (Ability a : AbilityList.AbilityList) {
                 if (a.isOwner(getPlayer())) {

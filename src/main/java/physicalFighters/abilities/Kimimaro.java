@@ -1,5 +1,6 @@
 package physicalFighters.abilities;
 
+import org.bukkit.entity.LivingEntity;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
@@ -21,9 +22,9 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Kimimaro extends Ability {
     public Kimimaro() {
-        InitAbility("키미마로", Type.Passive_Manual, Rank.SS, new String[]{
-                "뼈다귀로 상대를 공격할시에 강한 데미지를 주고,",
-                "40% 확률로 상대에게 10초간 독효과를 준다."});
+        InitAbility("키미마로", Type.Passive_Manual, Rank.SS,
+                "뼈다귀로 상대를 공격할 시에 강한 데미지를 주고,",
+                "40% 확률로 상대에게 10초간 독 효과를 겁니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         EventManager.onPlayerDropItem.add(new EventData(this, 1));
@@ -31,45 +32,44 @@ public class Kimimaro extends Ability {
         EventManager.onEntityDeath.add(new EventData(this, 3));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
                 EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-                if ((isOwner(Event.getDamager())) && (isValidItem(Material.BONE)))
+                if (isOwner(Event.getDamager()) && isValidItem(Material.BONE)
+                        && Event.getEntity() instanceof LivingEntity)
                     return 0;
                 break;
             case 1:
                 PlayerDropItemEvent Event1 = (PlayerDropItemEvent) event;
-                if ((isOwner(Event1.getPlayer())) &&
-                        (Event1.getItemDrop().getItemStack().getType() == Material.BONE)) {
+                if (isOwner(Event1.getPlayer()) &&
+                        Event1.getItemDrop().getItemStack().getType() == Material.BONE) {
                     PlayerInventory inv = Event1.getPlayer().getInventory();
-                    if (!inv.contains(Material.BONE, 1)) {
-                        return 1;
-                    }
+                    if (!inv.contains(Material.BONE, 1)) return 1;
                 }
                 break;
             case 2:
                 PlayerRespawnEvent Event2 = (PlayerRespawnEvent) event;
-                if (isOwner(Event2.getPlayer()))
-                    return 2;
+                if (isOwner(Event2.getPlayer())) return 2;
                 break;
             case 3:
                 EntityDeathEvent Event3 = (EntityDeathEvent) event;
-                if (isOwner(Event3.getEntity()))
-                    return 3;
+                if (isOwner(Event3.getEntity())) return 3;
                 break;
         }
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
                 EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-                Event.setDamage(Event.getDamage() + 10);
-                Player p = (Player) Event.getEntity();
-                if (Math.random() <= 0.4D)
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 200, 0), true);
+                Event.setDamage(Event.getDamage() * 8);
+                LivingEntity entity = (LivingEntity) Event.getEntity();
+                if (Math.random() < 0.4D)
+                    entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 200, 0));
                 break;
             case 1:
                 PlayerDropItemEvent Event1 = (PlayerDropItemEvent) event;
@@ -84,24 +84,17 @@ public class Kimimaro extends Ability {
             case 3:
                 EntityDeathEvent Event3 = (EntityDeathEvent) event;
                 List<ItemStack> itemlist = Event3.getDrops();
-                for (int l = 0; l < itemlist.size(); l++) {
-                    if (((ItemStack) itemlist.get(l)).getType() == Material.BONE)
-                        itemlist.remove(l);
-                }
+                itemlist.removeIf(item -> item.getType() == Material.BONE);
         }
     }
 
+    @Override
     public void A_SetEvent(Player p) {
         p.getInventory().setItem(8, new ItemStack(Material.BONE, 1));
     }
 
+    @Override
     public void A_ResetEvent(Player p) {
         p.getInventory().setItem(8, new ItemStack(Material.BONE, 1));
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Kimimaro.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

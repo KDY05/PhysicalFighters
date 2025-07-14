@@ -43,71 +43,71 @@ public class MainScripter implements CommandInterface {
         this.s_GameWarning = new S_GameWarning(this);
     }
 
-    public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] data) {
-        if (data[0].equalsIgnoreCase("help")) {
+    public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] args) {
+        if (args[0].equalsIgnoreCase("help")) {
             if (sender instanceof Player p) {
                 AUC.showInfoText(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        } else if (data[0].equalsIgnoreCase("start")) {
+        } else if (args[0].equalsIgnoreCase("start")) {
             if (sender instanceof Player p) {
                 this.gameworld = p.getWorld();
                 this.s_GameReady.GameReady(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        } else if (data[0].equalsIgnoreCase("ob")) {
+        } else if (args[0].equalsIgnoreCase("ob")) {
             if (sender instanceof Player p) {
                 vaob(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        } else if (data[0].equalsIgnoreCase("yes")) {
+        } else if (args[0].equalsIgnoreCase("yes")) {
             if (sender instanceof Player p) {
                 vayes(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        } else if (data[0].equalsIgnoreCase("no")) {
+        } else if (args[0].equalsIgnoreCase("no")) {
             if (sender instanceof Player p) {
                 vano(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        } else if (data[0].equalsIgnoreCase("book")) {
+        } else if (args[0].equalsIgnoreCase("book")) {
             if (sender instanceof Player p) {
-                vabook(p, data);
+                vabook(p, args);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        } else if (data[0].equalsIgnoreCase("stop")) {
+        } else if (args[0].equalsIgnoreCase("stop")) {
             vastop(sender);
-        } else if (data[0].equalsIgnoreCase("alist")) {
+        } else if (args[0].equalsIgnoreCase("alist")) {
             vaalist(sender);
-        } else if (data[0].equalsIgnoreCase("elist")) {
+        } else if (args[0].equalsIgnoreCase("elist")) {
             vaelist(sender);
-        } else if (data[0].equalsIgnoreCase("tc")) {
+        } else if (args[0].equalsIgnoreCase("tc")) {
             vatc(sender);
-        } else if (data[0].equalsIgnoreCase("kill")) {
-            vakill(sender, data);
-        } else if (data[0].equalsIgnoreCase("debug")) {
+        } else if (args[0].equalsIgnoreCase("kill")) {
+            vakill(sender, args);
+        } else if (args[0].equalsIgnoreCase("debug")) {
             vadebug(sender);
-        } else if (data[0].equalsIgnoreCase("skip")) {
+        } else if (args[0].equalsIgnoreCase("skip")) {
             vaskip(sender);
-        } else if (data[0].equalsIgnoreCase("uti")) {
+        } else if (args[0].equalsIgnoreCase("uti")) {
             vauti(sender);
-        } else if (data[0].equalsIgnoreCase("abi")) {
-            vaabi(sender, data);
-        } else if (data[0].equalsIgnoreCase("ablist")) {
-            vaablist(sender, data);
-        } else if (data[0].equalsIgnoreCase("inv")) {
+        } else if (args[0].equalsIgnoreCase("abi")) {
+            vaabi(sender, args);
+        } else if (args[0].equalsIgnoreCase("ablist")) {
+            vaablist(sender, args);
+        } else if (args[0].equalsIgnoreCase("inv")) {
             vainv(sender);
-        } else if (data[0].equalsIgnoreCase("go")) {
+        } else if (args[0].equalsIgnoreCase("go")) {
             vago(sender);
-        } else if (data[0].equalsIgnoreCase("hung")) {
+        } else if (args[0].equalsIgnoreCase("hung")) {
             vahungry(sender);
-        } else if (data[0].equalsIgnoreCase("dura")) {
+        } else if (args[0].equalsIgnoreCase("dura")) {
             vadura(sender);
         }
 
@@ -353,7 +353,7 @@ public class MainScripter implements CommandInterface {
         }
         Player pn = Bukkit.getServer().getPlayerExact(d[1]);
         if (pn == null)  return;
-        Ability a = AUC.FindAbility(pn);
+        Ability a = AUC.findAbility(pn);
         if (a != null) {
             a.cancelDTimer();
             a.cancelCTimer();

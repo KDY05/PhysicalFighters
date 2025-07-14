@@ -1,10 +1,10 @@
 package physicalFighters.abilities;
 
+import org.bukkit.entity.LivingEntity;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
@@ -12,17 +12,16 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Ckyomi extends Ability {
     public Ckyomi() {
-        InitAbility("츠쿠요미", Type.Passive_AutoMatic, Rank.A, new String[]{
-                "상대를 공격하면 상대에게 5초간 혼란효과와 디버프를 줍니다."});
+        InitAbility("츠쿠요미", Type.Passive_AutoMatic, Rank.A,
+                "상대를 공격하면 상대에게 5초간 혼란효과와 디버프를 줍니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if ((!EventManager.DamageGuard) &&
-                (isOwner(Event.getDamager())) &&
-                ((Event.getEntity() instanceof Player))) {
+        if (!EventManager.DamageGuard && isOwner(Event.getDamager())
+                && Event.getEntity() instanceof LivingEntity) {
             return 0;
         }
         return -1;
@@ -30,18 +29,9 @@ public class Ckyomi extends Ability {
 
     public void A_Effect(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        Player p = (Player) Event.getEntity();
-        p.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 100,
-                0), true);
-        p.addPotionEffect(
-                new PotionEffect(PotionEffectType.WEAKNESS, 100, 0), true);
-        p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100,
-                0), true);
+        LivingEntity entity = (LivingEntity) Event.getEntity();
+        entity.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 100, 0));
+        entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 0));
+        entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 0));
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Ckyomi.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

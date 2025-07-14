@@ -42,7 +42,7 @@ public class Lockdown extends Ability implements CommandInterface {
                         data = null;
                         return -1;
                     }
-                    victim = AUC.FindAbility(pn);
+                    victim = AUC.findAbility(pn);
                     if (victim != null) {
                         Vector vec = new Vector(p.getLocation());
                         if (pn != null && vec.distance(pn.getLocation()) <= 60) {
@@ -90,10 +90,10 @@ public class Lockdown extends Ability implements CommandInterface {
 
     @Override
     public boolean onCommandEvent(CommandSender sender, Command command,
-                                  String label, String[] data) {
+                                  String label, String[] args) {
         this.sender = sender;
-        this.data = data;
-        if (data[0].equalsIgnoreCase("s") && data.length == 2) {
+        this.data = args;
+        if (args[0].equalsIgnoreCase("s") && args.length == 2) {
             this.AbilityExcute(null, 0);
             return true;
         }

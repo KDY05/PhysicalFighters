@@ -40,7 +40,7 @@ public class PhysicalFighters extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-        getLogger().info(String.format("빌드정보 " + BuildNumber));
+        getLogger().info("빌드정보 " + BuildNumber);
         getLogger().info("Edit By 염료");
         getLogger().info("Updated By 어라랍");
 
@@ -66,7 +66,7 @@ public class PhysicalFighters extends JavaPlugin {
     }
 
     private void loadConfigs() {
-        getLogger().info("기본설정 로드중입니다.");
+        getLogger().info("기본 설정 로드 중입니다.");
         saveDefaultConfig();
 
         AutoKick = getConfig().getBoolean("AutoKick", true);

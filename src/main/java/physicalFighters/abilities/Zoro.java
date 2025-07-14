@@ -1,59 +1,54 @@
 package physicalFighters.abilities;
 
+import org.bukkit.ChatColor;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
 
 import java.util.Random;
 
-import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+// TODO: 리메이크, 데미지 계수로 조정(1.0~1.8배), 시간 지날 수록 0.1배수씩 자동 하락
+
 public class Zoro extends Ability {
-    int dama = 0;
+    private double dmg = 0;
 
     public Zoro() {
-        InitAbility("조로", Type.Active_Immediately, Rank.S, new String[]{
-                "철괴 왼쪽클릭시 칼의 데미지가 랜덤으로 설정됩니다."});
+        InitAbility("조로", Type.Active_Immediately, Rank.S,
+                "철괴 왼쪽클릭시 칼의 데미지가 랜덤으로 설정됩니다.");
         InitAbility(45, 0, true);
         registerLeftClickEvent();
         EventManager.onEntityDamageByEntity.add(new EventData(this, 1));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
-        if (CustomData == 1) {
-            EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-            if ((isOwner(Event.getDamager())) && ((isValidItem(Material.DIAMOND_SWORD)) || (isValidItem(Material.WOODEN_SWORD))
-                    || (isValidItem(Material.IRON_SWORD)) || (isValidItem(Material.GOLDEN_SWORD)))) {
-                if (this.dama != 0) {
-                    Event.setDamage(this.dama);
-                } else {
-                    this.dama = ((int) Event.getDamage());
-                }
-            }
-        } else if (CustomData == 0) {
+        if (CustomData == 0) {
             PlayerInteractEvent Event1 = (PlayerInteractEvent) event;
-            if ((isOwner(Event1.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
+            if (isOwner(Event1.getPlayer()) && isValidItem(Ability.DefaultItem)) {
                 return 0;
+            }
+        } else if (CustomData == 1) {
+            EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
+            if (isOwner(Event.getDamager()) && getPlayer().getInventory().getItemInMainHand().getType().name().endsWith("_SWORD")) {
+                if (this.dmg != 0) {
+                    Event.setDamage(this.dmg);
+                } else {
+                    this.dmg = (Event.getDamage());
+                }
             }
         }
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        int rand = 0;
         Random random = new Random();
-        rand = random.nextInt(5) + 5;
-        this.dama = rand;
-        Event.getPlayer().sendMessage(org.bukkit.ChatColor.RED + "데미지가 " + this.dama + "로 설정되었습니다.");
+        this.dmg = random.nextInt(5) + 5;
+        Event.getPlayer().sendMessage(ChatColor.RED + "데미지가 " + this.dmg + "로 설정되었습니다.");
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Zoro.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */
