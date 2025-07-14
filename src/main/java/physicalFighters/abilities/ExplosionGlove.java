@@ -1,6 +1,5 @@
 package physicalFighters.abilities;
 
-import physicalFighters.PhysicalFighters;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 
@@ -12,7 +11,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class ExplosionGlove extends Ability {
     public ExplosionGlove() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("폭파장갑", Type.Active_Immediately, Rank.A,
                 "능력 사용시 주변의 플레이어에게 폭발을 일으키며", "공중으로 띄웁니다.");
         InitAbility(50, 0, true);

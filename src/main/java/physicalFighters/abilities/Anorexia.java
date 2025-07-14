@@ -3,7 +3,6 @@ package physicalFighters.abilities;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
-import physicalFighters.PhysicalFighters;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -12,7 +11,6 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 public class Anorexia extends Ability {
     public Anorexia() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("거식증", Type.Passive_AutoMatic, Rank.A,
                 "캐릭터의 배고픔이 꽉 찬 상태로 고정됩니다.", "모든 종류의 체력 회복량을 3배로 받습니다.");
         InitAbility(0, 0, true);

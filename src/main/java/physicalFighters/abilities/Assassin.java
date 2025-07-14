@@ -1,5 +1,7 @@
 package physicalFighters.abilities;
 
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
@@ -12,53 +14,59 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Assassin
-        extends Ability {
+public class Assassin extends Ability {
+    // 백스텝 각도 범위 (도 단위)
+    private static final double BACKSTAB_ANGLE_THRESHOLD = 90.0; // 90도 = 후방 180도 범위
+
     public Assassin() {
-        InitAbility("어쌔신", Type.Passive_AutoMatic, Rank.C,
+        InitAbility("어쌔신", Type.Passive_AutoMatic, Rank.B,
                 "뒤에서 공격할시에 데미지를 두배로 입히고 눈을 가립니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if ((isOwner(Event.getDamager())) &&
-                ((Event.getEntity() instanceof Player p))) {
-            Player p1 = (Player) Event.getDamager();
-            if (getDirection(p) == getDirection(p1)) {
-                return 0;
-            }
+        if (!isOwner(Event.getDamager()) || !(Event.getEntity() instanceof LivingEntity target)) {
+            return -1;
+        }
+        Player attacker = (Player) Event.getDamager();
+        if (isBackstabAttack(attacker, target)) {
+            return 0;
         }
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        Player p = (Player) Event.getEntity();
-        p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 200, 0));
-        Event.setDamage((int) (Event.getDamage() * 2.0D));
-        Event.getDamager().sendMessage(ChatColor.GREEN + "백스텝 성공!");
-        p.sendMessage(ChatColor.RED + "백스텝을 당하셨습니다.");
+        LivingEntity target = (LivingEntity) Event.getEntity();
+        Player attacker = (Player) Event.getDamager();
+        target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 200, 0));
+        Event.setDamage(Event.getDamage() * 2.0D);
+        attacker.sendMessage(ChatColor.GREEN + "백스텝 성공!");
+        if (target instanceof Player) {
+            target.sendMessage(ChatColor.RED + "백스텝에 당했습니다!");
+        }
     }
 
-    public static int getDirection(Player p) {
-        Location loc = p.getLocation();
-        Location loc2 = p.getTargetBlock(null, 0).getLocation();
-        int x = (int) Math.abs(Math.abs(loc.getX()) - Math.abs(loc2.getX()));
-        int z = (int) Math.abs(Math.abs(loc.getZ()) - Math.abs(loc2.getZ()));
-        if (loc == loc2) {
-            return 10;
-        }
-        if (x > z) {
-            if (loc.getX() > loc2.getX()) {
-                return 1;
-            }
-            return 3;
-        }
-        if (loc.getZ() > loc2.getZ()) {
-            return 2;
-        }
-        return 4;
+    /**
+     * pitch 무시하고 top view에서 백스텝인지 검증
+     */
+    private boolean isBackstabAttack(Player attacker, LivingEntity target) {
+        Location attackerLoc = attacker.getLocation();
+        Location targetLoc = target.getLocation();
+
+        Vector targetDirection = targetLoc.getDirection();
+        targetDirection.setY(0);
+        targetDirection.normalize();
+
+        Vector attackVector = new Vector(attackerLoc.getX() - targetLoc.getX(), 0,
+                attackerLoc.getZ() - targetLoc.getZ()).normalize();
+
+        double dotProduct = targetDirection.dot(attackVector);
+        return dotProduct <= Math.cos(Math.toRadians(BACKSTAB_ANGLE_THRESHOLD));
     }
+
 }

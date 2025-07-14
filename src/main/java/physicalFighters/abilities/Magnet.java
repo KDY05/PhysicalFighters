@@ -14,7 +14,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Magnet extends Ability {
     public Magnet() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("자석", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴를 들고 왼쪽클릭시, 20칸안에 있는 모든 적을 자신의 방향으로,",
                 "철괴를 들고 오른쪽클릭시, 20칸안에 있는 모든 적을 자신의 반대방향으로 날려버립니다."});

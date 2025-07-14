@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Ninja extends Ability {
     public Ninja() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("닌자", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴 왼쪽클릭시 매우 빠르게 화살을 발사합니다. ",
                 "이 화살에 플레이어가 맞을 경우 10%확률로 플레이어를 폭발시키고, ",

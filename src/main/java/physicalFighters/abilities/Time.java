@@ -1,6 +1,5 @@
 package physicalFighters.abilities;
 
-import physicalFighters.PhysicalFighters;
 import physicalFighters.core.Ability;
 import physicalFighters.core.EventManager;
 import physicalFighters.utils.EventData;
@@ -13,7 +12,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class Time extends Ability {
     public Time() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("타임", Type.Active_Continue, Rank.A,
                 "자신을 제외한 모든 능력자의 이동을 5초동안",
                 "차단합니다. 단, 직접적인 이동만 불가능합니다.", "능력이 없는 사람도 다 멈춥니다.");

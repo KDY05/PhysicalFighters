@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Poksi extends Ability {
     public Poksi() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("이슈타르의 링", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴로 능력을 사용합니다.",
                 "철괴를 들고 우클릭시 바라보는 방향으로 화살 두발을 발사합니다. (꾹 느르고 있으면 연사됩니다.)"});

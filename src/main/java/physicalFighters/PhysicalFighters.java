@@ -34,11 +34,8 @@ public class PhysicalFighters extends JavaPlugin {
     public static boolean InfinityDur;
     public static boolean HalfMonsterDamage;
 
-    public static boolean Specialability;
     public static boolean AbilityOverLap;
     public static boolean PrintTip;
-
-    public static boolean Gods = false;
 
     @Override
     public void onEnable() {
@@ -64,9 +61,6 @@ public class PhysicalFighters extends JavaPlugin {
         if (RestrictionTime <= 0) {
             getLogger().info("제약 시간이 0분 이하로 설정되어 제약 시간이 비활성화됩니다.");
             RestrictionTime = 0;
-        }
-        if (Specialability) {
-            getLogger().info("인기 능력만 사용합니다.");
         }
         getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityList.AbilityList.size()));
     }
@@ -94,7 +88,6 @@ public class PhysicalFighters extends JavaPlugin {
         InfinityDur = getConfig().getBoolean("InfinityDur", false);
         HalfMonsterDamage = getConfig().getBoolean("HalfMonsterDamage", false);
 
-        Specialability = getConfig().getBoolean("Specialability", true);
         AbilityOverLap = getConfig().getBoolean("AbilityOverLap", false);
         PrintTip = getConfig().getBoolean("PrintTip", true);
     }

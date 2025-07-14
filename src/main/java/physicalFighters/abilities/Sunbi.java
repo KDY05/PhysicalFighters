@@ -20,7 +20,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Sunbi extends Ability {
     public Sunbi() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("나그네", Type.Active_Immediately, Rank.S, new String[]{
                 "쉬프트를 누르고 앉으면 지나가던 나그네가 엣헴! 하며 주위의 사람들이 나그네에게 체력을 바칩니다. ",
                 "이 떄, 체력을 빼앗긴 플레이어들은 어지러움증과 고통을 느끼게됩니다."});

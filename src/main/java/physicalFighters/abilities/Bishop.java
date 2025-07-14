@@ -16,7 +16,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Bishop extends Ability {
     public Bishop() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("비숍", Type.Active_Immediately, Rank.B,
                 "철괴 왼클릭시 맞은 사람에게 각종 축복을 겁니다.", "철괴 오른클릭시 자신에게 각종 축복을 겁니다.",
                 "금괴를 적에게 왼클릭시 각종 저주를 겁니다.", "세 기능은 쿨타임을 공유하며 모든 효과 지속시간은",

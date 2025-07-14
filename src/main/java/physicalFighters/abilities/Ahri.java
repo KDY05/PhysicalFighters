@@ -25,7 +25,6 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class Ahri extends Ability {
     public Ahri() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("아리", Type.Active_Immediately, Rank.SS,
                 "눈덩이를 던져, 맞은 적을 자신에게 무작정 걸어오게 만듭니다.");
         InitAbility(20, 0, true);

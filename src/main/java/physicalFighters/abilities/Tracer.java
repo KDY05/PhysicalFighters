@@ -29,7 +29,6 @@ public class Tracer extends Ability {
     LinkedList<Integer> H = new LinkedList<>();
 
     public Tracer() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("트레이서", Type.Active_Immediately, Rank.S,
                 "1.철괴를 들고 쉬프트를 누르면 바라보는 방향으로 짧게 순간이동합니다.",
                 "- 5초마다 코어가 하나씩 충전되며, 3개까지 충전됩니다.",

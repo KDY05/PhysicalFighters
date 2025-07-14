@@ -13,7 +13,6 @@ import org.bukkit.util.Vector;
 public class Fallingarrow
         extends Ability {
     public Fallingarrow() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("낙하화살", Type.Active_Immediately, Rank.A,
                 "바라보는곳에 빠른속도로 화살 16발을 내리꽂습니다. [실내에서 사용이 안될 수 있습니다.]");
         InitAbility(3, 0, true);

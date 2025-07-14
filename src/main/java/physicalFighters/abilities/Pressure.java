@@ -17,7 +17,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Pressure extends Ability {
     public Pressure() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("압력", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴로 왼쪽클릭시 20칸 이내의 모든 적을 강한 압력으로 압축시킵니다.",
                 "대상플레이어는 데미지와 디버프를 받습니다."});

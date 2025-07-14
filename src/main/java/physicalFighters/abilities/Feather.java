@@ -14,7 +14,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Feather extends Ability {
     public Feather() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("깃털", Type.Passive_AutoMatic, Rank.C,
                 "낙하 데미지와 물속에서의 질식 데미지를 받지 않습니다.",
                 "90% 확률로 폭발,번개 데미지를 1로 줄여받으며 미러링 능력을",

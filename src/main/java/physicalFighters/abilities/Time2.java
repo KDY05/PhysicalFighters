@@ -13,7 +13,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Time2 extends Ability {
     public Time2() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("시간을 지배하는 자", Type.Active_Immediately, Rank.A,
                 "자신을 제외한 모든 플레이어들의 속도를 15초간 느리게 만듭니다.");
         InitAbility(40, 0, true);

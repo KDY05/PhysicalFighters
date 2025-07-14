@@ -19,7 +19,6 @@ public class gongban extends Ability {
     public static boolean ppon = false;
 
     public gongban() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("공격반사", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴 좌클릭으로 능력을 사용합니다.",
                 "능력 사용 후 5초간 받는 모든 데미지를 돌려줍니다."});

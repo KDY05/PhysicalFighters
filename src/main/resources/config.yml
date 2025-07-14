@@ -34,8 +34,6 @@ InfinityDur: false
 # 몬스터 공격력 반감 모드
 HalfMonsterDamage: false
 
-# 인기 능력만 사용
-Specialability: true
 # 능력 중복 가능
 AbilityOverLap: false
 # 팁 출력

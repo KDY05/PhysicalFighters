@@ -18,8 +18,8 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Pagi extends Ability {
     public Pagi() {
-        InitAbility("패기", Type.Active_Immediately, Rank.SS, new String[]{
-                "능력 사용시 20초간 10칸 안에 있는 적에게 5초마다 강한데미지를 줍니다."});
+        InitAbility("패기", Type.Active_Immediately, Rank.SS,
+                "능력 사용시 20초간 10칸 안에 있는 적에게 5초마다 강한데미지를 줍니다.");
         InitAbility(160, 0, true);
         registerLeftClickEvent();
     }
@@ -41,7 +41,7 @@ public class Pagi extends Ability {
 
     class Pauck extends TimerTask {
         private int num = 0;
-        private String name = null;
+        private final String name;
 
         public Pauck(String name1) {
             this.name = name1;
@@ -59,7 +59,7 @@ public class Pagi extends Ability {
                         Vector playervec = new Vector(l.getX(), l.getY(), l.getZ());
                         if ((playervec.distance(targetvec) <= 10.0D) && (loc.getY() != 0.0D)) {
                             p1[i].damage(5, p);
-                            p1[i].addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 30, 0), true);
+                            p1[i].addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 30, 0));
                         }
                     }
                 if (this.num > 20) cancel();
@@ -68,9 +68,3 @@ public class Pagi extends Ability {
         }
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Pagi.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

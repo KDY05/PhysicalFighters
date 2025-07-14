@@ -65,9 +65,6 @@ public final class S_GameStart {
             if (PhysicalFighters.WoodGive) {
                 p.getInventory().addItem(new ItemStack(Material.OAK_LOG, 64));
             }
-            if (PhysicalFighters.Specialability) {
-                Bukkit.broadcastMessage(ChatColor.GREEN + "인기있는 능력만 적용됩니다.");
-            }
         }
         for (Player p : this.ms.ExceptionList) {
             p.teleport(l);

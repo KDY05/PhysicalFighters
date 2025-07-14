@@ -12,7 +12,6 @@ public class Thunder extends Ability {
     public static boolean ppon = false;
 
     public Thunder() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("썬더볼트", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴 좌클릭으로 능력을 사용합니다.",
                 "주변 5칸의 플레이어에게 데미지를 줍니다."});

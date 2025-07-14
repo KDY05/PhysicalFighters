@@ -18,7 +18,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Infighter extends Ability {
     public Infighter() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("인파이터", Type.Passive_AutoMatic, Rank.A, new String[]{
                 "주먹으로 모든것을 해결하는 능력입니다.",
                 "주먹으로 공격하면 대상에게 큰 충격을 받습니다.",

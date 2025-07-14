@@ -13,7 +13,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Blind extends Ability {
     public Blind() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("블라인드", Type.Passive_AutoMatic, Rank.C,
                 "자신에게 공격받은 사람은 3초간 시야를 잃습니다.");
         InitAbility(0, 0, true);

@@ -29,7 +29,6 @@ public class Genji extends Ability {
     boolean po;
 
     public Genji() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("겐지", Type.Active_Immediately, Rank.S,
                 "철괴나 칼을 들고 쉬프트시 앞으로 돌진하며 앞의 모든 적에게 큰 데미지를 줍니다.(질풍참)",
                 "질풍참을 사용시 5초간 칼의 사거리가 증가하며 5의 추가데미지를 입힙니다.",

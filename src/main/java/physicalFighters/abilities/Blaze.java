@@ -11,7 +11,6 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public class Blaze extends Ability {
     public Blaze() {
-        if (PhysicalFighters.Specialability) return;
         InitAbility("블레이즈", Type.Passive_AutoMatic, Rank.C,
                 "용암과 불 데미지를 입지 않습니다.", "능력에서 파생되는 화염 데미지도 막습니다.",
                 "모든 종류의 폭발 데미지를 50%로 줄여 받습니다.");
