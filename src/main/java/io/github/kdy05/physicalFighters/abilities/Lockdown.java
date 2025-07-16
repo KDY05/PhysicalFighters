@@ -11,92 +11,126 @@ import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.utils.AUC;
 import io.github.kdy05.physicalFighters.utils.CommandInterface;
-import io.github.kdy05.physicalFighters.utils.Vector;
-
-// TODO: 아직 테스트 안 됨
 
 public class Lockdown extends Ability implements CommandInterface {
-    private Ability victim;
-    private CommandSender sender;
-    private String[] data;
+    // 능력 설정 상수
+    private static final double MAX_RANGE = 60.0;          // 최대 사용 거리 (60블록)
+    private static final int LOCKDOWN_DURATION = 60;      // 봉인 지속시간 (60초)
+    // 임시 저장 필드
+    private Ability targetAbility = null;
+    private Player caster = null;
+    private String targetName = null;
 
     public Lockdown() {
         InitAbility("봉인", Type.Active_Continue, Rank.B,
-                "특정 플레이어의 능력을 캔슬시키고 1분간 봉인하며 상대의",
-                "배고픔 수치를 0으로 만들어 도망치기 어렵게 합니다.",
-                "명령어로 작동하며 사용법은 \"/va s 대상닉네임\" 입니다.",
-                "자신과 60칸 이내 거리에 있어야 사용할수 있으며 게임 시작후",
-                "능력 제한 시간동안은 이 능력을 사용할 수 없습니다.");
-        InitAbility(80, 60, true);
+                "특정 플레이어의 능력을 1분간 봉인하며 구속 효과를 겁니다.",
+                "\"/va lock <nickname>\" 명령어로 작동하며 대상이 60칸 이내에 있어야 합니다.",
+                "게임 시작 후 능력 제한 시간동안 이 능력을 사용할 수 없습니다.");
+        InitAbility(80, LOCKDOWN_DURATION, true);
         commandManager.RegisterCommand(this);
     }
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        if (sender instanceof Player p && isOwner(p)) {
-            if (!Ability.restrictionTimer.isRunning()) {
-                if (Bukkit.getServer().getPlayerExact(data[1]) != null) {
-                    Player pn = Bukkit.getServer().getPlayerExact(data[1]);
-                    if (pn != null && p.getName().equals(pn.getName())) {
-                        p.sendMessage(ChatColor.RED + "자기 자신에게 능력을 사용할수 없습니다.");
-                        data = null;
-                        return -1;
-                    }
-                    victim = AUC.findAbility(pn);
-                    if (victim != null) {
-                        Vector vec = new Vector(p.getLocation());
-                        if (pn != null && vec.distance(pn.getLocation()) <= 60) {
-                            data = null;
-                            return 0;
-                        }
-                    } else
-                        p.sendMessage(ChatColor.RED + "옵저버입니다.");
-                } else
-                    p.sendMessage(ChatColor.RED + "존재하지 않는 플레이어입니다.");
-            } else
-                p.sendMessage(ChatColor.RED + "아직 능력을 사용할 수 없습니다.");
-        } else
-            sender.sendMessage(ChatColor.RED + "이 명령은 사용할 수 없습니다.");
-        data = null;
-        return -1;
+        if (caster == null || !isOwner(caster)) {
+            if (caster != null) caster.sendMessage(ChatColor.RED + "이 명령은 사용할 수 없습니다.");
+            clearTempData();
+            return -1;
+        }
+
+        if (Ability.restrictionTimer.isRunning()) {
+            caster.sendMessage(ChatColor.RED + "아직 능력을 사용할 수 없습니다.");
+            clearTempData();
+            return -1;
+        }
+
+        Player target = Bukkit.getPlayerExact(targetName);
+        if (target == null) {
+            caster.sendMessage(ChatColor.RED + "존재하지 않는 플레이어입니다.");
+            clearTempData();
+            return -1;
+        }
+
+        if (caster.getName().equals(target.getName())) {
+            caster.sendMessage(ChatColor.RED + "자기 자신에게 능력을 사용할 수 없습니다.");
+            clearTempData();
+            return -1;
+        }
+
+        targetAbility = AUC.findAbility(target);
+        if (targetAbility == null) {
+            caster.sendMessage(ChatColor.RED + "옵저버입니다.");
+            clearTempData();
+            return -1;
+        }
+
+        double distance = caster.getLocation().distance(target.getLocation());
+        if (distance > MAX_RANGE) {
+            caster.sendMessage(ChatColor.RED + String.format(
+                    "거리가 너무 멉니다. (현재: %.1f블록, 최대: %.0f블록)", distance, MAX_RANGE));
+            clearTempData();
+            return -1;
+        }
+
+        return 0;
     }
 
     @Override
     public void A_Effect(Event event, int CustomData) {
+        // A_DurationStart에서 실제 효과 처리
     }
 
     @Override
     public void A_DurationStart() {
-        Player p = (Player) sender;
-        Player pn = victim.getPlayer();
-        p.sendMessage(String.format("%s님의 능력을 1분간 봉인합니다.", pn.getName()));
-        pn.sendMessage(String.format(ChatColor.RED + "경고, %s님이 당신에게 Lockdown 능력을 사용했습니다.", p.getName()));
-        pn.sendMessage(ChatColor.RED + "지속 효과가 모두 해제되고 1분간 능력 효과가 봉인됩니다.");
-        victim.cancelDTimer();
-        victim.cancelCTimer();
-        victim.setRunAbility(false);
-        if (!PhysicalFighters.NoFoodMode)
-            victim.getPlayer().setFoodLevel(0);
-    }
+        if (caster == null || targetAbility == null) {
+            return;
+        }
 
+        Player target = targetAbility.getPlayer();
+
+        caster.sendMessage(ChatColor.YELLOW +
+                String.format("%s님의 능력을 %d초간 봉인합니다.", target.getName(), LOCKDOWN_DURATION));
+        target.sendMessage(ChatColor.RED +
+                String.format("경고, %s님이 당신에게 봉인 능력을 사용했습니다.", caster.getName()));
+        target.sendMessage(ChatColor.RED +
+                "지속 효과가 해제되고 1분간 능력 효과가 봉인됩니다.");
+
+        targetAbility.cancelDTimer();
+        targetAbility.cancelCTimer();
+        targetAbility.setRunAbility(false);
+
+        if (!PhysicalFighters.NoFoodMode) {
+            targetAbility.getPlayer().setFoodLevel(0);
+        }
+
+        clearTempData();
+    }
 
     @Override
     public void A_DurationEnd() {
-        Player pn = victim.getPlayer();
-        pn.sendMessage(ChatColor.GREEN + "봉인이 해제되었습니다.");
-        victim.setRunAbility(true);
+        if (targetAbility != null && targetAbility.getPlayer() != null) {
+            Player target = targetAbility.getPlayer();
+            target.sendMessage(ChatColor.GREEN + "봉인이 해제되었습니다.");
+            targetAbility.setRunAbility(true);
+        }
+    }
+
+    @Override
+    public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length != 2 || !args[0].equalsIgnoreCase("lock")) {
+            return false;
+        }
+
+        this.caster = (Player) sender;
+        this.targetName = args[1];
+
+        this.AbilityExcute(null, 0);
+        return true;
     }
 
 
-    @Override
-    public boolean onCommandEvent(CommandSender sender, Command command,
-                                  String label, String[] args) {
-        this.sender = sender;
-        this.data = args;
-        if (args[0].equalsIgnoreCase("s") && args.length == 2) {
-            this.AbilityExcute(null, 0);
-            return true;
-        }
-        return false;
+    private void clearTempData() {
+        this.caster = null;
+        this.targetName = null;
     }
 }

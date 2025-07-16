@@ -2,27 +2,29 @@ package io.github.kdy05.physicalFighters.abilities;
 
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Temari extends Ability {
+public class Haki extends Ability {
     // 능력 설정 상수
-    private static final int WIND_RANGE = 10;
-    private static final double LIFT_HEIGHT = 4.0;
-    private static final int MAX_COUNT = 14;
-    private static final long INTERVAL = 30L;
+    private static final double RANGE = 10.0;
+    private static final double DAMAGE = 8.0;
+    private static final int DURATION = 10;
+    private static final long INTERVAL = 40L;
+    private static final long DELAY = 10L;
 
-    public Temari() {
-        InitAbility("테마리", Type.Active_Immediately, Rank.S,
-                "철괴 좌클릭 시 20초간 자신의 주변에 있는 적들을 공중으로 날려버립니다.");
-        InitAbility(60, 0, true);
+    public Haki() {
+        InitAbility("패기", Type.Active_Immediately, Rank.SS,
+                "능력 사용시 20초간 10칸 내의 적에게 강한 데미지를 줍니다.");
+        InitAbility(160, 0, true);
         registerLeftClickEvent();
     }
 
@@ -44,15 +46,15 @@ public class Temari extends Ability {
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         Player caster = Event.getPlayer();
-        new WindBlastTask(caster).runTaskTimer(plugin, 0, INTERVAL);
-        caster.sendMessage(ChatColor.AQUA + "강풍을 일으킵니다!");
+        new ConquerorHakiTask(caster).runTaskTimer(PhysicalFighters.getPlugin(), DELAY, INTERVAL);
+        caster.sendMessage(ChatColor.DARK_RED + "패기를 발산합니다!");
     }
 
-    private static class WindBlastTask extends BukkitRunnable {
+    private static class ConquerorHakiTask extends BukkitRunnable {
         private final Player caster;
         private int tickCount = 0;
 
-        public WindBlastTask(Player caster) {
+        public ConquerorHakiTask(Player caster) {
             this.caster = caster;
         }
 
@@ -62,24 +64,24 @@ public class Temari extends Ability {
                 cancel();
                 return;
             }
-            if (tickCount >= MAX_COUNT) {
+            if (tickCount >= DURATION) {
                 cancel();
-                caster.sendMessage(ChatColor.GREEN + "강풍이 멈췄습니다.");
+                caster.sendMessage(ChatColor.GREEN + "패기가 사라졌습니다.");
                 return;
             }
-            blowAwayNearbyPlayers();
+            applyConquerorHaki();
             tickCount++;
         }
 
-        private void blowAwayNearbyPlayers() {
-            caster.getWorld().getNearbyEntities(caster.getLocation(), WIND_RANGE, WIND_RANGE, WIND_RANGE).stream()
+        private void applyConquerorHaki() {
+            caster.getWorld().getNearbyEntities(caster.getLocation(), Haki.RANGE, Haki.RANGE, Haki.RANGE).stream()
                     .filter(entity -> entity instanceof LivingEntity)
                     .map(entity -> (LivingEntity) entity)
                     .filter(entity -> entity != caster)
                     .forEach(entity -> {
-                        Location liftLoc = entity.getLocation().clone();
-                        liftLoc.setY(entity.getLocation().getY() + LIFT_HEIGHT);
-                        AUC.goVelocity(entity, liftLoc, 1);
+                        entity.damage(Haki.DAMAGE, caster);
+                        entity.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 30, 0));
+                        if (entity instanceof Player) entity.sendMessage(ChatColor.DARK_RED + "패기에 압도당했습니다!");
                     });
         }
     }

@@ -72,7 +72,7 @@ public class Blitzcrank extends Ability {
             case 1:
                 PlayerDropItemEvent Event1 = (PlayerDropItemEvent) event;
                 Event1.getPlayer().sendMessage(
-                        ChatColor.RED + "소유한 눈덩이가 16개 이하일시 못버립니다.");
+                        ChatColor.RED + "소유한 눈덩이가 16개 이하일시 버릴 수 없습니다.");
                 Event1.setCancelled(true);
                 break;
             case 2:

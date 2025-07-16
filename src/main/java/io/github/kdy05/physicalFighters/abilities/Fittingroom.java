@@ -3,10 +3,7 @@ package io.github.kdy05.physicalFighters.abilities;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -19,28 +16,26 @@ public class Fittingroom extends Ability {
         registerLeftClickEvent();
     }
 
+    @Override
     public int A_Condition(Event event, int CustomData) {
-        if (!EventManager.DamageGuard) {
-            PlayerInteractEvent Event = (PlayerInteractEvent) event;
-            if ((isOwner(Event.getPlayer())) &&
-                    (isValidItem(Ability.DefaultItem)))
-                return 0;
-        }
+        if (EventManager.DamageGuard) return -1;
+        PlayerInteractEvent Event = (PlayerInteractEvent) event;
+        if (isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem))
+            return 0;
         return -1;
     }
 
+    @Override
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player[] t = Bukkit.getOnlinePlayers().toArray(new Player[0]);
-        Player p = Event.getPlayer();
-        World w = p.getWorld();
-        for (int i = 0; i < (Bukkit.getOnlinePlayers()).size(); i++) {
-            if ((t[i].getGameMode() != GameMode.CREATIVE) && (t[i] != p) && (t[i].getInventory().getItemInMainHand().getType() != Material.AIR)) {
-                w.dropItem(t[i].getLocation(), t[i].getInventory().getItemInMainHand());
-                t[i].getInventory().remove(t[i].getInventory().getItemInMainHand());
+        Player caster = Event.getPlayer();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player != caster && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
+                caster.getWorld().dropItem(player.getLocation(), player.getInventory().getItemInMainHand());
+                player.getInventory().remove(player.getInventory().getItemInMainHand());
             }
         }
-        Bukkit.broadcastMessage(org.bukkit.ChatColor.AQUA + p.getName() +
-                "님이 능력을 사용해 모든 플레이어의 무장을 해체시켰습니다.");
+        Bukkit.broadcastMessage(ChatColor.AQUA + caster.getName() +
+                "님이 능력을 사용해 모든 플레이어의 무장을 해제시켰습니다.");
     }
 }

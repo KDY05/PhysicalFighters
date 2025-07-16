@@ -13,12 +13,11 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Fly
-        extends Ability {
+public class Fly extends Ability {
     public Fly() {
-        InitAbility("플라이", Type.Active_Immediately, Rank.GOD, new String[]{
+        InitAbility("플라이", Type.Active_Immediately, Rank.GOD,
                 "철괴를 휘두를시에 10초간 하늘을 날라다닐 수 있습니다.",
-                "낙하 데미지를 받지 않습니다."});
+                "낙하 데미지를 받지 않습니다.");
         InitAbility(60, 0, true);
         registerLeftClickEvent();
         EventManager.onEntityDamage.add(new EventData(this, 3));

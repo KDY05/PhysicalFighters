@@ -104,7 +104,7 @@ public class AbilityList {
     // ㅍ
     public static final Fireball fireball = new Fireball(); // 파이어볼
 //    public static final Paladin Paladin = new Paladin(); // 팔라딘
-    public static final Pagi pagi = new Pagi(); // 패기
+    public static final Haki haki = new Haki(); // 패기
     public static final Poseidon poseidon = new Poseidon(); // 포세이돈
     public static final Poison poison = new Poison(); // 포이즌
     public static final Killtolevelup Killtolevelup = new Killtolevelup(); // 폭주

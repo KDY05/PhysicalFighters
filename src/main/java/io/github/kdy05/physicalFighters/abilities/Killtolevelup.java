@@ -22,9 +22,9 @@ public class Killtolevelup extends Ability {
     int dama = 5;
 
     public Killtolevelup() {
-        InitAbility("폭주", Type.Passive_Manual, Rank.SS, new String[]{
+        InitAbility("폭주", Type.Passive_Manual, Rank.SS,
                 "깃털의 처음 데미지는 5입니다.",
-                "깃털로 1킬을 할때마다 데미지가 2씩 늘어납니다."});
+                "깃털로 1킬을 할때마다 데미지가 2씩 늘어납니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         EventManager.onPlayerDropItem.add(new EventData(this, 1));
@@ -86,7 +86,7 @@ public class Killtolevelup extends Ability {
                 EntityDeathEvent Event3 = (EntityDeathEvent) event;
                 List<ItemStack> itemlist = Event3.getDrops();
                 for (int l = 0; l < itemlist.size(); l++) {
-                    if (((ItemStack) itemlist.get(l)).getType() == Material.FEATHER) {
+                    if (itemlist.get(l).getType() == Material.FEATHER) {
                         itemlist.remove(l);
                     }
                 }
@@ -96,8 +96,8 @@ public class Killtolevelup extends Ability {
 //if (this.dama < 12)
 //{
                 this.dama += 2;
-                Bukkit.broadcastMessage(String.format(ChatColor.RED + "%s님을 죽이고 %s님이  폭주했습니다.", new Object[]{
-                        ((Player) Event4.getEntity()).getName(), Event4.getEntity().getKiller().getName()}));
+                Bukkit.broadcastMessage(String.format(ChatColor.RED + "%s님을 죽이고 %s님이  폭주했습니다.",
+                        Event4.getEntity().getName(), Event4.getEntity().getKiller().getName()));
                 Event4.getEntity().getKiller().sendMessage(ChatColor.RED + "붉은 피를보니... 내가 더 강해진 것 같군.. 큭..");
 //}
 //else
@@ -117,9 +117,3 @@ public class Killtolevelup extends Ability {
         p.getInventory().setItem(8, new ItemStack(Material.FEATHER, 1));
     }
 }
-
-
-/* Location:              E:\플러그인\1.7.10모드능력자(95개).jar!\Physical\Fighters\AbilityList\Killtolevelup.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */
