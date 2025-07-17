@@ -38,7 +38,7 @@ public abstract class Ability {
     }
 
     public enum Rank {
-        SSS(ChatColor.GOLD + "Special Rank"), SS(ChatColor.LIGHT_PURPLE + "SS Rank"),
+        SSS(ChatColor.DARK_PURPLE + "Special Rank"), SS(ChatColor.GOLD + "SS Rank"),
         S(ChatColor.RED + "S Rank"), A(ChatColor.GREEN + "A Rank"),
         B(ChatColor.BLUE + "B Rank"), C(ChatColor.YELLOW + "C Rank"),
         F(ChatColor.BLACK + "F Rank"), GOD(ChatColor.WHITE + "신");

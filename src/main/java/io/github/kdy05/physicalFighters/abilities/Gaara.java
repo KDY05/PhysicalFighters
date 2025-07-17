@@ -15,30 +15,27 @@ import org.bukkit.scheduler.BukkitRunnable;
 import io.github.kdy05.physicalFighters.utils.AUC;
 
 public class Gaara extends Ability {
-
     private Location targetLocation = null;
 
     public Gaara() {
         InitAbility("가아라", Type.Active_Immediately, Rank.B,
-                "철괴 좌클릭 시 바라보는 방향에 모래를 떨어뜨리고",
-                "잠시 후 폭발시킵니다. (바닥을 조준하세요.)");
+                Usage.IronLeft + "바라보는 방향에 모래를 떨어뜨리고, 잠시 후 폭발시킵니다.");
         InitAbility(30, 0, true);
         registerLeftClickEvent();
     }
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player p = Event.getPlayer();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Player caster = event0.getPlayer();
 
-        if (!isOwner(Event.getPlayer()) || !isValidItem(Ability.DefaultItem) || EventManager.DamageGuard) {
+        if (!isOwner(event0.getPlayer()) || !isValidItem(Ability.DefaultItem) || EventManager.DamageGuard) {
             return -1;
         }
 
-        targetLocation = AUC.getTargetLocation(p, 40);
-
+        targetLocation = AUC.getTargetLocation(caster, 40);
         if (targetLocation == null) {
-            p.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
+            caster.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
             return -1;
         }
 
@@ -47,42 +44,27 @@ public class Gaara extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player p = Event.getPlayer();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Player caster = event0.getPlayer();
 
         if (targetLocation == null) {
-            p.sendMessage(ChatColor.RED + "능력을 사용할 수 없습니다.");
+            caster.sendMessage(ChatColor.RED + "능력을 사용할 수 없습니다.");
             return;
         }
 
-        Location l1 = targetLocation.clone();
-        Location l2 = l1.clone();
-        Block targetBlock = p.getWorld().getBlockAt(l1);
-        new ExplosionTimer(targetBlock).runTaskLater(plugin, 80L);
+        Location center = targetLocation.clone().add(0, 4, 0); // 4블록 위로 올림
+        Block targetBlock = caster.getWorld().getBlockAt(targetLocation);
+        new Exploder(targetBlock).runTaskLater(plugin, 80L);
 
-        // 4방향으로 7x7 범위에 모래 블록 생성
-        for (int j = 4; j <= 8; j++) {
-            l2.setY(l1.getY() + j);
-            for (int i = -3; i <= 3; i++) {
-                for (int k = -3; k <= 3; k++) {
-                    l2.setX(l1.getX() + i);
-                    l2.setZ(l1.getZ() + k);
-
-                    Block currentBlock = p.getWorld().getBlockAt(l2);
-                    if (currentBlock.getType() != Material.BEDROCK) {
-                        currentBlock.setType(Material.SAND);
-                    }
-                }
-            }
-        }
+        AUC.createBox(center, Material.SAND, 3, 5);
         targetLocation = null;
     }
 
-    static class ExplosionTimer extends BukkitRunnable {
+    static class Exploder extends BukkitRunnable {
         World world;
         Location location;
 
-        ExplosionTimer(Block block) {
+        Exploder(Block block) {
             this.world = block.getWorld();
             this.location = block.getLocation();
         }

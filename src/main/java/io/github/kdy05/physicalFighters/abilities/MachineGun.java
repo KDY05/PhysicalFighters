@@ -17,10 +17,10 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class MachineGun extends Ability {
-
+    // 능력 설정 필드
     private static final int MAGAZINE_SIZE = 30;
     private static final int RELOAD_TIME_TICKS = 60;
-    private static final double CRITICAL_CHANCE = 0.1;
+    private static final double CRITICAL_CHANCE = 0.2;
     private static final int CRITICAL_DAMAGE = 2;
     private static final int BULLET_DAMAGE = 2;
     private static final Material WEAPON_ITEM = Material.GOLD_INGOT;
@@ -30,18 +30,16 @@ public class MachineGun extends Ability {
     private boolean isReloading = false;
 
     private static final int EVENT_RIGHT_CLICK = 1;
-    private static final int EVENT_DAMAGE = 3;
-    private static final int EVENT_PROJECTILE_HIT = 5;
+    private static final int EVENT_DAMAGE = 2;
+    private static final int EVENT_PROJECTILE_HIT = 3;
     private static final int ACTION_SHOOT = 10;
     private static final int ACTION_RELOAD = 20;
 
     public MachineGun() {
         InitAbility("기관총", Type.Active_Immediately, Rank.S,
-                "금괴를 우클릭하여 화살을 연사합니다.",
-                "철괴를 탄창으로 사용하며 한 탄창은 30발입니다.",
-                "크리티컬 - 10% 확률로 화살이 고정 데미지를 입힙니다.");
+                Usage.GoldRight + "화살을 연사합니다. 철괴를 탄창으로 사용하며 한 탄창은 30발입니다.",
+                "크리티컬 - 20% 확률로 화살이 고정 데미지를 입힙니다.");
         InitAbility(0, 0, true, ShowText.Custom_Text);
-
         registerRightClickEvent();
         EventManager.onEntityDamageByEntity.add(new EventData(this, EVENT_DAMAGE));
         EventManager.onProjectileHitEvent.add(new EventData(this, EVENT_PROJECTILE_HIT));
@@ -60,15 +58,9 @@ public class MachineGun extends Ability {
     @Override
     public void A_Effect(Event event, int CustomData) {
         switch (CustomData) {
-            case EVENT_DAMAGE:
-                handleDamageEffect(event);
-                break;
-            case ACTION_SHOOT:
-                handleShootEffect(event);
-                break;
-            case ACTION_RELOAD:
-                handleReloadEffect(event);
-                break;
+            case EVENT_DAMAGE -> handleDamageEffect(event);
+            case ACTION_SHOOT -> handleShootEffect(event);
+            case ACTION_RELOAD -> handleReloadEffect(event);
         }
     }
 
@@ -106,7 +98,6 @@ public class MachineGun extends Ability {
         if (e.getEntity() instanceof Arrow arrow) {
             if (arrow.getShooter() instanceof Player shooter && isOwner(shooter)) {
                 arrow.remove();
-                return -2; // 효과는 실행하지 않고 화살만 제거
             }
         }
         return -1;
@@ -117,8 +108,8 @@ public class MachineGun extends Ability {
         e.setDamage(BULLET_DAMAGE);
         if (e.getEntity() instanceof LivingEntity target && Math.random() <= CRITICAL_CHANCE) {
             target.getWorld().createExplosion(target.getLocation(), 0.0F);
-            target.setHealth(Math.max(0, target.getHealth() - CRITICAL_DAMAGE));
-            getPlayer().sendMessage(ChatColor.RED + "크리티컬");
+            AUC.piercingDamage(target, CRITICAL_DAMAGE);
+            getPlayer().sendMessage(ChatColor.GREEN + "크리티컬");
         }
     }
 
@@ -140,7 +131,7 @@ public class MachineGun extends Ability {
         Player player = e.getPlayer();
         if (isReloading) return;
         isReloading = true;
-        player.sendMessage("장전 중... [3초 소요]");
+        player.sendMessage(ChatColor.AQUA + "장전 중... [3초 소요]");
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (AUC.removeOneItem(player, AMMO_ITEM)) {
                 currentBullets = MAGAZINE_SIZE;
