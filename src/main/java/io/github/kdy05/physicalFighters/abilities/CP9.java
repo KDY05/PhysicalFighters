@@ -17,9 +17,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class CP9 extends Ability {
     public CP9() {
         InitAbility("CP9", Type.Active_Immediately, Rank.SS,
-                "지건 - 철괴로 상대 타격 시 6의 고정 데미지를 줍니다.",
-                "월보 - 철괴 우클릭 시 바라보는 방향으로 빠르게 전진합니다.",
-                "(점프와 함께 사용 시 멀리 이동) * 낙하 데미지 면역");
+                Usage.IronAttack + "지건 - 상대에게 6의 고정 데미지를 줍니다.",
+                Usage.IronRight + "월보 - 바라보는 방향으로 빠르게 전진합니다.",
+                Usage.Passive + "낙하 데미지를 무시합니다.");
         InitAbility(15, 0, true);
         registerRightClickEvent();
         EventManager.onEntityDamageByEntity.add(new EventData(this));

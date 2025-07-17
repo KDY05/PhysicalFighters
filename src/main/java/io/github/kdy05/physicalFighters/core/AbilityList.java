@@ -33,10 +33,10 @@ public class AbilityList {
     public static final Roclee roclee = new Roclee(); // 록리
     public static final Luffy luffy = new Luffy(); // 루피
     // ㅁ
-    public static final Multishot Multishot = new Multishot(); // 멀티샷
+    public static final Multishot multishot = new Multishot(); // 멀티샷
     public static final Medic medic = new Medic(); // 메딕
     public static final Guard guard = new Guard(); // 목둔
-    public static final Nonuck Nonuck = new Nonuck(); // 무통증
+    public static final Nonuck nonuck = new Nonuck(); // 무통증
     public static final Minato minato = new Minato(); // 미나토
     public static final Mirroring mirroring = new Mirroring(); // 미러링
     // ㅂ
@@ -46,15 +46,15 @@ public class AbilityList {
 //    public static final Trap trap = new Trap(); // 부비트랩
     public static final Booster booster = new Booster(); // 부스터
     public static final Phoenix phoenix = new Phoenix(); // 불사조
-    public static final Boom Boom = new Boom(); // 붐포인트
+    public static final Boom boom = new Boom(); // 붐포인트
 //    public static final Blind blind = new Blind(); // 블라인드
 //    public static final Blaze blaze = new Blaze(); // 블레이즈
     public static final Blitzcrank blitzcrank = new Blitzcrank(); // 블리츠크랭크
 //    public static final Bishop bishop = new Bishop(); // 비숍
     // ㅅ
     public static final Sasuke sasuke = new Sasuke(); // 사스케
-    public static final SuperFan SuperFan = new SuperFan(); // 선풍기
-    public static final Teleporter Teleporter = new Teleporter(); // 소환술사
+    public static final SuperFan superFan = new SuperFan(); // 선풍기
+    public static final Teleporter teleporter = new Teleporter(); // 소환술사
     public static final ShockWave shockwave = new ShockWave(); // 쇼크웨이브
     public static final Slower slower = new Slower(); // 슬로워
 //    public static final Time2 time2 = new Time2(); // 시간을 지배하는 자
@@ -70,7 +70,7 @@ public class AbilityList {
     public static final Apollon apolln = new Apollon(); // 아폴론
 //    public static final Devil Devil = new Devil(); // 악마
 //    public static final Pressure Pressure = new Pressure(); // 압력
-    public static final Assassin Assassin = new Assassin(); // 어쌔신
+    public static final Assassin assassin = new Assassin(); // 어쌔신
 //    public static final Uppercut Uppercut = new Uppercut(); // 어퍼컷
     public static final Ace ace = new Ace(); // 에이스
 //    public static final Poksi poksi = new Poksi(); // 이슈타르의 링
@@ -95,8 +95,8 @@ public class AbilityList {
     public static final Kijaru kijaru = new Kijaru(); // 키자루
     // ㅌ
 //    public static final Time time = new Time(); // 타임
-    public static final Fittingroom Fittingroom = new Fittingroom(); // 탈의실
-    public static final Temari Temari = new Temari(); // 테마리
+    public static final Fittingroom fittingroom = new Fittingroom(); // 탈의실
+    public static final Temari temari = new Temari(); // 테마리
     public static final Thor thor = new Thor(); // 토르
     public static final Tranceball tranceball = new Tranceball(); // 트랜스볼
 //    public static final Tracer Tracer = new Tracer(); // 트레이서
@@ -107,12 +107,12 @@ public class AbilityList {
     public static final Haki haki = new Haki(); // 패기
     public static final Poseidon poseidon = new Poseidon(); // 포세이돈
     public static final Poison poison = new Poison(); // 포이즌
-    public static final Killtolevelup Killtolevelup = new Killtolevelup(); // 폭주
+    public static final Killtolevelup killtolevelup = new Killtolevelup(); // 폭주
 //    public static final ExplosionGlove ExplosionGlove = new ExplosionGlove(); // 폭파장갑
-    public static final Fly Fly = new Fly(); // 플라이
+    public static final Fly fly = new Fly(); // 플라이
     // ㅎ
     public static final NuclearPunch nuclearpunch = new NuclearPunch(); // 핵펀치
-    public static final Hulk Hulk = new Hulk(); // 헐크
+    public static final Hulk hulk = new Hulk(); // 헐크
     public static final Assimilation assimilation = new Assimilation(); // 흡수
     public static final Flower flower = new Flower(); // 흡혈초
 }

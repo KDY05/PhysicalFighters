@@ -20,8 +20,8 @@ public class ReverseAlchemy extends Ability {
 
     public ReverseAlchemy() {
         InitAbility("반 연금술", Type.Active_Immediately, Rank.A,
-                "철괴 좌클릭 시 금괴 3개로 다이아몬드 하나를 얻습니다.",
-                "금괴 우클릭 시 금괴를 소모하여 자신의 체력을 회복합니다.");
+                Usage.IronLeft + "금괴 3개를 다이아몬드 1개로 변환합니다.",
+                Usage.GoldRight + "금괴를 소모하여 자신의 체력을 회복합니다.");
         InitAbility(8, 0, true, ShowText.No_Text);
         registerLeftClickEvent();
         registerRightClickEvent();

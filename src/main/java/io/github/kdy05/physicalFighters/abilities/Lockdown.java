@@ -124,7 +124,7 @@ public class Lockdown extends Ability implements CommandInterface {
         this.caster = (Player) sender;
         this.targetName = args[1];
 
-        this.AbilityExcute(null, 0);
+        this.execute(null, 0);
         return true;
     }
 

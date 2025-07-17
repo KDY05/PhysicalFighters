@@ -13,6 +13,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public final class AUC {
 
@@ -32,7 +34,7 @@ public final class AUC {
         if (PhysicalFighters.AbilityOverLap)
             p.sendMessage(ChatColor.DARK_AQUA + "참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.");
         p.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
-                + " [" + showTypeText(ability) + "] " + ability.getRank().getText());
+                + " [" + showTypeText(ability) + "] " + ability.getRank());
         for (int l = 0; l < ability.getGuide().length; l++) {
             p.sendMessage(ability.getGuide()[l]);
         }
@@ -121,6 +123,24 @@ public final class AUC {
                 .map(entity -> (LivingEntity) entity)
                 .filter(entity -> entity != caster)
                 .forEach(entity -> entity.damage(damage, caster));
+    }
+
+    public static void splashTask(Player caster, Location location, double bound, Consumer<LivingEntity> action) {
+        caster.getWorld().getNearbyEntities(location, bound, bound, bound).stream()
+                .filter(entity -> entity instanceof LivingEntity)
+                .map(entity -> (LivingEntity) entity)
+                .filter(entity -> entity != caster)
+                .forEach(action);
+    }
+
+    public static void splashTask(Player caster, Location location, double bound,
+                                  Predicate<LivingEntity> filter, Consumer<LivingEntity> action) {
+        caster.getWorld().getNearbyEntities(location, bound, bound, bound).stream()
+                .filter(entity -> entity instanceof LivingEntity)
+                .map(entity -> (LivingEntity) entity)
+                .filter(entity -> entity != caster)
+                .filter(filter)
+                .forEach(action);
     }
 
 }

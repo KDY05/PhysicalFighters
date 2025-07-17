@@ -38,7 +38,7 @@ public abstract class Ability {
     }
 
     public enum Rank {
-        SSS(ChatColor.GOLD + "Special Rank"), SS(ChatColor.GRAY + "SS Rank"),
+        SSS(ChatColor.GOLD + "Special Rank"), SS(ChatColor.LIGHT_PURPLE + "SS Rank"),
         S(ChatColor.RED + "S Rank"), A(ChatColor.GREEN + "A Rank"),
         B(ChatColor.BLUE + "B Rank"), C(ChatColor.YELLOW + "C Rank"),
         F(ChatColor.BLACK + "F Rank"), GOD(ChatColor.WHITE + "신");
@@ -49,8 +49,26 @@ public abstract class Ability {
             this.s = s;
         }
 
-        public String getText() {
-            return this.s;
+        @Override
+        public String toString() {
+            return this.s + ChatColor.WHITE;
+        }
+    }
+
+    public enum Usage {
+        IronLeft("철괴 좌클릭"), IronRight("철괴 우클릭"),
+        IronAttack("철괴 타격"), GoldRight("금괴 우클릭"),
+        Passive("패시브");
+
+        private final String s;
+
+        Usage(String s) {
+            this.s = s;
+        }
+
+        @Override
+        public String toString() {
+            return String.format(ChatColor.GRAY + "(%s) " + ChatColor.WHITE, this.s);
         }
     }
 
@@ -145,40 +163,47 @@ public abstract class Ability {
         this.player = p;
     }
 
-    public final boolean AbilityExcute(Event event, int CustomData) {
-        if (player != null && RunAbility) {
-            int cd = A_Condition(event, CustomData);
-            if (cd == -2) return true;
-            if (cd != -1) {
-                if (this.type == Type.Active_Continue || this.type == Type.Active_Immediately) {
-                    if (this.DTimer.isRunning()) {
-                        getPlayer().sendMessage(String.format(ChatColor.WHITE + "%d초"
-                                + ChatColor.GREEN + " 후 지속시간이 끝납니다.", this.DTimer.getCount()));
-                        return true;
-                    }
-                    if (this.CTimer.isRunning()) {
-                        if (getShowText() != ShowText.No_CoolDownText) {
-                            getPlayer().sendMessage(String.format(ChatColor.WHITE + "%d초"
-                                + ChatColor.RED + " 후 능력을 다시 사용하실 수 있습니다.", this.CTimer.getCount()));
-                        }
-                        return true;
-                    }
-                    if (getShowText() != ShowText.Custom_Text)
-                        getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "능력을 사용했습니다.");
-                }
-                if (this.type == Type.Active_Immediately) {
-                    A_Effect(event, cd);
-                    if (getCoolDown() != 0)
-                        this.CTimer.startTimer(getCoolDown(), true);
-                } else if (this.type == Type.Active_Continue) {
-                    this.DTimer.startTimer(getDuration(), true);
-                } else {
-                    A_Effect(event, cd);
+    public final boolean execute(Event event, int CustomData) {
+        if (player == null || !RunAbility) return false;
+
+        int data = A_Condition(event, CustomData);
+        if (data < 0) return false;
+
+        if (this.type == Type.Active_Continue || this.type == Type.Active_Immediately) {
+            // 지속 시간 알림 후 종료
+            if (this.DTimer.isRunning()) {
+                getPlayer().sendMessage(String.format(ChatColor.WHITE + "%d초"
+                        + ChatColor.GREEN + " 후 지속시간이 끝납니다.", this.DTimer.getCount()));
+                return true;
+            }
+            // 쿨타임 알림 후 종료
+            if (this.CTimer.isRunning()) {
+                if (getShowText() != ShowText.No_CoolDownText) {
+                    getPlayer().sendMessage(String.format(ChatColor.WHITE + "%d초"
+                        + ChatColor.RED + " 후 능력을 다시 사용하실 수 있습니다.", this.CTimer.getCount()));
                 }
                 return true;
             }
+            // 능력 사용 알림
+            if (getShowText() != ShowText.Custom_Text)
+                getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "능력을 사용했습니다.");
         }
-        return false;
+
+        switch (this.type) {
+            // 지속 능력 시작
+            case Type.Active_Continue ->
+                    this.DTimer.startTimer(getDuration(), true);
+            // 즉발 능력 사용 후 쿨타임 다시 시작
+            case Type.Active_Immediately -> {
+                A_Effect(event, data);
+                if (getCoolDown() != 0)
+                    this.CTimer.startTimer(getCoolDown(), true);
+            }
+            // 패시브 실행
+            default -> A_Effect(event, data);
+        }
+
+        return true;
     }
 
     // Timer Managing
@@ -251,7 +276,7 @@ public abstract class Ability {
 
     // Timer Classes
 
-    public static final class CoolDownTimer extends TimerBase {
+    private static final class CoolDownTimer extends TimerBase {
         private final Ability ab;
 
         public CoolDownTimer(Ability ab) {
@@ -277,7 +302,7 @@ public abstract class Ability {
         }
     }
 
-    public static final class DurationTimer extends TimerBase {
+    private static final class DurationTimer extends TimerBase {
         private final Ability ab;
         private final CoolDownTimer ctimer;
 

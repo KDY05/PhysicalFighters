@@ -35,7 +35,7 @@ public class EventManager implements Listener {
 
     @EventHandler
     public static void onEntityDamage(EntityDamageEvent event) {
-        if ((event.getEntity() instanceof Player p)) {
+        if (event.getEntity() instanceof Player p) {
             // 플레이어 무적
             if (DamageGuard) {
                 event.setCancelled(true);
@@ -173,15 +173,11 @@ public class EventManager implements Listener {
     private static void AbilityExcuter(ArrayList<EventData> ED, Event event) {
         for (EventData eventData : ED) {
             Ability ability = eventData.ability;
-            if (ability.getAbilityType() == Type.Active_Continue) {
-                if (ability.getPlayer() != null && ability.getDurationState()) {
-                    ability.A_Effect(event, eventData.parameter);
-                    return;
-                }
-            } else {
-                if (ability.AbilityExcute(event, eventData.parameter))
-                    return;
+            if (ability.getAbilityType() == Type.Active_Continue
+                    && ability.getPlayer() != null && ability.getDurationState()) {
+                ability.A_Effect(event, eventData.parameter);
             }
+            ability.execute(event, eventData.parameter);
         }
     }
 
@@ -191,7 +187,7 @@ public class EventManager implements Listener {
         if (event.getAction().equals(Action.LEFT_CLICK_AIR) ||
                 event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             while (i < LeftHandEvent.size() && !LeftHandEvent.isEmpty()) {
-                if (LeftHandEvent.get(i).AbilityExcute(event, 0)) {
+                if (LeftHandEvent.get(i).execute(event, 0)) {
                     return;
                 }
                 ++i;
@@ -199,7 +195,7 @@ public class EventManager implements Listener {
         } else if (event.getAction().equals(Action.RIGHT_CLICK_AIR) ||
                 event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             while (i < RightHandEvent.size() && !RightHandEvent.isEmpty()) {
-                if (RightHandEvent.get(i).AbilityExcute(event, 1)) {
+                if (RightHandEvent.get(i).execute(event, 1)) {
                     return;
                 }
                 ++i;
