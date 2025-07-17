@@ -57,8 +57,8 @@ public class Gladiator extends Ability {
         // 아레나 생성 후 마주 보도록 텔레포트
         createArena(arenaBase);
 
-        Location targetArenaLoc = arenaBase.clone().add(2, 1, 2);
-        Location attackerArenaLoc = arenaBase.clone().add(-2, 1, -2);
+        Location targetArenaLoc = arenaBase.clone().add(2, 2, 2);
+        Location attackerArenaLoc = arenaBase.clone().add(-2, 2, -2);
 
         Vector targetDirection = attackerArenaLoc.toVector().subtract(targetArenaLoc.toVector()).normalize();
         targetArenaLoc.setDirection(targetDirection);
@@ -88,7 +88,7 @@ public class Gladiator extends Ability {
 
     private void createArena(Location base) {
         AUC.createBox(base, Material.BEDROCK, ARENA_SIZE, ARENA_HEIGHT);
-        AUC.createBox(base.add(0, 1, 0), Material.AIR,
+        AUC.createBox(base.clone().add(0, 1, 0), Material.AIR,
                 ARENA_SIZE - 1, ARENA_HEIGHT - 2, true);
         int torchY = ARENA_HEIGHT - 2;
         base.clone().add(ARENA_SIZE - 1, torchY, ARENA_SIZE - 1).getBlock().setType(Material.TORCH);

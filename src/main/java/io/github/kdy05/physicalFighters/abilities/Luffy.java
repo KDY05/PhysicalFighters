@@ -16,19 +16,19 @@ import io.github.kdy05.physicalFighters.utils.AUC;
 public class Luffy extends Ability {
     public Luffy() {
         InitAbility("루피", Type.Active_Immediately, Rank.S,
-                "철괴를 들고 좌클릭 시 주먹질을 합니다.",
-                "금괴를 들고 좌클릭 시 체력을 5 소모하여 30초간 여러 버프를 얻습니다.");
+                Usage.IronLeft + "사거리가 긴 주먹질을 합니다.",
+                Usage.GoldLeft + "체력을 5 소모하여 30초간 여러 버프를 얻습니다.");
         InitAbility(0, 0, true, ShowText.Custom_Text);
         registerLeftClickEvent();
     }
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if (isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem) && !EventManager.DamageGuard) {
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem) && !EventManager.DamageGuard) {
             return 1;
         }
-        if (isOwner(Event.getPlayer()) && Event.getPlayer().getHealth() >= 6.0D && (isValidItem(Material.GOLD_INGOT))) {
+        if (isOwner(event0.getPlayer()) && event0.getPlayer().getHealth() >= 6.0D && (isValidItem(Material.GOLD_INGOT))) {
             return 2;
         }
         return -1;
@@ -36,10 +36,10 @@ public class Luffy extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player caster = Event.getPlayer();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Player caster = event0.getPlayer();
         switch (CustomData) {
-            case 1:
+            case 1 -> {
                 Location origin = caster.getLocation();
                 Vector direction = origin.getDirection();
                 for (int i = 2; i <= 5; i++) {
@@ -53,16 +53,16 @@ public class Luffy extends Ability {
                     }
                     AUC.splashDamage(caster, blockLoc, 2.5, 2);
                 }
-                break;
-            case 2:
-                caster.setHealth(caster.getHealth() - 5);
+            }
+            case 2 -> {
+                AUC.piercingDamage(caster, 5.0);
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 600, 0));
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 200, 0));
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 600, 0));
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 600, 0));
-                caster.sendMessage(ChatColor.GREEN + "기어세컨드를 사용하였습니다.");
-                break;
+                caster.sendMessage(ChatColor.RED + "기어 세컨드를 사용하였습니다.");
+            }
         }
     }
 

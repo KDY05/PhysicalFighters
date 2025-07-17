@@ -58,7 +58,7 @@ public abstract class Ability {
     public enum Usage {
         IronLeft("철괴 좌클릭"), IronRight("철괴 우클릭"),
         IronAttack("철괴 타격"), GoldRight("금괴 우클릭"),
-        Passive("패시브");
+        GoldLeft("금괴 좌클릭"), Passive("패시브");
 
         private final String s;
 

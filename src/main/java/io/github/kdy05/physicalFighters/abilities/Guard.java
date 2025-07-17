@@ -9,7 +9,6 @@ import io.github.kdy05.physicalFighters.core.EventManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -18,7 +17,7 @@ import io.github.kdy05.physicalFighters.utils.AUC;
 public class Guard extends Ability {
     // 박스 크기 관련 상수
     private static final int BOX_RADIUS = 5;
-    private static final int BOX_HEIGHT = 8;
+    private static final int BOX_HEIGHT = 9;
     private static final int INNER_RADIUS = 3;
     private static final int INNER_HEIGHT = 6;
     private static final int TELEPORT_HEIGHT = 2;
@@ -27,17 +26,17 @@ public class Guard extends Ability {
 
     public Guard() {
         InitAbility("목둔", Type.Active_Immediately, Rank.A,
-                "바라보는 위치에 나무벽을 설치합니다. 주위에 플레이어가 있으면 가둡니다.");
+                Usage.IronLeft + "바라보는 위치에 나무벽을 설치합니다. 주위에 플레이어가 있으면 가둡니다.");
         InitAbility(30, 0, true);
         registerLeftClickEvent();
     }
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player caster = Event.getPlayer();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Player caster = event0.getPlayer();
 
-        if (!isOwner(Event.getPlayer()) || !isValidItem(Ability.DefaultItem))
+        if (!isOwner(event0.getPlayer()) || !isValidItem(Ability.DefaultItem))
             return -1;
 
         targetLocation = AUC.getTargetLocation(caster, 40);
@@ -56,8 +55,8 @@ public class Guard extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player p = Event.getPlayer();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Player p = event0.getPlayer();
 
         if (targetLocation == null) {
             p.sendMessage(ChatColor.RED + "능력을 사용할 수 없습니다.");
@@ -66,8 +65,7 @@ public class Guard extends Ability {
 
         Location center = targetLocation.clone();
         teleportPlayersInRange(p, center);
-        buildOuterWalls(p, center);
-        buildInnerSpace(p, center);
+        buildWalls(center);
 
         targetLocation = null;
     }
@@ -75,7 +73,6 @@ public class Guard extends Ability {
     private void teleportPlayersInRange(Player caster, Location center) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player == caster) continue; // 시전자 제외
-
             Location playerLoc = player.getLocation();
             if (isPlayerInBoxRange(playerLoc, center)) {
                 Location teleportLoc = center.clone().add(0, TELEPORT_HEIGHT, 0);
@@ -92,38 +89,14 @@ public class Guard extends Ability {
         double dy = playerLoc.getY() - center.getY();
         double dz = Math.abs(playerLoc.getZ() - center.getZ());
 
-        return dx <= Guard.BOX_RADIUS &&
-                dy >= 0 && dy <= Guard.BOX_HEIGHT &&
-                dz <= Guard.BOX_RADIUS;
+        return dx <= BOX_RADIUS &&
+                dy >= 0 && dy <= BOX_HEIGHT &&
+                dz <= BOX_RADIUS;
     }
 
-    private void buildOuterWalls(Player player, Location center) {
-        for (int y = 0; y <= BOX_HEIGHT; y++) {
-            for (int x = -BOX_RADIUS; x <= BOX_RADIUS; x++) {
-                for (int z = -BOX_RADIUS; z <= BOX_RADIUS; z++) {
-                    Location blockLoc = center.clone().add(x, y, z);
-                    Block block = player.getWorld().getBlockAt(blockLoc);
-
-                    if (block.getType() != Material.BEDROCK) {
-                        block.setType(Material.OAK_PLANKS);
-                    }
-                }
-            }
-        }
+    private void buildWalls(Location center) {
+        AUC.createBox(center, Material.OAK_PLANKS, BOX_RADIUS, BOX_HEIGHT);
+        AUC.createBox(center.clone().add(0,1,0), Material.AIR, INNER_RADIUS, INNER_HEIGHT);
     }
 
-    private void buildInnerSpace(Player player, Location center) {
-        for (int y = 1; y <= INNER_HEIGHT; y++) {
-            for (int x = -INNER_RADIUS; x <= INNER_RADIUS; x++) {
-                for (int z = -INNER_RADIUS; z <= INNER_RADIUS; z++) {
-                    Location blockLoc = center.clone().add(x, y, z);
-                    Block block = player.getWorld().getBlockAt(blockLoc);
-
-                    if (block.getType() != Material.BEDROCK) {
-                        block.setType(Material.AIR);
-                    }
-                }
-            }
-        }
-    }
 }

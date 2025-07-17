@@ -13,7 +13,7 @@ public class Shadow extends Ability {
     public Shadow() {
         InitAbility("그림자", Type.Passive_AutoMatic, Rank.B,
                 Usage.Passive + "몹에게 절대로 공격받지 않습니다.",
-                "피격 시 7% 확률로 회피하며, 체력 4를 회복합니다.");
+                "피격 시 10% 확률로 회피하며, 체력 4를 회복합니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityTarget.add(new EventData(this, 0));
         EventManager.onEntityDamage.add(new EventData(this, 1));
@@ -29,7 +29,7 @@ public class Shadow extends Ability {
             }
             case 1 -> {
                 EntityDamageEvent event1 = (EntityDamageEvent) event;
-                if (isOwner(event1.getEntity()) && Math.random() < 0.07
+                if (isOwner(event1.getEntity()) && Math.random() < 0.10
                         && event1.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
                     return 1;
                 }

@@ -1,122 +1,96 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.core.BaseItem;
 import org.bukkit.entity.AbstractArrow;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
-import java.util.List;
-
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
 
-public class Multishot extends Ability {
+public class Multishot extends Ability implements BaseItem {
     public Multishot() {
         InitAbility("멀티샷", Type.Active_Immediately, Rank.A,
                 "화살 발사 시 여러 발이 퍼지면서 날라갑니다.",
-                "죽거나 게임 시작시 화살 한묶음이 고정적으로 주어집니다.");
+                "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.");
         InitAbility(3, 0, true, ShowText.All_Text);
         EventManager.onProjectileLaunchEvent.add(new EventData(this, 0));
-        EventManager.onPlayerDropItem.add(new EventData(this, 1));
-        EventManager.onPlayerRespawn.add(new EventData(this, 2));
-        EventManager.onEntityDeath.add(new EventData(this, 3));
+        registerBaseItemEvents();
     }
 
     @Override
     public int A_Condition(Event event, int CustomData) {
         switch (CustomData) {
-            case 0:
-                ProjectileLaunchEvent Event0 = (ProjectileLaunchEvent) event;
-                if (Event0.getEntity() instanceof Arrow a && a.getShooter() instanceof Player p
+            case 0 -> {
+                ProjectileLaunchEvent event0 = (ProjectileLaunchEvent) event;
+                if (event0.getEntity() instanceof Arrow a && a.getShooter() instanceof Player p
                         && isOwner(p) && isValidItem(Material.BOW)) {
                     return 0;
                 }
-                break;
-            case 1:
-                PlayerDropItemEvent Event1 = (PlayerDropItemEvent) event;
-                if (isOwner(Event1.getPlayer()) &&
-                        Event1.getItemDrop().getItemStack().getType() == Material.ARROW) {
-                    PlayerInventory inv = Event1.getPlayer().getInventory();
-                    if (!inv.contains(Material.ARROW, 64)) {
-                        return 1;
-                    }
-                }
-                break;
-            case 2:
-                PlayerRespawnEvent Event2 = (PlayerRespawnEvent) event;
-                if (isOwner(Event2.getPlayer()))
-                    return 2;
-                break;
-            case 3:
-                EntityDeathEvent Event3 = (EntityDeathEvent) event;
-                if (isOwner(Event3.getEntity()))
-                    return 3;
-                break;
+            }
+            case ITEM_DROP_EVENT -> {
+                return handleItemDropCondition(event);
+            }
+            case ITEM_RESPAWN_EVENT -> {
+                return handleItemRespawnCondition(event);
+            }
+            case ITEM_DEATH_EVENT -> {
+                return handleItemDeathCondition(event);
+            }
         }
         return -1;
     }
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0:
-                ProjectileLaunchEvent e = (ProjectileLaunchEvent) event;
-                Arrow originalArrow = (Arrow) e.getEntity();
-                Player shooter = (Player) originalArrow.getShooter();
-                originalArrow.remove();
-                if (shooter == null) break;
-                Location shootLocation = shooter.getEyeLocation();
-                Vector direction = shooter.getLocation().getDirection();
-                for (int i = 0; i <= 10; i++) {
-                    Arrow arrow = shooter.getWorld().spawnArrow(shootLocation, direction,
-                            1.5F, 10.0F);
-                    arrow.setVelocity(arrow.getVelocity().multiply(3.0));
-                    arrow.setShooter(shooter);
-                    arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
-                }
-                break;
-            case 1:
-                PlayerDropItemEvent Event1 = (PlayerDropItemEvent) event;
-                Event1.getPlayer().sendMessage(
-                        ChatColor.RED + "소유한 화살이 64개 이하일시 화살을 버릴수 없습니다.");
-                Event1.setCancelled(true);
-                break;
-            case 2:
-                PlayerRespawnEvent Event2 = (PlayerRespawnEvent) event;
-                Event2.getPlayer().sendMessage(
-                        ChatColor.GREEN + "이전에 소유했던 화살은 모두 소멸하며 다시 지급됩니다.");
-                PlayerInventory inv = Event2.getPlayer().getInventory();
-                inv.remove(new ItemStack(Material.ARROW, 64));
-                inv.setItem(8, new ItemStack(Material.ARROW, 64));
-                inv.setItem(7, new ItemStack(Material.BOW, 1));
-                break;
-            case 3:
-                EntityDeathEvent Event3 = (EntityDeathEvent) event;
-                List<ItemStack> itemlist = Event3.getDrops();
-                itemlist.removeIf(item -> item.getType() == Material.ARROW);
+        if (CustomData == 0) {
+            ProjectileLaunchEvent event0 = (ProjectileLaunchEvent) event;
+            Arrow originalArrow = (Arrow) event0.getEntity();
+            Player shooter = (Player) originalArrow.getShooter();
+            originalArrow.remove();
+
+            if (shooter == null) return;
+            Location shootLocation = shooter.getEyeLocation();
+            Vector direction = shooter.getLocation().getDirection();
+
+            for (int i = 0; i <= 10; i++) {
+                Arrow arrow = shooter.getWorld().spawnArrow(shootLocation, direction,
+                        1.5F, 10.0F);
+                arrow.setVelocity(arrow.getVelocity().multiply(3.0));
+                arrow.setShooter(shooter);
+                arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+            }
         }
     }
 
     @Override
     public void A_SetEvent(Player p) {
-        p.getInventory().setItem(8, new ItemStack(Material.ARROW, 64));
-        p.getInventory().setItem(7, new ItemStack(Material.BOW, 1));
+        giveBaseItem(p);
     }
 
     @Override
     public void A_ResetEvent(Player p) {
-        p.getInventory().removeItem(new ItemStack(Material.ARROW, 64));
+        removeBaseItem(p);
+    }
+
+    @Override
+    public ItemStack[] getBaseItem() {
+        return new ItemStack[] {
+                new ItemStack(Material.BOW, 1),
+                new ItemStack(Material.ARROW, 64)
+        };
+    }
+
+    @Override
+    public String getItemName() {
+        return "활과 화살";
     }
 
 }

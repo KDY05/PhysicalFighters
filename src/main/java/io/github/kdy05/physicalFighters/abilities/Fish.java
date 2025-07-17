@@ -43,6 +43,9 @@ public class Fish extends Ability implements BaseItem {
             case ITEM_RESPAWN_EVENT -> {
                 return handleItemRespawnCondition(event);
             }
+            case ITEM_DEATH_EVENT -> {
+                return handleItemDeathCondition(event);
+            }
         }
         return -1;
     }
@@ -61,8 +64,6 @@ public class Fish extends Ability implements BaseItem {
                 EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
                 damageEvent.setDamage(damageEvent.getDamage() * FISH_DAMAGE);
             }
-            case ITEM_DROP_EVENT -> handleItemDropEffect(event);
-            case ITEM_RESPAWN_EVENT -> handleItemRespawnEffect(event);
         }
     }
 
