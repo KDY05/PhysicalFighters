@@ -10,8 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class CommandManager implements CommandExecutor {
     private final LinkedList<CommandInterface> CommandEventHandler = new LinkedList<>();
@@ -20,7 +19,7 @@ public class CommandManager implements CommandExecutor {
         Objects.requireNonNull(plugin.getCommand("va")).setExecutor(this);
     }
 
-    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] data) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] data) {
         if (command.getName().equals("va")) {
             if (data.length != 0) {
                 for (CommandInterface handler : this.CommandEventHandler) {
@@ -32,7 +31,7 @@ public class CommandManager implements CommandExecutor {
                 sender.sendMessage(ChatColor.GREEN + "명령어 목록");
                 sender.sendMessage(ChatColor.YELLOW + "[1]/va start : " + ChatColor.WHITE + "게임을 시작시킵니다.");
                 sender.sendMessage(ChatColor.YELLOW + "[2]/va stop : " + ChatColor.WHITE + "게임을 중지시킵니다.");
-                sender.sendMessage(ChatColor.YELLOW + "[3]/va help : " + ChatColor.WHITE + "능력을 확인합니다.");
+                sender.sendMessage(ChatColor.YELLOW + "[3]/va check : " + ChatColor.WHITE + "능력을 확인합니다.");
                 sender.sendMessage(ChatColor.YELLOW + "[4]/va ob : " + ChatColor.WHITE + "옵저버 설정을 합니다.");
                 sender.sendMessage(ChatColor.YELLOW + "[5]/va uti : " + ChatColor.WHITE + "유틸리티 명령 목록을 보여줍니다.");
                 sender.sendMessage(ChatColor.YELLOW + "[6]/va debug : " + ChatColor.WHITE + "오류 방어 명령 목록을 보여줍니다.");

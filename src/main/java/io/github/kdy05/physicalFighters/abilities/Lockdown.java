@@ -12,6 +12,8 @@ import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.utils.AUC;
 import io.github.kdy05.physicalFighters.utils.CommandInterface;
 
+// TODO: 작동 안함
+
 public class Lockdown extends Ability implements CommandInterface {
     // 능력 설정 상수
     private static final double MAX_RANGE = 60.0;          // 최대 사용 거리 (60블록)

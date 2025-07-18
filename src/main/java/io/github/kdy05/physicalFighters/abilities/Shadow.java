@@ -12,7 +12,7 @@ import io.github.kdy05.physicalFighters.utils.EventData;
 public class Shadow extends Ability {
     public Shadow() {
         InitAbility("그림자", Type.Passive_AutoMatic, Rank.B,
-                Usage.Passive + "몹에게 절대로 공격받지 않습니다.",
+                "몹에게 절대로 공격받지 않습니다.",
                 "피격 시 10% 확률로 회피하며, 체력 4를 회복합니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityTarget.add(new EventData(this, 0));

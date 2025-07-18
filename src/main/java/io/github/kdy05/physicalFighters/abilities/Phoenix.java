@@ -38,13 +38,13 @@ public class Phoenix extends Ability {
     public int A_Condition(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
-                EntityDeathEvent Event0 = (EntityDeathEvent) event;
-                if (isOwner(Event0.getEntity()))
+                EntityDeathEvent event0 = (EntityDeathEvent) event;
+                if (isOwner(event0.getEntity()))
                     return 0;
                 break;
             case 1:
-                PlayerRespawnEvent Event1 = (PlayerRespawnEvent) event;
-                if (isOwner(Event1.getPlayer()))
+                PlayerRespawnEvent event1 = (PlayerRespawnEvent) event;
+                if (isOwner(event1.getPlayer()))
                     return 1;
                 break;
         }
@@ -54,11 +54,13 @@ public class Phoenix extends Ability {
     @Override
     public void A_Effect(Event event, int CustomData) {
         switch (CustomData) {
-            case 0:
-                PlayerDeathEvent Event0 = (PlayerDeathEvent) event;
-                Player killed = Event0.getEntity();
+            case 0 -> {
+                PlayerDeathEvent event0 = (PlayerDeathEvent) event;
+                Player killed = event0.getEntity();
+
                 invsave.put(killed, killed.getInventory().getContents());
-                Event0.getDrops().clear();
+                event0.getDrops().clear();
+
                 if (this.AbilityUse) {
                     Bukkit.broadcastMessage(ChatColor.RED + "불사조가 죽었습니다. 더 이상 부활할수 없습니다.");
                     if (PhysicalFighters.AutoKick) {
@@ -71,28 +73,34 @@ public class Phoenix extends Ability {
                 } else {
                     Bukkit.broadcastMessage(ChatColor.RED + "불사조가 죽었습니다. 다시 부활할 수 있습니다.");
                 }
+
                 if (killed.getKiller() != null) {
                     this.AbilityUse = true;
                 }
                 this.ReviveCounter += 1;
-                break;
-            case 1:
-                PlayerRespawnEvent Event1 = (PlayerRespawnEvent) event;
-                ItemStack[] inv = invsave.get(Event1.getPlayer());
+            }
+            case 1 -> {
+                PlayerRespawnEvent event1 = (PlayerRespawnEvent) event;
+                Player player = event1.getPlayer();
+                ItemStack[] inv = invsave.get(player);
+
                 if (inv != null)
-                    Event1.getPlayer().getInventory().setContents(inv);
-                invsave.remove(Event1.getPlayer());
+                    player.getInventory().setContents(inv);
+                invsave.remove(player);
+
                 if (!this.AbilityUse) {
                     Bukkit.broadcastMessage(ChatColor.GREEN + "불사조가 부활하였습니다. 부활 횟수 : " +
                             this.ReviveCounter + "회");
                 }
-                Event1.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 600, 0));
-                Event1.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 600, 0));
-                Event1.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 600, 0));
-                Event1.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
-                Event1.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 600, 0));
-                Event1.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 600, 0));
-                Event1.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 600, 0));
+
+                player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 600, 0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 600, 0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 600, 0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 600, 0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 600, 0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 600, 0));
+            }
         }
     }
 

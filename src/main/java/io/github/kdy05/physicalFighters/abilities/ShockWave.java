@@ -3,10 +3,11 @@ package io.github.kdy05.physicalFighters.abilities;
 import io.github.kdy05.physicalFighters.core.Ability;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import io.github.kdy05.physicalFighters.utils.AUC;
 
 public class ShockWave extends Ability {
     public ShockWave() {
@@ -19,13 +20,13 @@ public class ShockWave extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if (isOwner(Event.getPlayer()) && isValidItem(DefaultItem)) {
-            PlayerInventory inv = Event.getPlayer().getInventory();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        if (isOwner(event0.getPlayer()) && isValidItem(DefaultItem)) {
+            PlayerInventory inv = event0.getPlayer().getInventory();
             if (inv.contains(Material.IRON_INGOT, 1)) {
                 return 0;
             }
-            Event.getPlayer().sendMessage(org.bukkit.ChatColor.RED + "철괴가 부족합니다.");
+            event0.getPlayer().sendMessage(org.bukkit.ChatColor.RED + "철괴가 부족합니다.");
             return -1;
         }
         return -1;
@@ -33,10 +34,11 @@ public class ShockWave extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        AUC.removeOneItem(getPlayer(), Material.IRON_INGOT);
-        Location l = Event.getPlayer().getLocation();
-        Location l2 = Event.getPlayer().getLocation();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Player player = event0.getPlayer();
+        player.getInventory().removeItem(new ItemStack(Material.IRON_INGOT, 1));
+        Location l = player.getLocation();
+        Location l2 = player.getLocation();
         double degrees = Math.toRadians(-(l.getYaw() % 360.0F));
         double ydeg = Math.toRadians(-(l.getPitch() % 360.0F));
         for (int i = 1; i < 7; i++) {
@@ -46,4 +48,5 @@ public class ShockWave extends Ability {
             getPlayer().getWorld().createExplosion(l2, 4.0F);
         }
     }
+
 }

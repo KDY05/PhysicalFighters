@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 public class PoisonArrow extends Ability implements BaseItem {
     public PoisonArrow() {
         InitAbility("독화살", Type.Passive_Manual, Rank.B,
-                Usage.Passive + "화살에 맞은 적은 6초간 독에걸립니다.",
+                "화살에 맞은 적은 6초간 독에걸립니다.",
                 "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));

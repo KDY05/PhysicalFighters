@@ -120,7 +120,7 @@ public final class S_GameReady {
                             if (RandomAbility(p) == null) {
                                 p.sendMessage(ChatColor.RED + "경고, 능력의 갯수가 부족합니다.");
                             } else {
-                                p.sendMessage(ChatColor.YELLOW + "(!) /va help " + ChatColor.WHITE + "= 능력 확인");
+                                p.sendMessage(ChatColor.YELLOW + "(!) /va check " + ChatColor.WHITE + "= 능력 확인");
                                 p.sendMessage(ChatColor.YELLOW + "(!) /va yes " + ChatColor.WHITE + "= 능력 사용.");
                                 p.sendMessage(ChatColor.YELLOW + "(!) /va no " + ChatColor.WHITE + "= 능력 재추첨.(1회)");
                             }
@@ -136,7 +136,7 @@ public final class S_GameReady {
                             } else {
                                 S_GameReady.this.mainscripter.OKSign.add(p);
                                 p.sendMessage(ChatColor.GREEN + "당신에게 능력이 부여되었습니다. "
-                                        + ChatColor.YELLOW + "/va help" + ChatColor.WHITE + "로 확인하세요.");
+                                        + ChatColor.YELLOW + "/va check" + ChatColor.WHITE + "로 확인하세요.");
                             }
                         for (Player p : S_GameReady.this.mainscripter.ExceptionList) {
                             p.sendMessage(ChatColor.GREEN + "능력 추첨 완료");

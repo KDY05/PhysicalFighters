@@ -23,25 +23,24 @@ public class Mirroring extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        EntityDeathEvent Event = (EntityDeathEvent) event;
-        if (Event.getEntity().getKiller() != null && isOwner(Event.getEntity()))
+        EntityDeathEvent event0 = (EntityDeathEvent) event;
+        if (event0.getEntity().getKiller() != null && isOwner(event0.getEntity()))
             return 0;
         return -1;
     }
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        EntityDeathEvent Event = (EntityDeathEvent) event;
-        Player player = (Player) Event.getEntity();
+        EntityDeathEvent event0 = (EntityDeathEvent) event;
+        Player player = (Player) event0.getEntity();
         Bukkit.broadcastMessage(String.format(ChatColor.RED +
                 "%s님의 미러링 능력이 발동되었습니다.", player.getName()));
         if (AbilityList.assimilation.getPlayer() == player.getKiller()) {
-            AbilityList.assimilation.A_Effect(Event, 1);
+            AbilityList.assimilation.A_Effect(event0, 1);
             Bukkit.broadcastMessage(ChatColor.GREEN + "흡수 능력에 의해 미러링 능력이 무력화 되었습니다.");
             return;
         }
-        if (AbilityList.aegis.getPlayer() == player.getKiller() &&
-                AbilityList.aegis.getDurationState()) {
+        if (AbilityList.aegis.getPlayer() == player.getKiller() && AbilityList.aegis.getDurationState()) {
             Bukkit.broadcastMessage(ChatColor.GREEN + "이지스 능력에 의해 미러링 능력이 무력화 되었습니다.");
             return;
         }

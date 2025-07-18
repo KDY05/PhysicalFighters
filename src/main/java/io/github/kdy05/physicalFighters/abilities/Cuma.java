@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.utils.AUC;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.util.Vector;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
@@ -20,9 +20,9 @@ public class Cuma extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if (isOwner(Event.getEntity()) && !EventManager.DamageGuard
-                && Event.getEntity() instanceof LivingEntity) {
+        EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+        if (isOwner(event0.getEntity()) && !EventManager.DamageGuard
+                && event0.getDamager() instanceof LivingEntity) {
             return 0;
         }
         return -1;
@@ -30,15 +30,14 @@ public class Cuma extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        Player caster = (Player) Event.getEntity();
-        LivingEntity target = (LivingEntity) Event.getDamager();
+        EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+        Player caster = (Player) event0.getEntity();
+        LivingEntity target = (LivingEntity) event0.getDamager();
         if (Math.random() <= 0.20) {
-            target.damage(Event.getDamage());
-            Event.setCancelled(true);
+            target.damage(event0.getDamage());
+            event0.setCancelled(true);
         }
         target.getWorld().createExplosion(target.getLocation(), 0.0F);
-        Vector knockback = target.getLocation().toVector().subtract(caster.getLocation().toVector()).normalize();
-        target.setVelocity(target.getVelocity().add(knockback));
+        AUC.goVelocity(target, caster.getLocation(), -1);
     }
 }

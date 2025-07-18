@@ -44,9 +44,9 @@ public class MainScripter implements CommandInterface {
     }
 
     public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] args) {
-        if (args[0].equalsIgnoreCase("help")) {
+        if (args[0].equalsIgnoreCase("check")) {
             if (sender instanceof Player p) {
-                AUC.showInfoText(p);
+                handleCheck(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
@@ -59,19 +59,19 @@ public class MainScripter implements CommandInterface {
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
         } else if (args[0].equalsIgnoreCase("ob")) {
             if (sender instanceof Player p) {
-                vaob(p);
+                handleObserve(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
         } else if (args[0].equalsIgnoreCase("yes")) {
             if (sender instanceof Player p) {
-                vayes(p);
+                handleYes(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
         } else if (args[0].equalsIgnoreCase("no")) {
             if (sender instanceof Player p) {
-                vano(p);
+                handleNo(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
@@ -112,6 +112,58 @@ public class MainScripter implements CommandInterface {
         }
 
         return true;
+    }
+
+    private void handleCheck(Player p) {
+        Ability ability;
+        if (AbilityList.assimilation.getPlayer() == p) {
+            ability = AbilityList.assimilation;
+        } else {
+            ability = AUC.findAbility(p);
+        }
+        if (ability == null) {
+            p.sendMessage(ChatColor.RED + "능력이 없거나 옵저버입니다.");
+            return;
+        }
+        p.sendMessage(ChatColor.GREEN + "---------------");
+        p.sendMessage(ChatColor.GOLD + "- 능력 정보 -");
+        if (PhysicalFighters.AbilityOverLap)
+            p.sendMessage(ChatColor.DARK_AQUA + "참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.");
+        p.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
+                + " [" + getTypeText(ability) + "] " + ability.getRank());
+        for (int l = 0; l < ability.getGuide().length; l++) {
+            p.sendMessage(ability.getGuide()[l]);
+        }
+        p.sendMessage(getTimerText(ability));
+        p.sendMessage(ChatColor.GREEN + "---------------");
+    }
+
+    private String getTypeText(Ability ability) {
+        Ability.Type type = ability.getAbilityType();
+        if (!ability.getRunAbility()) return ChatColor.RED + "능력 비활성화됨" + ChatColor.WHITE;
+        return switch (type) {
+            case Active_Continue ->
+                    ChatColor.GREEN + "액티브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "지속" + ChatColor.WHITE;
+            case Active_Immediately ->
+                    ChatColor.GREEN + "액티브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "즉발" + ChatColor.WHITE;
+            case Passive_AutoMatic ->
+                    ChatColor.GREEN + "패시브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "자동" + ChatColor.WHITE;
+            case Passive_Manual ->
+                    ChatColor.GREEN + "패시브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "수동" + ChatColor.WHITE;
+            case null -> "Unknown";
+        };
+    }
+
+    private String getTimerText(Ability ability) {
+        return switch (ability.getAbilityType()) {
+            case Active_Continue -> String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / "
+                    + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "%d초", ability.getCoolDown(), ability.getDuration());
+            case Active_Immediately -> String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / "
+                    + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음", ability.getCoolDown());
+            case Passive_AutoMatic, Passive_Manual -> ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "없음 / "
+                    + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음";
+            case null -> "None";
+        };
     }
 
     public final void vaablist(CommandSender sender, String[] d) {
@@ -400,7 +452,7 @@ public class MainScripter implements CommandInterface {
             if (temp == null) continue;
             p.sendMessage(String.format(ChatColor.GREEN + "%d. " + ChatColor.WHITE +
                             "%s : " + ChatColor.RED + "%s " + ChatColor.WHITE +
-                            "[" + AUC.showTypeText(ability) + "]",
+                            "[" + getTypeText(ability) + "]",
                     count, temp.getName(), ability.getAbilityName()));
             count++;
         }
@@ -437,7 +489,7 @@ public class MainScripter implements CommandInterface {
         PlayerList.clear();
     }
 
-    public final void vaob(Player p) {
+    public final void handleObserve(Player p) {
         if (Scenario != ScriptStatus.NoPlay) {
             p.sendMessage(ChatColor.RED + "게임 시작 이후는 옵저버 처리가 불가능합니다.");
             return;
@@ -445,54 +497,54 @@ public class MainScripter implements CommandInterface {
         if (this.ExceptionList.contains(p)) {
             PlayerList.add(p);
             this.ExceptionList.remove(p);
-            p.sendMessage(ChatColor.GREEN + "게임 예외처리가 해제되었습니다.");
+            p.sendMessage(ChatColor.GREEN + "게임 예외 처리가 해제되었습니다.");
         } else {
             this.ExceptionList.add(p);
             PlayerList.remove(p);
-            p.sendMessage(ChatColor.GOLD + "게임 예외처리가 완료되었습니다.");
+            p.sendMessage(ChatColor.GOLD + "게임 예외 처리가 완료되었습니다.");
             p.sendMessage(ChatColor.GREEN + "/va ob을 다시 사용하시면 해제됩니다.");
         }
     }
 
-    public final void vayes(Player p) {
-        if (Scenario == ScriptStatus.AbilitySelect &&
-                !this.ExceptionList.contains(p) && !this.OKSign.contains(p)) {
-            this.OKSign.add(p);
-            p.sendMessage(ChatColor.GOLD + "능력이 확정되었습니다. 다른 사람을 기다리세요.");
-            Bukkit.broadcastMessage(String.format(ChatColor.YELLOW + "%s" +
-                            ChatColor.WHITE + "님이 능력을 확정했습니다.", p.getName()));
-            Bukkit.broadcastMessage(String.format(
-                    ChatColor.GREEN + "남은 인원 : " + ChatColor.WHITE + "%d명",
-                    PlayerList.size() - this.OKSign.size()));
-            if (this.OKSign.size() == PlayerList.size())
-                this.s_GameStart.GameStart();
+    public final void handleYes(Player player) {
+        if (Scenario != ScriptStatus.AbilitySelect || this.ExceptionList.contains(player) || this.OKSign.contains(player)) {
+            return;
         }
+        this.OKSign.add(player);
+        player.sendMessage(ChatColor.GOLD + "능력이 확정되었습니다. 다른 플레이어를 기다려주세요.");
+        Bukkit.broadcastMessage(String.format(ChatColor.YELLOW + "%s" +
+                        ChatColor.WHITE + "님이 능력을 확정했습니다.", player.getName()));
+        Bukkit.broadcastMessage(String.format(ChatColor.GREEN + "남은 인원 : "
+                + ChatColor.WHITE + "%d명", PlayerList.size() - this.OKSign.size()));
+        if (this.OKSign.size() == PlayerList.size())
+            this.s_GameStart.GameStart();
     }
 
-    public final void vano(Player p) {
-        if (Scenario == ScriptStatus.AbilitySelect &&
-                !this.ExceptionList.contains(p) && !this.OKSign.contains(p)) {
-            if (reRandomAbility(p) == null) {
-                p.sendMessage(ChatColor.RED + "경고, 능력의 갯수가 부족합니다.");
-                return;
-            }
-            AUC.showInfoText(p);
-            this.OKSign.add(p);
-            p.sendMessage(ChatColor.GOLD + "능력이 자동으로 확정되었습니다. 다른 사람을 기다리세요.");
-            Bukkit.broadcastMessage(String.format(ChatColor.YELLOW + "%s" +
-                            ChatColor.WHITE + "님이 능력을 확정했습니다.", p.getName()));
-            Bukkit.broadcastMessage(String.format(
-                    ChatColor.GREEN + "남은 인원 : " + ChatColor.WHITE + "%d명",
-                    PlayerList.size() - this.OKSign.size()));
-            if (this.OKSign.size() == PlayerList.size())
-                this.s_GameStart.GameStart();
+    public final void handleNo(Player player) {
+        if (Scenario != ScriptStatus.AbilitySelect || this.ExceptionList.contains(player) || this.OKSign.contains(player)) {
+            return;
         }
+
+        if (reRandomAbility(player) == null) {
+            player.sendMessage(ChatColor.RED + "(!) 능력의 갯수가 부족하여 재추첨이 불가합니다.");
+            return;
+        }
+        handleCheck(player);
+
+        this.OKSign.add(player);
+        player.sendMessage(ChatColor.GOLD + "능력이 자동으로 확정되었습니다. 다른 플레이어를 기다려주세요.");
+        Bukkit.broadcastMessage(String.format(ChatColor.YELLOW + "%s" +
+                        ChatColor.WHITE + "님이 능력을 확정했습니다.", player.getName()));
+        Bukkit.broadcastMessage(String.format(ChatColor.GREEN + "남은 인원 : "
+                        + ChatColor.WHITE + "%d명", PlayerList.size() - this.OKSign.size()));
+        if (this.OKSign.size() == PlayerList.size())
+            this.s_GameStart.GameStart();
     }
 
     private Ability reRandomAbility(Player p) {
         ArrayList<Ability> Alist = new ArrayList<>();
-        Random r = new Random();
-        int Findex = r.nextInt(AbilityList.AbilityList.size() - 1);
+        Random rand = new Random();
+        int Findex = rand.nextInt(AbilityList.AbilityList.size() - 1);
         int saveindex;
         if (Findex == 0) {
             saveindex = AbilityList.AbilityList.size();
@@ -520,7 +572,7 @@ public class MainScripter implements CommandInterface {
             Alist.getFirst().setPlayer(p, false);
             return Alist.getFirst();
         }
-        int ran2 = r.nextInt(Alist.size() - 1);
+        int ran2 = rand.nextInt(Alist.size() - 1);
         Alist.get(ran2).setPlayer(p, false);
         return Alist.get(ran2);
     }

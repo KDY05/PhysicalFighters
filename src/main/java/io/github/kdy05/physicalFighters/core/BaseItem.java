@@ -9,6 +9,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -112,9 +113,15 @@ public interface BaseItem {
     default void giveBaseItem(Player player) {
         ItemStack[] baseItems = getBaseItem();
         if (baseItems == null) return;
+
+        Inventory inventory = player.getInventory();
         for (ItemStack item : baseItems) {
-            if (item != null) {
-                player.getInventory().addItem(item.clone());
+            if (item == null) continue;
+            for (int slot = 0; slot < 36; slot++) {
+                if (inventory.getItem(slot) == null) {
+                    inventory.setItem(slot, item.clone());
+                    break;
+                }
             }
         }
     }

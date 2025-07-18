@@ -15,6 +15,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class MachineGun extends Ability {
     // 능력 설정 필드
@@ -133,7 +134,8 @@ public class MachineGun extends Ability {
         isReloading = true;
         player.sendMessage(ChatColor.AQUA + "장전 중... [3초 소요]");
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (AUC.removeOneItem(player, AMMO_ITEM)) {
+            if (player.getInventory().contains(AMMO_ITEM, 1)){
+                player.getInventory().removeItem(new ItemStack(AMMO_ITEM, 1));
                 currentBullets = MAGAZINE_SIZE;
                 player.sendMessage(ChatColor.GREEN + "재장전 완료");
             } else {

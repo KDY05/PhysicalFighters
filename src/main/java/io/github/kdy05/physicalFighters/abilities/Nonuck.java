@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 public class Nonuck extends Ability {
     public Nonuck() {
         InitAbility("무통증", Type.Passive_AutoMatic, Rank.C,
-                Usage.Passive + "피격 시 80% 확률로 넉백을 무시합니다.");
+                "피격 시 80% 확률로 넉백을 무시합니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
