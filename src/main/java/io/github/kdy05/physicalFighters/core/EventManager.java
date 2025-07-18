@@ -1,10 +1,9 @@
 package io.github.kdy05.physicalFighters.core;
 
 import io.github.kdy05.physicalFighters.core.Ability.Type;
+import io.github.kdy05.physicalFighters.scripts.GameManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
-import io.github.kdy05.physicalFighters.scripts.MainScripter;
-import io.github.kdy05.physicalFighters.scripts.MainScripter.ScriptStatus;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,7 +77,7 @@ public class EventManager implements Listener {
 
     @EventHandler
     public static void onEntityDeath(EntityDeathEvent event) {
-        if (MainScripter.Scenario == ScriptStatus.GameStart && event instanceof PlayerDeathEvent pde) {
+        if (GameManager.getScenario() == GameManager.ScriptStatus.GameStart && event instanceof PlayerDeathEvent pde) {
             Player victim = (Player) event.getEntity();
             Player killer = victim.getKiller();
             victim.getInventory().clear();

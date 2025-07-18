@@ -20,27 +20,12 @@ import io.github.kdy05.physicalFighters.utils.CommandInterface;
 
 public class MainScripter implements CommandInterface {
 
-    public static ScriptStatus Scenario = ScriptStatus.NoPlay;
-    public LinkedList<Player> ExceptionList = new LinkedList<>();
-    public static ArrayList<Player> PlayerList = new ArrayList<>();
-    public ArrayList<Player> OKSign = new ArrayList<>();
-    public PhysicalFighters plugin;
-    public org.bukkit.World gameworld;
-    public S_GameReady s_GameReady;
-    public S_GameStart s_GameStart;
-    public S_GameProgress s_GameProgress;
-    public S_GameWarning s_GameWarning;
-
-    public enum ScriptStatus {
-        NoPlay, ScriptStart, AbilitySelect, GameStart
-    }
+    private final PhysicalFighters plugin;
+    private final GameManager gameManager;
 
     public MainScripter(PhysicalFighters plugin) {
         this.plugin = plugin;
-        this.s_GameReady = new S_GameReady(this);
-        this.s_GameStart = new S_GameStart(this, plugin);
-        this.s_GameProgress = new S_GameProgress();
-        this.s_GameWarning = new S_GameWarning(this);
+        this.gameManager = new GameManager(this, plugin);
     }
 
     public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] args) {
@@ -52,26 +37,26 @@ public class MainScripter implements CommandInterface {
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
         } else if (args[0].equalsIgnoreCase("start")) {
             if (sender instanceof Player p) {
-                this.gameworld = p.getWorld();
-                this.s_GameReady.GameReady(p);
+                this.gameManager.setGameWorld(p.getWorld());
+                this.gameManager.gameReady(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
         } else if (args[0].equalsIgnoreCase("ob")) {
             if (sender instanceof Player p) {
-                handleObserve(p);
+                this.gameManager.handleObserve(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
         } else if (args[0].equalsIgnoreCase("yes")) {
             if (sender instanceof Player p) {
-                handleYes(p);
+                this.gameManager.handleYes(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
         } else if (args[0].equalsIgnoreCase("no")) {
             if (sender instanceof Player p) {
-                handleNo(p);
+                this.gameManager.handleNo(p);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
@@ -114,7 +99,7 @@ public class MainScripter implements CommandInterface {
         return true;
     }
 
-    private void handleCheck(Player p) {
+    public void handleCheck(Player p) {
         Ability ability;
         if (AbilityList.assimilation.getPlayer() == p) {
             ability = AbilityList.assimilation;
@@ -376,12 +361,12 @@ public class MainScripter implements CommandInterface {
 
     public final void vaskip(CommandSender p) {
         if (!p.isOp()) return;
-        if (Scenario == ScriptStatus.AbilitySelect) {
+        if (GameManager.getScenario() == GameManager.ScriptStatus.AbilitySelect) {
             Bukkit.broadcastMessage(String.format(ChatColor.GRAY +
                             "관리자 %s님이 능력을 강제로 확정시켰습니다.", p.getName()));
-            this.OKSign.clear();
-            this.OKSign.addAll(PlayerList);
-            this.s_GameStart.GameStart();
+            this.gameManager.getOKSign().clear();
+            this.gameManager.getOKSign().addAll(GameManager.getPlayerList());
+            this.gameManager.gameStart();
         } else {
             p.sendMessage(ChatColor.RED + "능력 추첨중이 아닙니다.");
         }
@@ -418,7 +403,7 @@ public class MainScripter implements CommandInterface {
 
     public final void vaelist(CommandSender p) {
         if (!p.isOp()) return;
-        if (Scenario != ScriptStatus.AbilitySelect) {
+        if (GameManager.getScenario() != GameManager.ScriptStatus.AbilitySelect) {
             p.sendMessage(ChatColor.RED + "능력 추첨중에만 가능합니다.");
             return;
         }
@@ -428,7 +413,7 @@ public class MainScripter implements CommandInterface {
         int count = 0;
         for (Ability ability : pl) {
             if (ability.getPlayer() == null) continue;
-            if (!this.OKSign.contains(ability.getPlayer())) {
+            if (!this.gameManager.getOKSign().contains(ability.getPlayer())) {
                 p.sendMessage(String.format(ChatColor.GREEN +
                         "%d. " + ChatColor.WHITE + "%s",
                         count, ability.getPlayer().getName()));
@@ -463,22 +448,22 @@ public class MainScripter implements CommandInterface {
 
     public final void vastop(CommandSender p) {
         if (!p.isOp()) return;
-        if (Scenario == ScriptStatus.NoPlay) {
+        if (GameManager.getScenario() == GameManager.ScriptStatus.NoPlay) {
             p.sendMessage(ChatColor.RED + "아직 게임을 시작하지 않았습니다.");
             return;
         }
-        S_GameStart.PlayDistanceBuffer = 0;
+        GameManager.PlayDistanceBuffer = 0;
         Bukkit.broadcastMessage(ChatColor.GRAY + "------------------------------");
         Bukkit.broadcastMessage(String.format(ChatColor.YELLOW +
                         "%s님이 게임 카운터를 중단시켰습니다.", p.getName()));
-        Scenario = ScriptStatus.NoPlay;
-        this.s_GameReady.GameReadyStop();
-        this.s_GameStart.GameStartStop();
-        this.s_GameProgress.GameProgressStop();
-        this.s_GameWarning.GameWarnningStop();
+        GameManager.setScenario(GameManager.ScriptStatus.NoPlay);
+        this.gameManager.gameReadyStop();
+        this.gameManager.gameStartStop();
+        this.gameManager.gameProgressStop();
+        this.gameManager.gameWarningStop();
         Bukkit.broadcastMessage(ChatColor.GRAY + "모든 설정이 취소됩니다.");
         Bukkit.broadcastMessage(ChatColor.GREEN + "옵저버 설정은 초기화 되지 않습니다.");
-        this.OKSign.clear();
+        this.gameManager.getOKSign().clear();
         EventManager.DamageGuard = false;
         for (int l = 0; l < AbilityList.AbilityList.size(); l++) {
             AbilityList.AbilityList.get(l).cancelDTimer();
@@ -486,94 +471,7 @@ public class MainScripter implements CommandInterface {
             AbilityList.AbilityList.get(l).setRunAbility(false);
             AbilityList.AbilityList.get(l).setPlayer(null, false);
         }
-        PlayerList.clear();
+        GameManager.getPlayerList().clear();
     }
 
-    public final void handleObserve(Player p) {
-        if (Scenario != ScriptStatus.NoPlay) {
-            p.sendMessage(ChatColor.RED + "게임 시작 이후는 옵저버 처리가 불가능합니다.");
-            return;
-        }
-        if (this.ExceptionList.contains(p)) {
-            PlayerList.add(p);
-            this.ExceptionList.remove(p);
-            p.sendMessage(ChatColor.GREEN + "게임 예외 처리가 해제되었습니다.");
-        } else {
-            this.ExceptionList.add(p);
-            PlayerList.remove(p);
-            p.sendMessage(ChatColor.GOLD + "게임 예외 처리가 완료되었습니다.");
-            p.sendMessage(ChatColor.GREEN + "/va ob을 다시 사용하시면 해제됩니다.");
-        }
-    }
-
-    public final void handleYes(Player player) {
-        if (Scenario != ScriptStatus.AbilitySelect || this.ExceptionList.contains(player) || this.OKSign.contains(player)) {
-            return;
-        }
-        this.OKSign.add(player);
-        player.sendMessage(ChatColor.GOLD + "능력이 확정되었습니다. 다른 플레이어를 기다려주세요.");
-        Bukkit.broadcastMessage(String.format(ChatColor.YELLOW + "%s" +
-                        ChatColor.WHITE + "님이 능력을 확정했습니다.", player.getName()));
-        Bukkit.broadcastMessage(String.format(ChatColor.GREEN + "남은 인원 : "
-                + ChatColor.WHITE + "%d명", PlayerList.size() - this.OKSign.size()));
-        if (this.OKSign.size() == PlayerList.size())
-            this.s_GameStart.GameStart();
-    }
-
-    public final void handleNo(Player player) {
-        if (Scenario != ScriptStatus.AbilitySelect || this.ExceptionList.contains(player) || this.OKSign.contains(player)) {
-            return;
-        }
-
-        if (reRandomAbility(player) == null) {
-            player.sendMessage(ChatColor.RED + "(!) 능력의 갯수가 부족하여 재추첨이 불가합니다.");
-            return;
-        }
-        handleCheck(player);
-
-        this.OKSign.add(player);
-        player.sendMessage(ChatColor.GOLD + "능력이 자동으로 확정되었습니다. 다른 플레이어를 기다려주세요.");
-        Bukkit.broadcastMessage(String.format(ChatColor.YELLOW + "%s" +
-                        ChatColor.WHITE + "님이 능력을 확정했습니다.", player.getName()));
-        Bukkit.broadcastMessage(String.format(ChatColor.GREEN + "남은 인원 : "
-                        + ChatColor.WHITE + "%d명", PlayerList.size() - this.OKSign.size()));
-        if (this.OKSign.size() == PlayerList.size())
-            this.s_GameStart.GameStart();
-    }
-
-    private Ability reRandomAbility(Player p) {
-        ArrayList<Ability> Alist = new ArrayList<>();
-        Random rand = new Random();
-        int Findex = rand.nextInt(AbilityList.AbilityList.size() - 1);
-        int saveindex;
-        if (Findex == 0) {
-            saveindex = AbilityList.AbilityList.size();
-        } else {
-            saveindex = Findex - 1;
-        }
-        for (int i = 0; i < AbilityList.AbilityList.size(); i++) {
-            if (AbilityList.AbilityList.get(Findex).isOwner(p)) {
-                AbilityList.AbilityList.get(Findex).setPlayer(null, false);
-            } else if ((AbilityList.AbilityList.get(Findex).getPlayer() == null) && (
-                    (PlayerList.size() > 6) ||
-                            (AbilityList.AbilityList.get(Findex) != AbilityList.mirroring))) {
-                Alist.add(AbilityList.AbilityList.get(Findex));
-            }
-            Findex++;
-            if (Findex == saveindex)
-                break;
-            if (Findex == AbilityList.AbilityList.size())
-                Findex = 0;
-        }
-        if (Alist.isEmpty()) {
-            return null;
-        }
-        if (Alist.size() == 1) {
-            Alist.getFirst().setPlayer(p, false);
-            return Alist.getFirst();
-        }
-        int ran2 = rand.nextInt(Alist.size() - 1);
-        Alist.get(ran2).setPlayer(p, false);
-        return Alist.get(ran2);
-    }
 }
