@@ -20,7 +20,7 @@ public class Multishot extends Ability implements BaseItem {
         InitAbility("멀티샷", Type.Active_Immediately, Rank.A,
                 "화살 발사 시 여러 발이 퍼지면서 날라갑니다.",
                 "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.");
-        InitAbility(3, 0, true, ShowText.All_Text);
+        InitAbility(3, 0, true);
         EventManager.onProjectileLaunchEvent.add(new EventData(this, 0));
         registerBaseItemEvents();
     }

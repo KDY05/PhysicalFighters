@@ -109,7 +109,7 @@ public class Lockdown extends Ability implements CommandInterface {
     }
 
     @Override
-    public void A_DurationEnd() {
+    public void A_FinalDurationEnd() {
         if (targetAbility != null && targetAbility.getPlayer() != null) {
             Player target = targetAbility.getPlayer();
             target.sendMessage(ChatColor.GREEN + "봉인이 해제되었습니다.");

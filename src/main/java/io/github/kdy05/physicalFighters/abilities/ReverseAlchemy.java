@@ -23,7 +23,7 @@ public class ReverseAlchemy extends Ability {
                 Usage.GoldRight + "금괴를 소모하여 자신의 체력을 회복합니다.",
                 "이때 체력이 최대 채력의 절반 이상이라면 체력을 전부 회복하며,",
                 "절반 이하라면 최대 체력의 절반까지 회복합니다.");
-        InitAbility(5, 0, true, ShowText.No_Text);
+        InitAbility(5, 0, true, ShowText.No_CoolDownText);
         registerLeftClickEvent();
         registerRightClickEvent();
     }

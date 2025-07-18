@@ -42,10 +42,10 @@ public final class S_GameReady {
         public S_ScriptTimer() {
         }
 
-        public void EventStartTimer() {
+        public void onTimerStart() {
         }
 
-        public void EventRunningTimer(int count) {
+        public void onTimerRunning(int count) {
             switch (count) {
                 case 0:
                     Bukkit.broadcastMessage(ChatColor.AQUA + "인식된 플레이어 목록");
@@ -147,7 +147,7 @@ public final class S_GameReady {
             }
         }
 
-        public void EventEndTimer() {
+        public void onTimerEnd() {
         }
 
         private Ability RandomAbility(Player p) {

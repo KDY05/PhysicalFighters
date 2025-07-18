@@ -29,10 +29,6 @@ public abstract class Ability {
     private boolean RunAbility = true;
     private ShowText showtext = ShowText.All_Text;
 
-    public enum ShowText {
-        All_Text, No_CoolDownText, No_DurationText, No_Text, Custom_Text
-    }
-
     public enum Type {
         Passive_AutoMatic, Passive_Manual, Active_Immediately, Active_Continue
     }
@@ -53,6 +49,10 @@ public abstract class Ability {
         public String toString() {
             return this.s + ChatColor.WHITE;
         }
+    }
+
+    public enum ShowText {
+        All_Text, No_CoolDownText, No_DurationText, Custom_Text
     }
 
     public enum Usage {
@@ -277,71 +277,77 @@ public abstract class Ability {
     // Timer Classes
 
     private static final class CoolDownTimer extends TimerBase {
-        private final Ability ab;
+        private final Ability ability;
 
-        public CoolDownTimer(Ability ab) {
-            this.ab = ab;
+        public CoolDownTimer(Ability ability) {
+            this.ability = ability;
         }
 
-        public void EventStartTimer() {
-            this.ab.A_CoolDownStart();
+        @Override
+        public void onTimerStart() {
+            ability.A_CoolDownStart();
         }
 
-        public void EventRunningTimer(int count) {
-            if (((count <= 3) && (count >= 1) && (this.ab.getShowText() == ShowText.All_Text))
-                    || (this.ab.getShowText() == ShowText.No_DurationText)) {
-                this.ab.getPlayer().sendMessage(String.format(ChatColor.RED + "%d초 뒤" + ChatColor.WHITE + " 능력사용이 가능합니다.", count));
+        @Override
+        public void onTimerRunning(int count) {
+            ShowText showText = ability.getShowText();
+            if (count <= 3 && count >= 1 && showText != ShowText.No_CoolDownText && showText != ShowText.Custom_Text) {
+                ability.getPlayer().sendMessage(String.format(ChatColor.RED
+                        + "%d초 뒤" + ChatColor.WHITE + " 능력사용이 가능합니다.", count));
             }
         }
 
-        public void EventEndTimer() {
-            this.ab.A_CoolDownEnd();
-            if (this.ab.getShowText() != ShowText.Custom_Text) {
-                this.ab.getPlayer().sendMessage(ChatColor.AQUA + "다시 능력을 사용할 수 있습니다.");
-            }
+        @Override
+        public void onTimerEnd() {
+            ability.A_CoolDownEnd();
+            if (ability.getShowText() != ShowText.Custom_Text)
+                ability.getPlayer().sendMessage(ChatColor.AQUA + "다시 능력을 사용할 수 있습니다.");
         }
     }
 
     private static final class DurationTimer extends TimerBase {
-        private final Ability ab;
+        private final Ability ability;
         private final CoolDownTimer ctimer;
 
-        public DurationTimer(Ability ab, CoolDownTimer ctimer) {
-            this.ab = ab;
+        public DurationTimer(Ability ability, CoolDownTimer ctimer) {
+            this.ability = ability;
             this.ctimer = ctimer;
         }
 
-        public void EventStartTimer() {
-            this.ab.A_DurationStart();
+        @Override
+        public void onTimerStart() {
+            ability.A_DurationStart();
         }
 
-        public void EventRunningTimer(int count) {
-            if (((count <= 3) && (count >= 1) && (this.ab.getShowText() == ShowText.All_Text))
-                    || (this.ab.getShowText() == ShowText.No_CoolDownText)) {
-                this.ab.getPlayer().sendMessage(String.format(ChatColor.GREEN + "지속 시간" + ChatColor.WHITE + " %d초 전", count));
+        @Override
+        public void onTimerRunning(int count) {
+            ShowText showText = ability.getShowText();
+            if (count <= 3 && count >= 1 && showText != ShowText.No_DurationText && showText != ShowText.Custom_Text) {
+                ability.getPlayer().sendMessage(String.format(ChatColor.GREEN
+                        + "지속 시간" + ChatColor.WHITE + " %d초 전", count));
             }
         }
 
-        public void EventEndTimer() {
-            this.ab.A_DurationEnd();
-            if (this.ab.getShowText() != ShowText.Custom_Text)
-                this.ab.getPlayer().sendMessage(ChatColor.GREEN + "능력 지속시간이 끝났습니다.");
-            this.ctimer.startTimer(this.ab.getCoolDown(), true);
+        @Override
+        public void onTimerEnd() {
+            ability.A_DurationEnd();
+            if (ability.getShowText() != ShowText.Custom_Text)
+                ability.getPlayer().sendMessage(ChatColor.GREEN + "능력 지속시간이 끝났습니다.");
+            ctimer.startTimer(ability.getCoolDown(), true);
         }
 
-        public void FinalEventEndTimer() {
-            this.ab.A_FinalDurationEnd();
+        @Override
+        public void onTimerFinalize() {
+            ability.A_FinalDurationEnd();
         }
     }
 
     public static final class RestrictionTimer extends TimerBase {
-        public void EventStartTimer() {
-        }
+        public void onTimerStart() {}
 
-        public void EventRunningTimer(int count) {
-        }
+        public void onTimerRunning(int count) {}
 
-        public void EventEndTimer() {
+        public void onTimerEnd() {
             Bukkit.broadcastMessage(ChatColor.GREEN + "일부 능력의 제약이 해제되었습니다.");
         }
     }

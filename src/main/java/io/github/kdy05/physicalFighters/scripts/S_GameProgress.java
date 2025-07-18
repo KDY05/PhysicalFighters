@@ -21,10 +21,10 @@ public class S_GameProgress {
 
     public final class S_ScriptTimer extends TimerBase {
 
-        public void EventStartTimer() {
+        public void onTimerStart() {
         }
 
-        public void EventRunningTimer(int count) {
+        public void onTimerRunning(int count) {
             if (PhysicalFighters.PrintTip)
                 printTip(count);
             if (count > 0 && count % 600 == 0) {
@@ -44,7 +44,7 @@ public class S_GameProgress {
             }
         }
 
-        public void EventEndTimer() {
+        public void onTimerEnd() {
         }
 
         public void printTip(int c) {

@@ -75,11 +75,11 @@ public final class S_GameStart {
         public S_ScriptTimer() {
         }
 
-        public void EventStartTimer() {
+        public void onTimerStart() {
             MainScripter.Scenario = MainScripter.ScriptStatus.GameStart;
         }
 
-        public void EventRunningTimer(int count) {
+        public void onTimerRunning(int count) {
             switch (count) {
                 case 0:
                     S_GameStart.this.ms.s_GameWarning.GameWarnningStop();
@@ -146,7 +146,7 @@ public final class S_GameStart {
             }
         }
 
-        public void EventEndTimer() {
+        public void onTimerEnd() {
         }
     }
 }

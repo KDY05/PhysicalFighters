@@ -106,7 +106,7 @@ public class EventManager implements Listener {
             } else {
                 // 자연사인 경우
                 pde.setDeathMessage(ChatColor.RED + victim.getName() +
-                        ChatColor.WHITE + "님이 대자연에 의해 의지를 꺾였습니다.");
+                        ChatColor.WHITE + "님이 대자연에 의해 의지가 꺾였습니다.");
             }
 
         }
@@ -142,7 +142,7 @@ public class EventManager implements Listener {
     }
     public static ArrayList<EventData> onPlayerInteract = new ArrayList<>();
 
-    public static void usebook(Player p, int abicode) {
+    private static void usebook(Player p, int abicode) {
         if (p == null || abicode < 0 || abicode >= AbilityList.AbilityList.size())
             return;
         Ability ability = AbilityList.AbilityList.get(abicode);

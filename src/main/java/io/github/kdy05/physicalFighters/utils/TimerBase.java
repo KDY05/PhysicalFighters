@@ -11,14 +11,13 @@ public abstract class TimerBase {
     private int count = 0;
     private int maxCount = 0;
 
-    public abstract void EventStartTimer();
+    public abstract void onTimerStart();
 
-    public abstract void EventRunningTimer(int count);
+    public abstract void onTimerRunning(int count);
 
-    public abstract void EventEndTimer();
+    public abstract void onTimerEnd();
 
-    public void FinalEventEndTimer() {
-    }
+    public void onTimerFinalize() {}
 
     public final int getCount() {
         return count;
@@ -33,6 +32,8 @@ public abstract class TimerBase {
     }
 
     public final void startTimer(int maxCount, boolean reverse) {
+        if (running) return;
+
         running = true;
         this.maxCount = maxCount;
         this.reverse = reverse;
@@ -41,7 +42,7 @@ public abstract class TimerBase {
         task = new BukkitRunnable() {
             @Override
             public void run() {
-                EventRunningTimer(count);
+                onTimerRunning(count);
                 if (TimerBase.this.reverse) {
                     if (count <= 0) {
                         endTimer();
@@ -58,20 +59,23 @@ public abstract class TimerBase {
             }
         }.runTaskTimer(PhysicalFighters.getPlugin(), 0L, 20L);
         
-        EventStartTimer();
+        onTimerStart();
     }
 
     public final void endTimer() {
+        if (!running) return;
         stopTimer();
-        EventEndTimer();
+        onTimerEnd();
     }
 
     public final void stopTimer() {
-        if (task != null)
+        if (task != null) {
             task.cancel();
+            task = null;
+        }
         count = 0;
         running = false;
-        FinalEventEndTimer();
+        onTimerFinalize();
     }
 
 }

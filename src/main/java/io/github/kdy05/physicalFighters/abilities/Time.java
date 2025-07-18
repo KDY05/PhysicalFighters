@@ -40,7 +40,7 @@ public class Time extends Ability {
                 "님이 Time 능력을 사용했습니다.", getPlayer().getName()));
     }
 
-    public void A_DurationEnd() {
+    public void A_FinalDurationEnd() {
         Bukkit.broadcastMessage(String.format(ChatColor.GREEN +
                 "Time 능력이 해제되었습니다."));
     }

@@ -49,7 +49,7 @@ public class Fly extends Ability {
     }
 
     @Override
-    public void A_DurationEnd() {
+    public void A_FinalDurationEnd() {
         getPlayer().setAllowFlight(false);
         getPlayer().setFlying(false);
     }
