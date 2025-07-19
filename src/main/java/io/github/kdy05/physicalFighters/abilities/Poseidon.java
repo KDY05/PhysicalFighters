@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
@@ -40,7 +41,7 @@ public class Poseidon extends Ability {
                 if (!isOwner(p) || !isValidItem(Ability.DefaultItem)) {
                     return -1;
                 }
-                if (EventManager.DamageGuard) {
+                if (PhysicalFighters.DamageGuard) {
                     p.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
                     return -1;
                 }

@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.AUC;
@@ -30,7 +31,7 @@ public class Paladin extends Ability {
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent e = (PlayerInteractEvent) event;
-            if (isOwner(e.getPlayer()) && !EventManager.DamageGuard) {
+            if (isOwner(e.getPlayer()) && !PhysicalFighters.DamageGuard) {
                 return 0;
             }
         }

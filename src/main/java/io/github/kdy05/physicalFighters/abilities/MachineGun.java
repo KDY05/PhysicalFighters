@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
@@ -67,7 +68,7 @@ public class MachineGun extends Ability {
 
     private int handleRightClickCondition(Event event) {
         PlayerInteractEvent e = (PlayerInteractEvent) event;
-        if (!EventManager.DamageGuard && isOwner(e.getPlayer()) && isValidItem(WEAPON_ITEM)) {
+        if (!PhysicalFighters.DamageGuard && isOwner(e.getPlayer()) && isValidItem(WEAPON_ITEM)) {
             Player player = e.getPlayer();
             if (currentBullets > 0)
                 return ACTION_SHOOT;

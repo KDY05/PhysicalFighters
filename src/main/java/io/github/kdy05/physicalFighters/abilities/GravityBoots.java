@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
@@ -37,7 +38,7 @@ public class GravityBoots extends Ability {
         switch (CustomData) {
             case 0:
                 PlayerInteractEvent e = (PlayerInteractEvent) event;
-                if ((isOwner(e.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard) {
+                if ((isOwner(e.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !PhysicalFighters.DamageGuard) {
                     Player p = e.getPlayer();
                     if (p.getInventory().getBoots() == null) {
                         if (p.getLocation().distance(p.getTargetBlock(null, 0).getLocation()) < 30.0D) {

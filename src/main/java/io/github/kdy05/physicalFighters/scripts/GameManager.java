@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.scripts;
 
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.AbilityList;
-import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.TimerBase;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
@@ -12,8 +11,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.*;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * 게임 상태와 플레이어 관리를 담당하는 핵심 클래스
@@ -37,7 +36,6 @@ public class GameManager {
     private final LinkedList<Player> exceptionList = new LinkedList<>();
     private static final ArrayList<Player> playerList = new ArrayList<>();
     private final ArrayList<Player> okSign = new ArrayList<>();
-    private World gameWorld;
     private int peopleCount = 0;
     
     // Timers
@@ -45,8 +43,6 @@ public class GameManager {
     private final GameTimer gameStartTimer = new GameTimer(TimerType.START);
     private final GameTimer gameProgressTimer = new GameTimer(TimerType.PROGRESS);
     private final GameTimer gameWarningTimer = new GameTimer(TimerType.WARNING);
-    
-    public static int PlayDistanceBuffer = 0;
 
     public enum ScriptStatus {
         NoPlay, ScriptStart, AbilitySelect, GameStart
@@ -69,21 +65,13 @@ public class GameManager {
     public LinkedList<Player> getExceptionList() { return exceptionList; }
     public static ArrayList<Player> getPlayerList() { return playerList; }
     public ArrayList<Player> getOKSign() { return okSign; }
-    public World getGameWorld() { return gameWorld; }
-    public void setGameWorld(World gameWorld) { this.gameWorld = gameWorld; }
 
     // Game flow control
-    public void gameReady(Player player) {
-        if (!player.isOp()) {
-            player.sendMessage(ChatColor.RED + "(!) 당신은 권한이 없습니다.");
-            return;
-        }
-        
+    public void gameReady(CommandSender sender) {
         if (scenario != ScriptStatus.NoPlay) {
-            player.sendMessage(ChatColor.RED + "(!) 이미 게임이 시작되어있습니다.");
+            sender.sendMessage(ChatColor.RED + "(!) 이미 게임이 시작되어있습니다.");
             return;
         }
-        
         scenario = ScriptStatus.ScriptStart;
         broadcastMessage(ChatColor.YELLOW + "(!) 잠시 후 게임을 시작합니다.");
         gameReadyTimer.startTimer(READY_DURATION, false);
@@ -116,7 +104,6 @@ public class GameManager {
             player.sendMessage(ChatColor.RED + "게임 시작 이후는 옵저버 처리가 불가능합니다.");
             return;
         }
-        
         if (exceptionList.contains(player)) {
             playerList.add(player);
             exceptionList.remove(player);
@@ -134,12 +121,11 @@ public class GameManager {
             confirmPlayerAbility(player);
             checkAllPlayersConfirmed();
         }
-
     }
 
     public void handleNo(Player player) {
         if (isValidAbilitySelection(player)) {
-            if (reRandomAbility(player) == null) {
+            if (assignRandomAbility(player) == null) {
                 player.sendMessage(ChatColor.RED + "(!) 능력의 갯수가 부족하여 재추첨이 불가합니다.");
                 return;
             }
@@ -199,8 +185,8 @@ public class GameManager {
             broadcastMessage(String.format(ChatColor.YELLOW + "총 인원수 : %d명", peopleCount));
         } else {
             broadcastMessage(String.format(ChatColor.RED + "총 인원수 : %d명", peopleCount));
-            broadcastMessage("인원이 능력의 갯수보다 많습니다. Error 처리된분들은 능력을");
-            broadcastMessage("받을수 없으며 모든 게임 진행 대상에서 제외됩니다.");
+            broadcastMessage("인원이 능력의 개수보다 많습니다. 에러 처리된 분들은 능력을");
+            broadcastMessage("받을 수 없으며 모든 게임 진행 대상에서 제외됩니다.");
         }
         
         broadcastMessage(ChatColor.GOLD + "==========");
@@ -218,8 +204,8 @@ public class GameManager {
         broadcastMessage(ChatColor.DARK_RED + "Physical Fighters");
         broadcastMessage(String.format(ChatColor.RED + "VER. %d", PhysicalFighters.BuildNumber));
         broadcastMessage(ChatColor.GREEN + "제작 : " + ChatColor.WHITE + "염료");
-        broadcastMessage(ChatColor.GREEN + "업데이트 : " + ChatColor.WHITE + "어라랍");
-        broadcastMessage(ChatColor.DARK_AQUA + "본 플러그인은 '제온'님의 VisualAbility 모듈을 사용합니다.");
+        broadcastMessage(ChatColor.AQUA + "업데이트 : " + ChatColor.WHITE + "어라랍");
+        broadcastMessage(ChatColor.GREEN + "원작 : " + ChatColor.WHITE + "VisualAbility by Xeon(제온)");
     }
 
     private void handleAbilitySetup() {
@@ -253,10 +239,11 @@ public class GameManager {
             if (assignRandomAbility(player) == null) {
                 player.sendMessage(ChatColor.RED + "경고, 능력의 갯수가 부족합니다.");
             } else {
-                sendAbilityInstructions(player);
+                player.sendMessage(ChatColor.YELLOW + "(!) /va check " + ChatColor.WHITE + "= 능력 확인");
+                player.sendMessage(ChatColor.YELLOW + "(!) /va yes " + ChatColor.WHITE + "= 능력 사용.");
+                player.sendMessage(ChatColor.YELLOW + "(!) /va no " + ChatColor.WHITE + "= 능력 재추첨.(1회)");
             }
         }
-        
         for (Player player : exceptionList) {
             player.sendMessage(ChatColor.GREEN + "능력 추첨중입니다");
         }
@@ -264,7 +251,6 @@ public class GameManager {
 
     private void distributeAbilitiesInstantly() {
         broadcastMessage(ChatColor.AQUA + "능력 갯수보다 플레이어 수가 같거나 많으므로 즉시 확정됩니다.");
-        
         for (Player player : playerList) {
             if (assignRandomAbility(player) == null) {
                 player.sendMessage(ChatColor.RED + "경고, 능력의 갯수가 부족합니다.");
@@ -274,16 +260,9 @@ public class GameManager {
                                  ChatColor.YELLOW + "/va check" + ChatColor.WHITE + "로 확인하세요.");
             }
         }
-        
         for (Player player : exceptionList) {
             player.sendMessage(ChatColor.GREEN + "능력 추첨 완료");
         }
-    }
-
-    private void sendAbilityInstructions(Player player) {
-        player.sendMessage(ChatColor.YELLOW + "(!) /va check " + ChatColor.WHITE + "= 능력 확인");
-        player.sendMessage(ChatColor.YELLOW + "(!) /va yes " + ChatColor.WHITE + "= 능력 사용.");
-        player.sendMessage(ChatColor.YELLOW + "(!) /va no " + ChatColor.WHITE + "= 능력 재추첨.(1회)");
     }
 
     private void startGameLogic() {
@@ -291,8 +270,7 @@ public class GameManager {
         logPlayerAbilities();
         setupInvincibility();
         setupRestrictions();
-        respawnTeleport();
-        setupWorldSettings();
+        setPlayerBase();
         enableAllAbilities();
         gameProgress();
     }
@@ -313,7 +291,7 @@ public class GameManager {
     private void setupInvincibility() {
         if (PhysicalFighters.EarlyInvincibleTime != 0) {
             broadcastMessage("시작 직후 " + PhysicalFighters.EarlyInvincibleTime + "분간은 무적입니다.");
-            EventManager.DamageGuard = true;
+            PhysicalFighters.DamageGuard = true;
         } else {
             broadcastMessage(ChatColor.RED + "초반 무적은 작동하지 않습니다.");
         }
@@ -327,88 +305,21 @@ public class GameManager {
         }
     }
 
-    private void setupWorldSettings() {
-        PlayDistanceBuffer = playerList.size() * 50;
-        
-        for (World world : Bukkit.getWorlds()) {
-            world.setTime(1L);
-            world.setStorm(false);
-            world.setWeatherDuration(0);
-            world.setPVP(true);
-        }
-    }
-
-    private void respawnTeleport() {
-        Location spawnLocation = gameWorld.getSpawnLocation();
-        spawnLocation.setY(gameWorld.getHighestBlockYAt((int) spawnLocation.getX(), (int) spawnLocation.getZ()));
-        
+    private void setPlayerBase() {
         for (Player player : playerList) {
-            resetPlayerStats(player);
-            teleportAndEquipPlayer(player, spawnLocation);
+            player.setHealth(20.0);
+            player.setFoodLevel(20);
+            player.setSaturation(10.0f);
+            player.setExhaustion(0.0f);
+            player.setLevel(PhysicalFighters.Setlev);
+            if (PhysicalFighters.ClearInventory) {
+                player.getInventory().clear();
+            }
+            // TODO: 기본템 로직 여기에 넣기
         }
-        
-        for (Player player : exceptionList) {
-            player.teleport(spawnLocation);
-        }
-    }
-
-    private void resetPlayerStats(Player player) {
-        player.setFoodLevel(20);
-        player.setLevel(PhysicalFighters.Setlev);
-        player.setExhaustion(0.0F);
-        player.setExp(0.0F);
-        player.setHealth(20.0D);
-        player.setSaturation(10.0F);
-    }
-
-    private void teleportAndEquipPlayer(Player player, Location location) {
-        if (PhysicalFighters.ClearInventory) {
-            player.getInventory().clear();
-        }
-        
-        if (PhysicalFighters.Respawn) {
-            player.teleport(location);
-        }
-        
-        if (PhysicalFighters.DefaultArmed) {
-            equipDefaultItems(player);
-        }
-        
-        if (PhysicalFighters.TableGive) {
-            player.getInventory().addItem(
-                new ItemStack(Material.ENCHANTING_TABLE, 1),
-                new ItemStack(Material.BOOKSHELF, 64)
-            );
-        }
-        
-        if (PhysicalFighters.WoodGive) {
-            player.getInventory().addItem(new ItemStack(Material.OAK_LOG, 64));
-        }
-    }
-
-    private void equipDefaultItems(Player player) {
-        player.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
-        player.getInventory().setChestplate(new ItemStack(Material.CHAINMAIL_CHESTPLATE));
-        player.getInventory().setLeggings(new ItemStack(Material.GOLDEN_LEGGINGS));
-        player.getInventory().setBoots(new ItemStack(Material.GOLDEN_BOOTS));
-        player.getInventory().addItem(
-            new ItemStack(Material.GOLDEN_SWORD, 1),
-            new ItemStack(Material.IRON_INGOT, 64),
-            new ItemStack(Material.GOLD_INGOT, 64)
-        );
-        broadcastMessage(ChatColor.GREEN + "기본 무장이 제공됩니다.");
     }
 
     private Ability assignRandomAbility(Player player) {
-        List<Ability> availableAbilities = getAvailableAbilities();
-        if (availableAbilities.isEmpty()) return null;
-        
-        Ability selectedAbility = availableAbilities.get(random.nextInt(availableAbilities.size()));
-        selectedAbility.setPlayer(player, false);
-        return selectedAbility;
-    }
-
-    public Ability reRandomAbility(Player player) {
         // Remove current ability
         for (Ability ability : AbilityList.AbilityList) {
             if (ability.isOwner(player)) {
@@ -416,7 +327,7 @@ public class GameManager {
                 break;
             }
         }
-        
+
         List<Ability> availableAbilities = getAvailableAbilities();
         if (availableAbilities.isEmpty()) return null;
         
@@ -427,14 +338,12 @@ public class GameManager {
 
     private List<Ability> getAvailableAbilities() {
         List<Ability> available = new ArrayList<>();
-        
         for (Ability ability : AbilityList.AbilityList) {
             if (ability.getPlayer() == null && 
                 (playerList.size() > 6 || ability != AbilityList.mirroring)) {
                 available.add(ability);
             }
         }
-        
         return available;
     }
 
@@ -459,7 +368,7 @@ public class GameManager {
         
         if (remainingSeconds == 0) {
             broadcastMessage(ChatColor.GREEN + "초반 무적이 해제되었습니다. 이제 데미지를 입습니다.");
-            EventManager.DamageGuard = false;
+            PhysicalFighters.DamageGuard = false;
         } else if (remainingSeconds <= 5 && remainingSeconds >= 1) {
             broadcastMessage(String.format(ChatColor.YELLOW + "%d초 후" + ChatColor.WHITE + " 초반무적이 해제됩니다.", 
                            remainingSeconds));
@@ -471,8 +380,7 @@ public class GameManager {
     private void showWarningMessage() {
         broadcastMessage(ChatColor.RED + "경고, 게임이 올바르게 시작되지 않았습니다.");
         broadcastMessage(ChatColor.RED + "/va yes나 /va no 명령으로 능력을 확정하세요.");
-        
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : playerList) {
             if (!okSign.contains(player)) {
                 player.sendMessage(ChatColor.YELLOW + "당신의 능력이 올바르게 확정되지 않았습니다.");
             }
@@ -480,26 +388,8 @@ public class GameManager {
     }
 
     private void showPeriodicInfo(int count) {
-        if (PhysicalFighters.PrintTip) {
-            showTips(count);
-        }
-        
         if (count > 0 && count % PROGRESS_INFO_INTERVAL == 0) {
-            broadcastMessage(ChatColor.DARK_RED + "Physical Fighters");
-            broadcastMessage(ChatColor.GRAY + "빌드 넘버 " + PhysicalFighters.BuildNumber);
-        }
-    }
-
-    private void showTips(int count) {
-        switch (count) {
-            case 60 -> broadcastMessage(ChatColor.GOLD + 
-                "TIP. 본 플러그인은 제온님이 배포한 VisualAbility의 모듈을 사용합니다.\n" +
-                "http://cafe.naver.com/craftproducer 제온님이 운영하는 카페입니다.");
-            case 120 -> broadcastMessage(ChatColor.GOLD + 
-                "TIP. 액티브 능력은 철괴나 금괴를 이용해 사용하며,\n" +
-                "패시브 능력은 사용할 필요 없이 자동으로 능력이 적용됩니다.");
-            case 180 -> broadcastMessage(ChatColor.GOLD + 
-                "TIP. 불편 및 건의 사항은 디스코드 @kdy05_로 문의 해주세요.");
+            showGameInfo();
         }
     }
 

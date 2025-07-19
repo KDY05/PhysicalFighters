@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
@@ -36,7 +37,7 @@ public class Issac
         switch (CustomData) {
             case 1:
                 PlayerInteractEvent Event0 = (PlayerInteractEvent) event;
-                if ((!EventManager.DamageGuard) &&
+                if ((!PhysicalFighters.DamageGuard) &&
                         (isOwner(Event0.getPlayer())) && (isValidItem(this.item))) {
                     if (this.bullet != 0) {
                         return 10;

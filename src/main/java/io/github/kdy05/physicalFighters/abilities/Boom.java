@@ -1,8 +1,8 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.utils.AUC;
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.EventManager;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -21,7 +21,7 @@ public class Boom extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-        if (!EventManager.DamageGuard && isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
+        if (!PhysicalFighters.DamageGuard && isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
             return 0;
         }
         return -1;

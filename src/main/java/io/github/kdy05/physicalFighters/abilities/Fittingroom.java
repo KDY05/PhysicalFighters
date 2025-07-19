@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.EventManager;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ public class Fittingroom extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        if (EventManager.DamageGuard) return -1;
+        if (PhysicalFighters.DamageGuard) return -1;
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         if (isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem))
             return 0;

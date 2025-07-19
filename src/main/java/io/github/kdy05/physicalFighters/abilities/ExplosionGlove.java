@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.EventManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,7 +20,7 @@ public class ExplosionGlove extends Ability {
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent e = (PlayerInteractEvent) event;
-            if ((isOwner(e.getPlayer())) && (isValidItem(Material.IRON_INGOT)) && !EventManager.DamageGuard) {
+            if ((isOwner(e.getPlayer())) && (isValidItem(Material.IRON_INGOT)) && !PhysicalFighters.DamageGuard) {
                 return 0;
             }
         }

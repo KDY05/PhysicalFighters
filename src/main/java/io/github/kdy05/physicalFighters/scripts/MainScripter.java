@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.scripts;
 
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.AbilityList;
-import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.AUC;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
@@ -30,24 +29,8 @@ public class MainScripter implements CommandInterface {
 
     public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] args) {
         if (args[0].equalsIgnoreCase("check")) {
-            if (sender instanceof Player p) {
-                handleCheck(p);
-                return true;
-            }
-            sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        } else if (args[0].equalsIgnoreCase("start")) {
-            if (sender instanceof Player p) {
-                this.gameManager.setGameWorld(p.getWorld());
-                this.gameManager.gameReady(p);
-                return true;
-            }
-            sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        } else if (args[0].equalsIgnoreCase("ob")) {
-            if (sender instanceof Player p) {
-                this.gameManager.handleObserve(p);
-                return true;
-            }
-            sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
+            handleCheck(sender);
+            return true;
         } else if (args[0].equalsIgnoreCase("yes")) {
             if (sender instanceof Player p) {
                 this.gameManager.handleYes(p);
@@ -60,67 +43,102 @@ public class MainScripter implements CommandInterface {
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        } else if (args[0].equalsIgnoreCase("book")) {
+        }
+
+
+        else if (args[0].equalsIgnoreCase("start")) {
+            if (sender instanceof Player p) {
+                this.gameManager.gameReady(p);
+                return true;
+            }
+            sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
+        }
+        else if (args[0].equalsIgnoreCase("stop")) {
+            vastop(sender);
+            return true;
+        }
+        else if (args[0].equalsIgnoreCase("skip")) {
+            vaskip(sender);
+            return true;
+        }
+        else if (args[0].equalsIgnoreCase("ob")) {
+            if (sender instanceof Player p) {
+                this.gameManager.handleObserve(p);
+                return true;
+            }
+            sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
+        }
+        else if (args[0].equalsIgnoreCase("book")) {
             if (sender instanceof Player p) {
                 vabook(p, args);
                 return true;
             }
             sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        } else if (args[0].equalsIgnoreCase("stop")) {
-            vastop(sender);
-        } else if (args[0].equalsIgnoreCase("alist")) {
+        }
+        else if (args[0].equalsIgnoreCase("alist")) {
             vaalist(sender);
-        } else if (args[0].equalsIgnoreCase("elist")) {
+            return true;
+        }
+        else if (args[0].equalsIgnoreCase("elist")) {
             vaelist(sender);
-        } else if (args[0].equalsIgnoreCase("tc")) {
+            return true;
+        }
+        else if (args[0].equalsIgnoreCase("tc")) {
             vatc(sender);
-        } else if (args[0].equalsIgnoreCase("kill")) {
-            vakill(sender, args);
-        } else if (args[0].equalsIgnoreCase("debug")) {
-            vadebug(sender);
-        } else if (args[0].equalsIgnoreCase("skip")) {
-            vaskip(sender);
-        } else if (args[0].equalsIgnoreCase("uti")) {
+            return true;
+        }
+        else if (args[0].equalsIgnoreCase("uti")) {
             vauti(sender);
+            return true;
         } else if (args[0].equalsIgnoreCase("abi")) {
             vaabi(sender, args);
+            return true;
         } else if (args[0].equalsIgnoreCase("ablist")) {
             vaablist(sender, args);
+            return true;
         } else if (args[0].equalsIgnoreCase("inv")) {
             vainv(sender);
+            return true;
         } else if (args[0].equalsIgnoreCase("go")) {
             vago(sender);
+            return true;
         } else if (args[0].equalsIgnoreCase("hung")) {
             vahungry(sender);
+            return true;
         } else if (args[0].equalsIgnoreCase("dura")) {
             vadura(sender);
+            return true;
         }
 
-        return true;
+        return false;
     }
 
-    public void handleCheck(Player p) {
-        Ability ability;
-        if (AbilityList.assimilation.getPlayer() == p) {
-            ability = AbilityList.assimilation;
-        } else {
-            ability = AUC.findAbility(p);
-        }
-        if (ability == null) {
-            p.sendMessage(ChatColor.RED + "능력이 없거나 옵저버입니다.");
+    public void handleCheck(CommandSender sender) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("콘솔에서는 사용할 수 없습니다.");
             return;
         }
-        p.sendMessage(ChatColor.GREEN + "---------------");
-        p.sendMessage(ChatColor.GOLD + "- 능력 정보 -");
+        Ability ability;
+        if (AbilityList.assimilation.getPlayer() == player) {
+            ability = AbilityList.assimilation;
+        } else {
+            ability = AUC.findAbility(player);
+        }
+        if (ability == null) {
+            player.sendMessage(ChatColor.RED + "능력이 없거나 옵저버입니다.");
+            return;
+        }
+        player.sendMessage(ChatColor.GREEN + "---------------");
+        player.sendMessage(ChatColor.GOLD + "- 능력 정보 -");
         if (PhysicalFighters.AbilityOverLap)
-            p.sendMessage(ChatColor.DARK_AQUA + "참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.");
-        p.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
+            player.sendMessage(ChatColor.DARK_AQUA + "참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.");
+        player.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
                 + " [" + getTypeText(ability) + "] " + ability.getRank());
         for (int l = 0; l < ability.getGuide().length; l++) {
-            p.sendMessage(ability.getGuide()[l]);
+            player.sendMessage(ability.getGuide()[l]);
         }
-        p.sendMessage(getTimerText(ability));
-        p.sendMessage(ChatColor.GREEN + "---------------");
+        player.sendMessage(getTimerText(ability));
+        player.sendMessage(ChatColor.GREEN + "---------------");
     }
 
     private String getTypeText(Ability ability) {
@@ -306,20 +324,24 @@ public class MainScripter implements CommandInterface {
                 "게임을 시작하지 않더라도 사용이 가능한 명령입니다. " +
                 "닉네임칸에 null을 쓰면 해당 능력에 등록된 플레이어가 " +
                 "해제되며 명령 코드에 -1을 넣으면 해당 플레이어가 가진" + "모든 능력이 해제됩니다.");
+        p.sendMessage(ChatColor.RED + "tc : " + ChatColor.WHITE +
+                "[Debug] 모든 능력의 지속 효과 및 쿨타임을 초기화 합니다.");
+        p.sendMessage(ChatColor.RED + "skip : " + ChatColor.WHITE +
+                "[Debug] 모든 능력을 강제로 확정시킵니다.");
     }
 
     public final void vago(CommandSender p) {
         if (!p.isOp()) return;
         Bukkit.broadcastMessage(ChatColor.GREEN +
                 "OP에 의해 초반 무적이 해제되었습니다. 이제 데미지를 입습니다.");
-        EventManager.DamageGuard = false;
+        PhysicalFighters.DamageGuard = false;
     }
 
     public final void vainv(CommandSender p) {
         if (!p.isOp()) return;
         Bukkit.broadcastMessage(ChatColor.GREEN +
                 "OP에 의해 초반 무적이 설정되었습니다. 이제 데미지를 입지않습니다.");
-        EventManager.DamageGuard = true;
+        PhysicalFighters.DamageGuard = true;
     }
 
     public final void vahungry(CommandSender p) {
@@ -348,17 +370,6 @@ public class MainScripter implements CommandInterface {
         }
     }
 
-    public final void vadebug(CommandSender p) {
-        if (!p.isOp()) return;
-        p.sendMessage(ChatColor.DARK_RED + "Physical Fighters Debug");
-        p.sendMessage(ChatColor.RED + "tc : " + ChatColor.WHITE +
-                "[Debug] 모든 능력의 지속 효과 및 쿨타임을 초기화 합니다.");
-        p.sendMessage(ChatColor.RED + "kill 닉네임 : " + ChatColor.WHITE +
-                "[Debug] 플러그인 내에서 이 플레이어를 사망 처리합니다.");
-        p.sendMessage(ChatColor.RED + "skip : " + ChatColor.WHITE +
-                "[Debug] 모든 능력을 강제로 확정시킵니다.");
-    }
-
     public final void vaskip(CommandSender p) {
         if (!p.isOp()) return;
         if (GameManager.getScenario() == GameManager.ScriptStatus.AbilitySelect) {
@@ -380,25 +391,6 @@ public class MainScripter implements CommandInterface {
         }
         Bukkit.broadcastMessage(String.format(ChatColor.GRAY +
                         "관리자 %s님이 쿨타임 및 지속시간을 초기화했습니다.", p.getName()));
-    }
-
-    public final void vakill(CommandSender p, String[] d) {
-        if (!p.isOp()) return;
-        if (d.length != 2) {
-            p.sendMessage("명령이 올바르지 않습니다.");
-            return;
-        }
-        Player pn = Bukkit.getServer().getPlayerExact(d[1]);
-        if (pn == null)  return;
-        Ability a = AUC.findAbility(pn);
-        if (a != null) {
-            a.cancelDTimer();
-            a.cancelCTimer();
-        }
-        pn.damage(5000.0);
-        pn.kickPlayer("관리자가 당신의 의지를 꺾었습니다.");
-        Bukkit.broadcastMessage(String.format(ChatColor.GRAY +
-                "%s님이 %s님을 사망처리했습니다.", p.getName(), pn.getName()));
     }
 
     public final void vaelist(CommandSender p) {
@@ -452,7 +444,6 @@ public class MainScripter implements CommandInterface {
             p.sendMessage(ChatColor.RED + "아직 게임을 시작하지 않았습니다.");
             return;
         }
-        GameManager.PlayDistanceBuffer = 0;
         Bukkit.broadcastMessage(ChatColor.GRAY + "------------------------------");
         Bukkit.broadcastMessage(String.format(ChatColor.YELLOW +
                         "%s님이 게임 카운터를 중단시켰습니다.", p.getName()));
@@ -464,7 +455,7 @@ public class MainScripter implements CommandInterface {
         Bukkit.broadcastMessage(ChatColor.GRAY + "모든 설정이 취소됩니다.");
         Bukkit.broadcastMessage(ChatColor.GREEN + "옵저버 설정은 초기화 되지 않습니다.");
         this.gameManager.getOKSign().clear();
-        EventManager.DamageGuard = false;
+        PhysicalFighters.DamageGuard = false;
         for (int l = 0; l < AbilityList.AbilityList.size(); l++) {
             AbilityList.AbilityList.get(l).cancelDTimer();
             AbilityList.AbilityList.get(l).cancelCTimer();

@@ -22,39 +22,34 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.Damageable;
 
 public class EventManager implements Listener {
 
     public static ArrayList<Ability> LeftHandEvent = new ArrayList<>();
     public static ArrayList<Ability> RightHandEvent = new ArrayList<>();
-    public static boolean DamageGuard = false;
+
+    @EventHandler
+    public static void onPlayerItemDamage(PlayerItemDamageEvent event) {
+        // 내구도 무한 모드
+        if (PhysicalFighters.InfinityDur) {
+            event.setCancelled(true);
+        }
+        AbilityExcuter(onPlayerItemDamage, event);
+    }
+    public static ArrayList<EventData> onPlayerItemDamage = new ArrayList<>();
 
     @EventHandler
     public static void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player p) {
+        if (event.getEntity() instanceof Player) {
             // 플레이어 무적
-            if (DamageGuard) {
+            if (PhysicalFighters.DamageGuard) {
                 event.setCancelled(true);
                 event.getEntity().setFireTicks(0);
             }
-            // 갑옷 내구도 무한
-            if (PhysicalFighters.InfinityDur) {
-                PlayerInventory inv = p.getInventory();
-                for (ItemStack armor : inv.getArmorContents()) {
-                    if (armor != null && armor.getItemMeta() instanceof Damageable damageable) {
-                        damageable.setDamage(0);
-                        armor.setItemMeta(damageable);
-                    }
-                }
-            }
         }
-        if (event instanceof EntityDamageByEntityEvent byEntityEvent) {
-            // 몬스터애게 받는 대미지 50% 감소
-            if (PhysicalFighters.HalfMonsterDamage && !(byEntityEvent.getDamager() instanceof Player))
-                byEntityEvent.setDamage(byEntityEvent.getDamage() / 2);
+        if (event instanceof EntityDamageByEntityEvent) {
             AbilityExcuter(onEntityDamageByEntity, event);
         }
         AbilityExcuter(onEntityDamage, event);
@@ -117,16 +112,10 @@ public class EventManager implements Listener {
     @EventHandler
     public static void onPlayerInteract(PlayerInteractEvent event) {
         _AbilityEventFilter(event);
+
+        // 능력서 사용
         Player p = event.getPlayer();
         ItemStack handItem = p.getInventory().getItemInMainHand();
-        // 도구 내구도 무한
-        if (PhysicalFighters.InfinityDur) {
-            if (handItem.getItemMeta() instanceof Damageable damageable) {
-                damageable.setDamage(0);
-                handItem.setItemMeta(damageable);
-            }
-        }
-        // 능력서 사용
         if (handItem.getType() == Material.ENCHANTED_BOOK) {
             if (handItem.hasItemMeta() && Objects.requireNonNull(
                     handItem.getItemMeta()).getDisplayName().startsWith(ChatColor.GOLD + "[능력서]")) {
@@ -147,10 +136,10 @@ public class EventManager implements Listener {
         Ability ability = AbilityList.AbilityList.get(abicode);
         if (PhysicalFighters.AbilityOverLap) {
             if (ability.getAbilityType() == Ability.Type.Active_Continue ||
-                ability.getAbilityType() == Ability.Type.Active_Immediately) {
+                    ability.getAbilityType() == Ability.Type.Active_Immediately) {
                 for (Ability ab : AbilityList.AbilityList) {
                     if (ab.isOwner(p) && (ab.getAbilityType() == Ability.Type.Active_Continue ||
-                                            ab.getAbilityType() == Ability.Type.Active_Immediately)) {
+                            ab.getAbilityType() == Ability.Type.Active_Immediately)) {
                         ab.setPlayer(null, true);
                     }
                 }
@@ -164,8 +153,7 @@ public class EventManager implements Listener {
         }
         ability.setPlayer(p, true);
         ability.setRunAbility(true);
-        Bukkit.broadcastMessage(String.format(ChatColor.GOLD +
-                "%s님이 능력을 부여받았습니다.", p.getName()));
+        Bukkit.broadcastMessage(String.format(ChatColor.GOLD + "%s님이 능력을 부여받았습니다.", p.getName()));
     }
 
 
@@ -211,6 +199,12 @@ public class EventManager implements Listener {
             AbilityExcuter(onPlayerPickupItem, event);
     }
     public static ArrayList<EventData> onPlayerPickupItem = new ArrayList<>();
+
+    @EventHandler
+    public static void onDisable(PluginDisableEvent event) {
+        AbilityExcuter(onPluginDisable, event);
+    }
+    public static ArrayList<EventData> onPluginDisable = new ArrayList<>();
 
 
     @EventHandler

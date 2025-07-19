@@ -3,7 +3,6 @@ package io.github.kdy05.physicalFighters.abilities;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.LinkedList;
 import java.util.Objects;
@@ -23,6 +22,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.util.BlockIterator;
 
 public class Tracer extends Ability {
+    public static Timer TracerTimer;
     int core = 3;
     int aaa = 0;
     LinkedList<Location> L = new LinkedList<>();
@@ -38,8 +38,10 @@ public class Tracer extends Ability {
         EventManager.onPlayerToggleSneakEvent.add(new EventData(this));
         registerRightClickEvent();
         EventManager.onEntityDamage.add(new EventData(this, 3));
-        PhysicalFighters.TracerTimer = new Timer();
-        PhysicalFighters.TracerTimer.schedule(new TimerTask() {
+        EventManager.onPluginDisable.add(new EventData(this, 4));
+
+        TracerTimer = new Timer();
+        TracerTimer.schedule(new TimerTask() {
             public void run() {
                 if (getPlayer() != null) {
                     if (Tracer.this.core < 3) {
@@ -102,6 +104,10 @@ public class Tracer extends Ability {
                 getPlayer().sendMessage(
                         ChatColor.GREEN + "사뿐하게 떨어져 데미지를 받지 않았습니다.");
             }
+        }
+        if (CustomData == 4) {
+            if (TracerTimer != null)
+                TracerTimer.cancel();
         }
         return -1;
     }

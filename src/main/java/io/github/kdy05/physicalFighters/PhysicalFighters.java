@@ -6,36 +6,27 @@ import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.core.AbilityList;
 import io.github.kdy05.physicalFighters.scripts.MainScripter;
 
-import java.util.Timer;
-
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PhysicalFighters extends JavaPlugin {
     private static PhysicalFighters plugin;
     public static int BuildNumber = 20250708;
-    public static Timer TracerTimer;
+
+    public static boolean DamageGuard = false;
+    public static boolean NoFoodMode = false;
+    public static boolean InfinityDur = false;
 
     public static boolean AutoKick;
     public static boolean AutoBan;
     public static boolean KillerOutput;
 
-    public static boolean ClearInventory;
-    public static boolean Respawn;
+    public static int Setlev;
     public static int EarlyInvincibleTime;
     public static int RestrictionTime;
+    public static boolean ClearInventory;
     public static boolean NoAbilitySetting;
 
-    public static int Setlev;
-    public static boolean DefaultArmed;
-    public static boolean TableGive;
-    public static boolean WoodGive;
-
-    public static boolean NoFoodMode;
-    public static boolean InfinityDur;
-    public static boolean HalfMonsterDamage;
-
     public static boolean AbilityOverLap;
-    public static boolean PrintTip;
 
     @Override
     public void onEnable() {
@@ -74,28 +65,16 @@ public class PhysicalFighters extends JavaPlugin {
         KillerOutput = getConfig().getBoolean("KillerOutput", true);
 
         ClearInventory = getConfig().getBoolean("ClearInventory", true);
-        Respawn = getConfig().getBoolean("Respawn", false);
         EarlyInvincibleTime = getConfig().getInt("EarlyInvincibleTime", 10);
         RestrictionTime = getConfig().getInt("RestrictionTime", 15);
         NoAbilitySetting = getConfig().getBoolean("NoAbilitySetting", false);
-
         Setlev = getConfig().getInt("SetLev", 60);
-        DefaultArmed = getConfig().getBoolean("DefaultArmed", false);
-        TableGive = getConfig().getBoolean("TableGive", false);
-        WoodGive = getConfig().getBoolean("WoodGive", false);
-
-        NoFoodMode = getConfig().getBoolean("NoFoodMode", false);
-        InfinityDur = getConfig().getBoolean("InfinityDur", false);
-        HalfMonsterDamage = getConfig().getBoolean("HalfMonsterDamage", false);
 
         AbilityOverLap = getConfig().getBoolean("AbilityOverLap", false);
-        PrintTip = getConfig().getBoolean("PrintTip", true);
     }
 
     @Override
     public void onDisable() {
-        if (TracerTimer != null)
-            TracerTimer.cancel();
         getLogger().info("플러그인을 종료합니다.");
     }
 

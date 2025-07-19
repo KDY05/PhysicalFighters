@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
@@ -39,7 +40,7 @@ public class FallArrow extends Ability {
                 EntityDamageByEntityEvent Event0 = (EntityDamageByEntityEvent) event;
                 if (Event0.getDamager() instanceof Arrow a && a.getShooter() instanceof Player player
                         && isOwner(player) && Event0.getEntity() instanceof LivingEntity entity
-                        && entity != player && !EventManager.DamageGuard) {
+                        && entity != player && !PhysicalFighters.DamageGuard) {
                     return 0;
                 }
                 break;

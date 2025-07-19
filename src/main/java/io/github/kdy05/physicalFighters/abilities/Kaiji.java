@@ -36,7 +36,7 @@ public class Kaiji extends Ability {
         switch (CustomData) {
             case 0:
                 EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-                if (!EventManager.DamageGuard && isOwner(Event.getDamager())
+                if (!PhysicalFighters.DamageGuard && isOwner(Event.getDamager())
                         && isValidItem(Material.DIAMOND) && Event.getEntity() instanceof Player)
                     return 0;
                 break;

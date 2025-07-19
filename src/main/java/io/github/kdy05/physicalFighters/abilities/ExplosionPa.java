@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
@@ -35,7 +36,7 @@ public class ExplosionPa extends Ability {
             case 0:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
                 if ((isOwner(Event.getPlayer())) &&
-                        (isValidItem(Ability.DefaultItem)) && !EventManager.DamageGuard)
+                        (isValidItem(Ability.DefaultItem)) && !PhysicalFighters.DamageGuard)
                     return 0;
                 break;
             case 1:

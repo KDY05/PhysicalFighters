@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
@@ -31,12 +32,12 @@ public class Angel extends Ability {
         if (CustomData == 0) {
             EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
             if ((isOwner(Event.getDamager())) && (isValidItem(Ability.DefaultItem)) &&
-                    (!EventManager.DamageGuard) &&
+                    (!PhysicalFighters.DamageGuard) &&
                     (pp == "false") && (!ppon)) {
                 return 0;
             }
             if ((isOwner(Event.getEntity())) &&
-                    (!EventManager.DamageGuard) &&
+                    (!PhysicalFighters.DamageGuard) &&
                     (pp != "false") && (ppon)) {
                 org.bukkit.Bukkit.getPlayer(pp).damage((int) (Event.getDamage() / 2.0D), Event.getEntity());
                 Event.setDamage((int) (Event.getDamage() / 2.0D));

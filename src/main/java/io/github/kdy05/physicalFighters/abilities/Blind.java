@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
@@ -20,7 +21,7 @@ public class Blind extends Ability {
 
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if ((!EventManager.DamageGuard) &&
+        if ((!PhysicalFighters.DamageGuard) &&
                 (isOwner(Event.getDamager())) &&
                 ((Event.getEntity() instanceof Player))) {
             return 0;

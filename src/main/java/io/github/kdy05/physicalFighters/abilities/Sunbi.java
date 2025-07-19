@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
@@ -28,7 +29,7 @@ public class Sunbi extends Ability {
 
     public int A_Condition(Event event, int CustomData) {
         PlayerToggleSneakEvent Event = (PlayerToggleSneakEvent) event;
-        if ((!EventManager.DamageGuard) &&
+        if ((!PhysicalFighters.DamageGuard) &&
                 (isOwner(Event.getPlayer())) && (Event.isSneaking())) {
             return 0;
         }

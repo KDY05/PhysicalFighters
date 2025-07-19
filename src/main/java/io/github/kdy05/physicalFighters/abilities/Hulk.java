@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
@@ -26,7 +27,7 @@ public class Hulk extends Ability {
         if (CustomData == 1) {
             PlayerInteractEvent Event2 = (PlayerInteractEvent) event;
             if (isOwner(Event2.getPlayer()) &&
-                    isValidItem(Ability.DefaultItem) && !EventManager.DamageGuard) {
+                    isValidItem(Ability.DefaultItem) && !PhysicalFighters.DamageGuard) {
                 return 1;
             }
         }

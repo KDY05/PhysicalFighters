@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.abilities;
 
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
@@ -37,7 +38,7 @@ public class Ahri extends Ability {
         switch (CustomData) {
             case 0:
                 EntityDamageByEntityEvent Event0 = (EntityDamageByEntityEvent) event;
-                if ((!EventManager.DamageGuard) &&
+                if ((!PhysicalFighters.DamageGuard) &&
                         ((Event0.getDamager() instanceof Snowball a))) {
                     if (isOwner((Player) a.getShooter())) {
                         if (((Event0.getEntity() instanceof Player)) &&

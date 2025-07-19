@@ -44,12 +44,14 @@ public class Fly extends Ability {
 
     @Override
     public void A_DurationStart() {
+        if (getPlayer() == null) return;
         getPlayer().setAllowFlight(true);
         getPlayer().setFlying(true);
     }
 
     @Override
     public void A_FinalDurationEnd() {
+        if (getPlayer() == null) return;
         getPlayer().setAllowFlight(false);
         getPlayer().setFlying(false);
     }
