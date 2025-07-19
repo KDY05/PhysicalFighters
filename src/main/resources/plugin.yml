@@ -6,4 +6,8 @@ authors: [ Xeon, Yeomryo, Ararab ]
 website: https://github.com/KDY05
 commands:
   va:
-    description: This is a demo command.
+    description: main command
+permissions:
+  va.operate:
+    description: operating permission
+    default: op

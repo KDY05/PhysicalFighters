@@ -1,0 +1,132 @@
+package io.github.kdy05.physicalFighters.ability;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+
+import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.CommandInterface;
+
+// TODO: 작동 안함
+
+public class Lockdown extends Ability implements CommandInterface {
+    // 능력 설정 상수
+    private static final double MAX_RANGE = 60.0;          // 최대 사용 거리 (60블록)
+    private static final int LOCKDOWN_DURATION = 60;      // 봉인 지속시간 (60초)
+    // 임시 저장 필드
+    private Ability targetAbility = null;
+    private Player caster = null;
+    private String targetName = null;
+
+    public Lockdown() {
+        InitAbility("봉인", Type.Active_Continue, Rank.B,
+                "특정 플레이어의 능력을 1분간 봉인하며 구속 효과를 겁니다.",
+                "\"/va lock <nickname>\" 명령어로 작동하며 대상이 60칸 이내에 있어야 합니다.",
+                "게임 시작 후 능력 제한 시간동안 이 능력을 사용할 수 없습니다.");
+        InitAbility(80, LOCKDOWN_DURATION, true);
+        commandManager.RegisterCommand(this);
+    }
+
+    @Override
+    public int A_Condition(Event event, int CustomData) {
+        if (caster == null || !isOwner(caster)) {
+            if (caster != null) caster.sendMessage(ChatColor.RED + "이 명령은 사용할 수 없습니다.");
+            clearTempData();
+            return -1;
+        }
+
+        Player target = Bukkit.getPlayerExact(targetName);
+        if (target == null) {
+            caster.sendMessage(ChatColor.RED + "존재하지 않는 플레이어입니다.");
+            clearTempData();
+            return -1;
+        }
+
+        if (caster.getName().equals(target.getName())) {
+            caster.sendMessage(ChatColor.RED + "자기 자신에게 능력을 사용할 수 없습니다.");
+            clearTempData();
+            return -1;
+        }
+
+        targetAbility = AUC.findAbility(target);
+        if (targetAbility == null) {
+            caster.sendMessage(ChatColor.RED + "옵저버입니다.");
+            clearTempData();
+            return -1;
+        }
+
+        double distance = caster.getLocation().distance(target.getLocation());
+        if (distance > MAX_RANGE) {
+            caster.sendMessage(ChatColor.RED + String.format(
+                    "거리가 너무 멉니다. (현재: %.1f블록, 최대: %.0f블록)", distance, MAX_RANGE));
+            clearTempData();
+            return -1;
+        }
+
+        return 0;
+    }
+
+    @Override
+    public void A_Effect(Event event, int CustomData) {
+        // A_DurationStart에서 실제 효과 처리
+    }
+
+    @Override
+    public void A_DurationStart() {
+        if (caster == null || targetAbility == null) {
+            return;
+        }
+
+        Player target = targetAbility.getPlayer();
+
+        caster.sendMessage(ChatColor.YELLOW +
+                String.format("%s님의 능력을 %d초간 봉인합니다.", target.getName(), LOCKDOWN_DURATION));
+        target.sendMessage(ChatColor.RED +
+                String.format("경고, %s님이 당신에게 봉인 능력을 사용했습니다.", caster.getName()));
+        target.sendMessage(ChatColor.RED +
+                "지속 효과가 해제되고 1분간 능력 효과가 봉인됩니다.");
+
+        targetAbility.cancelDTimer();
+        targetAbility.cancelCTimer();
+        targetAbility.setRunAbility(false);
+
+        if (!PhysicalFighters.NoFoodMode) {
+            targetAbility.getPlayer().setFoodLevel(0);
+        }
+
+        clearTempData();
+    }
+
+    @Override
+    public void A_FinalDurationEnd() {
+        if (targetAbility != null && targetAbility.getPlayer() != null) {
+            Player target = targetAbility.getPlayer();
+            target.sendMessage(ChatColor.GREEN + "봉인이 해제되었습니다.");
+            targetAbility.setRunAbility(true);
+        }
+    }
+
+    @Override
+    public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length != 2 || !args[0].equalsIgnoreCase("lock")) {
+            return false;
+        }
+
+        this.caster = (Player) sender;
+        this.targetName = args[1];
+
+        this.execute(null, 0);
+        return true;
+    }
+
+
+    private void clearTempData() {
+        this.caster = null;
+        this.targetName = null;
+    }
+}

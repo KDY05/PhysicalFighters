@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.core;
 
 import io.github.kdy05.physicalFighters.core.Ability.Type;
-import io.github.kdy05.physicalFighters.scripts.GameManager;
+import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
 import io.github.kdy05.physicalFighters.utils.EventData;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
@@ -78,7 +78,7 @@ public class EventManager implements Listener {
             victim.getInventory().clear();
 
             // 킥, 밴 처리
-            if (PhysicalFighters.AutoKick && !AbilityList.phoenix.isOwner(victim)) {
+            if (PhysicalFighters.AutoKick && !AbilityInitializer.phoenix.isOwner(victim)) {
                 if (PhysicalFighters.AutoBan && !victim.isOp()) {
                     victim.ban("당신은 죽었습니다. 다시 들어오실 수 없습니다.", (Date) null, null, true);
                 } else {
@@ -131,13 +131,13 @@ public class EventManager implements Listener {
     public static ArrayList<EventData> onPlayerInteract = new ArrayList<>();
 
     private static void usebook(Player p, int abicode) {
-        if (p == null || abicode < 0 || abicode >= AbilityList.AbilityList.size())
+        if (p == null || abicode < 0 || abicode >= AbilityInitializer.AbilityList.size())
             return;
-        Ability ability = AbilityList.AbilityList.get(abicode);
+        Ability ability = AbilityInitializer.AbilityList.get(abicode);
         if (PhysicalFighters.AbilityOverLap) {
             if (ability.getAbilityType() == Ability.Type.Active_Continue ||
                     ability.getAbilityType() == Ability.Type.Active_Immediately) {
-                for (Ability ab : AbilityList.AbilityList) {
+                for (Ability ab : AbilityInitializer.AbilityList) {
                     if (ab.isOwner(p) && (ab.getAbilityType() == Ability.Type.Active_Continue ||
                             ab.getAbilityType() == Ability.Type.Active_Immediately)) {
                         ab.setPlayer(null, true);
@@ -145,7 +145,7 @@ public class EventManager implements Listener {
                 }
             }
         } else {
-            for (Ability ab : AbilityList.AbilityList) {
+            for (Ability ab : AbilityInitializer.AbilityList) {
                 if (ab.isOwner(p)) {
                     ab.setPlayer(null, true);
                 }

@@ -8,7 +8,6 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.AbilityList;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
@@ -19,7 +18,7 @@ public final class AUC {
 
     @Nullable
     public static Ability findAbility(Player p) {
-        for (Ability a : AbilityList.AbilityList)
+        for (Ability a : AbilityInitializer.AbilityList)
             if (a.isOwner(p)) return a;
         return null;
     }

@@ -2,7 +2,7 @@ package io.github.kdy05.physicalFighters.core;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
-import org.bukkit.Bukkit;
+import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -15,7 +15,6 @@ public abstract class Ability {
     protected static CommandManager commandManager;
     protected static Material DefaultItem = Material.IRON_INGOT;
 
-    public static final RestrictionTimer restrictionTimer = new RestrictionTimer();
     private static int AbilityCount = 0;
     private CoolDownTimer CTimer;
     private DurationTimer DTimer;
@@ -97,7 +96,7 @@ public abstract class Ability {
         this.Duration = this.type == Type.Active_Continue ? Duration : -1;
         this.RunAbility = RunAbility;
         this.showtext = showtext;
-        AbilityList.AbilityList.add(this);
+        AbilityInitializer.AbilityList.add(this);
         AbilityCount += 1;
     }
 
@@ -339,16 +338,6 @@ public abstract class Ability {
         @Override
         public void onTimerFinalize() {
             ability.A_FinalDurationEnd();
-        }
-    }
-
-    public static final class RestrictionTimer extends TimerBase {
-        public void onTimerStart() {}
-
-        public void onTimerRunning(int count) {}
-
-        public void onTimerEnd() {
-            Bukkit.broadcastMessage(ChatColor.GREEN + "일부 능력의 제약이 해제되었습니다.");
         }
     }
 

@@ -3,13 +3,17 @@ package io.github.kdy05.physicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.CommandManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.core.AbilityList;
-import io.github.kdy05.physicalFighters.scripts.MainScripter;
+import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
+import io.github.kdy05.physicalFighters.command.GameCommand;
+import io.github.kdy05.physicalFighters.core.GameManager;
 
+import io.github.kdy05.physicalFighters.command.UtilCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PhysicalFighters extends JavaPlugin {
     private static PhysicalFighters plugin;
+    private GameManager gameManager;
+    private GameCommand gameCommand;
     public static int BuildNumber = 20250708;
 
     public static boolean DamageGuard = false;
@@ -43,7 +47,10 @@ public class PhysicalFighters extends JavaPlugin {
         Ability.InitAbilityBase(this, commandManager);
 
         getLogger().info("스크립터를 초기화합니다.");
-        commandManager.RegisterCommand(new MainScripter(this));
+        this.gameManager = new GameManager(this);
+        this.gameCommand = new GameCommand(this, gameManager);
+        commandManager.RegisterCommand(gameCommand);
+        commandManager.RegisterCommand(new UtilCommand(this));
 
         if (EarlyInvincibleTime <= 0) {
             getLogger().info("초반 무적 시간이 0분 이하로 설정되어 초반 무적이 비활성화됩니다.");
@@ -53,7 +60,7 @@ public class PhysicalFighters extends JavaPlugin {
             getLogger().info("제약 시간이 0분 이하로 설정되어 제약 시간이 비활성화됩니다.");
             RestrictionTime = 0;
         }
-        getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityList.AbilityList.size()));
+        getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityInitializer.AbilityList.size()));
     }
 
     private void loadConfigs() {
@@ -80,6 +87,14 @@ public class PhysicalFighters extends JavaPlugin {
 
     public static PhysicalFighters getPlugin() {
         return plugin;
+    }
+
+    public GameManager getGameManager() {
+        return gameManager;
+    }
+
+    public GameCommand getGameCommand() {
+        return gameCommand;
     }
 
 }

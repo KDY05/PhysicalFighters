@@ -1,0 +1,66 @@
+package io.github.kdy05.physicalFighters.ability;
+
+import io.github.kdy05.physicalFighters.utils.AUC;
+import org.bukkit.entity.LivingEntity;
+import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.EventManager;
+import io.github.kdy05.physicalFighters.utils.EventData;
+
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+
+public class Medic extends Ability {
+    public Medic() {
+        InitAbility("메딕", Type.Active_Immediately, Rank.B,
+                Usage.IronAttack + "타인의 체력을 6만큼 회복합니다.",
+                Usage.IronRight + "자신의 체력을 6만큼 회복합니다.");
+        InitAbility(15, 0, true);
+        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        registerRightClickEvent();
+    }
+
+    @Override
+    public int A_Condition(Event event, int CustomData) {
+        switch (CustomData) {
+            case 0 -> {
+                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+                if (event0.getEntity() instanceof LivingEntity &&
+                        isOwner(event0.getDamager()) && isValidItem(Ability.DefaultItem)) {
+                    return 0;
+                }
+            }
+            case 1 -> {
+                PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+                if (isOwner(event1.getPlayer()) && isValidItem(Ability.DefaultItem)) {
+                    return 1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public void A_Effect(Event event, int CustomData) {
+        switch (CustomData) {
+            case 0 -> {
+                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+                LivingEntity entity = (LivingEntity) event0.getEntity();
+                AUC.healEntity(entity, 6);
+                entity.sendMessage(String.format(ChatColor.GREEN
+                        + "%s의 메딕 능력으로 체력을 6 회복했습니다.", getPlayer().getName()));
+                getPlayer().sendMessage(String.format(ChatColor.GREEN
+                        + "%s의 체력을 6 회복시켰습니다.", entity.getName()));
+                event0.setCancelled(true);
+            }
+            case 1 -> {
+                PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+                Player p2 = event1.getPlayer();
+                AUC.healEntity(p2, 6);
+                p2.sendMessage(ChatColor.GREEN + "자신의 체력을 6 회복했습니다.");
+            }
+        }
+    }
+}
