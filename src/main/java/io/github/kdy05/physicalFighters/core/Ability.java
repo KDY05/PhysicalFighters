@@ -3,12 +3,15 @@ package io.github.kdy05.physicalFighters.core;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import io.github.kdy05.physicalFighters.utils.TimerBase;
+
+import java.util.UUID;
 
 public abstract class Ability {
     protected static PhysicalFighters plugin;
@@ -20,7 +23,7 @@ public abstract class Ability {
     private DurationTimer DTimer;
     private int CoolDown = 0;
     private int Duration = 0;
-    private Player player = null;
+    private UUID playerUuid = null;
     private String AbilityName;
     private Type type;
     private Rank rank;
@@ -131,6 +134,7 @@ public abstract class Ability {
     }
 
     public final boolean isValidItem(Material material) {
+        if (getPlayer() == null) return false;
         return getPlayer().getInventory().getItemInMainHand().getType() == material;
     }
 
@@ -139,18 +143,25 @@ public abstract class Ability {
     }
 
     public final boolean isOwner(Player p) {
-        return this.player != null && p.getUniqueId().equals(this.player.getUniqueId());
+        return this.playerUuid != null && p.getUniqueId().equals(this.playerUuid);
+    }
+
+    public final void sendMessage(String message) {
+        Player player = getPlayer();
+        if (player == null) return;
+        player.sendMessage(message);
     }
 
     public final void setPlayer(Player p, boolean textout) {
         this.DTimer.stopTimer();
         this.CTimer.stopTimer();
-        if (this.player != null) {
+        Player currentPlayer = getPlayer();
+        if (currentPlayer != null) {
             if (textout) {
-                this.player.sendMessage(String.format(ChatColor.RED + "%s" +
+                currentPlayer.sendMessage(String.format(ChatColor.RED + "%s" +
                     ChatColor.WHITE + " 능력이 해제되었습니다.", getAbilityName()));
             }
-            A_ResetEvent(this.player);
+            A_ResetEvent(currentPlayer);
         }
         if (p != null && this.RunAbility) {
             if (textout) {
@@ -159,21 +170,21 @@ public abstract class Ability {
             }
             A_SetEvent(p);
         }
-        this.player = p;
+        this.playerUuid = p != null ? p.getUniqueId() : null;
     }
 
-    public final boolean execute(Event event, int CustomData) {
-        if (player == null || !RunAbility) return false;
+    public final void execute(Event event, int CustomData) {
+        if (getPlayer() == null || !RunAbility) return;
 
         int data = A_Condition(event, CustomData);
-        if (data < 0) return false;
+        if (data < 0) return;
 
         if (this.type == Type.Active_Continue || this.type == Type.Active_Immediately) {
             // 지속 시간 알림 후 종료
             if (this.DTimer.isRunning()) {
                 getPlayer().sendMessage(String.format(ChatColor.WHITE + "%d초"
                         + ChatColor.GREEN + " 후 지속시간이 끝납니다.", this.DTimer.getCount()));
-                return true;
+                return;
             }
             // 쿨타임 알림 후 종료
             if (this.CTimer.isRunning()) {
@@ -181,7 +192,7 @@ public abstract class Ability {
                     getPlayer().sendMessage(String.format(ChatColor.WHITE + "%d초"
                         + ChatColor.RED + " 후 능력을 다시 사용하실 수 있습니다.", this.CTimer.getCount()));
                 }
-                return true;
+                return;
             }
             // 능력 사용 알림
             if (getShowText() != ShowText.Custom_Text)
@@ -202,7 +213,6 @@ public abstract class Ability {
             default -> A_Effect(event, data);
         }
 
-        return true;
     }
 
     // Timer Managing
@@ -242,7 +252,7 @@ public abstract class Ability {
     }
 
     public final Player getPlayer() {
-        return this.player;
+        return this.playerUuid != null ? Bukkit.getPlayer(this.playerUuid) : null;
     }
 
     public final String getAbilityName() {
@@ -290,7 +300,8 @@ public abstract class Ability {
         @Override
         public void onTimerRunning(int count) {
             ShowText showText = ability.getShowText();
-            if (count <= 3 && count >= 1 && showText != ShowText.No_CoolDownText && showText != ShowText.Custom_Text) {
+            if (count <= 3 && count >= 1 && showText != ShowText.No_CoolDownText && showText != ShowText.Custom_Text
+                    && ability.getPlayer() != null) {
                 ability.getPlayer().sendMessage(String.format(ChatColor.RED
                         + "%d초 뒤" + ChatColor.WHITE + " 능력사용이 가능합니다.", count));
             }
@@ -299,7 +310,7 @@ public abstract class Ability {
         @Override
         public void onTimerEnd() {
             ability.A_CoolDownEnd();
-            if (ability.getShowText() != ShowText.Custom_Text)
+            if (ability.getShowText() != ShowText.Custom_Text && ability.getPlayer() != null)
                 ability.getPlayer().sendMessage(ChatColor.AQUA + "다시 능력을 사용할 수 있습니다.");
         }
     }
@@ -320,8 +331,10 @@ public abstract class Ability {
 
         @Override
         public void onTimerRunning(int count) {
+            if (ability.getPlayer() == null) return;
             ShowText showText = ability.getShowText();
-            if (count <= 3 && count >= 1 && showText != ShowText.No_DurationText && showText != ShowText.Custom_Text) {
+            if (count <= 3 && count >= 1 && showText != ShowText.No_DurationText && showText != ShowText.Custom_Text
+                    && ability.getPlayer() != null) {
                 ability.getPlayer().sendMessage(String.format(ChatColor.GREEN
                         + "지속 시간" + ChatColor.WHITE + " %d초 전", count));
             }
@@ -330,7 +343,7 @@ public abstract class Ability {
         @Override
         public void onTimerEnd() {
             ability.A_DurationEnd();
-            if (ability.getShowText() != ShowText.Custom_Text)
+            if (ability.getShowText() != ShowText.Custom_Text && ability.getPlayer() != null)
                 ability.getPlayer().sendMessage(ChatColor.GREEN + "능력 지속시간이 끝났습니다.");
             ctimer.startTimer(ability.getCoolDown(), true);
         }

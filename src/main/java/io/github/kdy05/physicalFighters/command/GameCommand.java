@@ -133,7 +133,6 @@ public class GameCommand implements CommandInterface {
 
     private String getTypeText(Ability ability) {
         Ability.Type type = ability.getAbilityType();
-        if (!ability.getRunAbility()) return ChatColor.RED + "능력 비활성화됨" + ChatColor.WHITE;
         return switch (type) {
             case Active_Continue ->
                     ChatColor.GREEN + "액티브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "지속" + ChatColor.WHITE;
@@ -268,32 +267,35 @@ public class GameCommand implements CommandInterface {
                 senderName, target.getName(), ability.getAbilityName()));
     }
 
-    public final void vabook(Player p, String[] d) {
-        if (d.length != 2) {
-            p.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va book [능력코드]]");
+    public final void vabook(Player player, String[] args) {
+        if (args.length != 2) {
+            player.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va book [능력코드]]");
             return;
         }
+
         int abicode;
         try {
-            abicode = Integer.parseInt(d[1]);
+            abicode = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            p.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
+            player.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
             return;
         }
-        if (abicode < 0 || abicode >= AbilityInitializer.AbilityList.size()) {
-            p.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
+        if (abicode < 0 || abicode >= AbilityInitializer.AbilityList.size() - 1) {
+            player.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
             return;
         }
+
         Ability ability = AbilityInitializer.AbilityList.get(abicode);
-        ItemStack is = new ItemStack(Material.ENCHANTED_BOOK);
-        ItemMeta im = is.getItemMeta();
-        if (im != null) {
-            im.setDisplayName(ChatColor.GOLD + "[능력서]" + ChatColor.WHITE + abicode + "." + ChatColor.AQUA + ability.getAbilityName());
-            im.setLore(new LinkedList<>(Arrays.asList(ability.getGuide())));
-        }
-        is.setItemMeta(im);
-        p.getInventory().addItem(is);
-        p.sendMessage("능력서를 만들었습니다. " + ChatColor.GOLD + ability.getAbilityName());
+        ItemStack stack = new ItemStack(Material.ENCHANTED_BOOK);
+        ItemMeta meta = stack.getItemMeta();
+        if (meta == null) return;
+
+        meta.setDisplayName(ChatColor.GOLD + "[능력서]" + ChatColor.WHITE + abicode + ". " + ability.getAbilityName());
+        meta.setLore(new LinkedList<>(Arrays.asList(ability.getGuide())));
+        stack.setItemMeta(meta);
+
+        player.getInventory().addItem(stack);
+        player.sendMessage("능력서를 만들었습니다. " + ChatColor.GOLD + ability.getAbilityName());
     }
 
     public final void vaskip(CommandSender sender) {
@@ -330,43 +332,38 @@ public class GameCommand implements CommandInterface {
         p.sendMessage(ChatColor.GREEN + "---------------");
     }
 
-    public final void vaalist(CommandSender p) {
+    public final void vaalist(CommandSender sender) {
         Bukkit.broadcastMessage(String.format(ChatColor.GREEN +
-                "%s님이 플레이어들의 능력을 확인했습니다.", p.getName()));
-        p.sendMessage(ChatColor.GOLD + "- 능력을 스캔했습니다. -");
-        p.sendMessage(ChatColor.GREEN + "---------------");
+                "%s님이 플레이어들의 능력을 확인했습니다.", sender.getName()));
+        sender.sendMessage(ChatColor.GOLD + "- 능력을 스캔했습니다. -");
+        sender.sendMessage(ChatColor.GREEN + "---------------");
         List<Ability> pl = AbilityInitializer.AbilityList;
         int count = 0;
         for (Ability ability : pl) {
             if (ability.getPlayer() == null) continue;
             Player temp = Bukkit.getServer().getPlayer(ability.getPlayer().getName());
             if (temp == null) continue;
-            p.sendMessage(String.format(ChatColor.GREEN + "%d. " + ChatColor.WHITE +
+            sender.sendMessage(String.format(ChatColor.GREEN + "%d. " + ChatColor.WHITE +
                             "%s : " + ChatColor.RED + "%s " + ChatColor.WHITE +
                             "[" + getTypeText(ability) + "]",
                     count, temp.getName(), ability.getAbilityName()));
             count++;
         }
         if (count == 0)
-            p.sendMessage("아직 능력자가 없습니다.");
-        p.sendMessage(ChatColor.GREEN + "---------------");
+            sender.sendMessage("아직 능력자가 없습니다.");
+        sender.sendMessage(ChatColor.GREEN + "---------------");
     }
 
-    public final void vastop(CommandSender p) {
+    public final void vastop(CommandSender sender) {
         if (GameManager.getScenario() == GameManager.ScriptStatus.NoPlay) {
-            p.sendMessage(ChatColor.RED + "아직 게임을 시작하지 않았습니다.");
+            sender.sendMessage(ChatColor.RED + "아직 게임을 시작하지 않았습니다.");
             return;
         }
-        Bukkit.broadcastMessage(ChatColor.GRAY + "------------------------------");
-        Bukkit.broadcastMessage(String.format(ChatColor.YELLOW +
-                        "%s님이 게임 카운터를 중단시켰습니다.", p.getName()));
         GameManager.setScenario(GameManager.ScriptStatus.NoPlay);
         this.gameManager.gameReadyStop();
         this.gameManager.gameStartStop();
         this.gameManager.gameProgressStop();
         this.gameManager.gameWarningStop();
-        Bukkit.broadcastMessage(ChatColor.GRAY + "모든 설정이 취소됩니다.");
-        Bukkit.broadcastMessage(ChatColor.GREEN + "옵저버 설정은 초기화 되지 않습니다.");
         this.gameManager.getOKSign().clear();
         PhysicalFighters.DamageGuard = false;
         for (int l = 0; l < AbilityInitializer.AbilityList.size(); l++) {
@@ -376,6 +373,11 @@ public class GameCommand implements CommandInterface {
             AbilityInitializer.AbilityList.get(l).setPlayer(null, false);
         }
         GameManager.getPlayerList().clear();
+        Bukkit.broadcastMessage(ChatColor.GRAY + "------------------------------");
+        Bukkit.broadcastMessage(String.format(ChatColor.YELLOW +
+                "관리자 %s님이 게임 카운터를 중단시켰습니다.", sender.getName()));
+        Bukkit.broadcastMessage(ChatColor.GRAY + "모든 설정이 취소됩니다.");
+        Bukkit.broadcastMessage(ChatColor.GRAY + "옵저버 설정은 초기화 되지 않습니다.");
     }
 
 }

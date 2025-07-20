@@ -39,6 +39,7 @@ public class Roclee extends Ability {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         LivingEntity target = (LivingEntity) event0.getEntity();
         Player attacker = getPlayer();
+        if (attacker == null) return;
 
         target.getWorld().createExplosion(target.getLocation(), 0.0F);
 

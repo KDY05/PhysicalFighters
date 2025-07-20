@@ -32,6 +32,7 @@ public class SuperFan extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
+        if (getPlayer() == null) return;
         Location l = getPlayer().getLocation();
         Location l2 = getPlayer().getLocation();
         Location l3 = getPlayer().getLocation();

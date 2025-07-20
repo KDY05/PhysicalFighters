@@ -49,6 +49,7 @@ public class Medic extends Ability {
                 EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
                 LivingEntity entity = (LivingEntity) event0.getEntity();
                 AUC.healEntity(entity, 6);
+                if (getPlayer() == null) return;
                 entity.sendMessage(String.format(ChatColor.GREEN
                         + "%s의 메딕 능력으로 체력을 6 회복했습니다.", getPlayer().getName()));
                 getPlayer().sendMessage(String.format(ChatColor.GREEN

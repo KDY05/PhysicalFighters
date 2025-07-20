@@ -27,6 +27,7 @@ public class Clocking extends Ability {
     @Override
     public void A_DurationStart() {
         for (Player p : Bukkit.getOnlinePlayers()) {
+            if (getPlayer() == null) return;
             p.hidePlayer(plugin, getPlayer());
         }
     }

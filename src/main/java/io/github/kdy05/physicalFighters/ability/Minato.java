@@ -50,6 +50,7 @@ public class Minato extends Ability implements BaseItem {
         if (CustomData == 0) {
             ProjectileHitEvent Event0 = (ProjectileHitEvent) event;
             LivingEntity target = (LivingEntity) Event0.getHitEntity();
+            if (getPlayer() == null) return;
             if (target != null) getPlayer().teleport(target.getLocation());
         }
     }

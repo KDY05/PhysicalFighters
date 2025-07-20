@@ -11,6 +11,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Objects;
+
 // TODO: 낚시로 얻을 수 없는 전용 물고기를 구현
 
 public class Fish extends Ability implements BaseItem {
@@ -57,7 +59,7 @@ public class Fish extends Ability implements BaseItem {
                 EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
                 damageEvent.setDamage(damageEvent.getDamage() * FISHING_ROD_DAMAGE);
                 if (Math.random() < FISH_DROP_RATE) {
-                    getPlayer().getInventory().addItem(new ItemStack(Material.COD));
+                    Objects.requireNonNull(getPlayer()).getInventory().addItem(new ItemStack(Material.COD));
                 }
             }
             case 1 -> {

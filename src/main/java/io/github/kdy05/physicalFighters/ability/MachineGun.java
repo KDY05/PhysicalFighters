@@ -111,7 +111,7 @@ public class MachineGun extends Ability {
         if (e.getEntity() instanceof LivingEntity target && Math.random() <= CRITICAL_CHANCE) {
             target.getWorld().createExplosion(target.getLocation(), 0.0F);
             AUC.piercingDamage(target, CRITICAL_DAMAGE);
-            getPlayer().sendMessage(ChatColor.GREEN + "크리티컬");
+            sendMessage(ChatColor.GREEN + "크리티컬");
         }
     }
 

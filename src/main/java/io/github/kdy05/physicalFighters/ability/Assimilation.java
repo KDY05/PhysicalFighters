@@ -15,6 +15,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
+import java.util.Objects;
+
 public class Assimilation
         extends Ability implements CommandInterface {
     private boolean ActiveAss = false;
@@ -41,8 +43,8 @@ public class Assimilation
                 break;
             case 1:
                 EntityDeathEvent Event1 = (EntityDeathEvent) event;
-                if (((Event1.getEntity() instanceof Player)) &&
-                        (isOwner(Event1.getEntity().getKiller())))
+                if (Event1.getEntity() instanceof Player &&
+                        isOwner(Event1.getEntity().getKiller()))
                     return 1;
                 break;
         }
@@ -59,31 +61,32 @@ public class Assimilation
                 break;
             case 1:
                 EntityDeathEvent Event1 = (EntityDeathEvent) event;
-                if ((Event1.getEntity() instanceof Player p)) {
-                    Ability a = AUC.findAbility(p);
-                    if (a != null) {
-                        a.cancelCTimer();
-                        a.cancelDTimer();
-                        if ((a.getAbilityType() == Type.Passive_AutoMatic) ||
-                                (a.getAbilityType() == Type.Passive_Manual)) {
-                            a.setPlayer(getPlayer(), false);
-                            getPlayer().sendMessage(
+                if (Event1.getEntity() instanceof Player victim && Event1.getEntity().getKiller() != null) {
+                    Ability ability = AUC.findAbility(victim);
+                    Player player = Event1.getEntity().getKiller();
+                    if (ability != null) {
+                        ability.cancelCTimer();
+                        ability.cancelDTimer();
+                        if ((ability.getAbilityType() == Type.Passive_AutoMatic) ||
+                                (ability.getAbilityType() == Type.Passive_Manual)) {
+                            ability.setPlayer(player, false);
+                            player.sendMessage(
                                     ChatColor.GREEN + "새로운 패시브 능력을 흡수하였습니다.");
-                            getPlayer().sendMessage(
+                            player.sendMessage(
                                     ChatColor.YELLOW + "새로운 능력 : " +
-                                            ChatColor.WHITE + a.getAbilityName());
+                                            ChatColor.WHITE + ability.getAbilityName());
                         } else if (!this.ActiveAss) {
-                            a.setPlayer(getPlayer(), false);
-                            getPlayer().sendMessage(
+                            ability.setPlayer(player, false);
+                            player.sendMessage(
                                     ChatColor.GREEN + "새로운 액티브 능력을 흡수하였습니다.");
-                            getPlayer().sendMessage(
+                            player.sendMessage(
                                     ChatColor.YELLOW + "새로운 능력 : " +
-                                            ChatColor.WHITE + a.getAbilityName());
-                            getPlayer().sendMessage(
+                                            ChatColor.WHITE + ability.getAbilityName());
+                            player.sendMessage(
                                     ChatColor.RED + "이제 액티브 흡수는 불가능합니다.");
                             this.ActiveAss = true;
                         } else {
-                            getPlayer().sendMessage(
+                            player.sendMessage(
                                     ChatColor.RED + "흡수할수 없는 능력을 가지고 있었습니다.");
                         }
                     }
@@ -102,7 +105,7 @@ public class Assimilation
             sender.sendMessage(ChatColor.GREEN + "-- 당신이 소유한 능력 --");
             for (Ability a : AbilityInitializer.AbilityList) {
                 if (a.isOwner(getPlayer())) {
-                    getPlayer().sendMessage(a.getAbilityName());
+                    Objects.requireNonNull(getPlayer()).sendMessage(a.getAbilityName());
                 }
             }
             return true;

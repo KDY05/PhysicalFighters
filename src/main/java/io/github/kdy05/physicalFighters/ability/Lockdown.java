@@ -83,6 +83,7 @@ public class Lockdown extends Ability implements CommandInterface {
         }
 
         Player target = targetAbility.getPlayer();
+        if (target == null) return;
 
         caster.sendMessage(ChatColor.YELLOW +
                 String.format("%s님의 능력을 %d초간 봉인합니다.", target.getName(), LOCKDOWN_DURATION));

@@ -49,7 +49,7 @@ public class CP9 extends Ability {
                 EntityDamageEvent event2 = (EntityDamageEvent) event;
                 if (isOwner(event2.getEntity()) && event2.getCause() == DamageCause.FALL) {
                     event2.setCancelled(true);
-                    getPlayer().sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 데미지를 받지 않았습니다.");
+                    sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 데미지를 받지 않았습니다.");
                 }
             }
         }
@@ -63,10 +63,10 @@ public class CP9 extends Ability {
                 EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
                 LivingEntity entity = (LivingEntity) event0.getEntity();
                 AUC.piercingDamage(entity, 6);
-                getPlayer().sendMessage(String.format(ChatColor.GREEN +
+                sendMessage(String.format(ChatColor.GREEN +
                         "%s에게 지건을 사용했습니다.", entity.getName()));
                 entity.sendMessage(String.format(ChatColor.RED +
-                        "%s(이)가 지건을 사용했습니다.", getPlayer().getName()));
+                        "%s(이)가 지건을 사용했습니다.", event0.getDamager().getName()));
             }
             case 1 -> {
                 PlayerInteractEvent event1 = (PlayerInteractEvent) event;

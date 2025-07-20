@@ -36,7 +36,7 @@ public class Aokizi extends Ability {
                     Player p = Event1.getPlayer();
                     Location location = AUC.getTargetLocation(p, 5);
                     if (location == null) {
-                        getPlayer().sendMessage(ChatColor.GREEN + "5칸 이내의 물만 얼릴 수 있습니다.");
+                        Event1.getPlayer().sendMessage(ChatColor.GREEN + "5칸 이내의 물만 얼릴 수 있습니다.");
                         break;
                     }
                     Block block = location.getBlock();
@@ -59,11 +59,11 @@ public class Aokizi extends Ability {
             l2.setX(l.getX() + (i + 1) * (Math.sin(degrees) * Math.cos(ydeg)));
             l2.setY(l.getY() + (i + 1) * Math.sin(ydeg));
             l2.setZ(l.getZ() + (i + 1) * (Math.cos(degrees) * Math.cos(ydeg)));
-            Block block = getPlayer().getWorld().getBlockAt(l2);
+            Block block = Event.getPlayer().getWorld().getBlockAt(l2);
             if (block.getType() != Material.ICE)
                 new ExplosionTimer(block.getType(), block).runTaskLater(plugin, 15L);
             block.setType(Material.ICE);
-            AUC.splashDamage(getPlayer(), block.getLocation(), 3, 8);
+            AUC.splashDamage(Event.getPlayer(), block.getLocation(), 3, 8);
         }
     }
 

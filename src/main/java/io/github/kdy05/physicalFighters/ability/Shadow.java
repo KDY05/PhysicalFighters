@@ -9,6 +9,8 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
+import java.util.Objects;
+
 public class Shadow extends Ability {
     public Shadow() {
         InitAbility("그림자", Type.Passive_AutoMatic, Rank.B,
@@ -49,6 +51,7 @@ public class Shadow extends Ability {
             case 1 -> {
                 EntityDamageEvent event1 = (EntityDamageEvent) event;
                 event1.setDamage(0);
+                if (getPlayer() == null) return;
                 AUC.healEntity(getPlayer(), 4);
             }
         }

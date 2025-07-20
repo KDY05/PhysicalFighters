@@ -7,7 +7,6 @@ import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
@@ -114,16 +112,14 @@ public class EventManager implements Listener {
         _AbilityEventFilter(event);
 
         // 능력서 사용
-        Player p = event.getPlayer();
-        ItemStack handItem = p.getInventory().getItemInMainHand();
-        if (handItem.getType() == Material.ENCHANTED_BOOK) {
-            if (handItem.hasItemMeta() && Objects.requireNonNull(
-                    handItem.getItemMeta()).getDisplayName().startsWith(ChatColor.GOLD + "[능력서]")) {
-                String name = handItem.getItemMeta().getDisplayName();
-                int n = Integer.parseInt(name.split("f")[1].split("\\.")[0]);
-                usebook(p, n);
-                p.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-            }
+        Player player = event.getPlayer();
+        ItemStack handItem = player.getInventory().getItemInMainHand();
+        if (handItem.getType() == Material.ENCHANTED_BOOK && handItem.getItemMeta() != null
+                && handItem.getItemMeta().getDisplayName().startsWith(ChatColor.GOLD + "[능력서]")) {
+            String name = handItem.getItemMeta().getDisplayName();
+            int n = Integer.parseInt(name.split("f")[1].split("\\.")[0]);
+            player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+            usebook(player, n);
         }
 
         AbilityExcuter(onPlayerInteract, event);
@@ -171,21 +167,18 @@ public class EventManager implements Listener {
 
     private static void _AbilityEventFilter(PlayerInteractEvent event) {
         int i = 0;
-        if (event.getAction().equals(Action.LEFT_CLICK_AIR) ||
-                event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-            while (i < LeftHandEvent.size() && !LeftHandEvent.isEmpty()) {
-                if (LeftHandEvent.get(i).execute(event, 0)) {
-                    return;
+        switch (event.getAction()) {
+            case LEFT_CLICK_AIR, LEFT_CLICK_BLOCK -> {
+                while (i < LeftHandEvent.size() && !LeftHandEvent.isEmpty()) {
+                    LeftHandEvent.get(i).execute(event, 0);
+                    ++i;
                 }
-                ++i;
             }
-        } else if (event.getAction().equals(Action.RIGHT_CLICK_AIR) ||
-                event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            while (i < RightHandEvent.size() && !RightHandEvent.isEmpty()) {
-                if (RightHandEvent.get(i).execute(event, 1)) {
-                    return;
+            case RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK -> {
+                while (i < RightHandEvent.size() && !RightHandEvent.isEmpty()) {
+                    RightHandEvent.get(i).execute(event, 1);
+                    ++i;
                 }
-                ++i;
             }
         }
     }

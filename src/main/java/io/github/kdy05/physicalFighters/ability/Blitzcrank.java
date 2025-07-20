@@ -7,6 +7,7 @@ import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -67,7 +68,7 @@ public class Blitzcrank extends Ability {
             case 0:
                 ProjectileHitEvent Event0 = (ProjectileHitEvent) event;
                 LivingEntity target = (LivingEntity) Event0.getHitEntity();
-                if (target != null) target.teleport(getPlayer().getLocation());
+                if (target != null) target.teleport(Objects.requireNonNull(getPlayer()).getLocation());
                 break;
             case 1:
                 PlayerDropItemEvent Event1 = (PlayerDropItemEvent) event;

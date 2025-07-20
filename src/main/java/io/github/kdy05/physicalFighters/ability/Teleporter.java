@@ -54,12 +54,12 @@ public class Teleporter extends Ability {
                     if (event2.getBlock().getType().name().endsWith("_SIGN")) {
                         String line = event2.getLine(0);
                         if (line == null || line.isEmpty()) {
-                            getPlayer().sendMessage(ChatColor.RED + "표지판의 첫 줄에 플레이어의 이름을 입력해주세요.");
+                            sendMessage(ChatColor.RED + "표지판의 첫 줄에 플레이어의 이름을 입력해주세요.");
                             break;
                         }
                         Player target = Bukkit.getPlayer(line);
                         if (target == null || !target.isOnline()) {
-                            getPlayer().sendMessage(ChatColor.RED + "유효한 플레이어가 아닙니다.");
+                            sendMessage(ChatColor.RED + "유효한 플레이어가 아닙니다.");
                             break;
                         }
                         signName = target.getName();
@@ -82,7 +82,7 @@ public class Teleporter extends Ability {
                 if (signLoc != null && Event4.getBlock().getLocation().equals(signLoc)) {
                     signName = null;
                     signLoc = null;
-                    getPlayer().sendMessage(ChatColor.RED + "표지판이 제거되었습니다.");
+                    sendMessage(ChatColor.RED + "표지판이 제거되었습니다.");
                 }
                 break;
         }
