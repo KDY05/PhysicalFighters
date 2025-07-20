@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
@@ -21,7 +21,7 @@ public class Nonuck extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-        if (isOwner(event0.getEntity()) && Math.random() <= 0.8D && !PhysicalFighters.DamageGuard
+        if (isOwner(event0.getEntity()) && Math.random() <= 0.8D && !ConfigManager.DamageGuard
                 && (event0.getCause() == DamageCause.ENTITY_ATTACK || event0.getCause() == DamageCause.PROJECTILE)) {
             return 0;
         }

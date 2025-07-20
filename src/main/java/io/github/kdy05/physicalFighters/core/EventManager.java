@@ -8,7 +8,6 @@ import io.github.kdy05.physicalFighters.PhysicalFighters;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -31,18 +30,19 @@ public class EventManager implements Listener {
     @EventHandler
     public static void onPlayerItemDamage(PlayerItemDamageEvent event) {
         // 내구도 무한 모드
-        if (PhysicalFighters.InfinityDur) {
+        if (ConfigManager.InfinityDur) {
             event.setCancelled(true);
         }
         AbilityExcuter(onPlayerItemDamage, event);
     }
+
     public static ArrayList<EventData> onPlayerItemDamage = new ArrayList<>();
 
     @EventHandler
     public static void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             // 플레이어 무적
-            if (PhysicalFighters.DamageGuard) {
+            if (ConfigManager.DamageGuard) {
                 event.setCancelled(true);
                 event.getEntity().setFireTicks(0);
             }
@@ -52,21 +52,21 @@ public class EventManager implements Listener {
         }
         AbilityExcuter(onEntityDamage, event);
     }
+
     public static ArrayList<EventData> onEntityDamage = new ArrayList<>();
     public static ArrayList<EventData> onEntityDamageByEntity = new ArrayList<>();
 
-
     @EventHandler
     public static void onFoodLevelChange(FoodLevelChangeEvent event) {
-        if (PhysicalFighters.NoFoodMode) {
+        if (ConfigManager.NoFoodMode) {
             // 배고픔 무한
             event.setFoodLevel(20);
             return;
         }
         AbilityExcuter(onFoodLevelChange, event);
     }
-    public static ArrayList<EventData> onFoodLevelChange = new ArrayList<>();
 
+    public static ArrayList<EventData> onFoodLevelChange = new ArrayList<>();
 
     @EventHandler
     public static void onEntityDeath(EntityDeathEvent event) {
@@ -76,8 +76,8 @@ public class EventManager implements Listener {
             victim.getInventory().clear();
 
             // 킥, 밴 처리
-            if (PhysicalFighters.AutoKick && !AbilityInitializer.phoenix.isOwner(victim)) {
-                if (PhysicalFighters.AutoBan && !victim.isOp()) {
+            if (ConfigManager.AutoKick && !AbilityInitializer.phoenix.isOwner(victim)) {
+                if (ConfigManager.AutoBan && !victim.isOp()) {
                     victim.ban("당신은 죽었습니다. 다시 들어오실 수 없습니다.", (Date) null, null, true);
                 } else {
                     victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
@@ -88,7 +88,7 @@ public class EventManager implements Listener {
             PhysicalFighters.getPlugin().getLogger().info(pde.getDeathMessage());
             if (killer != null) {
                 // 타살인 경우
-                if (PhysicalFighters.KillerOutput) {
+                if (ConfigManager.KillerOutput) {
                     pde.setDeathMessage(ChatColor.GREEN + killer.getName() + ChatColor.WHITE + "님이 "
                             + ChatColor.RED + victim.getName() + ChatColor.WHITE + "님의 살겠다는 의지를 꺾었습니다.");
                 } else {
@@ -104,12 +104,12 @@ public class EventManager implements Listener {
         }
         AbilityExcuter(onEntityDeath, event);
     }
-    public static ArrayList<EventData> onEntityDeath = new ArrayList<>();
 
+    public static ArrayList<EventData> onEntityDeath = new ArrayList<>();
 
     @EventHandler
     public static void onPlayerInteract(PlayerInteractEvent event) {
-        _AbilityEventFilter(event);
+        AbilityEventFilter(event);
 
         // 능력서 사용
         Player player = event.getPlayer();
@@ -119,39 +119,13 @@ public class EventManager implements Listener {
             String name = handItem.getItemMeta().getDisplayName();
             int n = Integer.parseInt(name.split("f")[1].split("\\.")[0]);
             player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-            usebook(player, n);
+            PhysicalFighters.getPlugin().getGameCommand().assignAbility(player, n, player);
         }
 
         AbilityExcuter(onPlayerInteract, event);
     }
+
     public static ArrayList<EventData> onPlayerInteract = new ArrayList<>();
-
-    private static void usebook(Player p, int abicode) {
-        if (p == null || abicode < 0 || abicode >= AbilityInitializer.AbilityList.size())
-            return;
-        Ability ability = AbilityInitializer.AbilityList.get(abicode);
-        if (PhysicalFighters.AbilityOverLap) {
-            if (ability.getAbilityType() == Ability.Type.Active_Continue ||
-                    ability.getAbilityType() == Ability.Type.Active_Immediately) {
-                for (Ability ab : AbilityInitializer.AbilityList) {
-                    if (ab.isOwner(p) && (ab.getAbilityType() == Ability.Type.Active_Continue ||
-                            ab.getAbilityType() == Ability.Type.Active_Immediately)) {
-                        ab.setPlayer(null, true);
-                    }
-                }
-            }
-        } else {
-            for (Ability ab : AbilityInitializer.AbilityList) {
-                if (ab.isOwner(p)) {
-                    ab.setPlayer(null, true);
-                }
-            }
-        }
-        ability.setPlayer(p, true);
-        ability.setRunAbility(true);
-        Bukkit.broadcastMessage(String.format(ChatColor.GOLD + "%s님이 능력을 부여받았습니다.", p.getName()));
-    }
-
 
     private static void AbilityExcuter(ArrayList<EventData> ED, Event event) {
         for (EventData eventData : ED) {
@@ -164,8 +138,7 @@ public class EventManager implements Listener {
         }
     }
 
-
-    private static void _AbilityEventFilter(PlayerInteractEvent event) {
+    private static void AbilityEventFilter(PlayerInteractEvent event) {
         int i = 0;
         switch (event.getAction()) {
             case LEFT_CLICK_AIR, LEFT_CLICK_BLOCK -> {
@@ -183,7 +156,6 @@ public class EventManager implements Listener {
         }
     }
 
-
     // 이하는 이벤트 구독 용도만 수행
 
     @EventHandler
@@ -191,89 +163,91 @@ public class EventManager implements Listener {
         if (event.getEntity() instanceof Player)
             AbilityExcuter(onPlayerPickupItem, event);
     }
+
     public static ArrayList<EventData> onPlayerPickupItem = new ArrayList<>();
 
     @EventHandler
     public static void onDisable(PluginDisableEvent event) {
         AbilityExcuter(onPluginDisable, event);
     }
-    public static ArrayList<EventData> onPluginDisable = new ArrayList<>();
 
+    public static ArrayList<EventData> onPluginDisable = new ArrayList<>();
 
     @EventHandler
     public static void onPlayerRespawn(PlayerRespawnEvent event) {
         AbilityExcuter(onPlayerRespawn, event);
     }
-    public static ArrayList<EventData> onPlayerRespawn = new ArrayList<>();
 
+    public static ArrayList<EventData> onPlayerRespawn = new ArrayList<>();
 
     @EventHandler
     public static void onEntityTarget(EntityTargetEvent event) {
         AbilityExcuter(onEntityTarget, event);
     }
-    public static ArrayList<EventData> onEntityTarget = new ArrayList<>();
 
+    public static ArrayList<EventData> onEntityTarget = new ArrayList<>();
 
     @EventHandler
     public static void onEntityRegainHealth(EntityRegainHealthEvent event) {
         AbilityExcuter(onEntityRegainHealth, event);
     }
-    public static ArrayList<EventData> onEntityRegainHealth = new ArrayList<>();
 
+    public static ArrayList<EventData> onEntityRegainHealth = new ArrayList<>();
 
     @EventHandler
     public static void onBlockPlaceEvent(BlockPlaceEvent event) {
         AbilityExcuter(onBlockPlaceEvent, event);
     }
-    public static ArrayList<EventData> onBlockPlaceEvent = new ArrayList<>();
 
+    public static ArrayList<EventData> onBlockPlaceEvent = new ArrayList<>();
 
     @EventHandler
     public static void onBlockBreakEvent(BlockBreakEvent event) {
         AbilityExcuter(onBlockBreakEvent, event);
     }
-    public static ArrayList<EventData> onBlockBreakEvent = new ArrayList<>();
 
+    public static ArrayList<EventData> onBlockBreakEvent = new ArrayList<>();
 
     @EventHandler
     public static void onSignChangeEvent(SignChangeEvent event) {
         AbilityExcuter(onSignChangeEvent, event);
     }
-    public static ArrayList<EventData> onSignChangeEvent = new ArrayList<>();
 
+    public static ArrayList<EventData> onSignChangeEvent = new ArrayList<>();
 
     @EventHandler
     public static void onPlayerToggleSneakEvent(PlayerToggleSneakEvent event) {
         AbilityExcuter(onPlayerToggleSneakEvent, event);
     }
-    public static ArrayList<EventData> onPlayerToggleSneakEvent = new ArrayList<>();
 
+    public static ArrayList<EventData> onPlayerToggleSneakEvent = new ArrayList<>();
 
     @EventHandler
     public static void onProjectileLaunchEvent(ProjectileLaunchEvent event) {
         AbilityExcuter(onProjectileLaunchEvent, event);
     }
-    public static ArrayList<EventData> onProjectileLaunchEvent = new ArrayList<>();
 
+    public static ArrayList<EventData> onProjectileLaunchEvent = new ArrayList<>();
 
     @EventHandler
     public static void onPlayerDropItem(PlayerDropItemEvent event) {
         AbilityExcuter(onPlayerDropItem, event);
     }
-    public static ArrayList<EventData> onPlayerDropItem = new ArrayList<>();
 
+    public static ArrayList<EventData> onPlayerDropItem = new ArrayList<>();
 
     @EventHandler
     public static void onPlayerMove(PlayerMoveEvent event) {
         AbilityExcuter(onPlayerMoveEvent, event);
     }
-    public static ArrayList<EventData> onPlayerMoveEvent = new ArrayList<>();
 
+    public static ArrayList<EventData> onPlayerMoveEvent = new ArrayList<>();
 
     @EventHandler
     public static void onProjectileHit(ProjectileHitEvent event) {
         AbilityExcuter(onProjectileHitEvent, event);
     }
+
     public static ArrayList<EventData> onProjectileHitEvent = new ArrayList<>();
 
 }

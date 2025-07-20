@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.util.Vector;
 import io.github.kdy05.physicalFighters.core.Ability;
 
@@ -25,7 +25,7 @@ public class Luffy extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-        if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem) && !PhysicalFighters.DamageGuard) {
+        if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard) {
             return 1;
         }
         if (isOwner(event0.getPlayer()) && event0.getPlayer().getHealth() >= 6.0D && (isValidItem(Material.GOLD_INGOT))) {

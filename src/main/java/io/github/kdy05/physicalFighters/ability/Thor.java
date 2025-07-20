@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.AUC;
 import io.github.kdy05.physicalFighters.utils.EventData;
@@ -69,7 +69,7 @@ public class Thor extends Ability {
             // 우클릭 이벤트
             case 1 -> {
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
-                if (isOwner(Event.getPlayer()) && isValidItem(getMjolnir().getType()) && !PhysicalFighters.DamageGuard) {
+                if (isOwner(Event.getPlayer()) && isValidItem(getMjolnir().getType()) && !ConfigManager.DamageGuard) {
                     ItemStack item = Event.getPlayer().getInventory().getItemInMainHand();
                     ItemMeta meta = item.getItemMeta();
                     if (meta instanceof Damageable damageable) {

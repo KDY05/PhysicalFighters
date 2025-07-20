@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
@@ -43,14 +43,14 @@ public class Teleporter extends Ability {
         switch (CustomData) {
             case 0:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
-                if (isOwner(Event.getPlayer()) && !PhysicalFighters.DamageGuard && isValidItem(Ability.DefaultItem)) {
+                if (isOwner(Event.getPlayer()) && !ConfigManager.DamageGuard && isValidItem(Ability.DefaultItem)) {
                     if (signName != null && signLoc != null) return 0;
                     Event.getPlayer().sendMessage(ChatColor.RED + "표지판을 설치하셔야 합니다.");
                 }
                 break;
             case 1:
                 SignChangeEvent event2 = (SignChangeEvent) event;
-                if (isOwner(event2.getPlayer()) && !PhysicalFighters.DamageGuard) {
+                if (isOwner(event2.getPlayer()) && !ConfigManager.DamageGuard) {
                     if (event2.getBlock().getType().name().endsWith("_SIGN")) {
                         String line = event2.getLine(0);
                         if (line == null || line.isEmpty()) {

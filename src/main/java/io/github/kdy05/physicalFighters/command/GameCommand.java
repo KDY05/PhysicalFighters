@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.command;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
 import io.github.kdy05.physicalFighters.core.GameManager;
 import io.github.kdy05.physicalFighters.utils.AUC;
@@ -10,12 +11,9 @@ import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import io.github.kdy05.physicalFighters.utils.CommandInterface;
 
 public class GameCommand implements CommandInterface {
@@ -29,6 +27,12 @@ public class GameCommand implements CommandInterface {
     }
 
     public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] args) {
+        // 도움말 커맨드
+        if (args[0].equalsIgnoreCase("help")) {
+            handleHelp(sender);
+            return true;
+        }
+        
         // 유저 커맨드
         if (args[0].equalsIgnoreCase("check")) {
             handleCheck(sender);
@@ -58,49 +62,61 @@ public class GameCommand implements CommandInterface {
                 this.gameManager.gameReady(p);
                 return true;
             }
-            sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        }
-        else if (args[0].equalsIgnoreCase("stop")) {
-            vastop(sender);
+            sender.sendMessage("콘솔에서는 사용할 수 없습니다.");
+        } else if (args[0].equalsIgnoreCase("stop")) {
+            handleStop(sender);
             return true;
-        }
-        else if (args[0].equalsIgnoreCase("skip")) {
-            vaskip(sender);
+        } else if (args[0].equalsIgnoreCase("skip")) {
+            handleSkip(sender);
             return true;
-        }
-        else if (args[0].equalsIgnoreCase("ob")) {
+        } else if (args[0].equalsIgnoreCase("ob")) {
             if (sender instanceof Player p) {
                 this.gameManager.handleObserve(p);
                 return true;
             }
-            sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        }
-
-
-        else if (args[0].equalsIgnoreCase("book")) {
-            if (sender instanceof Player p) {
-                vabook(p, args);
-                return true;
-            }
-            sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-        }
-        else if (args[0].equalsIgnoreCase("alist")) {
-            vaalist(sender);
-            return true;
-        }
-        else if (args[0].equalsIgnoreCase("elist")) {
-            vaelist(sender);
-            return true;
-        }
-        else if (args[0].equalsIgnoreCase("abi")) {
-            vaabi(sender, args);
-            return true;
+            sender.sendMessage("콘솔에서는 사용할 수 없습니다.");
         } else if (args[0].equalsIgnoreCase("ablist")) {
-            vaablist(sender, args);
+            handleAblist(sender, args);
+            return true;
+        } else if (args[0].equalsIgnoreCase("abi")) {
+            handleAbi(sender, args);
             return true;
         }
 
         return false;
+    }
+
+    private void handleHelp(CommandSender sender) {
+        sender.sendMessage(ChatColor.GREEN + "=== PhysicalFighters 명령어 목록 ===");
+        sender.sendMessage("");
+        
+        // 기본 명령어들
+        sender.sendMessage(ChatColor.YELLOW + "■ 기본 명령어");
+        sender.sendMessage(ChatColor.GOLD + "/va help" + ChatColor.WHITE + " - 이 도움말을 표시합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va check" + ChatColor.WHITE + " - 자신의 능력 정보를 확인합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va yes" + ChatColor.WHITE + " - 능력 선택을 확정합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va no" + ChatColor.WHITE + " - 능력 선택을 거부합니다.");
+        sender.sendMessage("");
+        
+        // 운영자 명령어들 (권한이 있을 때만 표시)
+        if (sender.hasPermission("va.operate")) {
+            sender.sendMessage(ChatColor.YELLOW + "■ 게임 관리 명령어");
+            sender.sendMessage(ChatColor.GOLD + "/va start" + ChatColor.WHITE + " - 게임을 시작합니다.");
+            sender.sendMessage(ChatColor.GOLD + "/va stop" + ChatColor.WHITE + " - 게임을 중지합니다.");
+            sender.sendMessage(ChatColor.GOLD + "/va skip" + ChatColor.WHITE + " - 능력 선택을 강제로 확정시킵니다.");
+            sender.sendMessage(ChatColor.GOLD + "/va ob" + ChatColor.WHITE + " - 옵저버 설정을 합니다.");
+            sender.sendMessage("");
+            
+            sender.sendMessage(ChatColor.YELLOW + "■ 능력 관리 명령어");
+            sender.sendMessage(ChatColor.GOLD + "/va ablist [페이지]" + ChatColor.WHITE + " - 능력 목록과 코드를 표시합니다.");
+            sender.sendMessage(ChatColor.GOLD + "/va abi [플레이어] [코드]" + ChatColor.WHITE + " - 플레이어에게 능력을 할당합니다.");
+            sender.sendMessage("");
+            
+            sender.sendMessage(ChatColor.YELLOW + "■ 유틸리티 명령어");
+            sender.sendMessage(ChatColor.GOLD + "/va util" + ChatColor.WHITE + " - 유틸리티 명령어 목록을 표시합니다.");
+        }
+        
+        sender.sendMessage(ChatColor.GREEN + "================================");
     }
 
     public void handleCheck(CommandSender sender) {
@@ -120,7 +136,7 @@ public class GameCommand implements CommandInterface {
         }
         player.sendMessage(ChatColor.GREEN + "---------------");
         player.sendMessage(ChatColor.GOLD + "- 능력 정보 -");
-        if (PhysicalFighters.AbilityOverLap)
+        if (ConfigManager.AbilityOverLap)
             player.sendMessage(ChatColor.DARK_AQUA + "참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.");
         player.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
                 + " [" + getTypeText(ability) + "] " + ability.getRank());
@@ -131,7 +147,7 @@ public class GameCommand implements CommandInterface {
         player.sendMessage(ChatColor.GREEN + "---------------");
     }
 
-    private String getTypeText(Ability ability) {
+    public String getTypeText(Ability ability) {
         Ability.Type type = ability.getAbilityType();
         return switch (type) {
             case Active_Continue ->
@@ -158,13 +174,51 @@ public class GameCommand implements CommandInterface {
         };
     }
 
-    public final void vaablist(CommandSender sender, String[] d) {
-        if (d.length != 2) {
+    private void handleStop(CommandSender sender) {
+        if (GameManager.getScenario() == GameManager.ScriptStatus.NoPlay) {
+            sender.sendMessage(ChatColor.RED + "아직 게임을 시작하지 않았습니다.");
+            return;
+        }
+        GameManager.setScenario(GameManager.ScriptStatus.NoPlay);
+        this.gameManager.gameReadyStop();
+        this.gameManager.gameStartStop();
+        this.gameManager.gameProgressStop();
+        this.gameManager.gameWarningStop();
+        this.gameManager.getOKSign().clear();
+        ConfigManager.DamageGuard = false;
+        for (int l = 0; l < AbilityInitializer.AbilityList.size(); l++) {
+            AbilityInitializer.AbilityList.get(l).cancelDTimer();
+            AbilityInitializer.AbilityList.get(l).cancelCTimer();
+            AbilityInitializer.AbilityList.get(l).setRunAbility(false);
+            AbilityInitializer.AbilityList.get(l).setPlayer(null, false);
+        }
+        GameManager.getPlayerList().clear();
+        Bukkit.broadcastMessage(ChatColor.GRAY + "------------------------------");
+        Bukkit.broadcastMessage(String.format(ChatColor.YELLOW +
+                "관리자 %s님이 게임 카운터를 중단시켰습니다.", sender.getName()));
+        Bukkit.broadcastMessage(ChatColor.GRAY + "모든 설정이 취소됩니다.");
+        Bukkit.broadcastMessage(ChatColor.GRAY + "옵저버 설정은 초기화 되지 않습니다.");
+    }
+
+    private void handleSkip(CommandSender sender) {
+        if (GameManager.getScenario() == GameManager.ScriptStatus.AbilitySelect) {
+            Bukkit.broadcastMessage(String.format(ChatColor.GRAY +
+                    "관리자 %s님이 능력을 강제로 확정시켰습니다.", sender.getName()));
+            this.gameManager.getOKSign().clear();
+            this.gameManager.getOKSign().addAll(GameManager.getPlayerList());
+            this.gameManager.gameStart();
+        } else {
+            sender.sendMessage(ChatColor.RED + "능력 추첨중이 아닙니다.");
+        }
+    }
+
+    private void handleAblist(CommandSender sender, String[] args) {
+        if (args.length != 2) {
             sender.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va ablist [0~10]");
             return;
         }
         try {
-            int page = Integer.parseInt(d[1]);
+            int page = Integer.parseInt(args[1]);
             if (page < 0) {
                 sender.sendMessage(ChatColor.RED + "페이지가 올바르지 않습니다.");
                 return;
@@ -184,17 +238,19 @@ public class GameCommand implements CommandInterface {
         }
     }
 
-    public final void vaabi(CommandSender sender, String[] d) {
+    private void handleAbi(CommandSender sender, String[] d) {
         // 예외 처리
         if (d.length != 3) {
             sender.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va abi [플레이어] [명령코드]]");
             return;
         }
+
         Player target = Bukkit.getServer().getPlayerExact(d[1]);
-        if (target == null && !d[1].equalsIgnoreCase("null")) {
+        if (target == null) {
             sender.sendMessage(ChatColor.RED + "존재하지 않는 플레이어입니다.");
             return;
         }
+
         int abicode;
         try {
             abicode = Integer.parseInt(d[2]);
@@ -202,46 +258,37 @@ public class GameCommand implements CommandInterface {
             sender.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
             return;
         }
-        if (abicode < -1 || abicode >= AbilityInitializer.AbilityList.size()) {
+        if (abicode < -1 || abicode > AbilityInitializer.AbilityList.size() - 1) {
             sender.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
             return;
         }
 
+        assignAbility(sender, abicode, target);
+    }
+
+    public void assignAbility(CommandSender sender, int abicode, Player target) {
         // 특정 플레이어 능력 해제
         if (abicode == -1) {
-            for (Ability ab : AbilityInitializer.AbilityList) {
-                if (ab.isOwner(target)) {
-                    ab.setPlayer(null, true);
+            for (Ability ability : AbilityInitializer.AbilityList) {
+                if (ability.isOwner(target)) {
+                    ability.setPlayer(null, true);
                 }
             }
-            if (target != null) {
-                target.sendMessage(ChatColor.RED + "당신의 능력이 모두 해제되었습니다.");
-                sender.sendMessage(String.format(ChatColor.GREEN + "%s" +
-                        ChatColor.WHITE + "님의 능력을 모두 해제했습니다.", target.getName()));
-            }
-            Bukkit.broadcastMessage(String.format(ChatColor.GOLD +
-                    "%s님이 누군가의 능력을 모두 해제했습니다.", sender.getName()));
+            target.sendMessage(ChatColor.RED + "당신의 능력이 모두 해제되었습니다.");
+            sender.sendMessage(String.format(ChatColor.GREEN + "%s" +
+                    ChatColor.WHITE + "님의 능력을 모두 해제했습니다.", target.getName()));
             return;
         }
 
-        // 특정 능력 소유자 능력 해제
-        Ability ability = AbilityInitializer.AbilityList.get(abicode);
-        if (d[1].equalsIgnoreCase("null")) {
-            ability.setPlayer(null, true);
-            sender.sendMessage(String.format("%s 능력 초기화 완료", ability.getAbilityName()));
-            return;
-        }
-
-        // 실제 능력 적용 로직
         // 기존 능력 해제
-        if (PhysicalFighters.AbilityOverLap) {
+        Ability ability = AbilityInitializer.AbilityList.get(abicode);
+        if (ConfigManager.AbilityOverLap) {
             // 중복 모드에서 액티브 능력 중복은 불가함.
             if (ability.getAbilityType() == Ability.Type.Active_Continue ||
                     ability.getAbilityType() == Ability.Type.Active_Immediately) {
                 for (Ability ab : AbilityInitializer.AbilityList) {
-                    if (ab.isOwner(target) &&
-                            (ab.getAbilityType() == Ability.Type.Active_Continue)||
-                                ab.getAbilityType() == Ability.Type.Active_Immediately) {
+                    if ((ab.getAbilityType() == Ability.Type.Active_Continue || ab.getAbilityType() == Ability.Type.Active_Immediately)
+                            && ab.isOwner(target)) {
                         ab.setPlayer(null, true);
                     }
                 }
@@ -260,124 +307,9 @@ public class GameCommand implements CommandInterface {
         sender.sendMessage(String.format(ChatColor.GREEN + "%s" + ChatColor.WHITE + "님에게 " +
                             ChatColor.GREEN + "%s" + ChatColor.WHITE + " 능력 할당이 완료되었습니다.",
                             Objects.requireNonNull(target).getName(), ability.getAbilityName()));
-        Bukkit.broadcastMessage(String.format(ChatColor.GOLD +
-                        "%s님이 누군가에게 능력을 강제로 할당했습니다.",sender.getName()));
         String senderName = sender instanceof Player ? sender.getName() : "Console";
         plugin.getLogger().info(String.format("%s님이 %s님에게 %s 능력을 할당했습니다.",
                 senderName, target.getName(), ability.getAbilityName()));
-    }
-
-    public final void vabook(Player player, String[] args) {
-        if (args.length != 2) {
-            player.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va book [능력코드]]");
-            return;
-        }
-
-        int abicode;
-        try {
-            abicode = Integer.parseInt(args[1]);
-        } catch (NumberFormatException e) {
-            player.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
-            return;
-        }
-        if (abicode < 0 || abicode >= AbilityInitializer.AbilityList.size() - 1) {
-            player.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
-            return;
-        }
-
-        Ability ability = AbilityInitializer.AbilityList.get(abicode);
-        ItemStack stack = new ItemStack(Material.ENCHANTED_BOOK);
-        ItemMeta meta = stack.getItemMeta();
-        if (meta == null) return;
-
-        meta.setDisplayName(ChatColor.GOLD + "[능력서]" + ChatColor.WHITE + abicode + ". " + ability.getAbilityName());
-        meta.setLore(new LinkedList<>(Arrays.asList(ability.getGuide())));
-        stack.setItemMeta(meta);
-
-        player.getInventory().addItem(stack);
-        player.sendMessage("능력서를 만들었습니다. " + ChatColor.GOLD + ability.getAbilityName());
-    }
-
-    public final void vaskip(CommandSender sender) {
-        if (GameManager.getScenario() == GameManager.ScriptStatus.AbilitySelect) {
-            Bukkit.broadcastMessage(String.format(ChatColor.GRAY +
-                            "관리자 %s님이 능력을 강제로 확정시켰습니다.", sender.getName()));
-            this.gameManager.getOKSign().clear();
-            this.gameManager.getOKSign().addAll(GameManager.getPlayerList());
-            this.gameManager.gameStart();
-        } else {
-            sender.sendMessage(ChatColor.RED + "능력 추첨중이 아닙니다.");
-        }
-    }
-
-
-    public final void vaelist(CommandSender p) {
-        if (GameManager.getScenario() != GameManager.ScriptStatus.AbilitySelect) {
-            p.sendMessage(ChatColor.RED + "능력 추첨중에만 가능합니다.");
-            return;
-        }
-        p.sendMessage(ChatColor.GOLD + "- 확정하지 않은 사람 -");
-        p.sendMessage(ChatColor.GREEN + "---------------");
-        List<Ability> pl = AbilityInitializer.AbilityList;
-        int count = 0;
-        for (Ability ability : pl) {
-            if (ability.getPlayer() == null) continue;
-            if (!this.gameManager.getOKSign().contains(ability.getPlayer())) {
-                p.sendMessage(String.format(ChatColor.GREEN +
-                        "%d. " + ChatColor.WHITE + "%s",
-                        count, ability.getPlayer().getName()));
-                count++;
-            }
-        }
-        p.sendMessage(ChatColor.GREEN + "---------------");
-    }
-
-    public final void vaalist(CommandSender sender) {
-        Bukkit.broadcastMessage(String.format(ChatColor.GREEN +
-                "%s님이 플레이어들의 능력을 확인했습니다.", sender.getName()));
-        sender.sendMessage(ChatColor.GOLD + "- 능력을 스캔했습니다. -");
-        sender.sendMessage(ChatColor.GREEN + "---------------");
-        List<Ability> pl = AbilityInitializer.AbilityList;
-        int count = 0;
-        for (Ability ability : pl) {
-            if (ability.getPlayer() == null) continue;
-            Player temp = Bukkit.getServer().getPlayer(ability.getPlayer().getName());
-            if (temp == null) continue;
-            sender.sendMessage(String.format(ChatColor.GREEN + "%d. " + ChatColor.WHITE +
-                            "%s : " + ChatColor.RED + "%s " + ChatColor.WHITE +
-                            "[" + getTypeText(ability) + "]",
-                    count, temp.getName(), ability.getAbilityName()));
-            count++;
-        }
-        if (count == 0)
-            sender.sendMessage("아직 능력자가 없습니다.");
-        sender.sendMessage(ChatColor.GREEN + "---------------");
-    }
-
-    public final void vastop(CommandSender sender) {
-        if (GameManager.getScenario() == GameManager.ScriptStatus.NoPlay) {
-            sender.sendMessage(ChatColor.RED + "아직 게임을 시작하지 않았습니다.");
-            return;
-        }
-        GameManager.setScenario(GameManager.ScriptStatus.NoPlay);
-        this.gameManager.gameReadyStop();
-        this.gameManager.gameStartStop();
-        this.gameManager.gameProgressStop();
-        this.gameManager.gameWarningStop();
-        this.gameManager.getOKSign().clear();
-        PhysicalFighters.DamageGuard = false;
-        for (int l = 0; l < AbilityInitializer.AbilityList.size(); l++) {
-            AbilityInitializer.AbilityList.get(l).cancelDTimer();
-            AbilityInitializer.AbilityList.get(l).cancelCTimer();
-            AbilityInitializer.AbilityList.get(l).setRunAbility(false);
-            AbilityInitializer.AbilityList.get(l).setPlayer(null, false);
-        }
-        GameManager.getPlayerList().clear();
-        Bukkit.broadcastMessage(ChatColor.GRAY + "------------------------------");
-        Bukkit.broadcastMessage(String.format(ChatColor.YELLOW +
-                "관리자 %s님이 게임 카운터를 중단시켰습니다.", sender.getName()));
-        Bukkit.broadcastMessage(ChatColor.GRAY + "모든 설정이 취소됩니다.");
-        Bukkit.broadcastMessage(ChatColor.GRAY + "옵저버 설정은 초기화 되지 않습니다.");
     }
 
 }

@@ -195,7 +195,7 @@ public class GameManager {
     }
 
     private void showGameInfo() {
-        broadcastMessage(ChatColor.LIGHT_PURPLE + "Physical Fighters");
+        broadcastMessage(ChatColor.DARK_PURPLE + "Physical Fighters");
         broadcastMessage(String.format(ChatColor.GRAY + "VER. %d", PhysicalFighters.BuildNumber));
         broadcastMessage(ChatColor.GREEN + "제작 : " + ChatColor.WHITE + "염료");
         broadcastMessage(ChatColor.GREEN + "원작 : " + ChatColor.WHITE + "제온(VisualAbility)");
@@ -203,7 +203,7 @@ public class GameManager {
     }
 
     private void handleAbilitySetup() {
-        if (!PhysicalFighters.NoAbilitySetting) {
+        if (!ConfigManager.NoAbilitySetting) {
             broadcastMessage(ChatColor.GRAY + "능력 설정 초기화 및 추첨 준비...");
             resetAllAbilities();
         } else {
@@ -282,9 +282,9 @@ public class GameManager {
     }
 
     private void setupInvincibility() {
-        if (PhysicalFighters.EarlyInvincibleTime != 0) {
-            broadcastMessage("시작 직후 " + PhysicalFighters.EarlyInvincibleTime + "분간은 무적입니다.");
-            PhysicalFighters.DamageGuard = true;
+        if (ConfigManager.EarlyInvincibleTime != 0) {
+            broadcastMessage("시작 직후 " + ConfigManager.EarlyInvincibleTime + "분간은 무적입니다.");
+            ConfigManager.DamageGuard = true;
         } else {
             broadcastMessage(ChatColor.RED + "초반 무적은 작동하지 않습니다.");
         }
@@ -296,8 +296,8 @@ public class GameManager {
             player.setFoodLevel(20);
             player.setSaturation(10.0f);
             player.setExhaustion(0.0f);
-            player.setLevel(PhysicalFighters.Setlev);
-            if (PhysicalFighters.ClearInventory) {
+            player.setLevel(ConfigManager.Setlev);
+            if (ConfigManager.ClearInventory) {
                 player.getInventory().clear();
             }
             // TODO: 기본템 로직 여기에 넣기
@@ -347,13 +347,13 @@ public class GameManager {
     }
 
     private void handleInvincibilityCountdown(int count) {
-        if (PhysicalFighters.EarlyInvincibleTime == 0) return;
+        if (ConfigManager.EarlyInvincibleTime == 0) return;
         
-        int remainingSeconds = PhysicalFighters.EarlyInvincibleTime * 60 - count;
+        int remainingSeconds = ConfigManager.EarlyInvincibleTime * 60 - count;
         
         if (remainingSeconds == 0) {
             broadcastMessage(ChatColor.GREEN + "초반 무적이 해제되었습니다. 이제 데미지를 입습니다.");
-            PhysicalFighters.DamageGuard = false;
+            ConfigManager.DamageGuard = false;
         } else if (remainingSeconds <= 5 && remainingSeconds >= 1) {
             broadcastMessage(String.format(ChatColor.YELLOW + "%d초 후" + ChatColor.WHITE + " 초반무적이 해제됩니다.", 
                            remainingSeconds));
@@ -367,7 +367,7 @@ public class GameManager {
         broadcastMessage(ChatColor.RED + "/va yes나 /va no 명령으로 능력을 확정하세요.");
         for (Player player : playerList) {
             if (!okSign.contains(player)) {
-                player.sendMessage(ChatColor.YELLOW + "당신의 능력이 올바르게 확정되지 않았습니다.");
+                broadcastMessage(ChatColor.YELLOW + player.getName() + "님의 능력이 확정되지 않았습니다.");
             }
         }
     }

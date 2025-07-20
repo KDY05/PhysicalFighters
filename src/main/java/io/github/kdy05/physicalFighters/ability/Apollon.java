@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import io.github.kdy05.physicalFighters.core.Ability;
@@ -31,7 +31,7 @@ public class Apollon extends Ability {
             return -1;
         }
 
-        if (PhysicalFighters.DamageGuard) {
+        if (ConfigManager.DamageGuard) {
             p.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
             return -1;
         }

@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.utils.AUC;
 import io.github.kdy05.physicalFighters.core.Ability;
 
@@ -21,7 +21,7 @@ public class Boom extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-        if (!PhysicalFighters.DamageGuard && isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
+        if (!ConfigManager.DamageGuard && isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
             return 0;
         }
         return -1;

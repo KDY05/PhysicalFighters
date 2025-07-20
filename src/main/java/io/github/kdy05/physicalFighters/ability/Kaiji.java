@@ -1,9 +1,9 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.Date;
 import java.util.List;
@@ -36,7 +36,7 @@ public class Kaiji extends Ability {
         switch (CustomData) {
             case 0:
                 EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-                if (!PhysicalFighters.DamageGuard && isOwner(Event.getDamager())
+                if (!ConfigManager.DamageGuard && isOwner(Event.getDamager())
                         && isValidItem(Material.DIAMOND) && Event.getEntity() instanceof Player)
                     return 0;
                 break;
@@ -70,8 +70,8 @@ public class Kaiji extends Ability {
                     player.damage(5000);
                     Bukkit.broadcastMessage(String.format(ChatColor.RED +
                             "%s님이  카'의지'에 능력에 의지가 꺾였습니다.", player.getName()));
-                    if (PhysicalFighters.AutoKick) {
-                        if (PhysicalFighters.AutoBan)
+                    if (ConfigManager.AutoKick) {
+                        if (ConfigManager.AutoBan)
                             player.ban("카이지에 의해 사망했습니다.", (Date) null, null, true);
                         player.kickPlayer("카이지에 의해 사망했습니다.");
                     }
@@ -79,8 +79,8 @@ public class Kaiji extends Ability {
                     getPlayer().damage(5000);
                     Bukkit.broadcastMessage(String.format(ChatColor.RED +
                             "%s님이 도박하다가 손목이 날라갔습니다.", getPlayer().getName()));
-                    if (PhysicalFighters.AutoKick) {
-                        if (PhysicalFighters.AutoBan)
+                    if (ConfigManager.AutoKick) {
+                        if (ConfigManager.AutoBan)
                             player.ban("카이지에 의해 사망했습니다.", (Date) null, null, true);
                         getPlayer().kickPlayer("카이지에 의해 사망했습니다.");
                     }

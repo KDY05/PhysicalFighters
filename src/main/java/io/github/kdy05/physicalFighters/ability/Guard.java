@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -45,7 +45,7 @@ public class Guard extends Ability {
             return -1;
         }
 
-        if (PhysicalFighters.DamageGuard) {
+        if (ConfigManager.DamageGuard) {
             caster.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
             return -1;
         }

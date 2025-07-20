@@ -31,7 +31,7 @@ public class Assimilation
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         EventManager.onEntityDeath.add(new EventData(this, 1));
-        commandManager.RegisterCommand(this);
+        commandManager.registerCommand(this);
     }
 
     public int A_Condition(Event event, int CustomData) {

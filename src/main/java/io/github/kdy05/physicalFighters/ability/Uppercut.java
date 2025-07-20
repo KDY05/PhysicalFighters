@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
@@ -20,7 +20,7 @@ public class Uppercut extends Ability {
 
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if (isOwner(Event.getDamager()) && !PhysicalFighters.DamageGuard) {
+        if (isOwner(Event.getDamager()) && !ConfigManager.DamageGuard) {
             return 0;
         }
         return -1;

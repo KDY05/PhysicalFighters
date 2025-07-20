@@ -1,8 +1,8 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -24,7 +24,7 @@ public class SuperFan extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if (isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem) && !PhysicalFighters.DamageGuard) {
+        if (isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard) {
             return 0;
         }
         return -1;
@@ -44,7 +44,7 @@ public class SuperFan extends Ability {
             l2.setY(l.getY() + i + 2.0D * Math.sin(ydeg));
             l2.setZ(l.getZ() + i + 2.0D * (Math.cos(degrees) * Math.cos(ydeg)));
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (PhysicalFighters.DamageGuard) continue;
+                if (ConfigManager.DamageGuard) continue;
                 if (player == getPlayer()) continue;
                 if (l2.distance(player.getLocation()) > 3.0D) continue;
                 player.setVelocity(player.getVelocity().add(l3.toVector()

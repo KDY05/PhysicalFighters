@@ -1,36 +1,19 @@
 package io.github.kdy05.physicalFighters;
 
-import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.CommandManager;
-import io.github.kdy05.physicalFighters.core.EventManager;
+import io.github.kdy05.physicalFighters.core.*;
 import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
 import io.github.kdy05.physicalFighters.command.GameCommand;
-import io.github.kdy05.physicalFighters.core.GameManager;
 
 import io.github.kdy05.physicalFighters.command.UtilCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PhysicalFighters extends JavaPlugin {
+
+    public static int BuildNumber = 20250708;
     private static PhysicalFighters plugin;
     private GameManager gameManager;
     private GameCommand gameCommand;
-    public static int BuildNumber = 20250708;
-
-    public static boolean DamageGuard = false;
-    public static boolean NoFoodMode = false;
-    public static boolean InfinityDur = false;
-
-    public static boolean AutoKick;
-    public static boolean AutoBan;
-    public static boolean KillerOutput;
-
-    public static int Setlev;
-    public static int EarlyInvincibleTime;
-    public static int RestrictionTime;
-    public static boolean ClearInventory;
-    public static boolean NoAbilitySetting;
-
-    public static boolean AbilityOverLap;
+    private ConfigManager configManager;
 
     @Override
     public void onEnable() {
@@ -41,7 +24,7 @@ public class PhysicalFighters extends JavaPlugin {
 
         CommandManager commandManager = new CommandManager(this);
         getServer().getPluginManager().registerEvents(new EventManager(), this);
-        loadConfigs();
+        configManager = new ConfigManager(this);
 
         getLogger().info("능력을 초기화합니다.");
         Ability.InitAbilityBase(this, commandManager);
@@ -49,35 +32,10 @@ public class PhysicalFighters extends JavaPlugin {
         getLogger().info("스크립터를 초기화합니다.");
         this.gameManager = new GameManager(this);
         this.gameCommand = new GameCommand(this, gameManager);
-        commandManager.RegisterCommand(gameCommand);
-        commandManager.RegisterCommand(new UtilCommand(this));
+        commandManager.registerCommand(gameCommand);
+        commandManager.registerCommand(new UtilCommand(this));
 
-        if (EarlyInvincibleTime <= 0) {
-            getLogger().info("초반 무적 시간이 0분 이하로 설정되어 초반 무적이 비활성화됩니다.");
-            EarlyInvincibleTime = 0;
-        }
-        if (RestrictionTime <= 0) {
-            getLogger().info("제약 시간이 0분 이하로 설정되어 제약 시간이 비활성화됩니다.");
-            RestrictionTime = 0;
-        }
         getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityInitializer.AbilityList.size()));
-    }
-
-    private void loadConfigs() {
-        getLogger().info("기본 설정 로드 중입니다.");
-        saveDefaultConfig();
-
-        AutoKick = getConfig().getBoolean("AutoKick", true);
-        AutoBan = getConfig().getBoolean("AutoBan", true);
-        KillerOutput = getConfig().getBoolean("KillerOutput", true);
-
-        ClearInventory = getConfig().getBoolean("ClearInventory", true);
-        EarlyInvincibleTime = getConfig().getInt("EarlyInvincibleTime", 10);
-        RestrictionTime = getConfig().getInt("RestrictionTime", 15);
-        NoAbilitySetting = getConfig().getBoolean("NoAbilitySetting", false);
-        Setlev = getConfig().getInt("SetLev", 60);
-
-        AbilityOverLap = getConfig().getBoolean("AbilityOverLap", false);
     }
 
     @Override
@@ -95,6 +53,10 @@ public class PhysicalFighters extends JavaPlugin {
 
     public GameCommand getGameCommand() {
         return gameCommand;
+    }
+
+    public ConfigManager getConfigManager() {
+        return configManager;
     }
 
 }

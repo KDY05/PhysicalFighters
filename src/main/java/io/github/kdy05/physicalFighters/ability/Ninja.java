@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
@@ -28,7 +28,7 @@ public class Ninja extends Ability {
         switch (CustomData) {
             case 0:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
-                if ((!PhysicalFighters.DamageGuard) && (isOwner(Event.getPlayer())) &&
+                if ((!ConfigManager.DamageGuard) && (isOwner(Event.getPlayer())) &&
                         (isValidItem(Ability.DefaultItem))) {
                     return 0;
                 }

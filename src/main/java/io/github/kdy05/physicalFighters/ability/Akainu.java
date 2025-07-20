@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.AUC;
 import io.github.kdy05.physicalFighters.utils.EventData;
@@ -54,7 +54,7 @@ public class Akainu extends Ability {
                 return -1;
             }
 
-            if (PhysicalFighters.DamageGuard) {
+            if (ConfigManager.DamageGuard) {
                 caster.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
                 return -1;
             }

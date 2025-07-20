@@ -1,10 +1,10 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 
 import java.util.LinkedList;
 
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -25,12 +25,12 @@ public class Magnet extends Ability {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         switch (CustomData) {
             case 0:
-                if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !PhysicalFighters.DamageGuard) {
+                if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !ConfigManager.DamageGuard) {
                     return 0;
                 }
                 break;
             case 1:
-                if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !PhysicalFighters.DamageGuard) {
+                if ((isOwner(Event.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !ConfigManager.DamageGuard) {
                     return 1;
                 }
                 break;

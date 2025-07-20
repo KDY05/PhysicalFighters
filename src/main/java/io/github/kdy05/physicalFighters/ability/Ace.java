@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import io.github.kdy05.physicalFighters.core.Ability;
@@ -20,7 +20,7 @@ public class Ace extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if (!PhysicalFighters.DamageGuard && isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem)) {
+        if (!ConfigManager.DamageGuard && isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem)) {
             return 0;
         }
         return -1;

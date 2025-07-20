@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ public class Fallingarrow
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         if ((isOwner(Event.getPlayer())) &&
-                (isValidItem(Ability.DefaultItem)) && !PhysicalFighters.DamageGuard) {
+                (isValidItem(Ability.DefaultItem)) && !ConfigManager.DamageGuard) {
             return 0;
         }
         return -1;

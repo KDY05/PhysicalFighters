@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import io.github.kdy05.physicalFighters.core.Ability;
@@ -22,7 +22,7 @@ public class Slower extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if (isOwner(Event.getDamager()) && !PhysicalFighters.DamageGuard && Event.getEntity() instanceof LivingEntity) {
+        if (isOwner(Event.getDamager()) && !ConfigManager.DamageGuard && Event.getEntity() instanceof LivingEntity) {
             return 0;
         }
         return -1;

@@ -1,8 +1,8 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -42,7 +42,7 @@ public class Crocodile extends Ability {
         if (!isOwner(p) || !isValidItem(Ability.DefaultItem)) {
             return -1;
         }
-        if (PhysicalFighters.DamageGuard) {
+        if (ConfigManager.DamageGuard) {
             p.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
             return -1;
         }

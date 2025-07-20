@@ -1,9 +1,9 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -63,8 +63,8 @@ public class Phoenix extends Ability {
 
                 if (this.AbilityUse) {
                     Bukkit.broadcastMessage(ChatColor.RED + "불사조가 죽었습니다. 더 이상 부활할수 없습니다.");
-                    if (PhysicalFighters.AutoKick) {
-                        if (PhysicalFighters.AutoBan) {
+                    if (ConfigManager.AutoKick) {
+                        if (ConfigManager.AutoBan) {
                             killed.ban("당신은 죽었습니다. 다시 들어오실 수 없습니다.", (Date) null, null, true);
                         } else {
                             killed.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");

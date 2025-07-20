@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import io.github.kdy05.physicalFighters.core.Ability;
@@ -33,7 +33,7 @@ public class Kijaru extends Ability {
             case 0 -> {
                 EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
                 if (isOwner(Event.getDamager()) && isValidItem(Ability.DefaultItem)
-                        && !PhysicalFighters.DamageGuard && Event.getEntity() instanceof LivingEntity)
+                        && !ConfigManager.DamageGuard && Event.getEntity() instanceof LivingEntity)
                     return 0;
             }
             case 3 -> {

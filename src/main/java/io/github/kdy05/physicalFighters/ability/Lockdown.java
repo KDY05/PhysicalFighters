@@ -1,5 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -7,7 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.utils.AUC;
 import io.github.kdy05.physicalFighters.utils.CommandInterface;
@@ -29,7 +29,7 @@ public class Lockdown extends Ability implements CommandInterface {
                 "\"/va lock <nickname>\" 명령어로 작동하며 대상이 60칸 이내에 있어야 합니다.",
                 "게임 시작 후 능력 제한 시간동안 이 능력을 사용할 수 없습니다.");
         InitAbility(80, LOCKDOWN_DURATION, true);
-        commandManager.RegisterCommand(this);
+        commandManager.registerCommand(this);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class Lockdown extends Ability implements CommandInterface {
         targetAbility.cancelCTimer();
         targetAbility.setRunAbility(false);
 
-        if (!PhysicalFighters.NoFoodMode) {
+        if (!ConfigManager.NoFoodMode) {
             targetAbility.getPlayer().setFoodLevel(0);
         }
 

@@ -2,12 +2,20 @@ package io.github.kdy05.physicalFighters.command;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
 import io.github.kdy05.physicalFighters.utils.CommandInterface;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.Arrays;
+import java.util.LinkedList;
 
 public class UtilCommand implements CommandInterface {
 
@@ -23,89 +31,151 @@ public class UtilCommand implements CommandInterface {
             return false;
         }
 
-        if (args[0].equalsIgnoreCase("uti")) {
-            vauti(sender);
+        if (args[0].equalsIgnoreCase("util")) {
+            handleUtil(sender);
             return true;
         } else if (args[0].equalsIgnoreCase("inv")) {
-            vainv();
-            return true;
-        } else if (args[0].equalsIgnoreCase("go")) {
-            vago();
+            handleInv();
             return true;
         } else if (args[0].equalsIgnoreCase("hung")) {
-            vahungry();
+            handleHung();
             return true;
         } else if (args[0].equalsIgnoreCase("dura")) {
-            vadura();
+            handleDura();
             return true;
         } else if (args[0].equalsIgnoreCase("tc")) {
-            vatc(sender);
+            handleTc(sender);
+            return true;
+        } else if (args[0].equalsIgnoreCase("book")) {
+            handleBook(sender, args);
+            return true;
+        } else if (args[0].equalsIgnoreCase("scan")) {
+            handleScan(sender);
             return true;
         }
 
         return false;
     }
 
-    public final void vauti(CommandSender sender) {
-        sender.sendMessage(ChatColor.AQUA + "유틸 명령어 목록");
-        sender.sendMessage(ChatColor.RED + "alist : " + ChatColor.WHITE + "능력자 목록을 봅니다.");
-        sender.sendMessage(ChatColor.RED + "elist : " + ChatColor.WHITE + "능력 확정이 안된 사람들을 보여줍니다.");
-        sender.sendMessage(ChatColor.RED + "ablist [페이지] : " + ChatColor.WHITE + "능력 목록 및 능력 코드를 보여줍니다.");
-        sender.sendMessage(ChatColor.RED + "abi [닉네임] [능력 코드] : " +
-                ChatColor.WHITE + "특정 플레이어에게 능력을 강제로 할당합니다. 같은 능력을 " +
-                "여럿이서 가질수는 없으며 이미 할당된 능력을 타인에게 " +
-                "주면 기존에 갖고있던 사람의 능력은 사라지게 됩니다. " +
-                "액티브 능력은 두 종류 이상 중복해서 줄 수 없습니다. " +
-                "게임을 시작하지 않더라도 사용이 가능한 명령입니다. " +
-                "닉네임칸에 null을 쓰면 해당 능력에 등록된 플레이어가 " +
-                "해제되며 명령 코드에 -1을 넣으면 해당 플레이어가 가진" + "모든 능력이 해제됩니다.");
-        sender.sendMessage(ChatColor.RED + "tc : " + ChatColor.WHITE + "모든 능력의 지속 효과 및 쿨타임을 초기화 합니다.");
-        sender.sendMessage(ChatColor.RED + "skip : " + ChatColor.WHITE + "모든 능력을 강제로 확정시킵니다.");
+    private void handleUtil(CommandSender sender) {
+        sender.sendMessage(ChatColor.AQUA + "=== 유틸리티 명령어 목록 ===");
+        sender.sendMessage("");
+        
+        sender.sendMessage(ChatColor.YELLOW + "■ 조사 및 확인");
+        sender.sendMessage(ChatColor.GOLD + "/va scan" + ChatColor.WHITE + " - 현재 능력자 목록을 확인합니다.");
+        sender.sendMessage("");
+        
+        sender.sendMessage(ChatColor.YELLOW + "■ 능력 관리");
+        sender.sendMessage(ChatColor.GOLD + "/va tc" + ChatColor.WHITE + " - 모든 능력의 쿨타임과 지속시간을 초기화합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va book [코드]" + ChatColor.WHITE + " - 능력 정보가 담긴 책을 생성합니다.");
+        sender.sendMessage("");
+        
+        sender.sendMessage(ChatColor.YELLOW + "■ 게임 설정");
+        sender.sendMessage(ChatColor.GOLD + "/va inv" + ChatColor.WHITE + " - 무적 모드를 토글합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va hung" + ChatColor.WHITE + " - 배고픔 무한 모드를 토글합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va dura" + ChatColor.WHITE + " - 내구도 무한 모드를 토글합니다.");
+        sender.sendMessage("");
+        
+        sender.sendMessage(ChatColor.AQUA + "==========================");
     }
 
-    public final void vago() {
-        Bukkit.broadcastMessage(ChatColor.GREEN +
-                "OP에 의해 초반 무적이 해제되었습니다. 이제 데미지를 입습니다.");
-        PhysicalFighters.DamageGuard = false;
+    private void handleInv() {
+        if (ConfigManager.DamageGuard) {
+            ConfigManager.DamageGuard = false;
+            Bukkit.broadcastMessage(ChatColor.GREEN +
+                    "OP에 의해 초반 무적이 해제되었습니다. 이제 데미지를 입습니다.");
+        } else {
+            ConfigManager.DamageGuard = true;
+            Bukkit.broadcastMessage(ChatColor.GREEN +
+                    "OP에 의해 초반 무적이 설정되었습니다. 이제 데미지를 입지않습니다.");
+        }
     }
 
-    public final void vainv() {
-        Bukkit.broadcastMessage(ChatColor.GREEN +
-                "OP에 의해 초반 무적이 설정되었습니다. 이제 데미지를 입지않습니다.");
-        PhysicalFighters.DamageGuard = true;
-    }
-
-    public final void vahungry() {
-        if (!PhysicalFighters.NoFoodMode) {
-            PhysicalFighters.NoFoodMode = true;
+    private void handleHung() {
+        if (!ConfigManager.NoFoodMode) {
+            ConfigManager.NoFoodMode = true;
             Bukkit.broadcastMessage(ChatColor.GREEN +
                     "OP에 의해 배고픔무한이 설정되었습니다.");
         } else {
-            PhysicalFighters.NoFoodMode = false;
+            ConfigManager.NoFoodMode = false;
             Bukkit.broadcastMessage(ChatColor.RED +
                     "OP에 의해 배고픔무한이 해제되었습니다.");
         }
     }
 
-    public final void vadura() {
-        if (!PhysicalFighters.InfinityDur) {
-            PhysicalFighters.InfinityDur = true;
+    private void handleDura() {
+        if (!ConfigManager.InfinityDur) {
+            ConfigManager.InfinityDur = true;
             Bukkit.broadcastMessage(ChatColor.GREEN +
                     "OP에 의해 내구도무한이 설정되었습니다.");
         } else {
-            PhysicalFighters.InfinityDur = false;
+            ConfigManager.InfinityDur = false;
             Bukkit.broadcastMessage(ChatColor.RED +
                     "OP에 의해 내구도무한이 해제되었습니다.");
         }
     }
 
-    public final void vatc(CommandSender sender) {
+    private void handleTc(CommandSender sender) {
         for (Ability a : AbilityInitializer.AbilityList) {
             a.cancelDTimer();
             a.cancelCTimer();
         }
         Bukkit.broadcastMessage(String.format(ChatColor.GRAY +
                 "관리자 %s님이 쿨타임 및 지속시간을 초기화했습니다.", sender.getName()));
+    }
+
+    private void handleBook(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
+            return;
+        }
+
+        if (args.length != 2) {
+            player.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va book [능력코드]]");
+            return;
+        }
+
+        int abicode;
+        try {
+            abicode = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            player.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
+            return;
+        }
+        if (abicode < 0 || abicode >= AbilityInitializer.AbilityList.size() - 1) {
+            player.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
+            return;
+        }
+
+        Ability ability = AbilityInitializer.AbilityList.get(abicode);
+        ItemStack stack = new ItemStack(Material.ENCHANTED_BOOK);
+        ItemMeta meta = stack.getItemMeta();
+        if (meta == null) return;
+
+        meta.setDisplayName(ChatColor.GOLD + "[능력서]" + ChatColor.WHITE + abicode + ". " + ability.getAbilityName());
+        meta.setLore(new LinkedList<>(Arrays.asList(ability.getGuide())));
+        stack.setItemMeta(meta);
+
+        player.getInventory().addItem(stack);
+        player.sendMessage("능력서를 만들었습니다. " + ChatColor.GOLD + ability.getAbilityName());
+    }
+
+    private void handleScan(CommandSender sender) {
+        sender.sendMessage(ChatColor.GOLD + "- 능력을 스캔했습니다. -");
+        sender.sendMessage(ChatColor.GREEN + "---------------");
+        int count = 0;
+        for (Ability ability : AbilityInitializer.AbilityList) {
+            Player temp = ability.getPlayer();
+            if (temp == null) continue;
+            sender.sendMessage(String.format(ChatColor.GREEN + "%d. " + ChatColor.WHITE +
+                            "%s : " + ChatColor.RED + "%s " + ChatColor.WHITE +
+                            "[" + plugin.getGameCommand().getTypeText(ability) + "]",
+                    count, temp.getName(), ability.getAbilityName()));
+            count++;
+        }
+        if (count == 0)
+            sender.sendMessage("아직 능력자가 없습니다.");
+        sender.sendMessage(ChatColor.GREEN + "---------------");
     }
 
 }

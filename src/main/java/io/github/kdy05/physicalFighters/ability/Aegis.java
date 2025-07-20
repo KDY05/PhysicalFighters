@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
@@ -24,7 +24,7 @@ public class Aegis extends Ability {
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent Event = (PlayerInteractEvent) event;
-            if (isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem) && !PhysicalFighters.DamageGuard)
+            if (isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard)
                 return 0;
         }
         return -1;

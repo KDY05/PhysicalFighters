@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.*;
 import io.github.kdy05.physicalFighters.core.Ability;
 
@@ -27,12 +27,12 @@ public class Aokizi extends Ability {
         switch (CustomData) {
             case 0:
                 PlayerInteractEvent Event = (PlayerInteractEvent) event;
-                if (isOwner(Event.getPlayer()) && isValidItem(DefaultItem) && !PhysicalFighters.DamageGuard)
+                if (isOwner(Event.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard)
                     return 0;
                 break;
             case 1:
                 PlayerInteractEvent Event1 = (PlayerInteractEvent) event;
-                if (isOwner(Event1.getPlayer()) && isValidItem(DefaultItem) && !PhysicalFighters.DamageGuard) {
+                if (isOwner(Event1.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard) {
                     Player p = Event1.getPlayer();
                     Location location = AUC.getTargetLocation(p, 5);
                     if (location == null) {

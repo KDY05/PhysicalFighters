@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
@@ -21,7 +21,7 @@ public class Ckyomi extends Ability {
 
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if (!PhysicalFighters.DamageGuard && isOwner(Event.getDamager())
+        if (!ConfigManager.DamageGuard && isOwner(Event.getDamager())
                 && Event.getEntity() instanceof LivingEntity) {
             return 0;
         }

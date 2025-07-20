@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.utils.AUC;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
@@ -35,7 +35,7 @@ public class CP9 extends Ability {
             case 0 -> {
                 EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
                 if (event0.getEntity() instanceof LivingEntity && isOwner(event0.getDamager())
-                        && isValidItem(Ability.DefaultItem) && !PhysicalFighters.DamageGuard) {
+                        && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard) {
                     return 0;
                 }
             }

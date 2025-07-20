@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
@@ -33,7 +33,7 @@ public class Devil extends Ability {
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-            if ((!PhysicalFighters.DamageGuard) &&
+            if ((!ConfigManager.DamageGuard) &&
                     (isOwner(Event.getDamager())) && ((Event.getEntity() instanceof Player)) && (isValidItem(Ability.DefaultItem))) {
                 return 0;
             }

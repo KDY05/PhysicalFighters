@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
@@ -28,7 +28,7 @@ public class Poksi extends Ability {
         switch (CustomData) {
             case 1:
                 PlayerInteractEvent Event0 = (PlayerInteractEvent) event;
-                if ((!PhysicalFighters.DamageGuard) &&
+                if ((!ConfigManager.DamageGuard) &&
                         (isOwner(Event0.getPlayer())) && (isValidItem(Ability.DefaultItem))) {
                     return 10;
                 }

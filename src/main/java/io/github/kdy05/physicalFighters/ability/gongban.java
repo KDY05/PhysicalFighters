@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
@@ -30,14 +30,14 @@ public class gongban extends Ability {
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent e = (PlayerInteractEvent) event;
-            if ((isOwner(e.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !PhysicalFighters.DamageGuard) {
+            if ((isOwner(e.getPlayer())) && (isValidItem(Ability.DefaultItem)) && !ConfigManager.DamageGuard) {
                 return 0;
             }
         }
         if (CustomData == 1) {
             EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
             if ((isOwner(Event.getEntity())) && (ppon) &&
-                    ((Event.getDamager() instanceof Player)) && !PhysicalFighters.DamageGuard) {
+                    ((Event.getDamager() instanceof Player)) && !ConfigManager.DamageGuard) {
                 Player p = (Player) Event.getEntity();
                 Player t = (Player) Event.getDamager();
                 t.damage(Event.getDamage(), p);
