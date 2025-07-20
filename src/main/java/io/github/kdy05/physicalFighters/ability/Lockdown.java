@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.CommandInterface;
 
 // TODO: 작동 안함
@@ -53,7 +53,7 @@ public class Lockdown extends Ability implements CommandInterface {
             return -1;
         }
 
-        targetAbility = AUC.findAbility(target);
+        targetAbility = AbilityUtils.findAbility(target);
         if (targetAbility == null) {
             caster.sendMessage(ChatColor.RED + "옵저버입니다.");
             clearTempData();

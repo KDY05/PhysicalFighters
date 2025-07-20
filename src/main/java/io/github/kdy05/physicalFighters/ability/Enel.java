@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 
 import java.util.Objects;
 
@@ -39,7 +39,7 @@ public class Enel extends Ability {
         for (int i = 3; i <= 10; i++) {
             Location lightningLoc = startLoc.clone().add(direction.clone().multiply(i));
             Objects.requireNonNull(lightningLoc.getWorld()).strikeLightning(lightningLoc);
-            AUC.splashDamage(caster, lightningLoc, 2, 20);
+            AbilityUtils.splashDamage(caster, lightningLoc, 2, 20);
         }
     }
 }

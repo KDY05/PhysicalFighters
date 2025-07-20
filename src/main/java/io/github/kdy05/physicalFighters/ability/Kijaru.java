@@ -5,7 +5,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
 import org.bukkit.ChatColor;
@@ -57,7 +57,7 @@ public class Kijaru extends Ability {
         entity.teleport(loc);
 
         entity.getWorld().createExplosion(entity.getLocation(), 0.0F);
-        AUC.goVelocity(entity, getPlayer().getLocation(), -10);
+        AbilityUtils.goVelocity(entity, getPlayer().getLocation(), -10);
         new Kizaru(getPlayer(), entity).runTaskLater(plugin, 20L);
         Event.setDamage(8);
     }

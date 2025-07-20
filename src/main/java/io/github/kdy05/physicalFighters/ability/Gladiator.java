@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
@@ -88,8 +88,8 @@ public class Gladiator extends Ability {
     }
 
     private void createArena(Location base) {
-        AUC.createBox(base, Material.BEDROCK, ARENA_SIZE, ARENA_HEIGHT);
-        AUC.createBox(base.clone().add(0, 1, 0), Material.AIR,
+        AbilityUtils.createBox(base, Material.BEDROCK, ARENA_SIZE, ARENA_HEIGHT);
+        AbilityUtils.createBox(base.clone().add(0, 1, 0), Material.AIR,
                 ARENA_SIZE - 1, ARENA_HEIGHT - 2, true);
         int torchY = ARENA_HEIGHT - 2;
         base.clone().add(ARENA_SIZE - 1, torchY, ARENA_SIZE - 1).getBlock().setType(Material.TORCH);
@@ -99,7 +99,7 @@ public class Gladiator extends Ability {
     }
 
     private void removeArena(Location base) {
-        AUC.createBox(base, Material.AIR, ARENA_SIZE, ARENA_HEIGHT, true);
+        AbilityUtils.createBox(base, Material.AIR, ARENA_SIZE, ARENA_HEIGHT, true);
     }
 
 }

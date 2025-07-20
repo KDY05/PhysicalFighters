@@ -2,7 +2,7 @@ package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
 import org.bukkit.entity.Player;
@@ -29,8 +29,8 @@ public class Trash extends Ability {
                 if (!isOwner(Event0.getDamager())) break;
                 if (Math.random() > 0.03D) break;
                 if (Event0.getDamager() instanceof Player caster && Event0.getEntity() instanceof Player target) {
-                    Ability casterAbility = AUC.findAbility(caster);
-                    Ability targetAbility = AUC.findAbility(target);
+                    Ability casterAbility = AbilityUtils.findAbility(caster);
+                    Ability targetAbility = AbilityUtils.findAbility(target);
                     if (casterAbility == null || targetAbility == null) break;
                     targetAbility.setPlayer(caster, false);
                     casterAbility.setPlayer(target, false);

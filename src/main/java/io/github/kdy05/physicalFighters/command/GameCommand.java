@@ -4,7 +4,7 @@ import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
 import io.github.kdy05.physicalFighters.core.GameManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.*;
@@ -128,7 +128,7 @@ public class GameCommand implements CommandInterface {
         if (AbilityInitializer.assimilation.getPlayer() == player) {
             ability = AbilityInitializer.assimilation;
         } else {
-            ability = AUC.findAbility(player);
+            ability = AbilityUtils.findAbility(player);
         }
         if (ability == null) {
             player.sendMessage(ChatColor.RED + "능력이 없거나 옵저버입니다.");

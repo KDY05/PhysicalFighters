@@ -3,7 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
 import java.util.Random;
@@ -47,7 +47,7 @@ public class Infighter extends Ability {
             if (Math.random() <= 0.1D) {
                 t.getWorld().createExplosion(t.getLocation(), 0.0F);
                 Location l1 = p.getLocation();
-                AUC.goVelocity(t, l1, -3);
+                AbilityUtils.goVelocity(t, l1, -3);
             }
             if (Math.random() <= 0.2D) {
                 t.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 100, 0), true);

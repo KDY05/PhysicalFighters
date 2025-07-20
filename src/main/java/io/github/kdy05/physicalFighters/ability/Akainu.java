@@ -3,7 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
 import org.bukkit.ChatColor;
@@ -59,7 +59,7 @@ public class Akainu extends Ability {
                 return -1;
             }
 
-            targetLocation = AUC.getTargetLocation(caster, 40);
+            targetLocation = AbilityUtils.getTargetLocation(caster, 40);
             if (targetLocation == null) {
                 caster.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
                 return -1;

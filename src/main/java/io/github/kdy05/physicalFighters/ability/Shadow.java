@@ -2,14 +2,12 @@ package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.EventManager;
 
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.utils.EventData;
-
-import java.util.Objects;
 
 public class Shadow extends Ability {
     public Shadow() {
@@ -52,7 +50,7 @@ public class Shadow extends Ability {
                 EntityDamageEvent event1 = (EntityDamageEvent) event;
                 event1.setDamage(0);
                 if (getPlayer() == null) return;
-                AUC.healEntity(getPlayer(), 4);
+                AbilityUtils.healEntity(getPlayer(), 4);
             }
         }
     }

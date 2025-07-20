@@ -12,7 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 
 public class Guard extends Ability {
     // 박스 크기 관련 상수
@@ -39,7 +39,7 @@ public class Guard extends Ability {
         if (!isOwner(event0.getPlayer()) || !isValidItem(Ability.DefaultItem))
             return -1;
 
-        targetLocation = AUC.getTargetLocation(caster, 40);
+        targetLocation = AbilityUtils.getTargetLocation(caster, 40);
         if (targetLocation == null) {
             caster.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
             return -1;
@@ -95,8 +95,8 @@ public class Guard extends Ability {
     }
 
     private void buildWalls(Location center) {
-        AUC.createBox(center, Material.OAK_PLANKS, BOX_RADIUS, BOX_HEIGHT);
-        AUC.createBox(center.clone().add(0,1,0), Material.AIR, INNER_RADIUS, INNER_HEIGHT);
+        AbilityUtils.createBox(center, Material.OAK_PLANKS, BOX_RADIUS, BOX_HEIGHT);
+        AbilityUtils.createBox(center.clone().add(0,1,0), Material.AIR, INNER_RADIUS, INNER_HEIGHT);
     }
 
 }

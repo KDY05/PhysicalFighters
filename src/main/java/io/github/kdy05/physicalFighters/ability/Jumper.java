@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -23,7 +23,7 @@ public class Jumper extends Ability {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         if (!isOwner(Event.getPlayer()) || !isValidItem(Ability.DefaultItem)) return -1;
         Player caster = Event.getPlayer();
-        targetLocation = AUC.getTargetLocation(caster, 80);
+        targetLocation = AbilityUtils.getTargetLocation(caster, 80);
         if (targetLocation == null) {
             caster.sendMessage(String.format(ChatColor.RED + "거리가 너무 멉니다."));
             return -1;

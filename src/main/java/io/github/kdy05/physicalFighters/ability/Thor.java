@@ -3,7 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
 import org.bukkit.ChatColor;
@@ -91,7 +91,7 @@ public class Thor extends Ability {
             Location loc = caster.getLocation();
             caster.getWorld().strikeLightningEffect(loc);
             caster.getWorld().strikeLightningEffect(loc);
-            AUC.splashDamage(caster, loc, 3, 5);
+            AbilityUtils.splashDamage(caster, loc, 3, 5);
             if (this.charge < 6) {
                 this.charge += 1;
                 caster.sendMessage(ChatColor.YELLOW + "묠니르에 농축된 번개 : (" + this.charge + "/6)");

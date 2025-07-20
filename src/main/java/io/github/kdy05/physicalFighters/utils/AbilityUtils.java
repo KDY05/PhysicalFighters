@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public final class AUC {
+public final class AbilityUtils {
 
     @Nullable
     public static Ability findAbility(Player p) {

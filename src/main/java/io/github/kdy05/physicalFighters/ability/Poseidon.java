@@ -4,7 +4,7 @@ import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -55,7 +55,7 @@ public class Poseidon extends Ability {
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 60, 0));
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 0));
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 60, 0));
-                AUC.splashTask(caster, caster.getLocation(), SLOW_RANGE,
+                AbilityUtils.splashTask(caster, caster.getLocation(), SLOW_RANGE,
                         entity -> entity.getLocation().getBlock().getType().equals(Material.WATER),
                         entity -> entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 60, 0)));
                 return -1;
@@ -70,7 +70,7 @@ public class Poseidon extends Ability {
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         Player p = Event.getPlayer();
-        Location targetLoc = AUC.getTargetLocation(p, TARGET_RANGE);
+        Location targetLoc = AbilityUtils.getTargetLocation(p, TARGET_RANGE);
         if (targetLoc == null) {
             p.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
             return;

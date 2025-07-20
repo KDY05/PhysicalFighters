@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
@@ -62,7 +62,7 @@ public class CP9 extends Ability {
             case 0 -> {
                 EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
                 LivingEntity entity = (LivingEntity) event0.getEntity();
-                AUC.piercingDamage(entity, 6);
+                AbilityUtils.piercingDamage(entity, 6);
                 sendMessage(String.format(ChatColor.GREEN +
                         "%s에게 지건을 사용했습니다.", entity.getName()));
                 entity.sendMessage(String.format(ChatColor.RED +
@@ -78,7 +78,7 @@ public class CP9 extends Ability {
                 player.getWorld().createExplosion(explosionLoc, 0.0F);
 
                 Location targetLoc = playerLoc.clone().add(direction.clone().multiply(5));
-                AUC.goVelocity(player, targetLoc, 5);
+                AbilityUtils.goVelocity(player, targetLoc, 5);
             }
         }
     }

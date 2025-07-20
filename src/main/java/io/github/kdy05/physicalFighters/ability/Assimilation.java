@@ -3,7 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.CommandInterface;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
@@ -62,7 +62,7 @@ public class Assimilation
             case 1:
                 EntityDeathEvent Event1 = (EntityDeathEvent) event;
                 if (Event1.getEntity() instanceof Player victim && Event1.getEntity().getKiller() != null) {
-                    Ability ability = AUC.findAbility(victim);
+                    Ability ability = AbilityUtils.findAbility(victim);
                     Player player = Event1.getEntity().getKiller();
                     if (ability != null) {
                         ability.cancelCTimer();

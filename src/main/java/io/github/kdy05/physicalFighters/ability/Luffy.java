@@ -11,7 +11,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 
 public class Luffy extends Ability {
     public Luffy() {
@@ -51,11 +51,11 @@ public class Luffy extends Ability {
                         Bukkit.getScheduler().runTaskLater(plugin,
                                 () -> targetBlock.setType(originalType), 5L);
                     }
-                    AUC.splashDamage(caster, blockLoc, 2.5, 2);
+                    AbilityUtils.splashDamage(caster, blockLoc, 2.5, 2);
                 }
             }
             case 2 -> {
-                AUC.piercingDamage(caster, 5.0);
+                AbilityUtils.piercingDamage(caster, 5.0);
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 600, 0));
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 200, 0));

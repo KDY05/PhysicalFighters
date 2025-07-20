@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
@@ -48,7 +48,7 @@ public class Medic extends Ability {
             case 0 -> {
                 EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
                 LivingEntity entity = (LivingEntity) event0.getEntity();
-                AUC.healEntity(entity, 6);
+                AbilityUtils.healEntity(entity, 6);
                 if (getPlayer() == null) return;
                 entity.sendMessage(String.format(ChatColor.GREEN
                         + "%s의 메딕 능력으로 체력을 6 회복했습니다.", getPlayer().getName()));
@@ -59,7 +59,7 @@ public class Medic extends Ability {
             case 1 -> {
                 PlayerInteractEvent event1 = (PlayerInteractEvent) event;
                 Player p2 = event1.getPlayer();
-                AUC.healEntity(p2, 6);
+                AbilityUtils.healEntity(p2, 6);
                 p2.sendMessage(ChatColor.GREEN + "자신의 체력을 6 회복했습니다.");
             }
         }

@@ -4,7 +4,7 @@ import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
 import org.bukkit.Bukkit;
@@ -110,7 +110,7 @@ public class MachineGun extends Ability {
         e.setDamage(BULLET_DAMAGE);
         if (e.getEntity() instanceof LivingEntity target && Math.random() <= CRITICAL_CHANCE) {
             target.getWorld().createExplosion(target.getLocation(), 0.0F);
-            AUC.piercingDamage(target, CRITICAL_DAMAGE);
+            AbilityUtils.piercingDamage(target, CRITICAL_DAMAGE);
             sendMessage(ChatColor.GREEN + "크리티컬");
         }
     }

@@ -9,7 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 
 public class Apollon extends Ability {
     // 타겟 위치 저장
@@ -36,7 +36,7 @@ public class Apollon extends Ability {
             return -1;
         }
 
-        targetLocation = AUC.getTargetLocation(p, 40);
+        targetLocation = AbilityUtils.getTargetLocation(p, 40);
         if (targetLocation == null) {
             p.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
             return -1;

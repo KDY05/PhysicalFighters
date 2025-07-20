@@ -2,7 +2,7 @@ package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -79,7 +79,7 @@ public class Temari extends Ability {
                     .forEach(entity -> {
                         Location liftLoc = entity.getLocation().clone();
                         liftLoc.setY(entity.getLocation().getY() + LIFT_HEIGHT);
-                        AUC.goVelocity(entity, liftLoc, 1);
+                        AbilityUtils.goVelocity(entity, liftLoc, 1);
                     });
         }
     }

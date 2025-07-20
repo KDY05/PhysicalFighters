@@ -10,7 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 
 public class Aokizi extends Ability {
     public Aokizi() {
@@ -34,7 +34,7 @@ public class Aokizi extends Ability {
                 PlayerInteractEvent Event1 = (PlayerInteractEvent) event;
                 if (isOwner(Event1.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard) {
                     Player p = Event1.getPlayer();
-                    Location location = AUC.getTargetLocation(p, 5);
+                    Location location = AbilityUtils.getTargetLocation(p, 5);
                     if (location == null) {
                         Event1.getPlayer().sendMessage(ChatColor.GREEN + "5칸 이내의 물만 얼릴 수 있습니다.");
                         break;
@@ -63,7 +63,7 @@ public class Aokizi extends Ability {
             if (block.getType() != Material.ICE)
                 new ExplosionTimer(block.getType(), block).runTaskLater(plugin, 15L);
             block.setType(Material.ICE);
-            AUC.splashDamage(Event.getPlayer(), block.getLocation(), 3, 8);
+            AbilityUtils.splashDamage(Event.getPlayer(), block.getLocation(), 3, 8);
         }
     }
 

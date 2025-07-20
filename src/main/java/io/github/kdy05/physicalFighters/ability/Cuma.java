@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
@@ -39,6 +39,6 @@ public class Cuma extends Ability {
             event0.setCancelled(true);
         }
         target.getWorld().createExplosion(target.getLocation(), 0.0F);
-        AUC.goVelocity(target, caster.getLocation(), -1);
+        AbilityUtils.goVelocity(target, caster.getLocation(), -1);
     }
 }

@@ -3,7 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public class Demigod extends Ability {
         EntityDamageEvent event0 = (EntityDamageEvent) event;
         Player player = (Player) event0.getEntity();
         if (Math.random() <= 0.05D)
-            AUC.healEntity(player, 2);
+            AbilityUtils.healEntity(player, 2);
         if (Math.random() <= 0.05D)
             player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 200, 0));
         if (Math.random() <= 0.05D)

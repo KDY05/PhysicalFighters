@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
 import java.util.Timer;
@@ -64,7 +64,7 @@ public class Genji extends Ability {
                 BlockIterator bi = new BlockIterator(e.getPlayer(), 6);
                 while (bi.hasNext()) {
                     Block bb = bi.next();
-                    AUC.splashDamage(e.getPlayer(), bb.getLocation(), 3, 5);
+                    AbilityUtils.splashDamage(e.getPlayer(), bb.getLocation(), 3, 5);
                     for (Player target : Bukkit.getOnlinePlayers()) {
                         if (target != e.getPlayer() && bb.getLocation().distance(target.getLocation()) <= 3) {
                             target.getWorld().strikeLightning(target.getLocation());
@@ -98,7 +98,7 @@ public class Genji extends Ability {
                 Block bb = bi.next();
                 if ((bb.getType().isSolid()) && (bb.getType() != Material.AIR)) break;
                 b = bb;
-                AUC.splashDamage(e.getPlayer(), b.getLocation(), 2, 20);
+                AbilityUtils.splashDamage(e.getPlayer(), b.getLocation(), 2, 20);
                 for (Player target : Bukkit.getOnlinePlayers()) {
                     if (target != e.getPlayer() && b.getLocation().distance(target.getLocation()) <= 2) {
                         target.getWorld().strikeLightning(target.getLocation());

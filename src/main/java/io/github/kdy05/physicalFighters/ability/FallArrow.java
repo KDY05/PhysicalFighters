@@ -4,7 +4,7 @@ import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
 import java.util.List;
@@ -73,7 +73,7 @@ public class FallArrow extends Ability {
                 Location l1 = Event0.getEntity().getLocation();
                 Location l2 = Event0.getEntity().getLocation();
                 l2.setY(l1.getY() + 4.0D);
-                AUC.goVelocity(entity, l2, 1);
+                AbilityUtils.goVelocity(entity, l2, 1);
                 entity.getWorld().createExplosion(entity.getLocation(), 0.0F);
                 entity.teleport(l2);
                 break;

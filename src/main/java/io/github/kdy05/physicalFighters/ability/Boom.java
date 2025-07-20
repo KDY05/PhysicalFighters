@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.core.Ability;
 
 import org.bukkit.scheduler.BukkitRunnable;
@@ -45,7 +45,7 @@ public class Boom extends Ability {
         public void run() {
             Player caster = this.caster;
             if (caster == null) return;
-            AUC.splashTask(caster, caster.getLocation(), 10, entity
+            AbilityUtils.splashTask(caster, caster.getLocation(), 10, entity
                     -> entity.getWorld().createExplosion(entity.getLocation(), 0.3f));
             count++;
             if (count >= 13) cancel();

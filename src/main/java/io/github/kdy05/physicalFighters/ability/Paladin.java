@@ -3,7 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.AUC;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
 import java.util.Random;
@@ -55,7 +55,7 @@ public class Paladin extends Ability {
                 int i = r.nextInt(10) + 10;
                 while (bi.hasNext()) {
                     Block bb = bi.next();
-                    AUC.splashDamage(e.getPlayer(), bb.getLocation(), 3, i);
+                    AbilityUtils.splashDamage(e.getPlayer(), bb.getLocation(), 3, i);
                 }
                 e.getPlayer().sendMessage(ChatColor.GREEN + "" + i + "의 데미지를 가했습니다.");
                 this.candmg = false;
