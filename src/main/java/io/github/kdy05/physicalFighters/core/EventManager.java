@@ -75,12 +75,25 @@ public class EventManager implements Listener {
             Player killer = victim.getKiller();
             victim.getInventory().clear();
 
-            // 킥, 밴 처리
-            if (ConfigManager.AutoKick && !AbilityInitializer.phoenix.isOwner(victim)) {
-                if (ConfigManager.AutoBan && !victim.isOp()) {
-                    victim.ban("당신은 죽었습니다. 다시 들어오실 수 없습니다.", (Date) null, null, true);
-                } else {
-                    victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
+            // 사망 시 처리 (OnKill: 0=아무것도 안함, 1=관전자 모드, 2=킥, 3=밴)
+            if (ConfigManager.OnKill > 0 && !AbilityInitializer.phoenix.isOwner(victim)) {
+                switch (ConfigManager.OnKill) {
+                    case 1 -> {
+                        // 죽은 위치 저장
+                        org.bukkit.Location deathLocation = victim.getLocation().clone();
+                        victim.setGameMode(org.bukkit.GameMode.SPECTATOR);
+                        victim.teleport(deathLocation);
+                        victim.sendMessage(ChatColor.YELLOW + "관전자 모드로 전환되었습니다.");
+                    }
+                    case 2 ->
+                        victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
+                    case 3 -> {
+                        if (!victim.isOp()) {
+                            victim.ban("당신은 죽었습니다. 다시 들어오실 수 없습니다.", (Date) null, null, true);
+                        } else {
+                            victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
+                        }
+                    }
                 }
             }
 

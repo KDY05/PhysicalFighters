@@ -1,9 +1,7 @@
 # PhysicalFighters Configuration
 
-# 사망 시 자동 퇴장
-AutoKick: true
-# 사망시 자동 밴 (AutoKick이 활성화여야 작동)
-AutoBan: false
+# 사망 시 처리 (0: 아무것도 안함, 1: 관전자 모드, 2: 킥, 3: 밴)
+OnKill: 2
 # 사망 시 죽인 사람 공개
 KillerOutput: true
 

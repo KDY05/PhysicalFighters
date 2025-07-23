@@ -26,9 +26,9 @@ public class Minato extends Ability implements BaseItem {
     public int A_Condition(Event event, int CustomData) {
         switch (CustomData) {
             case 0 -> {
-                ProjectileHitEvent Event0 = (ProjectileHitEvent) event;
-                if (Event0.getEntity() instanceof Snowball s && s.getShooter() instanceof Player p
-                        && isOwner(p) && Event0.getHitEntity() instanceof LivingEntity e && p != e) {
+                ProjectileHitEvent event0 = (ProjectileHitEvent) event;
+                if (event0.getEntity() instanceof Snowball s && s.getShooter() instanceof Player p
+                        && isOwner(p) && event0.getHitEntity() instanceof LivingEntity e && p != e) {
                     return 0;
                 }
             }
@@ -48,8 +48,8 @@ public class Minato extends Ability implements BaseItem {
     @Override
     public void A_Effect(Event event, int CustomData) {
         if (CustomData == 0) {
-            ProjectileHitEvent Event0 = (ProjectileHitEvent) event;
-            LivingEntity target = (LivingEntity) Event0.getHitEntity();
+            ProjectileHitEvent event0 = (ProjectileHitEvent) event;
+            LivingEntity target = (LivingEntity) event0.getHitEntity();
             if (getPlayer() == null) return;
             if (target != null) getPlayer().teleport(target.getLocation());
         }

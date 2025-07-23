@@ -20,7 +20,7 @@ public class Assassin extends Ability {
 
     public Assassin() {
         InitAbility("어쌔신", Type.Passive_AutoMatic, Rank.B,
-                "뒤에서 공격할시에 데미지를 두배로 입히고 눈을 가립니다.");
+                "뒤에서 공격할 시 데미지를 2배로 입히고 눈을 가립니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
@@ -46,9 +46,7 @@ public class Assassin extends Ability {
         target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 200, 0));
         Event.setDamage(Event.getDamage() * 2.0D);
         attacker.sendMessage(ChatColor.GREEN + "백스텝 성공!");
-        if (target instanceof Player) {
-            target.sendMessage(ChatColor.RED + "백스텝에 당했습니다!");
-        }
+        target.sendMessage(ChatColor.RED + "백스텝에 당했습니다!");
     }
 
     /**

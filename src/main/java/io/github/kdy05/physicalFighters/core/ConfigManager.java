@@ -6,12 +6,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class ConfigManager {
 
     private final PhysicalFighters plugin;
+    private FileConfiguration config;
 
     public static boolean DamageGuard = false;
     public static boolean NoFoodMode = false;
     public static boolean InfinityDur = false;
-    public static boolean AutoKick;
-    public static boolean AutoBan;
+    public static int OnKill;
     public static boolean KillerOutput;
     public static int Setlev;
     public static int EarlyInvincibleTime;
@@ -28,14 +28,15 @@ public class ConfigManager {
     private void loadConfigs() {
         plugin.getLogger().info("기본 설정 로드 중입니다.");
         plugin.saveDefaultConfig();
+        this.config = plugin.getConfig();
         reloadConfigs();
     }
 
     public void reloadConfigs() {
-        FileConfiguration config = plugin.getConfig();
+        plugin.reloadConfig();
+        this.config = plugin.getConfig();
 
-        AutoKick = config.getBoolean("AutoKick", true);
-        AutoBan = config.getBoolean("AutoBan", true);
+        OnKill = config.getInt("OnKill", 2);
         KillerOutput = config.getBoolean("KillerOutput", true);
 
         ClearInventory = config.getBoolean("ClearInventory", true);
@@ -54,6 +55,12 @@ public class ConfigManager {
             plugin.getLogger().info("제약 시간이 0분 이하로 설정되어 제약 시간이 비활성화됩니다.");
             RestrictionTime = 0;
         }
+        
+        plugin.getLogger().info("설정이 다시 로드되었습니다.");
+    }
+
+    public FileConfiguration getConfig() {
+        return config;
     }
 
 }

@@ -25,7 +25,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
     private static final List<String> BASIC_COMMANDS = List.of("help", "check", "yes", "no");
     
     // 운영자 명령어들
-    private static final List<String> OPERATOR_COMMANDS = List.of("start", "stop", "skip", "ob", "ablist", "abi", "util", "inv", "hung", "dura", "tc", "book", "scan");
+    private static final List<String> OPERATOR_COMMANDS = List.of("start", "stop", "skip", "ob", "ablist",
+            "abi", "util", "inv", "hung", "dura", "tc", "book", "scan", "reload", "kit");
 
     public CommandManager(PhysicalFighters plugin) {
         Objects.requireNonNull(plugin.getCommand("va")).setExecutor(this);
@@ -40,6 +41,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                         return true;
                     }
                 }
+                sender.sendMessage(ChatColor.RED + "알 수 없는 명령어입니다.");
             } else {
                 // /va만 입력했을 때는 help 명령어로 리다이렉트
                 String[] helpArgs = {"help"};

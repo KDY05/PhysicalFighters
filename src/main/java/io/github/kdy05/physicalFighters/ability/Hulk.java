@@ -25,8 +25,8 @@ public class Hulk extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 1) {
-            PlayerInteractEvent Event2 = (PlayerInteractEvent) event;
-            if (isOwner(Event2.getPlayer()) &&
+            PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+            if (isOwner(event1.getPlayer()) &&
                     isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard) {
                 return 1;
             }
@@ -37,14 +37,14 @@ public class Hulk extends Ability {
     @Override
     public void A_Effect(Event event, int CustomData) {
         if (CustomData != 0) return;
-        EntityDamageByEntityEvent Event1 = (EntityDamageByEntityEvent) event;
+        EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         // 공격력 1.5배
-        if (isOwner(Event1.getDamager())) {
-            Event1.setDamage(Event1.getDamage() * 1.5);
+        if (isOwner(event0.getDamager())) {
+            event0.setDamage(event0.getDamage() * 1.5);
         }
         // 대미지 반감
-        if (isOwner(Event1.getEntity())) {
-            Event1.setDamage(Event1.getDamage() / 2);
+        if (isOwner(event0.getEntity())) {
+            event0.setDamage(event0.getDamage() / 2);
         }
     }
 

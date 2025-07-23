@@ -15,8 +15,8 @@ import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 public class Aokizi extends Ability {
     public Aokizi() {
         InitAbility("아오키지", Type.Active_Immediately, Rank.S,
-                "철괴 좌클릭 시 자신이 보고있는 방향으로 얼음을 날립니다.",
-                "철괴로 우클릭 시 바라보고 있는 5칸 이내의 물을 얼립니다.");
+               Usage.IronLeft + "자신이 보고있는 방향으로 얼음을 날립니다.",
+              Usage.IronRight + "바라보고 있는 5칸 이내의 물을 얼립니다.");
         InitAbility(1, 0, true, ShowText.Custom_Text);
         registerLeftClickEvent();
         registerRightClickEvent();
@@ -25,45 +25,45 @@ public class Aokizi extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         switch (CustomData) {
-            case 0:
-                PlayerInteractEvent Event = (PlayerInteractEvent) event;
-                if (isOwner(Event.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard)
+            case 0 -> {
+                PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+                if (isOwner(event0.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard)
                     return 0;
-                break;
-            case 1:
-                PlayerInteractEvent Event1 = (PlayerInteractEvent) event;
-                if (isOwner(Event1.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard) {
-                    Player p = Event1.getPlayer();
+            }
+            case 1 -> {
+                PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+                if (isOwner(event1.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard) {
+                    Player p = event1.getPlayer();
                     Location location = AbilityUtils.getTargetLocation(p, 5);
                     if (location == null) {
-                        Event1.getPlayer().sendMessage(ChatColor.GREEN + "5칸 이내의 물만 얼릴 수 있습니다.");
+                        event1.getPlayer().sendMessage(ChatColor.GREEN + "5칸 이내의 물만 얼릴 수 있습니다.");
                         break;
                     }
                     Block block = location.getBlock();
                     if (block.getType() != Material.WATER) break;
                     block.setType(Material.ICE);
-                    break;
                 }
+            }
         }
         return -1;
     }
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Location l = Event.getPlayer().getLocation();
-        Location l2 = Event.getPlayer().getLocation();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Location l = event0.getPlayer().getLocation();
+        Location l2 = event0.getPlayer().getLocation();
         double degrees = Math.toRadians(-(l.getYaw() % 360.0F));
         double ydeg = Math.toRadians(-(l.getPitch() % 360.0F));
         for (int i = 1; i < 10; i++) {
             l2.setX(l.getX() + (i + 1) * (Math.sin(degrees) * Math.cos(ydeg)));
             l2.setY(l.getY() + (i + 1) * Math.sin(ydeg));
             l2.setZ(l.getZ() + (i + 1) * (Math.cos(degrees) * Math.cos(ydeg)));
-            Block block = Event.getPlayer().getWorld().getBlockAt(l2);
+            Block block = event0.getPlayer().getWorld().getBlockAt(l2);
             if (block.getType() != Material.ICE)
                 new ExplosionTimer(block.getType(), block).runTaskLater(plugin, 15L);
             block.setType(Material.ICE);
-            AbilityUtils.splashDamage(Event.getPlayer(), block.getLocation(), 3, 8);
+            AbilityUtils.splashDamage(event0.getPlayer(), block.getLocation(), 3, 8);
         }
     }
 

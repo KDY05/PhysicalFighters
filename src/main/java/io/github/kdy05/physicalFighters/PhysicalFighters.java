@@ -5,15 +5,17 @@ import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
 import io.github.kdy05.physicalFighters.command.GameCommand;
 
 import io.github.kdy05.physicalFighters.command.UtilCommand;
+import io.github.kdy05.physicalFighters.utils.BaseKitManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PhysicalFighters extends JavaPlugin {
 
-    public static int BuildNumber = 20250708;
+    public static int BuildNumber = 20250723;
     private static PhysicalFighters plugin;
     private GameManager gameManager;
     private GameCommand gameCommand;
     private ConfigManager configManager;
+    private BaseKitManager baseKitManager;
 
     @Override
     public void onEnable() {
@@ -34,6 +36,8 @@ public class PhysicalFighters extends JavaPlugin {
         this.gameCommand = new GameCommand(this, gameManager);
         commandManager.registerCommand(gameCommand);
         commandManager.registerCommand(new UtilCommand(this));
+
+        baseKitManager = new BaseKitManager(this);
 
         getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityInitializer.AbilityList.size()));
     }
@@ -59,4 +63,7 @@ public class PhysicalFighters extends JavaPlugin {
         return configManager;
     }
 
+    public BaseKitManager getBaseKitManager() {
+        return baseKitManager;
+    }
 }

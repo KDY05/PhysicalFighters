@@ -27,8 +27,8 @@ public class Crocodile extends Ability {
 
     public Crocodile() {
         InitAbility("크로커다일", Type.Active_Immediately, Rank.S,
-                "철괴를 휘둘러 자신의 주변의 있는 블록을 모래로 바꿉니다.",
-                "철괴 우클릭 시 모래 위에 있는 50칸 이내의 적에게",
+                Usage.IronLeft + "자신의 주변의 있는 블록을 모래로 바꿉니다.",
+                Usage.IronRight + "모래 위에 있는 50칸 이내의 적에게",
                 "10초 동안 피해를 주며 끌어당기는 모래 바람을 일으킵니다.");
         InitAbility(20, 0, true);
         registerLeftClickEvent();
@@ -37,8 +37,8 @@ public class Crocodile extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player p = Event.getPlayer();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Player p = event0.getPlayer();
         if (!isOwner(p) || !isValidItem(Ability.DefaultItem)) {
             return -1;
         }
@@ -51,16 +51,14 @@ public class Crocodile extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player caster = Event.getPlayer();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Player caster = event0.getPlayer();
         switch (CustomData) {
-            case 0:
-                convertToSand(caster);
-                break;
-            case 1:
+            case 0 -> convertToSand(caster);
+            case 1 -> {
                 new SandstormTask(caster).runTaskTimer(plugin, 0, STORM_INTERVAL);
                 caster.sendMessage(ChatColor.GOLD + "모래 바람을 시작합니다!");
-                break;
+            }
         }
     }
 
@@ -142,8 +140,7 @@ public class Crocodile extends Ability {
             pullDirection.setY(pullDirection.getY() + 0.4);
             target.setVelocity(target.getVelocity().add(pullDirection));
             target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 30, 0));
-            if (target instanceof Player)
-                target.sendMessage(ChatColor.YELLOW + "모래 바람에 휩쓸렸습니다!");
+            target.sendMessage(ChatColor.YELLOW + "모래 바람에 휩쓸렸습니다!");
         }
     }
 

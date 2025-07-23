@@ -195,7 +195,7 @@ public class GameManager {
     }
 
     private void showGameInfo() {
-        broadcastMessage(ChatColor.DARK_PURPLE + "Physical Fighters");
+        broadcastMessage(ChatColor.DARK_RED + "Physical Fighters");
         broadcastMessage(String.format(ChatColor.GRAY + "VER. %d", PhysicalFighters.BuildNumber));
         broadcastMessage(ChatColor.GREEN + "제작 : " + ChatColor.WHITE + "염료");
         broadcastMessage(ChatColor.GREEN + "원작 : " + ChatColor.WHITE + "제온(VisualAbility)");
@@ -283,7 +283,7 @@ public class GameManager {
 
     private void setupInvincibility() {
         if (ConfigManager.EarlyInvincibleTime != 0) {
-            broadcastMessage("시작 직후 " + ConfigManager.EarlyInvincibleTime + "분간은 무적입니다.");
+            broadcastMessage("시작 직후 " + ConfigManager.EarlyInvincibleTime + "분간 무적입니다.");
             ConfigManager.DamageGuard = true;
         } else {
             broadcastMessage(ChatColor.RED + "초반 무적은 작동하지 않습니다.");
@@ -300,7 +300,7 @@ public class GameManager {
             if (ConfigManager.ClearInventory) {
                 player.getInventory().clear();
             }
-            // TODO: 기본템 로직 여기에 넣기
+            plugin.getBaseKitManager().giveBasicItems(player);
         }
     }
 

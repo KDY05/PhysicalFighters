@@ -12,16 +12,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class Sasuke extends Ability {
     public Sasuke() {
         InitAbility("사스케", Type.Active_Immediately, Rank.S,
-                "치도리 - 철퇴로 상대를 타격하여 엄청난 데미지로 감전시킵니다.");
+                Usage.IronAttack + "치도리 - 엄청난 데미지로 감전시킵니다.");
         InitAbility(30, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if (isOwner(Event.getDamager()) && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard
-                && Event.getEntity() instanceof LivingEntity) {
+        EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+        if (isOwner(event0.getDamager()) && isValidItem(Ability.DefaultItem)
+                && !ConfigManager.DamageGuard && event0.getEntity() instanceof LivingEntity) {
             return 0;
         }
         return -1;
@@ -29,9 +29,9 @@ public class Sasuke extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        LivingEntity entity = (LivingEntity) Event.getEntity();
+        EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+        LivingEntity entity = (LivingEntity) event0.getEntity();
         entity.getWorld().strikeLightning(entity.getLocation());
-        entity.damage(30);
+        entity.damage(25);
     }
 }

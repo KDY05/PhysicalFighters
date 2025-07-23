@@ -52,6 +52,12 @@ public class UtilCommand implements CommandInterface {
         } else if (args[0].equalsIgnoreCase("scan")) {
             handleScan(sender);
             return true;
+        } else if (args[0].equalsIgnoreCase("reload")) {
+            handleReload(sender);
+            return true;
+        } else if (args[0].equalsIgnoreCase("kit")) {
+            handleKit(sender);
+            return true;
         }
 
         return false;
@@ -74,6 +80,8 @@ public class UtilCommand implements CommandInterface {
         sender.sendMessage(ChatColor.GOLD + "/va inv" + ChatColor.WHITE + " - 무적 모드를 토글합니다.");
         sender.sendMessage(ChatColor.GOLD + "/va hung" + ChatColor.WHITE + " - 배고픔 무한 모드를 토글합니다.");
         sender.sendMessage(ChatColor.GOLD + "/va dura" + ChatColor.WHITE + " - 내구도 무한 모드를 토글합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va reload" + ChatColor.WHITE + " - 플러그인 설정을 다시 로드합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va kit" + ChatColor.WHITE + " - 게임 시작 시 기본템을 설정합니다.");
         sender.sendMessage("");
         
         sender.sendMessage(ChatColor.AQUA + "==========================");
@@ -176,6 +184,21 @@ public class UtilCommand implements CommandInterface {
         if (count == 0)
             sender.sendMessage("아직 능력자가 없습니다.");
         sender.sendMessage(ChatColor.GREEN + "---------------");
+    }
+
+    private void handleReload(CommandSender sender) {
+        try {
+            plugin.getConfigManager().reloadConfigs();
+            sender.sendMessage(ChatColor.GREEN + "플러그인 설정이 성공적으로 다시 로드되었습니다.");
+        } catch (Exception e) {
+            sender.sendMessage(ChatColor.RED + "설정 로드 중 오류가 발생했습니다: " + e.getMessage());
+            plugin.getLogger().warning("설정 로드 실패: " + e.getMessage());
+        }
+    }
+
+    private void handleKit(CommandSender sender) {
+        if (!(sender instanceof Player player)) return;
+        plugin.getBaseKitManager().openBasicItemGUI(player);
     }
 
 }

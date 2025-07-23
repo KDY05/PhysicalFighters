@@ -22,26 +22,29 @@ public class Zombie extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        if (CustomData == 0) {
-            EntityDamageEvent Event = (EntityDamageEvent) event;
-            if (isOwner(Event.getEntity())) {
-                if (Event.getCause() == DamageCause.LAVA || Event.getCause() == DamageCause.FIRE
-                        || Event.getCause() == DamageCause.FIRE_TICK)
-                    return 0;
-                if (Event.getCause() == DamageCause.BLOCK_EXPLOSION
-                        || Event.getCause() == DamageCause.ENTITY_EXPLOSION)
-                    return 1;
-                if (Event.getCause() == DamageCause.FALL || Event.getCause() == DamageCause.POISON
-                        || Event.getCause() == DamageCause.PROJECTILE)
-                    return 1;
+        switch (CustomData) {
+            case 0 -> {
+                EntityDamageEvent event0 = (EntityDamageEvent) event;
+                if (isOwner(event0.getEntity())) {
+                    if (event0.getCause() == DamageCause.LAVA || event0.getCause() == DamageCause.FIRE
+                            || event0.getCause() == DamageCause.FIRE_TICK)
+                        return 0;
+                    if (event0.getCause() == DamageCause.BLOCK_EXPLOSION
+                            || event0.getCause() == DamageCause.ENTITY_EXPLOSION)
+                        return 1;
+                    if (event0.getCause() == DamageCause.FALL || event0.getCause() == DamageCause.POISON
+                            || event0.getCause() == DamageCause.PROJECTILE)
+                        return 1;
+                }
             }
-        } else if (CustomData == 1) {
-            EntityDamageByEntityEvent Event1 = (EntityDamageByEntityEvent) event;
-            if (isOwner(Event1.getEntity()) && Event1.getDamager() instanceof LivingEntity entity) {
-                if (!(entity instanceof Player p)) return 2;
-                Material handItem = p.getInventory().getItemInMainHand().getType();
-                if (handItem != Material.GOLD_INGOT && handItem != DefaultItem) {
-                    return 2;
+            case 1 -> {
+                EntityDamageByEntityEvent event1 = (EntityDamageByEntityEvent) event;
+                if (isOwner(event1.getEntity()) && event1.getDamager() instanceof LivingEntity entity) {
+                    if (!(entity instanceof Player p)) return 2;
+                    Material handItem = p.getInventory().getItemInMainHand().getType();
+                    if (handItem != Material.GOLD_INGOT && handItem != DefaultItem) {
+                        return 2;
+                    }
                 }
             }
         }
@@ -51,17 +54,18 @@ public class Zombie extends Ability {
     @Override
     public void A_Effect(Event event, int CustomData) {
         switch (CustomData) {
-            case 0:
-                EntityDamageEvent Event = (EntityDamageEvent) event;
-                Event.setDamage(Event.getDamage() * 8);
-                break;
-            case 1:
-                EntityDamageEvent Event2 = (EntityDamageEvent) event;
-                Event2.setDamage(Event2.getDamage() * 0.5);
-                break;
-            case 2:
-                EntityDamageByEntityEvent Event3 = (EntityDamageByEntityEvent) event;
-                Event3.setDamage(Event3.getDamage() * 0.5);
+            case 0 -> {
+                EntityDamageEvent event0 = (EntityDamageEvent) event;
+                event0.setDamage(event0.getDamage() * 8);
+            }
+            case 1 -> {
+                EntityDamageEvent event1 = (EntityDamageEvent) event;
+                event1.setDamage(event1.getDamage() * 0.5);
+            }
+            case 2 -> {
+                EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
+                event2.setDamage(event2.getDamage() * 0.5);
+            }
         }
     }
 }

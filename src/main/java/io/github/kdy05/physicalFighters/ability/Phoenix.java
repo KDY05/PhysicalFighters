@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -18,6 +19,8 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+// TODO: 인벤세이브 오류
 
 public class Phoenix extends Ability {
     private int ReviveCounter = 0;
@@ -63,11 +66,19 @@ public class Phoenix extends Ability {
 
                 if (this.AbilityUse) {
                     Bukkit.broadcastMessage(ChatColor.RED + "불사조가 죽었습니다. 더 이상 부활할수 없습니다.");
-                    if (ConfigManager.AutoKick) {
-                        if (ConfigManager.AutoBan) {
-                            killed.ban("당신은 죽었습니다. 다시 들어오실 수 없습니다.", (Date) null, null, true);
-                        } else {
-                            killed.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
+                    switch (ConfigManager.OnKill) {
+                        case 1 -> {
+                            killed.setGameMode(GameMode.SPECTATOR);
+                            killed.sendMessage(ChatColor.YELLOW + "관전자 모드로 전환되었습니다.");
+                        }
+                        case 2 ->
+                                killed.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
+                        case 3 -> {
+                            if (!killed.isOp()) {
+                                killed.ban("당신은 죽었습니다. 다시 들어오실 수 없습니다.", (Date) null, null, true);
+                            } else {
+                                killed.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
+                            }
                         }
                     }
                 } else {

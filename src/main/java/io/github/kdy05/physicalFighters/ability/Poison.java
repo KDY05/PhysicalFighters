@@ -20,8 +20,8 @@ public class Poison extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        if (isOwner(Event.getDamager()) && Event.getEntity() instanceof LivingEntity) {
+        EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+        if (isOwner(event0.getDamager()) && event0.getEntity() instanceof LivingEntity) {
             return 0;
         }
         return -1;
@@ -29,8 +29,9 @@ public class Poison extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
-        LivingEntity entity = (LivingEntity) Event.getEntity();
+        EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+        LivingEntity entity = (LivingEntity) event0.getEntity();
         entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60, 0));
     }
+
 }

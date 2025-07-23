@@ -37,12 +37,12 @@ public class Poseidon extends Ability {
         switch (CustomData) {
             case 0 -> {
                 PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-                Player p = event0.getPlayer();
-                if (!isOwner(p) || !isValidItem(Ability.DefaultItem)) {
+                Player player = event0.getPlayer();
+                if (!isOwner(player) || !isValidItem(Ability.DefaultItem)) {
                     return -1;
                 }
                 if (ConfigManager.DamageGuard) {
-                    p.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
+                    player.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
                     return -1;
                 }
                 return 0;
@@ -50,32 +50,29 @@ public class Poseidon extends Ability {
             case 1 -> {
                 PlayerMoveEvent event1 = (PlayerMoveEvent) event;
                 Player caster = event1.getPlayer();
-                if (!isOwner(caster)) return -1;
-                if (!caster.getLocation().getBlock().getType().equals(Material.WATER)) return -1;
+                if (!isOwner(caster)) break;
+                if (!caster.getLocation().getBlock().getType().equals(Material.WATER)) break;
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 60, 0));
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 0));
                 caster.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 60, 0));
                 AbilityUtils.splashTask(caster, caster.getLocation(), SLOW_RANGE,
                         entity -> entity.getLocation().getBlock().getType().equals(Material.WATER),
                         entity -> entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 60, 0)));
-                return -1;
-            }
-            default -> {
-                return -1;
             }
         }
+        return -1;
     }
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player p = Event.getPlayer();
-        Location targetLoc = AbilityUtils.getTargetLocation(p, TARGET_RANGE);
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Player player = event0.getPlayer();
+        Location targetLoc = AbilityUtils.getTargetLocation(player, TARGET_RANGE);
         if (targetLoc == null) {
-            p.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
+            player.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
             return;
         }
-        createAquarium(p, targetLoc);
+        createAquarium(player, targetLoc);
     }
 
     private void createAquarium(Player player, Location center) {

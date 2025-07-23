@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
 import io.github.kdy05.physicalFighters.core.Ability;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,15 +16,15 @@ public class Apollon extends Ability {
 
     public Apollon() {
         InitAbility("아폴론", Type.Active_Immediately, Rank.S,
-                "철괴를 휘둘러 바라보는 방향에 불구덩이를 만듭니다.");
+               Usage.IronLeft + "바라보는 방향에 불구덩이를 만듭니다.");
         InitAbility(30, 0, true);
         registerLeftClickEvent();
     }
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player p = Event.getPlayer();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Player p = event0.getPlayer();
 
         if (!isOwner(p) || !isValidItem(Ability.DefaultItem)) {
             return -1;
@@ -56,47 +55,11 @@ public class Apollon extends Ability {
         }
 
         Location center = targetLocation.clone();
-        buildNetherrackWalls(p, center);
-        digInnerSpace(p, center);
-        placeFire(p, center);
-        p.sendMessage(ChatColor.GOLD + "불구덩이를 만들었습니다!");
+        AbilityUtils.createBox(center.clone().add(0, -7, 0), Material.NETHERRACK, 4, 8);
+        AbilityUtils.createBox(center.clone().add(0, -6, 0), Material.AIR, 3, 7);
+        AbilityUtils.createBox(center.clone().add(0, -6, 0), Material.FIRE, 3, 1);
 
         targetLocation = null;
-    }
-
-    private void buildNetherrackWalls(Player player, Location center) {
-        for (int depth = 0; depth <= 7; depth++) {
-            for (int x = -4; x <= 4; x++) {
-                for (int z = -4; z <= 4; z++) {
-                    Location blockLoc = center.clone().add(x, -depth, z);
-                    Block block = player.getWorld().getBlockAt(blockLoc);
-                    block.setType(Material.NETHERRACK);
-                }
-            }
-        }
-    }
-
-    private void digInnerSpace(Player player, Location center) {
-        for (int depth = 0; depth <= 6; depth++) {
-            for (int x = -3; x <= 3; x++) {
-                for (int z = -3; z <= 3; z++) {
-                    Location blockLoc = center.clone().add(x, -depth, z);
-                    Block block = player.getWorld().getBlockAt(blockLoc);
-                    block.setType(Material.AIR);
-                }
-            }
-        }
-    }
-
-    private void placeFire(Player player, Location center) {
-        int fireDepth = 6; // 최하층
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                Location fireLoc = center.clone().add(x, -fireDepth, z);
-                Block fireBlock = player.getWorld().getBlockAt(fireLoc);
-                fireBlock.setType(Material.FIRE);
-            }
-        }
     }
 
 }

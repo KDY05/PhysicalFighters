@@ -14,7 +14,7 @@ import io.github.kdy05.physicalFighters.utils.EventData;
 public class Fireball extends Ability {
     public Fireball() {
         InitAbility("파이어볼", Type.Active_Immediately, Rank.B,
-                "바라보는 방향에 화염구를 날립니다.");
+                Usage.IronLeft + "바라보는 방향에 화염구를 날립니다.");
         InitAbility(15, 0, true);
         registerLeftClickEvent();
         EventManager.onProjectileHitEvent.add(new EventData(this, 1));
@@ -23,27 +23,27 @@ public class Fireball extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         switch (CustomData) {
-            case 0:
-                PlayerInteractEvent Event = (PlayerInteractEvent) event;
-                if (isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard)
+            case 0 -> {
+                PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+                if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard)
                     return 0;
-                break;
-            case 1:
-                ProjectileHitEvent Event1 = (ProjectileHitEvent) event;
-                if (Event1.getEntity() instanceof org.bukkit.entity.Fireball) {
-                    Event1.getEntity().getWorld().createExplosion(Event1.getEntity().getLocation(), 3.0F, true);
-                    Event1.getEntity().getWorld().createExplosion(Event1.getEntity().getLocation(), 2.5F, true);
-                    Event1.getEntity().getWorld().createExplosion(Event1.getEntity().getLocation(), 3.0F, true);
+            }
+            case 1 -> {
+                ProjectileHitEvent event1 = (ProjectileHitEvent) event;
+                if (event1.getEntity() instanceof org.bukkit.entity.Fireball) {
+                    event1.getEntity().getWorld().createExplosion(event1.getEntity().getLocation(), 3.0F, true);
+                    event1.getEntity().getWorld().createExplosion(event1.getEntity().getLocation(), 2.5F, true);
+                    event1.getEntity().getWorld().createExplosion(event1.getEntity().getLocation(), 3.0F, true);
                 }
-                break;
+            }
         }
         return -1;
     }
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player p = Event.getPlayer();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Player p = event0.getPlayer();
         Location loc = p.getLocation();
         Location loc2 = p.getLocation();
         loc2.setY(p.getLocation().getY() + 2.0D);
@@ -54,4 +54,5 @@ public class Fireball extends Ability {
         loc.setZ(loc2.getZ() + 1.2D * (Math.cos(degrees) * Math.cos(ydeg)));
         p.getWorld().spawn(loc, org.bukkit.entity.Fireball.class);
     }
+
 }

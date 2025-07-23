@@ -11,25 +11,29 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Ace extends Ability {
     public Ace() {
-        InitAbility("에이스", Type.Active_Immediately, Rank.S,
-                "철괴를 휘두를 시 20초간 자신의 주변에 있는 적들을 불태웁니다.");
-        InitAbility(40, 0, true);
+        InitAbility("에이스", Type.Active_Continue, Rank.S,
+                Usage.IronLeft + "20초간 자신의 주변에 있는 적들을 불태웁니다.");
+        InitAbility(40, 20, true);
         registerLeftClickEvent();
     }
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if (!ConfigManager.DamageGuard && isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem)) {
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        if (!ConfigManager.DamageGuard && isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
             return 0;
         }
         return -1;
     }
 
     @Override
+    public void A_DurationStart() {
+        if (getPlayer() == null) return;
+        new SplashFire(getPlayer()).runTaskTimer(plugin, 10L, 30L);
+    }
+
+    @Override
     public void A_Effect(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        new SplashFire(Event.getPlayer()).runTaskTimer(plugin, 10L, 30L);
     }
 
     static class SplashFire extends BukkitRunnable {

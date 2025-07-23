@@ -13,16 +13,16 @@ public class Jumper extends Ability {
 
     public Jumper() {
         InitAbility("점퍼", Type.Active_Immediately, Rank.B,
-                "최대 80칸 거리를 순간이동 할수 있습니다.");
+                Usage.IronLeft + "최대 80칸 거리를 순간이동 합니다.");
         InitAbility(20, 0, true);
         registerLeftClickEvent();
     }
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if (!isOwner(Event.getPlayer()) || !isValidItem(Ability.DefaultItem)) return -1;
-        Player caster = Event.getPlayer();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        if (!isOwner(event0.getPlayer()) || !isValidItem(Ability.DefaultItem)) return -1;
+        Player caster = event0.getPlayer();
         targetLocation = AbilityUtils.getTargetLocation(caster, 80);
         if (targetLocation == null) {
             caster.sendMessage(String.format(ChatColor.RED + "거리가 너무 멉니다."));
@@ -33,12 +33,13 @@ public class Jumper extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        Player caster = Event.getPlayer();
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        Player caster = event0.getPlayer();
         targetLocation.setY(caster.getWorld().getHighestBlockYAt(targetLocation) + 1.0);
         targetLocation.setPitch(caster.getLocation().getPitch());
         targetLocation.setYaw(caster.getLocation().getYaw());
         caster.teleport(targetLocation);
         targetLocation = null;
     }
+
 }

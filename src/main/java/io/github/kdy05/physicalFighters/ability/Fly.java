@@ -22,17 +22,19 @@ public class Fly extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        if (CustomData == 0) {
-            PlayerInteractEvent Event = (PlayerInteractEvent) event;
-            if (isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem)) {
-                return 0;
+        switch (CustomData) {
+            case 0 -> {
+                PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+                if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
+                    return 0;
+                }
             }
-        }
-        if (CustomData == 1) {
-            EntityDamageEvent event1 = (EntityDamageEvent) event;
-            if (isOwner(event1.getEntity()) && event1.getCause() == DamageCause.FALL) {
-                getPlayer().sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 데미지를 받지 않았습니다.");
-                event1.setCancelled(true);
+            case 1 -> {
+                EntityDamageEvent event1 = (EntityDamageEvent) event;
+                if (isOwner(event1.getEntity()) && event1.getCause() == DamageCause.FALL) {
+                    sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 데미지를 받지 않았습니다.");
+                    event1.setCancelled(true);
+                }
             }
         }
         return -1;

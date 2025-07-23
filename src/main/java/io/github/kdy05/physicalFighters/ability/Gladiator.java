@@ -48,6 +48,7 @@ public class Gladiator extends Ability {
     public void A_DurationStart() {
         if (target == null) return;
         Player attacker = getPlayer();
+        if (attacker == null) return;
 
         Location originalTargetLoc = target.getLocation().clone();
         Location originalAttackerLoc = attacker.getLocation().clone();

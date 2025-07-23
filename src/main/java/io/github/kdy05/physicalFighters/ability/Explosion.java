@@ -20,8 +20,8 @@ public class Explosion extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
-            EntityDeathEvent Event0 = (EntityDeathEvent) event;
-            if (isOwner(Event0.getEntity())) return 0;
+            EntityDeathEvent event0 = (EntityDeathEvent) event;
+            if (isOwner(event0.getEntity())) return 0;
         }
         return -1;
     }
@@ -29,10 +29,9 @@ public class Explosion extends Ability {
     @Override
     public void A_Effect(Event event, int CustomData) {
         if (CustomData == 0) {
-            PlayerDeathEvent Event0 = (PlayerDeathEvent) event;
-            Player killed = Event0.getEntity();
-            killed.getWorld().createExplosion(killed.getLocation(), 8.0F,
-                    false);
+            PlayerDeathEvent event0 = (PlayerDeathEvent) event;
+            Player killed = event0.getEntity();
+            killed.getWorld().createExplosion(killed.getLocation(), 8.0F, false);
         }
     }
 }

@@ -23,8 +23,8 @@ public class Aegis extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
-            PlayerInteractEvent Event = (PlayerInteractEvent) event;
-            if (isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard)
+            PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+            if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard)
                 return 0;
         }
         return -1;
@@ -33,11 +33,11 @@ public class Aegis extends Ability {
     @Override
     public void A_Effect(Event event, int CustomData) {
         if (CustomData == 1) {
-            EntityDamageEvent Event = (EntityDamageEvent) event;
-            if (isOwner(Event.getEntity())) {
-                Player p = (Player) Event.getEntity();
+            EntityDamageEvent event1 = (EntityDamageEvent) event;
+            if (isOwner(event1.getEntity())) {
+                Player p = (Player) event1.getEntity();
                 p.setFireTicks(0);
-                Event.setCancelled(true);
+                event1.setCancelled(true);
             }
         }
     }

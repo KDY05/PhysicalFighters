@@ -12,14 +12,14 @@ public class Clocking extends Ability {
         InitAbility("클로킹", Type.Active_Continue, Rank.A,
                 Usage.IronLeft + "일정 시간동안 다른 사람에게 보이지 않습니다.",
                 "클로킹 상태에서는 타인에게 공격 받지 않습니다.");
-        InitAbility(35, 5, true);
+        InitAbility(30, 5, true);
         registerLeftClickEvent();
     }
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if (isOwner(Event.getPlayer()) && isValidItem(Ability.DefaultItem))
+        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+        if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem))
             return 0;
         return -1;
     }
