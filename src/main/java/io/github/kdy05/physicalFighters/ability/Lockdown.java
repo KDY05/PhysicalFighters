@@ -23,7 +23,7 @@ public class Lockdown extends Ability implements CommandInterface {
 
     public Lockdown() {
         InitAbility("봉인", Type.Active_Continue, Rank.B,
-                "특정 플레이어의 능력을 1분간 봉인하며 구속 효과를 겁니다.",
+                "특정 플레이어의 능력을 1분간 봉인하며 배고픔 수치를 0으로 만듭니다.",
                 "\"/va lock <nickname>\" 명령어로 작동하며 대상이 60칸 이내에 있어야 합니다.",
                 "게임 시작 후 능력 제한 시간동안 이 능력을 사용할 수 없습니다.");
         InitAbility(80, LOCKDOWN_DURATION, true);
@@ -122,7 +122,6 @@ public class Lockdown extends Ability implements CommandInterface {
         this.execute(null, 0);
         return true;
     }
-
 
     private void clearTempData() {
         this.caster = null;

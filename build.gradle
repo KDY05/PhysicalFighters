@@ -40,6 +40,14 @@ tasks.withType(JavaCompile).configureEach {
     }
 }
 
+sourceSets {
+    main {
+        java {
+            exclude '**/ability/disabled/**'
+        }
+    }
+}
+
 processResources {
     def props = [version: version]
     inputs.properties props
