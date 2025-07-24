@@ -2,6 +2,7 @@ package io.github.kdy05.physicalFighters.core;
 
 import io.github.kdy05.physicalFighters.core.Ability.Type;
 import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.EventData;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
@@ -132,7 +133,7 @@ public class EventManager implements Listener {
             String name = handItem.getItemMeta().getDisplayName();
             int n = Integer.parseInt(name.split("f")[1].split("\\.")[0]);
             player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-            PhysicalFighters.getPlugin().getGameCommand().assignAbility(player, n, player);
+            AbilityUtils.assignAbility(player, n, player);
         }
 
         AbilityExcuter(onPlayerInteract, event);

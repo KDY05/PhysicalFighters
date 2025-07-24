@@ -4,6 +4,7 @@ import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
+import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.CommandInterface;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -66,24 +67,24 @@ public class UtilCommand implements CommandInterface {
     private void handleUtil(CommandSender sender) {
         sender.sendMessage(ChatColor.AQUA + "=== 유틸리티 명령어 목록 ===");
         sender.sendMessage("");
-        
+
+        sender.sendMessage(ChatColor.YELLOW + "■ 게임 설정");
+        sender.sendMessage(ChatColor.GOLD + "/va reload" + ChatColor.WHITE + " - 플러그인 설정을 다시 로드합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va kit" + ChatColor.WHITE + " - 게임 시작 시 기본템을 설정합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va inv" + ChatColor.WHITE + " - 무적 모드를 토글합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va hung" + ChatColor.WHITE + " - 배고픔 무한 모드를 토글합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va dura" + ChatColor.WHITE + " - 내구도 무한 모드를 토글합니다.");
+        sender.sendMessage("");
+
         sender.sendMessage(ChatColor.YELLOW + "■ 조사 및 확인");
         sender.sendMessage(ChatColor.GOLD + "/va scan" + ChatColor.WHITE + " - 현재 능력자 목록을 확인합니다.");
         sender.sendMessage("");
-        
+
         sender.sendMessage(ChatColor.YELLOW + "■ 능력 관리");
         sender.sendMessage(ChatColor.GOLD + "/va tc" + ChatColor.WHITE + " - 모든 능력의 쿨타임과 지속시간을 초기화합니다.");
         sender.sendMessage(ChatColor.GOLD + "/va book [코드]" + ChatColor.WHITE + " - 능력 정보가 담긴 책을 생성합니다.");
         sender.sendMessage("");
-        
-        sender.sendMessage(ChatColor.YELLOW + "■ 게임 설정");
-        sender.sendMessage(ChatColor.GOLD + "/va inv" + ChatColor.WHITE + " - 무적 모드를 토글합니다.");
-        sender.sendMessage(ChatColor.GOLD + "/va hung" + ChatColor.WHITE + " - 배고픔 무한 모드를 토글합니다.");
-        sender.sendMessage(ChatColor.GOLD + "/va dura" + ChatColor.WHITE + " - 내구도 무한 모드를 토글합니다.");
-        sender.sendMessage(ChatColor.GOLD + "/va reload" + ChatColor.WHITE + " - 플러그인 설정을 다시 로드합니다.");
-        sender.sendMessage(ChatColor.GOLD + "/va kit" + ChatColor.WHITE + " - 게임 시작 시 기본템을 설정합니다.");
-        sender.sendMessage("");
-        
+
         sender.sendMessage(ChatColor.AQUA + "==========================");
     }
 
@@ -133,10 +134,8 @@ public class UtilCommand implements CommandInterface {
     }
 
     private void handleBook(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("프롬프트에서는 사용할 수 없는 명령입니다.");
-            return;
-        }
+        if (!requirePlayer(sender)) return;
+        Player player = (Player) sender;
 
         if (args.length != 2) {
             player.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va book [능력코드]]");
@@ -150,7 +149,7 @@ public class UtilCommand implements CommandInterface {
             player.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
             return;
         }
-        if (abicode < 0 || abicode >= AbilityInitializer.AbilityList.size() - 1) {
+        if (abicode < 0 || abicode >= AbilityInitializer.AbilityList.size()) {
             player.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
             return;
         }
@@ -177,7 +176,7 @@ public class UtilCommand implements CommandInterface {
             if (temp == null) continue;
             sender.sendMessage(String.format(ChatColor.GREEN + "%d. " + ChatColor.WHITE +
                             "%s : " + ChatColor.RED + "%s " + ChatColor.WHITE +
-                            "[" + plugin.getGameCommand().getTypeText(ability) + "]",
+                            "[" + AbilityUtils.getTypeText(ability) + "]",
                     count, temp.getName(), ability.getAbilityName()));
             count++;
         }
@@ -197,8 +196,8 @@ public class UtilCommand implements CommandInterface {
     }
 
     private void handleKit(CommandSender sender) {
-        if (!(sender instanceof Player player)) return;
-        plugin.getBaseKitManager().openBasicItemGUI(player);
+        if (!requirePlayer(sender)) return;
+        plugin.getBaseKitManager().openBasicItemGUI((Player) sender);
     }
 
 }
