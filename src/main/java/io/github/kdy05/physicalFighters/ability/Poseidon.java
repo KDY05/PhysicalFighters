@@ -16,6 +16,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+// TODO: 목둔 참고해서 리팩토링하기
+
 public class Poseidon extends Ability {
     // 능력 설정 상수
     private static final int GLASS_RANGE = 5;

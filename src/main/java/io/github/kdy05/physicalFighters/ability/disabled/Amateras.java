@@ -9,8 +9,6 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-// TODO: 리메이크 필요, 이건 그냥 원거리 라이터잖아요;;
-
 public class Amateras extends Ability {
     public Amateras() {
         InitAbility("아마테라스", Type.Active_Immediately, Rank.S,
@@ -29,7 +27,7 @@ public class Amateras extends Ability {
     }
 
     public void A_Effect(Event event, int CustomData) {
-        Block block = getPlayer().getTargetBlock(null, 0); // TODO: 크래시 가능성 있음
+        Block block = getPlayer().getTargetBlock(null, 0);
         Location ll = block.getLocation();
         Location l2 = block.getLocation();
         l2.setY(ll.getY() + 1.0D);
