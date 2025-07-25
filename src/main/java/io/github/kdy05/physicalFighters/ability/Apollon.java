@@ -17,7 +17,7 @@ public class Apollon extends Ability {
     public Apollon() {
         InitAbility("아폴론", Type.Active_Immediately, Rank.S,
                Usage.IronLeft + "바라보는 방향에 불구덩이를 만듭니다.");
-        InitAbility(30, 0, true);
+        InitAbility(45, 0, true);
         registerLeftClickEvent();
     }
 
@@ -55,9 +55,9 @@ public class Apollon extends Ability {
         }
 
         Location center = targetLocation.clone();
-        AbilityUtils.createBox(center.clone().add(0, -7, 0), Material.NETHERRACK, 4, 8);
-        AbilityUtils.createBox(center.clone().add(0, -6, 0), Material.AIR, 3, 7);
-        AbilityUtils.createBox(center.clone().add(0, -6, 0), Material.FIRE, 3, 1);
+        AbilityUtils.createBox(center.clone().add(0, -8, 0), Material.NETHERRACK, 4, 8);
+        AbilityUtils.createBox(center.clone().add(0, -7, 0), Material.AIR, 3, 7);
+        AbilityUtils.createBox(center.clone().add(0, -7, 0), Material.FIRE, 3, 1);
 
         targetLocation = null;
     }

@@ -74,7 +74,6 @@ public class EventManager implements Listener {
         if (GameManager.getScenario() == GameManager.ScriptStatus.GameStart && event instanceof PlayerDeathEvent pde) {
             Player victim = (Player) event.getEntity();
             Player killer = victim.getKiller();
-            victim.getInventory().clear();
 
             // 사망 시 처리 (OnKill: 0=아무것도 안함, 1=관전자 모드, 2=킥, 3=밴)
             if (ConfigManager.OnKill > 0 && !AbilityInitializer.phoenix.isOwner(victim)) {

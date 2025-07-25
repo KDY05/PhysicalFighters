@@ -20,12 +20,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-// TODO: 인벤세이브 오류
-
 public class Phoenix extends Ability {
     private int ReviveCounter = 0;
     private boolean AbilityUse = false;
-    private static final HashMap<Player, ItemStack[]> invsave = new HashMap<>();
+    private final HashMap<Player, ItemStack[]> invsave = new HashMap<>();
 
     public Phoenix() {
         InitAbility("불사조", Type.Passive_Manual, Rank.A,
@@ -95,9 +93,12 @@ public class Phoenix extends Ability {
                 Player player = event1.getPlayer();
                 ItemStack[] inv = invsave.get(player);
 
-                if (inv != null)
-                    player.getInventory().setContents(inv);
-                invsave.remove(player);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    if (inv != null && player.isOnline()) {
+                        player.getInventory().setContents(inv);
+                    }
+                    invsave.remove(player);
+                }, 1L);
 
                 if (!this.AbilityUse) {
                     Bukkit.broadcastMessage(ChatColor.GREEN + "불사조가 부활하였습니다. 부활 횟수 : " +

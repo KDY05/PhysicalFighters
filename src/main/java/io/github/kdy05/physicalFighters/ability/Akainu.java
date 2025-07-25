@@ -24,8 +24,8 @@ import java.util.Map;
 
 public class Akainu extends Ability {
     // 범위 설정 상수
-    private static final int OUTER_RADIUS = 4;      // 외부 범위 반지름
-    private static final int INNER_RADIUS = 3;      // 내부 용암 반지름
+    private static final int OUTER_RADIUS = 3;      // 외부 범위 반지름
+    private static final int INNER_RADIUS = 2;      // 내부 용암 반지름
     private static final int DEPTH = 4;             // 깊이
     private static final int LAVA_DEPTH = 3;        // 용암 깊이
     private static final long RESTORE_DELAY = 80L;  // 복구 지연시간
@@ -38,7 +38,7 @@ public class Akainu extends Ability {
                Usage.IronLeft + "바라보는 곳의 땅을 용암으로 바꿉니다.",
                 "4초 뒤에 용암이 다시 굳으며 적을 땅속에 가둡니다.",
                 Usage.Passive + "화염 및 용암 데미지를 무시합니다.");
-        InitAbility(30, 0, true);
+        InitAbility(45, 0, true);
         registerLeftClickEvent();
         EventManager.onEntityDamage.add(new EventData(this, 1));
     }
