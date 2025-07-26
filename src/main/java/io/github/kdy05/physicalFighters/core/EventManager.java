@@ -9,8 +9,7 @@ import io.github.kdy05.physicalFighters.PhysicalFighters;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -40,6 +39,18 @@ public class EventManager implements Listener {
     public static ArrayList<EventData> onPlayerItemDamage = new ArrayList<>();
 
     @EventHandler
+    public static void onFoodLevelChange(FoodLevelChangeEvent event) {
+        // 배고픔 무한 모드
+        if (ConfigManager.NoFoodMode) {
+            event.setFoodLevel(20);
+            return;
+        }
+        AbilityExcuter(onFoodLevelChange, event);
+    }
+
+    public static ArrayList<EventData> onFoodLevelChange = new ArrayList<>();
+
+    @EventHandler
     public static void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             // 플레이어 무적
@@ -58,18 +69,6 @@ public class EventManager implements Listener {
     public static ArrayList<EventData> onEntityDamageByEntity = new ArrayList<>();
 
     @EventHandler
-    public static void onFoodLevelChange(FoodLevelChangeEvent event) {
-        if (ConfigManager.NoFoodMode) {
-            // 배고픔 무한
-            event.setFoodLevel(20);
-            return;
-        }
-        AbilityExcuter(onFoodLevelChange, event);
-    }
-
-    public static ArrayList<EventData> onFoodLevelChange = new ArrayList<>();
-
-    @EventHandler
     public static void onEntityDeath(EntityDeathEvent event) {
         if (GameManager.getScenario() == GameManager.ScriptStatus.GameStart && event instanceof PlayerDeathEvent pde) {
             Player victim = (Player) event.getEntity();
@@ -80,13 +79,17 @@ public class EventManager implements Listener {
                 switch (ConfigManager.OnKill) {
                     case 1 -> {
                         // 죽은 위치 저장
-                        org.bukkit.Location deathLocation = victim.getLocation().clone();
-                        victim.setGameMode(org.bukkit.GameMode.SPECTATOR);
-                        victim.teleport(deathLocation);
-                        victim.sendMessage(ChatColor.YELLOW + "관전자 모드로 전환되었습니다.");
+                        Location deathLocation = victim.getLocation().clone();
+                        Bukkit.getScheduler().runTaskLater(PhysicalFighters.getPlugin(), () -> {
+                            victim.setGameMode(GameMode.SPECTATOR);
+                            victim.spigot().respawn();
+                            victim.teleport(deathLocation);
+                            victim.sendTitle(ChatColor.RED + "사망하였습니다!",
+                                    ChatColor.YELLOW + "관전자 모드로 전환합니다.",
+                                    10, 100 ,10);
+                        }, 1L);
                     }
-                    case 2 ->
-                        victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
+                    case 2 -> victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
                     case 3 -> {
                         if (!victim.isOp()) {
                             victim.ban("당신은 죽었습니다. 다시 들어오실 수 없습니다.", (Date) null, null, true);
