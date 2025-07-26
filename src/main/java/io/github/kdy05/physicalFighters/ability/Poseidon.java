@@ -6,6 +6,7 @@ import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,14 +17,15 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-// TODO: 목둔 참고해서 리팩토링하기
-
 public class Poseidon extends Ability {
     // 능력 설정 상수
-    private static final int GLASS_RANGE = 5;
-    private static final int WATER_RANGE = 3;
+    private static final int GLASS_RANGE = 4;
+    private static final int WATER_RANGE = 2;
     private static final int TARGET_RANGE = 40;
     private static final double SLOW_RANGE = 10.0;
+    private static final int TELEPORT_HEIGHT = 3;
+
+    private Location targetLocation = null;
 
     public Poseidon() {
         InitAbility("포세이돈", Type.Active_Immediately, Rank.SS,
@@ -43,6 +45,13 @@ public class Poseidon extends Ability {
                 if (!isOwner(player) || !isValidItem(Ability.DefaultItem)) {
                     return -1;
                 }
+
+                targetLocation = AbilityUtils.getTargetLocation(player, TARGET_RANGE);
+                if (targetLocation == null) {
+                    player.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
+                    return -1;
+                }
+
                 if (ConfigManager.DamageGuard) {
                     player.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
                     return -1;
@@ -69,32 +78,45 @@ public class Poseidon extends Ability {
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player player = event0.getPlayer();
-        Location targetLoc = AbilityUtils.getTargetLocation(player, TARGET_RANGE);
-        if (targetLoc == null) {
-            player.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
+
+        if (targetLocation == null) {
+            player.sendMessage(ChatColor.RED + "능력을 사용할 수 없습니다.");
             return;
         }
-        createAquarium(player, targetLoc);
+
+        createAquarium(player, targetLocation);
+        targetLocation = null;
     }
 
-    private void createAquarium(Player player, Location center) {
-        for (int y = 0; y <= 2 * GLASS_RANGE; y++) {
-            for (int x = -GLASS_RANGE; x <= GLASS_RANGE; x++) {
-                for (int z = -GLASS_RANGE; z <= GLASS_RANGE; z++) {
-                    Location blockLoc = center.clone().add(x, y, z);
-                    player.getWorld().getBlockAt(blockLoc).setType(Material.GLASS);
-                }
+    private void createAquarium(Player caster, Location center) {
+        teleportPlayersInRange(caster, center);
+        
+        AbilityUtils.createBox(center, Material.GLASS, GLASS_RANGE, 2 * GLASS_RANGE + 1);
+        AbilityUtils.createBox(center.clone().add(0, GLASS_RANGE - WATER_RANGE, 0),
+                Material.WATER, WATER_RANGE, 2 * WATER_RANGE + 1);
+    }
+
+    private void teleportPlayersInRange(Player caster, Location center) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player == caster) continue;
+            Location playerLoc = player.getLocation();
+            if (isPlayerInAquariumRange(playerLoc, center)) {
+                Location teleportLoc = center.clone().add(0, TELEPORT_HEIGHT, 0);
+                teleportLoc.setYaw(playerLoc.getYaw());
+                teleportLoc.setPitch(playerLoc.getPitch());
+                player.teleport(teleportLoc);
             }
         }
-        int waterOffset = GLASS_RANGE - WATER_RANGE;
-        for (int y = waterOffset; y <= waterOffset + 2 * WATER_RANGE; y++) {
-            for (int x = -WATER_RANGE; x <= WATER_RANGE; x++) {
-                for (int z = -WATER_RANGE; z <= WATER_RANGE; z++) {
-                    Location waterLoc = center.clone().add(x, y, z);
-                    player.getWorld().getBlockAt(waterLoc).setType(Material.WATER);
-                }
-            }
-        }
+    }
+
+    private boolean isPlayerInAquariumRange(Location playerLoc, Location center) {
+        double dx = Math.abs(playerLoc.getX() - center.getX());
+        double dy = playerLoc.getY() - center.getY();
+        double dz = Math.abs(playerLoc.getZ() - center.getZ());
+
+        return dx <= GLASS_RANGE &&
+                dy >= 0 && dy <= 2 * GLASS_RANGE + 1 &&
+                dz <= GLASS_RANGE;
     }
 
 }
