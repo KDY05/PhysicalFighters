@@ -5,6 +5,7 @@ import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -13,6 +14,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Hulk extends Ability {
+
+    private double originalHealth = 20;
 
     public Hulk() {
         InitAbility("헐크", Type.Active_Continue, Rank.SSS,
@@ -28,6 +31,7 @@ public class Hulk extends Ability {
             PlayerInteractEvent event1 = (PlayerInteractEvent) event;
             if (isOwner(event1.getPlayer()) &&
                     isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard) {
+                originalHealth = event1.getPlayer().getHealth();
                 return 1;
             }
         }
@@ -66,7 +70,8 @@ public class Hulk extends Ability {
     public void A_FinalDurationEnd() {
         Player caster = getPlayer();
         if (caster == null) return;
-        caster.setHealth(20);
+        caster.setHealth(originalHealth);
+        caster.sendMessage(ChatColor.RED + "원래대로 돌아왔습니다.");
     }
 
 }

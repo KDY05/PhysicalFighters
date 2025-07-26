@@ -18,7 +18,7 @@ public class Kimimaro extends Ability implements BaseItem {
     public Kimimaro() {
         InitAbility("키미마로", Type.Passive_Manual, Rank.SS,
                 "뼈다귀로 상대를 공격할 시에 강한 데미지를 주고,",
-                "40% 확률로 상대에게 10초간 독 효과를 겁니다.");
+                "40% 확률로 상대에게 5초간 독 효과를 겁니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerBaseItemEvents();
@@ -53,7 +53,7 @@ public class Kimimaro extends Ability implements BaseItem {
             event0.setDamage(event0.getDamage() * 8);
             LivingEntity entity = (LivingEntity) event0.getEntity();
             if (Math.random() < 0.4D)
-                entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 200, 0));
+                entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 0));
         }
     }
 

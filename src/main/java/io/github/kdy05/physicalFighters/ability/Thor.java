@@ -62,12 +62,11 @@ public class Thor extends Ability implements BaseItem {
                     ItemStack item = caster.getInventory().getItemInMainHand();
                     if (!isMjolnir(item)) break;
                     if (this.charge > 0) {
-                        entity.damage(3 * this.charge);
+                        event0.setDamage(event0.getDamage() + 3 * this.charge);
+                        this.charge = 0;
                         entity.getWorld().strikeLightning(entity.getLocation());
                         caster.sendMessage(ChatColor.YELLOW + "묠니르에 농축된 번개의 데미지를 추가로 입혔습니다.");
-                        this.charge = 0;
                     }
-                    event0.setDamage(8);
                 }
             }
             case 1 -> {

@@ -5,21 +5,41 @@ import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.utils.EventData;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.List;
 import java.util.Objects;
-
-// TODO: 낚시로 얻을 수 없는 전용 물고기를 구현
 
 public class Fish extends Ability implements BaseItem {
     // 능력 설정 상수
     private static final double FISHING_ROD_DAMAGE = 6.0;
     private static final double FISH_DAMAGE = 9.0;
     private static final double FISH_DROP_RATE = 0.03;
+
+    private final ItemStack fish = createFish();
+
+    private ItemStack createFish() {
+        ItemStack fish = new ItemStack(Material.COD);
+        ItemMeta meta = fish.getItemMeta();
+        assert meta != null;
+        meta.setDisplayName(ChatColor.AQUA + "강태공의 물고기");
+        meta.setLore(List.of(ChatColor.GRAY + "강태공 전용"));
+        fish.setItemMeta(meta);
+        return fish;
+    }
+
+    private boolean isFish(ItemStack stack) {
+        ItemMeta meta = stack.getItemMeta();
+        if (meta == null || meta.getLore() == null) return false;
+        return stack.getType().equals(Material.COD) && meta.getDisplayName().equals(ChatColor.AQUA + "강태공의 물고기")
+                && meta.getLore().getFirst().equals(ChatColor.GRAY + "강태공 전용");
+    }
 
     public Fish() {
         InitAbility("강태공", Type.Passive_Manual, Rank.A,
@@ -36,8 +56,10 @@ public class Fish extends Ability implements BaseItem {
             case 0 -> {
                 EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
                 if (!isOwner(damageEvent.getDamager())) break;
+                Player player = (Player) damageEvent.getDamager();
+
                 if (isValidItem(Material.FISHING_ROD)) return 0;
-                if (isValidItem(Material.COD)) return 1;
+                if (isFish(player.getInventory().getItemInMainHand())) return 1;
             }
             case ITEM_DROP_EVENT -> {
                 return handleItemDropCondition(event);
@@ -59,7 +81,7 @@ public class Fish extends Ability implements BaseItem {
                 EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
                 damageEvent.setDamage(damageEvent.getDamage() * FISHING_ROD_DAMAGE);
                 if (Math.random() < FISH_DROP_RATE) {
-                    Objects.requireNonNull(getPlayer()).getInventory().addItem(new ItemStack(Material.COD));
+                    Objects.requireNonNull(getPlayer()).getInventory().addItem(fish);
                 }
             }
             case 1 -> {

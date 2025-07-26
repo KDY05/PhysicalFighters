@@ -44,4 +44,11 @@ public class Clocking extends Ability {
     public void A_Effect(Event event, int CustomData) {
     }
 
+    @Override
+    public void A_ResetEvent(Player owner) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.showPlayer(plugin, owner);
+        }
+    }
+
 }
