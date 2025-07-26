@@ -6,6 +6,7 @@ import io.github.kdy05.physicalFighters.command.GameCommand;
 
 import io.github.kdy05.physicalFighters.command.UtilCommand;
 import io.github.kdy05.physicalFighters.utils.BaseKitManager;
+import io.github.kdy05.physicalFighters.utils.CompassTracker;
 import org.bukkit.plugin.java.JavaPlugin;
 
 // TODO: 무적 시간 보스바 타이머, GameManager 역할 분담 리팩토링, 개별 능력 활성화 토글링(ability.yml), 리드미 생성, 우승자 공지
@@ -40,6 +41,7 @@ public class PhysicalFighters extends JavaPlugin {
         commandManager.registerCommand(new UtilCommand(this));
 
         baseKitManager = new BaseKitManager(this);
+        new CompassTracker(this);
 
         getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityInitializer.AbilityList.size()));
     }

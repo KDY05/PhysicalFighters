@@ -11,6 +11,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -66,8 +67,15 @@ public class Phoenix extends Ability {
                     Bukkit.broadcastMessage(ChatColor.RED + "불사조가 죽었습니다. 더 이상 부활할수 없습니다.");
                     switch (ConfigManager.OnKill) {
                         case 1 -> {
-                            killed.setGameMode(GameMode.SPECTATOR);
-                            killed.sendMessage(ChatColor.YELLOW + "관전자 모드로 전환되었습니다.");
+                            Location deathLocation = killed.getLocation().clone();
+                            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                                killed.setGameMode(GameMode.SPECTATOR);
+                                killed.spigot().respawn();
+                                killed.teleport(deathLocation);
+                                killed.sendTitle(ChatColor.RED + "사망하였습니다!",
+                                        ChatColor.YELLOW + "관전자 모드로 전환합니다.",
+                                        10, 100 ,10);
+                            }, 1L);
                         }
                         case 2 ->
                                 killed.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
