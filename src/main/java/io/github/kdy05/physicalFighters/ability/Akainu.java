@@ -37,7 +37,7 @@ public class Akainu extends Ability {
         InitAbility("아카이누", Type.Active_Immediately, Rank.SS,
                Usage.IronLeft + "바라보는 곳의 땅을 용암으로 바꿉니다.",
                 "4초 뒤에 용암이 다시 굳으며 적을 땅속에 가둡니다.",
-                Usage.Passive + "화염 및 용암 데미지를 무시합니다.");
+                Usage.Passive + "화염 및 용암 대미지를 무시합니다.");
         InitAbility(45, 0, true);
         registerLeftClickEvent();
         EventManager.onEntityDamage.add(new EventData(this, 1));

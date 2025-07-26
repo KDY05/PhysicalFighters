@@ -120,7 +120,7 @@ public class GameManager {
     public void handleNo(Player player) {
         if (isValidAbilitySelection(player)) {
             if (assignRandomAbility(player) == null) {
-                player.sendMessage(ChatColor.RED + "(!) 능력의 갯수가 부족하여 재추첨이 불가합니다.");
+                player.sendMessage(ChatColor.RED + "(!) 능력의 개수가 부족하여 재추첨이 불가합니다.");
                 return;
             }
             plugin.getGameCommand().handleCheck(player);
@@ -231,7 +231,7 @@ public class GameManager {
     private void distributeAbilitiesWithChoice() {
         for (Player player : playerList) {
             if (assignRandomAbility(player) == null) {
-                player.sendMessage(ChatColor.RED + "경고, 능력의 갯수가 부족합니다.");
+                player.sendMessage(ChatColor.RED + "경고, 능력의 개수가 부족합니다.");
             } else {
                 player.sendMessage(ChatColor.YELLOW + "(!) /va check " + ChatColor.WHITE + "= 능력 확인");
                 player.sendMessage(ChatColor.YELLOW + "(!) /va yes " + ChatColor.WHITE + "= 능력 사용.");
@@ -244,10 +244,10 @@ public class GameManager {
     }
 
     private void distributeAbilitiesInstantly() {
-        broadcastMessage(ChatColor.AQUA + "능력 갯수보다 플레이어 수가 같거나 많으므로 즉시 확정됩니다.");
+        broadcastMessage(ChatColor.AQUA + "능력 개수보다 플레이어 수가 같거나 많으므로 즉시 확정됩니다.");
         for (Player player : playerList) {
             if (assignRandomAbility(player) == null) {
-                player.sendMessage(ChatColor.RED + "경고, 능력의 갯수가 부족합니다.");
+                player.sendMessage(ChatColor.RED + "경고, 능력의 개수가 부족합니다.");
             } else {
                 okSign.add(player);
                 player.sendMessage(ChatColor.GREEN + "당신에게 능력이 부여되었습니다. " + 
@@ -352,7 +352,7 @@ public class GameManager {
         int remainingSeconds = ConfigManager.EarlyInvincibleTime * 60 - count;
         
         if (remainingSeconds == 0) {
-            broadcastMessage(ChatColor.GREEN + "초반 무적이 해제되었습니다. 이제 데미지를 입습니다.");
+            broadcastMessage(ChatColor.GREEN + "초반 무적이 해제되었습니다. 이제 대미지를 입습니다.");
             ConfigManager.DamageGuard = false;
         } else if (remainingSeconds <= 5 && remainingSeconds >= 1) {
             broadcastMessage(String.format(ChatColor.YELLOW + "%d초 후" + ChatColor.WHITE + " 초반무적이 해제됩니다.", 

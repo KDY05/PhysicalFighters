@@ -22,7 +22,7 @@ public class Paladin extends Ability {
 
     public Paladin() {
         InitAbility("팔라딘", Type.Passive_AutoMatic, Rank.A,
-                "칼을 들었을 때 다수의 적에게 10~20의 랜덤데미지를 가하며 사거리가 두배가 됩니다. 단, 공격속도가 감소합니다.");
+                "칼을 들었을 때 다수의 적에게 10~20의 랜덤대미지를 가하며 사거리가 두배가 됩니다. 단, 공격속도가 감소합니다.");
         InitAbility(0, 0, true);
         registerLeftClickEvent();
         EventManager.onEntityDamageByEntity.add(new EventData(this, 1));
@@ -57,7 +57,7 @@ public class Paladin extends Ability {
                     Block bb = bi.next();
                     AbilityUtils.splashDamage(e.getPlayer(), bb.getLocation(), 3, i);
                 }
-                e.getPlayer().sendMessage(ChatColor.GREEN + "" + i + "의 데미지를 가했습니다.");
+                e.getPlayer().sendMessage(ChatColor.GREEN + "" + i + "의 대미지를 가했습니다.");
                 this.candmg = false;
                 Timer t = new Timer();
                 t.schedule(new TimerTask() {

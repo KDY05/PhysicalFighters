@@ -21,8 +21,8 @@ public class Angel extends Ability {
 
     public Angel() {
         InitAbility("천사", Type.Active_Immediately, Rank.GOD, new String[]{
-                "철괴로 타격받은 대상에게 10초간 자신이 받는 데미지의 반을 흡수시킵니다.",
-                "독, 질식, 낙하 데미지를 받지 않습니다."});
+                "철괴로 타격받은 대상에게 10초간 자신이 받는 대미지의 반을 흡수시킵니다.",
+                "독, 질식, 낙하 대미지를 받지 않습니다."});
         InitAbility(80, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
         EventManager.onEntityDamage.add(new EventData(this, 3));
@@ -50,7 +50,7 @@ public class Angel extends Ability {
                     Event2.setCancelled(true);
                 } else if (Event2.getCause() == DamageCause.FALL) {
                     getPlayer().sendMessage(
-                            ChatColor.GREEN + "사뿐하게 떨어져 데미지를 받지 않았습니다.");
+                            ChatColor.GREEN + "사뿐하게 떨어져 대미지를 받지 않았습니다.");
                     Event2.setCancelled(true);
                 }
             }
@@ -61,8 +61,8 @@ public class Angel extends Ability {
     public void A_Effect(Event event, int CustomData) {
         EntityDamageByEntityEvent Event = (EntityDamageByEntityEvent) event;
         pp = ((Player) Event.getEntity()).getName();
-        getPlayer().sendMessage(ChatColor.GREEN + ((Player) Event.getEntity()).getName() + "님은 이제 10초간 당신의 데미지의 반을 흡수합니다.");
-        ((Player) Event.getEntity()).sendMessage(ChatColor.RED + "당신은 10초간 " + getPlayer().getName() + "님이 받는 데미지의 반을 흡수합니다.");
+        getPlayer().sendMessage(ChatColor.GREEN + ((Player) Event.getEntity()).getName() + "님은 이제 10초간 당신의 대미지의 반을 흡수합니다.");
+        ((Player) Event.getEntity()).sendMessage(ChatColor.RED + "당신은 10초간 " + getPlayer().getName() + "님이 받는 대미지의 반을 흡수합니다.");
         ppon = true;
         Timer timer = new Timer();
         timer.schedule(new offTimer(), 10000L);

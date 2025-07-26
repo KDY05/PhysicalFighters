@@ -44,8 +44,8 @@ public class Thor extends Ability implements BaseItem {
 
     public Thor() {
         InitAbility("토르", Type.Active_Immediately, Rank.GOD,
-                "묠니르(철퇴) 우클릭 시 주변의 플레이어에게 5의 데미지를 주고,",
-                "다음 공격에 +3의 데미지를 농축시킵니다. [최대 6회 중첩]");
+                "묠니르(철퇴) 우클릭 시 주변의 플레이어에게 5의 대미지를 주고,",
+                "다음 공격에 +3의 대미지를 농축시킵니다. [최대 6회 중첩]");
         InitAbility(8, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerRightClickEvent();
@@ -65,7 +65,7 @@ public class Thor extends Ability implements BaseItem {
                         event0.setDamage(event0.getDamage() + 3 * this.charge);
                         this.charge = 0;
                         entity.getWorld().strikeLightning(entity.getLocation());
-                        caster.sendMessage(ChatColor.YELLOW + "묠니르에 농축된 번개의 데미지를 추가로 입혔습니다.");
+                        caster.sendMessage(ChatColor.YELLOW + "묠니르에 농축된 번개의 대미지를 추가로 입혔습니다.");
                     }
                 }
             }

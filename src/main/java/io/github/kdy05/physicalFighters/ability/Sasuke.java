@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class Sasuke extends Ability {
     public Sasuke() {
         InitAbility("사스케", Type.Active_Immediately, Rank.S,
-                Usage.IronAttack + "치도리 - 엄청난 데미지로 감전시킵니다.");
+                Usage.IronAttack + "치도리 - 엄청난 대미지로 감전시킵니다.");
         InitAbility(30, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }

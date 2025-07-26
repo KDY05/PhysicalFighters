@@ -20,7 +20,7 @@ public class Assassin extends Ability {
 
     public Assassin() {
         InitAbility("어쌔신", Type.Passive_AutoMatic, Rank.B,
-                "뒤에서 공격할 시 데미지를 2배로 입히고 눈을 가립니다.");
+                "뒤에서 공격할 시 대미지를 2배로 입히고 눈을 가립니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }

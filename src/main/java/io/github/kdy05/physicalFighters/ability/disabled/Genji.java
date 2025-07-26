@@ -29,9 +29,9 @@ public class Genji extends Ability {
 
     public Genji() {
         InitAbility("겐지", Type.Active_Immediately, Rank.S,
-                "철괴나 칼을 들고 쉬프트시 앞으로 돌진하며 앞의 모든 적에게 큰 데미지를 줍니다.(질풍참)",
-                "질풍참을 사용시 5초간 칼의 사거리가 증가하며 5의 추가데미지를 입힙니다.",
-                "*낙하데미지를 받지않습니다.");
+                "철괴나 칼을 들고 쉬프트시 앞으로 돌진하며 앞의 모든 적에게 큰 대미지를 줍니다.(질풍참)",
+                "질풍참을 사용시 5초간 칼의 사거리가 증가하며 5의 추가대미지를 입힙니다.",
+                "*낙하대미지를 받지않습니다.");
         InitAbility(20, 0, true);
         EventManager.onPlayerToggleSneakEvent.add(new EventData(this, 7));
         registerLeftClickEvent();
@@ -54,7 +54,7 @@ public class Genji extends Ability {
                     (Event2.getCause() == DamageCause.FALL)) {
                 Event2.setCancelled(true);
                 getPlayer().sendMessage(
-                        ChatColor.GREEN + "사뿐하게 떨어져 데미지를 받지 않았습니다.");
+                        ChatColor.GREEN + "사뿐하게 떨어져 대미지를 받지 않았습니다.");
             }
         }
         if (CustomData == 4) {

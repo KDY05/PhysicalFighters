@@ -19,7 +19,7 @@ public class Hulk extends Ability {
 
     public Hulk() {
         InitAbility("헐크", Type.Active_Continue, Rank.SSS,
-                Usage.IronRight + "30초간 각종 버프를 받으며 주는 데미지가 1.5배, 받는 데미지가 절반이 됩니다.");
+                Usage.IronRight + "30초간 각종 버프를 받으며 주는 대미지가 1.5배, 받는 대미지가 절반이 됩니다.");
         InitAbility(180, 30, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerRightClickEvent();

@@ -16,7 +16,7 @@ public class Demigod extends Ability {
     public Demigod() {
         InitAbility("데미갓", Type.Passive_AutoMatic, Rank.S,
                 "반은 인간, 반은 신인 능력자입니다.",
-                "데미지를 받으면 일정 확률로 10초간 랜덤 버프가 발동됩니다.");
+                "대미지를 받으면 일정 확률로 10초간 랜덤 버프가 발동됩니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamage.add(new EventData(this));
     }

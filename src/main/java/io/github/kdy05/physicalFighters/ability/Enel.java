@@ -15,7 +15,7 @@ import java.util.Objects;
 public class Enel extends Ability {
     public Enel() {
         InitAbility("갓 에넬", Type.Active_Immediately, Rank.S,
-                Usage.IronLeft + "바라보는 방향으로 번개를 발사하여 강한 범위 데미지를 줍니다.");
+                Usage.IronLeft + "바라보는 방향으로 번개를 발사하여 강한 범위 대미지를 줍니다.");
         InitAbility(30, 0, true);
         registerLeftClickEvent();
     }

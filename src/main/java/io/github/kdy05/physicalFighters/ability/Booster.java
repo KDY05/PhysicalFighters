@@ -14,7 +14,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class Booster extends Ability {
     public Booster() {
         InitAbility("부스터", Type.Passive_AutoMatic, Rank.B,
-                "공격 시에 딜레이가 매우 낮습니다. 단 당신의 데미지는 3~6로 랜덤입니다.");
+                "공격 시에 딜레이가 매우 낮습니다. 단 당신의 대미지는 3~6로 랜덤입니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }

@@ -24,7 +24,7 @@ import org.bukkit.inventory.PlayerInventory;
 public class Archer extends Ability implements BaseItem {
     public Archer() {
         InitAbility("아쳐", Type.Passive_Manual, Rank.A,
-                "상대에게 쏘는 화살 데미지가 항상 3 상승합니다.",
+                "상대에게 쏘는 화살 대미지가 항상 3 상승합니다.",
                 "60% 확률로 6초간 불을 붙이며, 40% 확률로 폭발을 일으킵니다.",
                 "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.");
         InitAbility(0, 0, true);

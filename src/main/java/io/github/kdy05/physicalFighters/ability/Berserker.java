@@ -11,7 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class Berserker extends Ability {
     public Berserker() {
         InitAbility("광전사", Type.Passive_Manual, Rank.A,
-                "체력이 낮아질수록 데미지가 증폭됩니다.",
+                "체력이 낮아질수록 대미지가 증폭됩니다.",
                 "6칸 ↓ - 1.5배, 4칸 ↓ - 2배, 2칸 ↓ - 3배, 한 칸 ↓ - 4배");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));

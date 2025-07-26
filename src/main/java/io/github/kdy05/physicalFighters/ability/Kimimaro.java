@@ -17,7 +17,7 @@ import org.bukkit.potion.PotionEffectType;
 public class Kimimaro extends Ability implements BaseItem {
     public Kimimaro() {
         InitAbility("키미마로", Type.Passive_Manual, Rank.SS,
-                "뼈다귀로 상대를 공격할 시에 강한 데미지를 주고,",
+                "뼈다귀로 상대를 공격할 시에 강한 대미지를 주고,",
                 "40% 확률로 상대에게 5초간 독 효과를 겁니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));

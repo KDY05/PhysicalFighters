@@ -13,7 +13,7 @@ public class Thunder extends Ability {
     public Thunder() {
         InitAbility("썬더볼트", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴 좌클릭으로 능력을 사용합니다.",
-                "주변 5칸의 플레이어에게 데미지를 줍니다."});
+                "주변 5칸의 플레이어에게 대미지를 줍니다."});
         InitAbility(5, 0, true);
         registerLeftClickEvent();
     }

@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class NuclearPunch extends Ability {
     public NuclearPunch() {
         InitAbility("핵펀치", Type.Active_Immediately, Rank.A,
-                Usage.IronAttack + "데미지 20을 주며 매우 멀리 밀쳐버립니다.");
+                Usage.IronAttack + "대미지 20을 주며 매우 멀리 밀쳐버립니다.");
         InitAbility(45, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }

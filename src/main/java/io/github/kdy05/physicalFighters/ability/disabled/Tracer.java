@@ -33,7 +33,7 @@ public class Tracer extends Ability {
                 "1.철괴를 들고 쉬프트를 누르면 바라보는 방향으로 짧게 순간이동합니다.",
                 "- 5초마다 코어가 하나씩 충전되며, 3개까지 충전됩니다.",
                 "2.철괴를 들고 우클릭시 자신의 모든 상태를 4초전으로 돌립니다. (쿨타임:40초)",
-                "*낙하데미지를 받지않습니다.");
+                "*낙하대미지를 받지않습니다.");
         InitAbility(40, 0, true);
         EventManager.onPlayerToggleSneakEvent.add(new EventData(this));
         registerRightClickEvent();
@@ -102,7 +102,7 @@ public class Tracer extends Ability {
                     (Event2.getCause() == EntityDamageEvent.DamageCause.FALL)) {
                 Event2.setCancelled(true);
                 getPlayer().sendMessage(
-                        ChatColor.GREEN + "사뿐하게 떨어져 데미지를 받지 않았습니다.");
+                        ChatColor.GREEN + "사뿐하게 떨어져 대미지를 받지 않았습니다.");
             }
         }
         if (CustomData == 4) {

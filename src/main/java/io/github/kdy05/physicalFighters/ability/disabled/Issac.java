@@ -25,7 +25,7 @@ public class Issac
         InitAbility("아이작", Type.Active_Immediately, Rank.S, new String[]{
                 "금괴를 들고 우클릭시 눈물을 발사합니다.",
                 "철괴 하나당 5개의 눈물을 발사할 수 있습니다.",
-                "눈물의 데미지는 3입니다."});
+                "눈물의 대미지는 3입니다."});
         InitAbility(0, 0, true, ShowText.Custom_Text);
         registerRightClickEvent();
         EventManager.onEntityDamageByEntity.add(new EventData(this, 3));

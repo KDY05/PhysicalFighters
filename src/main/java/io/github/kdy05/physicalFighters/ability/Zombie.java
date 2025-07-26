@@ -14,7 +14,7 @@ import io.github.kdy05.physicalFighters.utils.EventData;
 public class Zombie extends Ability {
     public Zombie() {
         InitAbility("좀비", Type.Passive_AutoMatic, Rank.B,
-                "모든 데미지의 반을 흡수합니다. 단, 화염 데미지를 8배로 받습니다.");
+                "모든 대미지의 반을 흡수합니다. 단, 화염 대미지를 8배로 받습니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamage.add(new EventData(this));
         EventManager.onEntityDamageByEntity.add(new EventData(this, 1));

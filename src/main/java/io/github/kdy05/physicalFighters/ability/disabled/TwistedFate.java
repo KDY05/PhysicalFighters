@@ -32,9 +32,9 @@ public class TwistedFate extends Ability {
         InitAbility("트위스티드 페이트", Type.Active_Immediately, Rank.S, new String[]{
                 "철괴를 들고 우클릭시 카드를 뽑으며, 좌클릭시 바라보는 방향으로 카드를 날립니다.",
                 "카드는 순서대로 빨강색, 파랑색, 황금색이 있습니다.",
-                ChatColor.RED + "빨강색 카드" + ChatColor.WHITE + "는 15의 데미지를 주며, 상대와 주변 플레이어의 이동속도를 느리게합니다.",
-                ChatColor.BLUE + "파랑색 카드" + ChatColor.WHITE + "는 20의 데미지를 주며, 본 스킬의 재사용 대기시간을 초기화 시켜줍니다.",
-                ChatColor.GOLD + "황금색 카드" + ChatColor.WHITE + "는 10의 데미지를 주며, 상대를 2초간 못움직이게합니다."});
+                ChatColor.RED + "빨강색 카드" + ChatColor.WHITE + "는 15의 대미지를 주며, 상대와 주변 플레이어의 이동속도를 느리게합니다.",
+                ChatColor.BLUE + "파랑색 카드" + ChatColor.WHITE + "는 20의 대미지를 주며, 본 스킬의 재사용 대기시간을 초기화 시켜줍니다.",
+                ChatColor.GOLD + "황금색 카드" + ChatColor.WHITE + "는 10의 대미지를 주며, 상대를 2초간 못움직이게합니다."});
         InitAbility(20, 0, true);
         registerLeftClickEvent();
         registerRightClickEvent();

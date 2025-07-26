@@ -24,7 +24,7 @@ public class Devil extends Ability {
         InitAbility("악마", Type.Active_Immediately, Rank.GOD, new String[]{
                 "상대를 철괴로 타격할시에 공중의 투기장으로 이동하여 20초간 1:1 대결을 펼칩니다.",
                 "이때 10초간 상대는 다양한 디버프를 받고, 당신은 버프를 받습니다.",
-                "당신은 불데미지, 낙하데미지를 받지 않습니다."});
+                "당신은 불대미지, 낙하대미지를 받지 않습니다."});
         InitAbility(80, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
         EventManager.onEntityDamage.add(new EventData(this, 3));
@@ -46,7 +46,7 @@ public class Devil extends Ability {
                     Event2.setCancelled(true);
                 } else if (Event2.getCause() == DamageCause.FALL) {
                     getPlayer().sendMessage(
-                            ChatColor.GREEN + "사뿐하게 떨어져 데미지를 받지 않았습니다.");
+                            ChatColor.GREEN + "사뿐하게 떨어져 대미지를 받지 않았습니다.");
                     Event2.setCancelled(true);
                 }
             }

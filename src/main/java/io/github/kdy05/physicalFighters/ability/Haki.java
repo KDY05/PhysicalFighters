@@ -23,7 +23,7 @@ public class Haki extends Ability {
 
     public Haki() {
         InitAbility("패기", Type.Active_Continue, Rank.SS,
-                Usage.IronLeft + "20초간 10칸 내의 적에게 강한 데미지를 줍니다.");
+                Usage.IronLeft + "20초간 10칸 내의 적에게 강한 대미지를 줍니다.");
         InitAbility(160, 10, true);
         registerLeftClickEvent();
     }

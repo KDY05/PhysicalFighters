@@ -19,7 +19,7 @@ public class Roclee extends Ability {
     public Roclee() {
         InitAbility("록리", Type.Active_Immediately, Rank.S,
                 Usage.IronAttack + "피해를 입히며 공중으로 끌어올립니다.",
-                "이때 시전자는 5초간 낙하 데미지를 받지 않습니다.");
+                "이때 시전자는 5초간 낙하 대미지를 받지 않습니다.");
         InitAbility(20, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }

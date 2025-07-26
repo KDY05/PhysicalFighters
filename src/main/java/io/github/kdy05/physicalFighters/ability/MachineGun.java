@@ -40,7 +40,7 @@ public class MachineGun extends Ability {
     public MachineGun() {
         InitAbility("기관총", Type.Active_Immediately, Rank.S,
                 Usage.GoldRight + "화살을 연사합니다. 철괴를 탄창으로 사용하며 한 탄창은 30발입니다.",
-                "크리티컬 - 20% 확률로 화살이 고정 데미지를 입힙니다.");
+                "크리티컬 - 20% 확률로 화살이 고정 대미지를 입힙니다.");
         InitAbility(0, 0, true, ShowText.Custom_Text);
         registerRightClickEvent();
         EventManager.onEntityDamageByEntity.add(new EventData(this, EVENT_DAMAGE));

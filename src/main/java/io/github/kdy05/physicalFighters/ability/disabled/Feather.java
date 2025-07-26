@@ -14,8 +14,8 @@ import org.bukkit.potion.PotionEffectType;
 public class Feather extends Ability {
     public Feather() {
         InitAbility("깃털", Type.Passive_AutoMatic, Rank.C,
-                "낙하 데미지와 물속에서의 질식 데미지를 받지 않습니다.",
-                "90% 확률로 폭발,번개 데미지를 1로 줄여받으며 미러링 능력을",
+                "낙하 대미지와 물속에서의 질식 대미지를 받지 않습니다.",
+                "90% 확률로 폭발,번개 대미지를 1로 줄여받으며 미러링 능력을",
                 "회피할 수 있습니다, 낙하시 1분간 속도, 점프력이 빨라지는 버프를 받습니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDamage.add(new EventData(this));

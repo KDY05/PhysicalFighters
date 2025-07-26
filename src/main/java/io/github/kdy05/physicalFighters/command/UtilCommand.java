@@ -92,11 +92,11 @@ public class UtilCommand implements CommandInterface {
         if (ConfigManager.DamageGuard) {
             ConfigManager.DamageGuard = false;
             Bukkit.broadcastMessage(ChatColor.GREEN +
-                    "OP에 의해 초반 무적이 해제되었습니다. 이제 데미지를 입습니다.");
+                    "OP에 의해 초반 무적이 해제되었습니다. 이제 대미지를 입습니다.");
         } else {
             ConfigManager.DamageGuard = true;
             Bukkit.broadcastMessage(ChatColor.GREEN +
-                    "OP에 의해 초반 무적이 설정되었습니다. 이제 데미지를 입지않습니다.");
+                    "OP에 의해 초반 무적이 설정되었습니다. 이제 대미지를 입지않습니다.");
         }
     }
 

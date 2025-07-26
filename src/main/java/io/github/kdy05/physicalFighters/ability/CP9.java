@@ -20,9 +20,9 @@ import org.bukkit.util.Vector;
 public class CP9 extends Ability {
     public CP9() {
         InitAbility("CP9", Type.Active_Immediately, Rank.SS,
-                Usage.IronAttack + "지건 - 상대에게 6의 고정 데미지를 줍니다.",
+                Usage.IronAttack + "지건 - 상대에게 6의 고정 대미지를 줍니다.",
                 Usage.IronRight + "월보 - 바라보는 방향으로 빠르게 도약합니다.",
-                Usage.Passive + "낙하 데미지를 무시합니다.");
+                Usage.Passive + "낙하 대미지를 무시합니다.");
         InitAbility(15, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerRightClickEvent();
@@ -49,7 +49,7 @@ public class CP9 extends Ability {
                 EntityDamageEvent event2 = (EntityDamageEvent) event;
                 if (isOwner(event2.getEntity()) && event2.getCause() == DamageCause.FALL) {
                     event2.setCancelled(true);
-                    sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 데미지를 받지 않았습니다.");
+                    sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 대미지를 받지 않았습니다.");
                 }
             }
         }

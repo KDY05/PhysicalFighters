@@ -15,7 +15,7 @@ public class Nasus extends Ability {
     int stack = 0;
 
     public Nasus() {
-        InitAbility("나서스", Type.Active_Immediately, Rank.B, new String[]{"시작시 괭이를 지급합니다.", "괭이로 흙을 경작할때마다 스택이 1씩 쌓입니다.", "10스택당 괭이에 1의 추가데미지가 생깁니다."});
+        InitAbility("나서스", Type.Active_Immediately, Rank.B, new String[]{"시작시 괭이를 지급합니다.", "괭이로 흙을 경작할때마다 스택이 1씩 쌓입니다.", "10스택당 괭이에 1의 추가대미지가 생깁니다."});
         InitAbility(3, 0, true, ShowText.Custom_Text);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerRightClickEvent();
