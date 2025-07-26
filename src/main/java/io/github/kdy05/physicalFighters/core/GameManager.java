@@ -62,6 +62,7 @@ public class GameManager {
     public static ArrayList<Player> getPlayerList() { return playerList; }
     public LinkedList<Player> getExceptionList() { return exceptionList; }
     public ArrayList<Player> getOKSign() { return okSign; }
+    public int getGameTime() { return gameProgressTimer.getCount(); }
 
     // Game flow control
     public void gameReady(CommandSender sender) {

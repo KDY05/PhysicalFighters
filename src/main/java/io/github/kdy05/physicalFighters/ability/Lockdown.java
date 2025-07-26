@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.core.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -11,8 +12,6 @@ import org.bukkit.event.Event;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 import io.github.kdy05.physicalFighters.utils.CommandInterface;
-
-// TODO: 능력 제한 시간 필터링
 
 public class Lockdown extends Ability implements CommandInterface {
     // 능력 설정 상수
@@ -27,7 +26,7 @@ public class Lockdown extends Ability implements CommandInterface {
         InitAbility("봉인", Type.Active_Continue, Rank.B,
                 "특정 플레이어의 능력을 1분간 봉인하며 배고픔 수치를 0으로 만듭니다.",
                 "\"/va lock <nickname>\" 명령어로 작동하며 대상이 60칸 이내에 있어야 합니다.",
-                "게임 시작 후 능력 제한 시간동안 이 능력을 사용할 수 없습니다.");
+                String.format("게임 시작 후 %d분동안 능력 사용이 제한됩니다.", ConfigManager.RestrictionTime));
         InitAbility(80, LOCKDOWN_DURATION, true);
         commandManager.registerCommand(this);
     }
@@ -37,6 +36,13 @@ public class Lockdown extends Ability implements CommandInterface {
         if (caster == null || !isOwner(caster)) {
             if (caster != null) caster.sendMessage(ChatColor.RED + "이 명령은 사용할 수 없습니다.");
             clearTempData();
+            return -1;
+        }
+
+        int currentTime = plugin.getGameManager().getGameTime();
+        if (GameManager.getScenario() == GameManager.ScriptStatus.GameStart && currentTime <= ConfigManager.RestrictionTime * 60) {
+            caster.sendMessage(ChatColor.RED + "아직 능력 제한 시간입니다. " + String.format("(%d/%d)",
+                    currentTime / 60, ConfigManager.RestrictionTime));
             return -1;
         }
 
