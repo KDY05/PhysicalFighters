@@ -9,8 +9,6 @@ import io.github.kdy05.physicalFighters.utils.BaseKitManager;
 import io.github.kdy05.physicalFighters.utils.CompassTracker;
 import org.bukkit.plugin.java.JavaPlugin;
 
-// TODO: 무적 시간 보스바 타이머, GameManager 역할 분담 리팩토링, 개별 능력 활성화 토글링(ability.yml), 리드미 생성, 우승자 공지
-
 public class PhysicalFighters extends JavaPlugin {
 
     public static int BuildNumber = 20250723;
