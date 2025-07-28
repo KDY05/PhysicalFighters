@@ -56,3 +56,12 @@ processResources {
         expand props
     }
 }
+
+jar {
+    from('README.md') {
+        into 'META-INF'
+    }
+    from('LICENSE') {
+        into 'META-INF'
+    }
+}
