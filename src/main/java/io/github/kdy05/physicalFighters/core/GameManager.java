@@ -202,8 +202,8 @@ public class GameManager {
         broadcastMessage(ChatColor.GREEN + "원작(VisualAbility) : " + ChatColor.WHITE + "제온");
         broadcastMessage(ChatColor.AQUA + "업데이트 : " + ChatColor.WHITE + "어라랍");
         if (full) {
-            broadcastMessage("원작자 카페: https://cafe.naver.com/craftproducer");
-            broadcastMessage("공식 배포처: https://github.com/KDY05/PhysicalFighters");
+            broadcastMessage(ChatColor.GRAY + "원작자 카페: https://cafe.naver.com/craftproducer");
+            broadcastMessage(ChatColor.GRAY + "공식 배포처: https://github.com/KDY05/PhysicalFighters");
         }
     }
 
