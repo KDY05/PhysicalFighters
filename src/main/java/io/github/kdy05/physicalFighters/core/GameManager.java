@@ -195,12 +195,16 @@ public class GameManager {
         }
     }
 
-    private void showGameInfo() {
+    private void showGameInfo(boolean full) {
         broadcastMessage(ChatColor.DARK_RED + "Physical Fighters");
         broadcastMessage(String.format(ChatColor.GRAY + "VER. %d", PhysicalFighters.BuildNumber));
         broadcastMessage(ChatColor.GREEN + "제작 : " + ChatColor.WHITE + "염료");
-        broadcastMessage(ChatColor.GREEN + "원작 : " + ChatColor.WHITE + "제온(VisualAbility)");
+        broadcastMessage(ChatColor.GREEN + "원작(VisualAbility) : " + ChatColor.WHITE + "제온");
         broadcastMessage(ChatColor.AQUA + "업데이트 : " + ChatColor.WHITE + "어라랍");
+        if (full) {
+            broadcastMessage("원작자 카페: https://cafe.naver.com/craftproducer");
+            broadcastMessage("공식 배포처: https://github.com/KDY05/PhysicalFighters");
+        }
     }
 
     private void handleAbilitySetup() {
@@ -375,7 +379,7 @@ public class GameManager {
 
     private void showPeriodicInfo(int count) {
         if (count > 0 && count % PROGRESS_INFO_INTERVAL == 0) {
-            showGameInfo();
+            showGameInfo(false);
         }
     }
 
@@ -415,7 +419,7 @@ public class GameManager {
         private void handleReadyTimer(int count) {
             switch (count) {
                 case 0 -> initializePlayerList();
-                case 3 -> showGameInfo();
+                case 3 -> showGameInfo(true);
                 case 7 -> handleAbilitySetup();
                 case 9 -> processAbilitySelection();
             }
