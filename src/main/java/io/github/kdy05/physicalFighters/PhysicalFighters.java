@@ -6,7 +6,6 @@ import io.github.kdy05.physicalFighters.command.GameCommand;
 
 import io.github.kdy05.physicalFighters.command.UtilCommand;
 import io.github.kdy05.physicalFighters.utils.BaseKitManager;
-import io.github.kdy05.physicalFighters.utils.CompassTracker;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PhysicalFighters extends JavaPlugin {
@@ -39,7 +38,6 @@ public class PhysicalFighters extends JavaPlugin {
         commandManager.registerCommand(new UtilCommand(this));
 
         baseKitManager = new BaseKitManager(this);
-        new CompassTracker(this);
 
         getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityInitializer.AbilityList.size()));
     }
