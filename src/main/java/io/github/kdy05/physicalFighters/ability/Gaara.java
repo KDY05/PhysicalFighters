@@ -20,7 +20,7 @@ public class Gaara extends Ability {
     public Gaara() {
         InitAbility("가아라", Type.Active_Immediately, Rank.B,
                 Usage.IronLeft + "바라보는 방향에 모래를 떨어뜨리고, 잠시 후 폭발시킵니다.");
-        InitAbility(30, 0, true);
+        InitAbility(45, 0, true);
         registerLeftClickEvent();
     }
 
@@ -33,7 +33,7 @@ public class Gaara extends Ability {
             return -1;
         }
 
-        targetLocation = AbilityUtils.getTargetLocation(caster, 40);
+        targetLocation = AbilityUtils.getTargetLocation(caster, 30);
         if (targetLocation == null) {
             caster.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
             return -1;

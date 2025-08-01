@@ -1,9 +1,15 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.core.EventManager;
+import io.github.kdy05.physicalFighters.utils.EventData;
 import org.bukkit.*;
 import io.github.kdy05.physicalFighters.core.Ability;
 
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import org.bukkit.block.Block;
@@ -16,10 +22,12 @@ public class Aokizi extends Ability {
     public Aokizi() {
         InitAbility("아오키지", Type.Active_Immediately, Rank.S,
                Usage.IronLeft + "자신이 보고있는 방향으로 얼음을 날립니다.",
-              Usage.IronRight + "바라보고 있는 5칸 이내의 물을 얼립니다.");
+              Usage.IronRight + "바라보고 있는 5칸 이내의 물을 얼립니다.",
+              Usage.Passive + "자신이 공격한 적을 2초간 느리게 만듭니다.");
         InitAbility(1, 0, true, ShowText.Custom_Text);
         registerLeftClickEvent();
         registerRightClickEvent();
+        EventManager.onEntityDamageByEntity.add(new EventData(this, 2));
     }
 
     @Override
@@ -44,6 +52,13 @@ public class Aokizi extends Ability {
                     block.setType(Material.ICE);
                 }
             }
+            case 2 -> {
+                EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
+                if (isOwner(event2.getDamager()) && !ConfigManager.DamageGuard
+                        && event2.getEntity() instanceof LivingEntity entity) {
+                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 40, 0));
+                }
+            }
         }
         return -1;
     }
@@ -63,7 +78,7 @@ public class Aokizi extends Ability {
             if (block.getType() != Material.ICE)
                 new ExplosionTimer(block.getType(), block).runTaskLater(plugin, 15L);
             block.setType(Material.ICE);
-            AbilityUtils.splashDamage(event0.getPlayer(), block.getLocation(), 3, 8);
+            AbilityUtils.splashDamage(event0.getPlayer(), block.getLocation(), 2.5, 8);
         }
     }
 

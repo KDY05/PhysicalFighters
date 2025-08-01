@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Temari extends Ability {
@@ -20,7 +21,8 @@ public class Temari extends Ability {
 
     public Temari() {
         InitAbility("테마리", Type.Active_Continue, Rank.S,
-                Usage.IronLeft + "20초간 자신의 주변에 있는 적들을 공중으로 날려버립니다.");
+                Usage.IronLeft + "능력 지속 시간동안 자신의 주변에 있는 적들을 공중으로 날려버립니다.",
+                "이때 날아간 플레이어는 일정 확률롤 손에 쥐고 있는 아이템을 떨어뜨립니다.");
         InitAbility(60, 20, true);
         registerLeftClickEvent();
     }
@@ -76,6 +78,12 @@ public class Temari extends Ability {
                 Location liftLoc = entity.getLocation().clone();
                 liftLoc.setY(entity.getLocation().getY() + LIFT_HEIGHT);
                 AbilityUtils.goVelocity(entity, liftLoc, 1);
+                if (entity instanceof Player player && Math.random() <= 0.20) {
+                    ItemStack item = player.getInventory().getItemInMainHand();
+                    caster.getWorld().dropItem(player.getLocation(), item);
+                    player.getInventory().removeItem(item);
+                    player.sendMessage(ChatColor.RED + "테마리의 강풍에 의해 손에 쥐고 있는 아이템을 떨어뜨렸습니다.");
+                }
             });
         }
     }

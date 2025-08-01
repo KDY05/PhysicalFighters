@@ -37,7 +37,7 @@ public class AbilityInitializer {
     public static final Multishot multishot = new Multishot(); // 멀티샷
     public static final Medic medic = new Medic(); // 메딕
     public static final Guard guard = new Guard(); // 목둔
-    public static final Nonuck nonuck = new Nonuck(); // 무통증
+//    public static final Nonuck nonuck = new Nonuck(); // 무통증
     public static final Minato minato = new Minato(); // 미나토
     public static final Mirroring mirroring = new Mirroring(); // 미러링
     // ㅂ
@@ -57,7 +57,7 @@ public class AbilityInitializer {
     public static final SuperFan superFan = new SuperFan(); // 선풍기
     public static final Teleporter teleporter = new Teleporter(); // 소환술사
     public static final ShockWave shockwave = new ShockWave(); // 쇼크웨이브
-    public static final Slower slower = new Slower(); // 슬로워
+//    public static final Slower slower = new Slower(); // 슬로워
 //    public static final Time2 time2 = new Time2(); // 시간을 지배하는 자
 //    public static final Thunder Thunder = new Thunder(); // 썬더볼트
     public static final Trash trash = new Trash(); // 쓰레기
@@ -71,7 +71,7 @@ public class AbilityInitializer {
     public static final Apollon apolln = new Apollon(); // 아폴론
 //    public static final Devil Devil = new Devil(); // 악마
 //    public static final Pressure Pressure = new Pressure(); // 압력
-    public static final Assassin assassin = new Assassin(); // 어쌔신
+//    public static final Assassin assassin = new Assassin(); // 어쌔신
 //    public static final Uppercut Uppercut = new Uppercut(); // 어퍼컷
     public static final Ace ace = new Ace(); // 에이스
 //    public static final Poksi poksi = new Poksi(); // 이슈타르의 링
@@ -80,7 +80,7 @@ public class AbilityInitializer {
 //    public static final Infighter Infighter = new Infighter(); // 인파이터
     // ㅈ
 //    public static final Magnet Magnet = new Magnet(); // 자석
-    public static final Jumper jumper = new Jumper(); // 점퍼
+//    public static final Jumper jumper = new Jumper(); // 점퍼
     public static final Zoro zoro = new Zoro(); // 조로
     public static final Zombie zombie = new Zombie(); // 좀비
 //    public static final GravityBoots gravityBoots = new GravityBoots(); // 중력장화
@@ -96,7 +96,7 @@ public class AbilityInitializer {
     public static final Kijaru kijaru = new Kijaru(); // 키자루
     // ㅌ
 //    public static final Time time = new Time(); // 타임
-    public static final Fittingroom fittingroom = new Fittingroom(); // 탈의실
+//    public static final Fittingroom fittingroom = new Fittingroom(); // 탈의실
     public static final Temari temari = new Temari(); // 테마리
     public static final Thor thor = new Thor(); // 토르
     public static final Tranceball tranceball = new Tranceball(); // 트랜스볼
