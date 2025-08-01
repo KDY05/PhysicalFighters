@@ -71,7 +71,5 @@ AbilityOverLap: false
 
 ### TODO (업데이트 예정)
 
-- 무적 시간 보스바 타이머
-- 우승자 공지
 - 개별 능력 활성화 토글링(ability.yml)
 - GameManager 역할 분담 리팩토링

@@ -2,6 +2,7 @@ package io.github.kdy05.physicalFighters.core;
 
 import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
 import io.github.kdy05.physicalFighters.utils.TimerBase;
+import io.github.kdy05.physicalFighters.utils.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ public class GameManager {
     private final GameTimer gameStartTimer = new GameTimer(TimerType.START);
     private final GameTimer gameProgressTimer = new GameTimer(TimerType.PROGRESS);
     private final GameTimer gameWarningTimer = new GameTimer(TimerType.WARNING);
+    
+    // Invincibility Manager
+    private InvincibilityManager invincibilityManager;
 
     public enum ScriptStatus {
         NoPlay, ScriptStart, AbilitySelect, GameStart
@@ -63,6 +67,7 @@ public class GameManager {
     public LinkedList<Player> getExceptionList() { return exceptionList; }
     public ArrayList<Player> getOKSign() { return okSign; }
     public int getGameTime() { return gameProgressTimer.getCount(); }
+    public InvincibilityManager getInvincibilityManager() { return invincibilityManager; }
 
     // Game flow control
     public void gameReady(CommandSender sender) {
@@ -89,7 +94,12 @@ public class GameManager {
 
     // Stop methods
     public void gameReadyStop() { gameReadyTimer.stopTimer(); }
-    public void gameStartStop() { gameStartTimer.stopTimer(); }
+    public void gameStartStop() { 
+        gameStartTimer.stopTimer();
+        if (invincibilityManager != null) {
+            invincibilityManager.forceStop();
+        }
+    }
     public void gameProgressStop() { gameProgressTimer.stopTimer(); }
     public void gameWarningStop() { gameWarningTimer.endTimer(); }
 
@@ -202,8 +212,8 @@ public class GameManager {
             broadcastMessage(ChatColor.GREEN + "제작: " + ChatColor.WHITE + "염료");
             broadcastMessage(ChatColor.GREEN + "원작(VisualAbility): " + ChatColor.WHITE + "제온");
             broadcastMessage(ChatColor.AQUA + "업데이트: " + ChatColor.WHITE + "어라랍");
-            broadcastMessage(ChatColor.GRAY + "원작자 카페: https://cafe.naver.com/craftproducer");
-            broadcastMessage(ChatColor.GRAY + "공식 배포처: https://github.com/KDY05/PhysicalFighters");
+            broadcastMessage("원작자 카페: https://cafe.naver.com/craftproducer");
+            broadcastMessage("공식 배포처: https://github.com/KDY05/PhysicalFighters");
         }
     }
 
@@ -266,20 +276,14 @@ public class GameManager {
 
     private void startGameLogic() {
         broadcastMessage(ChatColor.GREEN + "게임이 시작되었습니다.");
-        setupInvincibility();
+        invincibilityManager = new InvincibilityManager(playerList);
+        plugin.getServer().getPluginManager().registerEvents(invincibilityManager, plugin);
+        invincibilityManager.startInvincibility();
         setPlayerBase();
         enableAllAbilities();
         gameProgress();
     }
 
-    private void setupInvincibility() {
-        if (ConfigManager.EarlyInvincibleTime != 0) {
-            broadcastMessage("시작 직후 " + ConfigManager.EarlyInvincibleTime + "분간 무적입니다.");
-            ConfigManager.DamageGuard = true;
-        } else {
-            broadcastMessage(ChatColor.RED + "초반 무적은 작동하지 않습니다.");
-        }
-    }
 
     private void setPlayerBase() {
         for (Player player : playerList) {
@@ -337,21 +341,6 @@ public class GameManager {
         }
     }
 
-    private void handleInvincibilityCountdown(int count) {
-        if (ConfigManager.EarlyInvincibleTime == 0) return;
-        
-        int remainingSeconds = ConfigManager.EarlyInvincibleTime * 60 - count;
-        
-        if (remainingSeconds == 0) {
-            broadcastMessage(ChatColor.GREEN + "초반 무적이 해제되었습니다. 이제 대미지를 입습니다.");
-            ConfigManager.DamageGuard = false;
-        } else if (remainingSeconds <= 5 && remainingSeconds >= 1) {
-            broadcastMessage(String.format(ChatColor.YELLOW + "%d초 후" + ChatColor.WHITE + " 초반무적이 해제됩니다.", 
-                           remainingSeconds));
-        } else if (remainingSeconds == 60) {
-            broadcastMessage(ChatColor.YELLOW + "초반 무적이 " + ChatColor.WHITE + "1분 후 해제됩니다.");
-        }
-    }
 
     private void showWarningMessage() {
         broadcastMessage(ChatColor.RED + "경고, 게임이 올바르게 시작되지 않았습니다.");
@@ -427,7 +416,6 @@ public class GameManager {
 
         private void handleProgressTimer(int count) {
             showPeriodicInfo(count);
-            handleInvincibilityCountdown(count);
         }
 
         private void handleWarningTimer(int count) {

@@ -5,7 +5,7 @@ import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
 import io.github.kdy05.physicalFighters.command.GameCommand;
 
 import io.github.kdy05.physicalFighters.command.UtilCommand;
-import io.github.kdy05.physicalFighters.utils.BaseKitManager;
+import io.github.kdy05.physicalFighters.utils.module.BaseKitManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PhysicalFighters extends JavaPlugin {

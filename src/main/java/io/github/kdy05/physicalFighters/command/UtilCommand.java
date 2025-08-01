@@ -91,8 +91,12 @@ public class UtilCommand implements CommandInterface {
     private void handleInv() {
         if (ConfigManager.DamageGuard) {
             ConfigManager.DamageGuard = false;
-            Bukkit.broadcastMessage(ChatColor.GREEN +
-                    "OP에 의해 초반 무적이 해제되었습니다. 이제 대미지를 입습니다.");
+
+            if (plugin.getGameManager() != null && plugin.getGameManager().getInvincibilityManager() != null) {
+                plugin.getGameManager().getInvincibilityManager().forceStop();
+            } else {
+                Bukkit.broadcastMessage(ChatColor.GREEN + "OP에 의해 초반 무적이 해제되었습니다. 이제 대미지를 입습니다.");
+            }
         } else {
             ConfigManager.DamageGuard = true;
             Bukkit.broadcastMessage(ChatColor.GREEN +

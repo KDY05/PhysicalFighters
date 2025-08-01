@@ -1,4 +1,4 @@
-package io.github.kdy05.physicalFighters.utils;
+package io.github.kdy05.physicalFighters.utils.module;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 import org.bukkit.Bukkit;
