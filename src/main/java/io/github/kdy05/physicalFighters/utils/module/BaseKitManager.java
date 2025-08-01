@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.utils.module;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +20,7 @@ public class BaseKitManager implements Listener {
     private final Map<Player, Inventory> editingInventories;
 
     // 기본 아이템 배열 (9x3 = 27칸)
-    private final ItemStack[] basicItems;
+    private ItemStack[] basicItems;
 
     public BaseKitManager(PhysicalFighters plugin) {
         this.plugin = plugin;
@@ -34,11 +35,29 @@ public class BaseKitManager implements Listener {
      * 기본 아이템들 초기화
      */
     private void initializeDefaultItems() {
-        basicItems[0] = new ItemStack(Material.ENCHANTING_TABLE);
-        basicItems[1] = new ItemStack(Material.BOOKSHELF, 64);
-        basicItems[2] = new ItemStack(Material.LAPIS_LAZULI, 64);
-        basicItems[3] = new ItemStack(Material.GRINDSTONE);
-        basicItems[4] = new ItemStack(Material.COOKED_BEEF, 64);
+       setKitbyPreset(0);
+    }
+
+    public void setKitbyPreset(int code) {
+        basicItems = new ItemStack[27];
+        if (code == 0) {
+            basicItems[0] = new ItemStack(Material.IRON_INGOT, 64);
+            basicItems[1] = new ItemStack(Material.GOLD_INGOT, 64);
+            basicItems[2] = new ItemStack(Material.LAPIS_LAZULI, 64);
+            basicItems[3] = new ItemStack(Material.OAK_LOG, 64);
+            basicItems[4] = new ItemStack(Material.COOKED_BEEF, 64);
+        }
+        else if (code == 1) {
+            ItemStack pickaxe = new ItemStack(Material.IRON_PICKAXE);
+            pickaxe.addEnchantment(Enchantment.UNBREAKING, 3);
+            pickaxe.addEnchantment(Enchantment.EFFICIENCY, 3);
+            basicItems[0] = pickaxe;
+            basicItems[1] = new ItemStack(Material.ENCHANTING_TABLE);
+            basicItems[2] = new ItemStack(Material.BOOKSHELF, 64);
+            basicItems[3] = new ItemStack(Material.LAPIS_LAZULI, 64);
+            basicItems[4] = new ItemStack(Material.GRINDSTONE);
+            basicItems[5] = new ItemStack(Material.COOKED_BEEF, 64);
+        }
     }
 
     /**

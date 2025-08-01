@@ -57,7 +57,7 @@ public class UtilCommand implements CommandInterface {
             handleReload(sender);
             return true;
         } else if (args[0].equalsIgnoreCase("kit")) {
-            handleKit(sender);
+            handleKit(sender, args);
             return true;
         }
 
@@ -199,8 +199,18 @@ public class UtilCommand implements CommandInterface {
         }
     }
 
-    private void handleKit(CommandSender sender) {
+    private void handleKit(CommandSender sender, String[] args) {
         if (!requirePlayer(sender)) return;
+        if (args.length == 2) {
+            int code;
+            try {
+                code = Integer.parseInt(args[1]);
+            } catch (NumberFormatException e) {
+                sender.sendMessage(ChatColor.RED + "코드가 올바르지 않습니다.");
+                return;
+            }
+            plugin.getBaseKitManager().setKitbyPreset(code);
+        }
         plugin.getBaseKitManager().openBasicItemGUI((Player) sender);
     }
 

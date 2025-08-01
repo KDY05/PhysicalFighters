@@ -110,8 +110,7 @@ public class InvincibilityManager implements Listener {
         int minutes = remainingSeconds / 60;
         int seconds = remainingSeconds % 60;
         
-        String title = String.format("%s초반 무적 %02d:%02d", 
-                                   ChatColor.GOLD, minutes, seconds);
+        String title = String.format("초반 무적 %02d:%02d", minutes, seconds);
         invincibilityBar.setTitle(title);
         
         if (remainingSeconds <= 30) {
