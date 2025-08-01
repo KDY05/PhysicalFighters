@@ -19,7 +19,7 @@ import java.util.Objects;
 public class Fish extends Ability implements BaseItem {
     // 능력 설정 상수
     private static final double FISHING_ROD_DAMAGE = 6.0;
-    private static final double FISH_DAMAGE = 9.0;
+    private static final double FISH_DAMAGE = 8.0;
     private static final double FISH_DROP_RATE = 0.03;
 
     private final ItemStack fish = createFish();
@@ -55,7 +55,7 @@ public class Fish extends Ability implements BaseItem {
         switch (CustomData) {
             case 0 -> {
                 EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
-                if (!isOwner(damageEvent.getDamager())) break;
+                if (!isOwner(damageEvent.getDamager()) || !(damageEvent.getEntity() instanceof Player)) break;
                 Player player = (Player) damageEvent.getDamager();
 
                 if (isValidItem(Material.FISHING_ROD)) return 0;

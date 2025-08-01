@@ -50,7 +50,7 @@ public class Kimimaro extends Ability implements BaseItem {
     public void A_Effect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-            event0.setDamage(event0.getDamage() * 8);
+            event0.setDamage(event0.getDamage() * 7);
             LivingEntity entity = (LivingEntity) event0.getEntity();
             if (Math.random() < 0.4D)
                 entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 0));

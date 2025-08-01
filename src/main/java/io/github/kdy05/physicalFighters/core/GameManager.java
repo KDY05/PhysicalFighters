@@ -198,10 +198,10 @@ public class GameManager {
     private void showGameInfo(boolean full) {
         broadcastMessage(ChatColor.DARK_RED + "Physical Fighters");
         broadcastMessage(String.format(ChatColor.GRAY + "VER. %d", PhysicalFighters.BuildNumber));
-        broadcastMessage(ChatColor.GREEN + "제작 : " + ChatColor.WHITE + "염료");
-        broadcastMessage(ChatColor.GREEN + "원작(VisualAbility) : " + ChatColor.WHITE + "제온");
-        broadcastMessage(ChatColor.AQUA + "업데이트 : " + ChatColor.WHITE + "어라랍");
         if (full) {
+            broadcastMessage(ChatColor.GREEN + "제작: " + ChatColor.WHITE + "염료");
+            broadcastMessage(ChatColor.GREEN + "원작(VisualAbility): " + ChatColor.WHITE + "제온");
+            broadcastMessage(ChatColor.AQUA + "업데이트: " + ChatColor.WHITE + "어라랍");
             broadcastMessage(ChatColor.GRAY + "원작자 카페: https://cafe.naver.com/craftproducer");
             broadcastMessage(ChatColor.GRAY + "공식 배포처: https://github.com/KDY05/PhysicalFighters");
         }
@@ -266,24 +266,10 @@ public class GameManager {
 
     private void startGameLogic() {
         broadcastMessage(ChatColor.GREEN + "게임이 시작되었습니다.");
-        logPlayerAbilities();
         setupInvincibility();
         setPlayerBase();
         enableAllAbilities();
         gameProgress();
-    }
-
-    private void logPlayerAbilities() {
-        plugin.getLogger().info("플레이어들의 능력");
-        int count = 0;
-        for (Ability ability : AbilityInitializer.AbilityList) {
-            if (ability.getPlayer() != null) {
-                plugin.getLogger().info(String.format("%d. %s - %s",
-                        count, ability.getPlayer().getName(), ability.getAbilityName()));
-                count++;
-            }
-        }
-        plugin.getLogger().info("-------------------------");
     }
 
     private void setupInvincibility() {

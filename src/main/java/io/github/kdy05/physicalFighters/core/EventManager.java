@@ -175,14 +175,6 @@ public class EventManager implements Listener {
     // 이하는 이벤트 구독 용도만 수행
 
     @EventHandler
-    public static void onPlayerPickupItem(EntityPickupItemEvent event) {
-        if (event.getEntity() instanceof Player)
-            AbilityExcuter(onPlayerPickupItem, event);
-    }
-
-    public static ArrayList<EventData> onPlayerPickupItem = new ArrayList<>();
-
-    @EventHandler
     public static void onDisable(PluginDisableEvent event) {
         AbilityExcuter(onPluginDisable, event);
     }
