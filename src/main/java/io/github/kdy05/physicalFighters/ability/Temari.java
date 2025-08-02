@@ -22,7 +22,7 @@ public class Temari extends Ability {
     public Temari() {
         InitAbility("테마리", Type.Active_Continue, Rank.S,
                 Usage.IronLeft + "능력 지속 시간동안 자신의 주변에 있는 적들을 공중으로 날려버립니다.",
-                "이때 날아간 플레이어는 일정 확률롤 손에 쥐고 있는 아이템을 떨어뜨립니다.");
+                "이때 날아간 플레이어는 일정 확률로 손에 쥐고 있는 아이템을 떨어뜨립니다.");
         InitAbility(60, 20, true);
         registerLeftClickEvent();
     }

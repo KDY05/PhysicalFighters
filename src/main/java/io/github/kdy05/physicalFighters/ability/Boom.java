@@ -46,7 +46,7 @@ public class Boom extends Ability {
             Player caster = this.caster;
             if (caster == null) return;
             AbilityUtils.splashTask(caster, caster.getLocation(), 10, entity
-                    -> entity.getWorld().createExplosion(entity.getLocation(), 0.3f));
+                    -> entity.getWorld().createExplosion(entity.getLocation(), 0.5f));
             count++;
             if (count >= 13) cancel();
         }

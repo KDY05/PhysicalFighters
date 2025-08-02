@@ -1,4 +1,4 @@
-package io.github.kdy05.physicalFighters.ability;
+package io.github.kdy05.physicalFighters.ability.disabled;
 
 import io.github.kdy05.physicalFighters.utils.BaseItem;
 import org.bukkit.entity.LivingEntity;

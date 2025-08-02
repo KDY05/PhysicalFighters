@@ -49,7 +49,7 @@ public class Kijaru extends Ability {
 
                 if (!teleportManager.canUse()) {
                     int timeLeft = teleportManager.getTimeToNextCharge();
-                    sendMessage(ChatColor.RED + "순간이동 충전 중입니다. (" + timeLeft + "초 남음)");
+                    sendMessage(ChatColor.RED + "충전 중 (다음 충전까지 " + timeLeft + "초)");
                     return -1;
                 }
 
@@ -100,7 +100,7 @@ public class Kijaru extends Ability {
 
         teleportManager.use();
         int remainingCharges = teleportManager.getCurrentCharges();
-        sendMessage(ChatColor.YELLOW + "순간이동! 남은 충전량: " + remainingCharges + "/2");
+        sendMessage(ChatColor.YELLOW + "순간이동! (" + remainingCharges + "/2)");
     }
 
     static class KizaruTask extends BukkitRunnable {

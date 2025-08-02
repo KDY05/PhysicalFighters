@@ -14,7 +14,7 @@ public class ShockWave extends Ability {
         InitAbility("쇼크웨이브", Type.Active_Immediately, Rank.A,
                 Usage.IronLeft + "철괴를 소모하여 보고있는 방향으로 막강한 직선 충격포를 쏩니다.",
                 "충격포는 물과 벽 건너편까지 통과할 수 있습니다.");
-        InitAbility(50, 0, true);
+        InitAbility(45, 0, true);
         registerLeftClickEvent();
     }
 
@@ -45,7 +45,7 @@ public class ShockWave extends Ability {
             l2.setX(l.getX() + (3 * i + 3) * (Math.sin(degrees) * Math.cos(ydeg)));
             l2.setY(l.getY() + (3 * i + 3) * Math.sin(ydeg));
             l2.setZ(l.getZ() + (3 * i + 3) * (Math.cos(degrees) * Math.cos(ydeg)));
-            player.getWorld().createExplosion(l2, 4.0F);
+            player.getWorld().createExplosion(l2, 5.0F);
         }
     }
 
