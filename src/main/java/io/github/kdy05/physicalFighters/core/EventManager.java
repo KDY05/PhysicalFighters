@@ -51,6 +51,19 @@ public class EventManager implements Listener {
     public static ArrayList<EventData> onFoodLevelChange = new ArrayList<>();
 
     @EventHandler
+    public static void onEntityTarget(EntityTargetEvent event) {
+        if (event.getTarget() instanceof Player) {
+            if (ConfigManager.DamageGuard) {
+                event.setTarget(null);
+                event.setCancelled(true);
+            }
+        }
+        AbilityExcuter(onEntityTarget, event);
+    }
+
+    public static ArrayList<EventData> onEntityTarget = new ArrayList<>();
+
+    @EventHandler
     public static void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             // 플레이어 무적
@@ -187,13 +200,6 @@ public class EventManager implements Listener {
     }
 
     public static ArrayList<EventData> onPlayerRespawn = new ArrayList<>();
-
-    @EventHandler
-    public static void onEntityTarget(EntityTargetEvent event) {
-        AbilityExcuter(onEntityTarget, event);
-    }
-
-    public static ArrayList<EventData> onEntityTarget = new ArrayList<>();
 
     @EventHandler
     public static void onEntityRegainHealth(EntityRegainHealthEvent event) {

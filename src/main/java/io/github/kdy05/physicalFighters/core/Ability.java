@@ -143,7 +143,7 @@ public abstract class Ability {
     }
 
     public final boolean isOwner(Player p) {
-        return this.playerUuid != null && p.getUniqueId().equals(this.playerUuid);
+        return this.playerUuid != null && p != null && p.getUniqueId().equals(this.playerUuid);
     }
 
     public final void sendMessage(String message) {

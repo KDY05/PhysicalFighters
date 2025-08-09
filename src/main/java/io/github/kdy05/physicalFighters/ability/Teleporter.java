@@ -26,7 +26,7 @@ public class Teleporter extends Ability implements BaseItem {
         InitAbility("소환술사", Type.Active_Immediately, Rank.A,
                 Usage.IronLeft + "표지판을 설치하고 첫 줄에 플레이어의 이름(자신도 가능)을 적으면,",
                 "능력 사용 시 이름이 적힌 플레이어가 표지판으로 이동합니다.");
-        InitAbility(100, 0, true);
+        InitAbility(300, 0, true);
         registerLeftClickEvent();
         EventManager.onSignChangeEvent.add(new EventData(this, 1));
         EventManager.onBlockBreakEvent.add(new EventData(this, 2));

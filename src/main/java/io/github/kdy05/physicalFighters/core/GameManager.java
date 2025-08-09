@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.core;
 
 import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
 import io.github.kdy05.physicalFighters.utils.TimerBase;
-import io.github.kdy05.physicalFighters.utils.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.ArrayList;
@@ -43,8 +42,6 @@ public class GameManager {
     private final GameTimer gameProgressTimer = new GameTimer(TimerType.PROGRESS);
     private final GameTimer gameWarningTimer = new GameTimer(TimerType.WARNING);
     
-    // Invincibility Manager
-    private InvincibilityManager invincibilityManager;
 
     public enum ScriptStatus {
         NoPlay, ScriptStart, AbilitySelect, GameStart
@@ -67,7 +64,6 @@ public class GameManager {
     public LinkedList<Player> getExceptionList() { return exceptionList; }
     public ArrayList<Player> getOKSign() { return okSign; }
     public int getGameTime() { return gameProgressTimer.getCount(); }
-    public InvincibilityManager getInvincibilityManager() { return invincibilityManager; }
 
     // Game flow control
     public void gameReady(CommandSender sender) {
@@ -96,9 +92,7 @@ public class GameManager {
     public void gameReadyStop() { gameReadyTimer.stopTimer(); }
     public void gameStartStop() { 
         gameStartTimer.stopTimer();
-        if (invincibilityManager != null) {
-            invincibilityManager.forceStop();
-        }
+        plugin.getInvincibilityManager().forceStop();
     }
     public void gameProgressStop() { gameProgressTimer.stopTimer(); }
     public void gameWarningStop() { gameWarningTimer.endTimer(); }
@@ -276,9 +270,7 @@ public class GameManager {
 
     private void startGameLogic() {
         broadcastMessage(ChatColor.GREEN + "게임이 시작되었습니다.");
-        invincibilityManager = new InvincibilityManager(playerList);
-        plugin.getServer().getPluginManager().registerEvents(invincibilityManager, plugin);
-        invincibilityManager.startInvincibility();
+        plugin.getInvincibilityManager().startInvincibility(ConfigManager.EarlyInvincibleTime);
         setPlayerBase();
         enableAllAbilities();
         gameProgress();

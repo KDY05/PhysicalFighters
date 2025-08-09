@@ -36,7 +36,7 @@ public class UtilCommand implements CommandInterface {
             handleUtil(sender);
             return true;
         } else if (args[0].equalsIgnoreCase("inv")) {
-            handleInv();
+            handleInv(sender, args);
             return true;
         } else if (args[0].equalsIgnoreCase("hung")) {
             handleHung();
@@ -69,9 +69,9 @@ public class UtilCommand implements CommandInterface {
         sender.sendMessage("");
 
         sender.sendMessage(ChatColor.YELLOW + "■ 게임 설정");
-        sender.sendMessage(ChatColor.GOLD + "/va reload" + ChatColor.WHITE + " - 플러그인 설정을 다시 로드합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va reload" + ChatColor.WHITE + " - 플러그인 설정(config.yml)을 다시 로드합니다.");
         sender.sendMessage(ChatColor.GOLD + "/va kit" + ChatColor.WHITE + " - 게임 시작 시 기본템을 설정합니다.");
-        sender.sendMessage(ChatColor.GOLD + "/va inv" + ChatColor.WHITE + " - 무적 모드를 토글합니다.");
+        sender.sendMessage(ChatColor.GOLD + "/va inv [시간(분)]" + ChatColor.WHITE + " - 무적 모드를 토글하거나 지정 시간동안 무적을 시작합니다.");
         sender.sendMessage(ChatColor.GOLD + "/va hung" + ChatColor.WHITE + " - 배고픔 무한 모드를 토글합니다.");
         sender.sendMessage(ChatColor.GOLD + "/va dura" + ChatColor.WHITE + " - 내구도 무한 모드를 토글합니다.");
         sender.sendMessage("");
@@ -88,19 +88,22 @@ public class UtilCommand implements CommandInterface {
         sender.sendMessage(ChatColor.AQUA + "==========================");
     }
 
-    private void handleInv() {
-        if (ConfigManager.DamageGuard) {
-            ConfigManager.DamageGuard = false;
-
-            if (plugin.getGameManager() != null && plugin.getGameManager().getInvincibilityManager() != null) {
-                plugin.getGameManager().getInvincibilityManager().forceStop();
-            } else {
-                Bukkit.broadcastMessage(ChatColor.GREEN + "OP에 의해 초반 무적이 해제되었습니다. 이제 대미지를 입습니다.");
+    private void handleInv(CommandSender sender, String[] args) {
+        if (args.length == 1) {
+            plugin.getInvincibilityManager().toggle();
+        } else if (args.length == 2) {
+            try {
+                int minutes = Integer.parseInt(args[1]);
+                if (minutes <= 0) {
+                    sender.sendMessage(ChatColor.RED + "시간은 1 이상의 숫자를 입력하세요.");
+                    return;
+                }
+                plugin.getInvincibilityManager().startInvincibility(minutes);
+            } catch (NumberFormatException e) {
+                sender.sendMessage(ChatColor.RED + "올바른 숫자를 입력하세요.");
             }
         } else {
-            ConfigManager.DamageGuard = true;
-            Bukkit.broadcastMessage(ChatColor.GREEN +
-                    "OP에 의해 초반 무적이 설정되었습니다. 이제 대미지를 입지않습니다.");
+            sender.sendMessage(ChatColor.RED + "명령어 사용법: /va inv [시간(분)]");
         }
     }
 

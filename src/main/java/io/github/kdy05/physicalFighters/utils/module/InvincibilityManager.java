@@ -13,26 +13,28 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class InvincibilityManager implements Listener {
     
-    private final List<Player> players;
     private BossBar invincibilityBar;
     private InvincibilityTimer timer;
     private boolean isActive = false;
+    private int customMinutes = 0;
     
-    public InvincibilityManager(List<Player> players) {
-        this.players = new ArrayList<>(players);
+    public InvincibilityManager() {
     }
     
-    public void startInvincibility() {
-        if (ConfigManager.EarlyInvincibleTime == 0) {
-            broadcastMessage(ChatColor.RED + "초반 무적은 작동하지 않습니다.");
+    public void startInvincibility(int minutes) {
+        if (minutes == 0) {
+            broadcastMessage(ChatColor.RED + "무적 시간이 0분으로 설정되어 작동하지 않습니다.");
             return;
         }
         
+        if (isActive) {
+            broadcastMessage(ChatColor.RED + "이미 무적이 활성화되어 있습니다. 먼저 해제하세요.");
+            return;
+        }
+        
+        this.customMinutes = minutes;
         isActive = true;
         ConfigManager.DamageGuard = true;
         
@@ -40,9 +42,13 @@ public class InvincibilityManager implements Listener {
         addPlayersToBar();
         
         timer = new InvincibilityTimer();
-        timer.startTimer(ConfigManager.EarlyInvincibleTime * 60, false);
+        timer.startTimer(minutes * 60, false);
         
-        broadcastMessage("시작 직후 " + ConfigManager.EarlyInvincibleTime + "분간 무적입니다.");
+        if (minutes == ConfigManager.EarlyInvincibleTime) {
+            broadcastMessage("시작 직후 " + minutes + "분간 무적입니다.");
+        } else {
+            broadcastMessage("OP에 의해 " + minutes + "분간 무적이 설정되었습니다.");
+        }
     }
     
     public void stopInvincibility() {
@@ -60,7 +66,7 @@ public class InvincibilityManager implements Listener {
             invincibilityBar = null;
         }
         
-        broadcastMessage(ChatColor.GREEN + "초반 무적이 해제되었습니다. 이제 대미지를 입습니다.");
+        broadcastMessage(ChatColor.GREEN + "무적이 해제되었습니다. 이제 대미지를 입습니다.");
     }
     
     public boolean isInvincible() {
@@ -82,27 +88,39 @@ public class InvincibilityManager implements Listener {
             invincibilityBar = null;
         }
         
-        broadcastMessage(ChatColor.GREEN + "OP에 의해 초반 무적이 해제되었습니다. 이제 대미지를 입습니다.");
+        broadcastMessage(ChatColor.GREEN + "OP에 의해 무적이 해제되었습니다. 이제 대미지를 입습니다.");
+    }
+    
+    public void toggle() {
+        if (ConfigManager.DamageGuard) {
+            if (isActive) {
+                forceStop();
+            } else {
+                ConfigManager.DamageGuard = false;
+                broadcastMessage(ChatColor.GREEN + "OP에 의해 무적이 해제되었습니다. 이제 대미지를 입습니다.");
+            }
+        } else {
+            ConfigManager.DamageGuard = true;
+            broadcastMessage(ChatColor.GREEN + "OP에 의해 무적이 설정되었습니다. 이제 대미지를 입지않습니다.");
+        }
     }
     
     private void createBossBar() {
-        String title = "초반 무적 시간";
+        String title = "무적 시간";
         invincibilityBar = Bukkit.createBossBar(title, BarColor.GREEN, BarStyle.SEGMENTED_12);
         invincibilityBar.setProgress(1.0);
     }
     
     private void addPlayersToBar() {
-        for (Player player : players) {
-            if (player.isOnline()) {
-                invincibilityBar.addPlayer(player);
-            }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            invincibilityBar.addPlayer(player);
         }
     }
     
     private void updateBossBar(int remainingSeconds) {
         if (invincibilityBar == null) return;
         
-        int totalSeconds = ConfigManager.EarlyInvincibleTime * 60;
+        int totalSeconds = customMinutes * 60;
         double progress = (double) remainingSeconds / totalSeconds;
         
         invincibilityBar.setProgress(Math.max(0.0, progress));
@@ -110,7 +128,7 @@ public class InvincibilityManager implements Listener {
         int minutes = remainingSeconds / 60;
         int seconds = remainingSeconds % 60;
         
-        String title = String.format("초반 무적 %02d:%02d", minutes, seconds);
+        String title = String.format("무적 시간 %02d:%02d", minutes, seconds);
         invincibilityBar.setTitle(title);
         
         if (remainingSeconds <= 30) {
@@ -127,7 +145,7 @@ public class InvincibilityManager implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (isActive && players.contains(player) && invincibilityBar != null) {
+        if (isActive && invincibilityBar != null) {
             invincibilityBar.addPlayer(player);
         }
     }
@@ -146,17 +164,17 @@ public class InvincibilityManager implements Listener {
         
         @Override
         public void onTimerRunning(int count) {
-            int remainingSeconds = ConfigManager.EarlyInvincibleTime * 60 - count;
+            int remainingSeconds = customMinutes * 60 - count;
             
             updateBossBar(remainingSeconds);
             
             if (remainingSeconds == 0) {
                 stopInvincibility();
             } else if (remainingSeconds <= 5 && remainingSeconds >= 1) {
-                broadcastMessage(String.format(ChatColor.YELLOW + "%d초 후" + ChatColor.WHITE + " 초반무적이 해제됩니다.", 
+                broadcastMessage(String.format(ChatColor.YELLOW + "%d초 후" + ChatColor.WHITE + " 무적이 해제됩니다.", 
                                remainingSeconds));
             } else if (remainingSeconds == 60) {
-                broadcastMessage(ChatColor.YELLOW + "초반 무적이 " + ChatColor.WHITE + "1분 후 해제됩니다.");
+                broadcastMessage(ChatColor.YELLOW + "무적이 " + ChatColor.WHITE + "1분 후 해제됩니다.");
             }
         }
         

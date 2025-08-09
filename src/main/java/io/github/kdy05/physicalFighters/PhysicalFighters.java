@@ -6,16 +6,18 @@ import io.github.kdy05.physicalFighters.command.GameCommand;
 
 import io.github.kdy05.physicalFighters.command.UtilCommand;
 import io.github.kdy05.physicalFighters.utils.module.BaseKitManager;
+import io.github.kdy05.physicalFighters.utils.module.InvincibilityManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PhysicalFighters extends JavaPlugin {
 
-    public static int BuildNumber = 20250723;
+    public static int BuildNumber = 20250809;
     private static PhysicalFighters plugin;
     private GameManager gameManager;
     private GameCommand gameCommand;
     private ConfigManager configManager;
     private BaseKitManager baseKitManager;
+    private InvincibilityManager invincibilityManager;
 
     @Override
     public void onEnable() {
@@ -38,6 +40,8 @@ public class PhysicalFighters extends JavaPlugin {
         commandManager.registerCommand(new UtilCommand(this));
 
         baseKitManager = new BaseKitManager(this);
+        invincibilityManager = new InvincibilityManager();
+        getServer().getPluginManager().registerEvents(invincibilityManager, this);
 
         getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityInitializer.AbilityList.size()));
     }
@@ -65,5 +69,9 @@ public class PhysicalFighters extends JavaPlugin {
 
     public BaseKitManager getBaseKitManager() {
         return baseKitManager;
+    }
+
+    public InvincibilityManager getInvincibilityManager() {
+        return invincibilityManager;
     }
 }
