@@ -123,7 +123,7 @@ public class Kijaru extends Ability {
 
     static class TeleportChargeManager {
         private static final int MAX_CHARGES = 2;
-        private static final int CHARGE_COOLDOWN_SECONDS = 90;
+        private static final int CHARGE_COOLDOWN_SECONDS = 120;
 
         private int charges = MAX_CHARGES;
         private int remainingCooldown = 0;
