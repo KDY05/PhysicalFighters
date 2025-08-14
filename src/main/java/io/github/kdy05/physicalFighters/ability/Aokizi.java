@@ -78,7 +78,7 @@ public class Aokizi extends Ability {
             if (block.getType() != Material.ICE)
                 new ExplosionTimer(block.getType(), block).runTaskLater(plugin, 15L);
             block.setType(Material.ICE);
-            AbilityUtils.splashDamage(event0.getPlayer(), block.getLocation(), 2.5, 8);
+            AbilityUtils.splashTask(event0.getPlayer(), block.getLocation(), 2.5, entity -> entity.damage(8));
         }
     }
 

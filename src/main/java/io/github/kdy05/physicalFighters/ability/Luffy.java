@@ -51,7 +51,7 @@ public class Luffy extends Ability {
                         Bukkit.getScheduler().runTaskLater(plugin,
                                 () -> targetBlock.setType(originalType), 5L);
                     }
-                    AbilityUtils.splashDamage(caster, blockLoc, 2.5, 2);
+                    AbilityUtils.splashTask(caster, blockLoc, 2.5, entity -> entity.damage(2));
                 }
             }
             case 2 -> {
