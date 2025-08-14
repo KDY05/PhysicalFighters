@@ -26,7 +26,7 @@ public class Kijaru extends Ability {
         InitAbility("키자루", Type.Active_Immediately, Rank.SS,
                 Usage.IronAttack + "타격한 상대를 빛의 속도로 타격합니다.",
                 "상대는 엄청난 속도로 멀리 날라갑니다. 당신도 상대를 따라 근접하게 날라갑니다.",
-                Usage.IronRight + "바라보는 곳으로 순간이동합니다. (충전시간: 90초 / 최대 충전량 2회)",
+                Usage.IronRight + "바라보는 곳으로 순간이동합니다. (충전시간: 120초 / 최대 충전량 2회)",
                 Usage.Passive + "낙하 대미지를 받지 않습니다.");
         InitAbility(45, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this));
@@ -136,6 +136,7 @@ public class Kijaru extends Ability {
         public void use() {
             if (charges > 0) {
                 charges--;
+                // cooldownTask가 null이거나 취소된 경우에만 새로 시작
                 if (charges < MAX_CHARGES && (cooldownTask == null || cooldownTask.isCancelled())) {
                     startCooldown();
                 }
@@ -155,6 +156,7 @@ public class Kijaru extends Ability {
             remainingCooldown = 0;
             if (cooldownTask != null && !cooldownTask.isCancelled()) {
                 cooldownTask.cancel();
+                cooldownTask = null;
             }
         }
 
@@ -167,9 +169,11 @@ public class Kijaru extends Ability {
                     if (remainingCooldown <= 0) {
                         charges++;
                         if (charges < MAX_CHARGES) {
-                            startCooldown();
+                            remainingCooldown = CHARGE_COOLDOWN_SECONDS;
                         } else {
+                            // 최대 충전량에 도달하면 태스크 종료
                             this.cancel();
+                            cooldownTask = null;
                         }
                     }
                 }
