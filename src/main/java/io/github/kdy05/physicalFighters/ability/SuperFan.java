@@ -88,6 +88,6 @@ public class SuperFan extends Ability {
         target.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 200, 2));
         target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 200, 2));
         
-        target.sendMessage(ChatColor.LIGHT_PURPLE + "선풍기의 강력한 바람에 힘을 잃었습니다!");
+        target.sendMessage(ChatColor.LIGHT_PURPLE + "앗! 바람이 강하지만 시원해~♥");
     }
 }
