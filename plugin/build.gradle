@@ -1,0 +1,45 @@
+plugins {
+    id("com.gradleup.shadow") version "9.3.1"
+}
+
+dependencies {
+//    implementation project(':api')
+//    implementation project(':v1_16_5')
+    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+}
+
+shadowJar {
+    archiveFileName = "PhysicalFighters-${version}.jar"
+
+    // Include all dependencies
+    configurations = [project.configurations.runtimeClasspath]
+
+    // Build to standard build/libs directory
+    destinationDirectory = layout.buildDirectory.dir("libs")
+
+    from(rootProject.file('README.md')) {
+        into 'META-INF'
+    }
+    from(rootProject.file('LICENSE')) {
+        into 'META-INF'
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+processResources {
+    def props = [version: project.version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
+
+build {
+    dependsOn shadowJar
+}

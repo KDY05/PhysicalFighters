@@ -2,53 +2,29 @@ plugins {
     id 'java'
 }
 
-group = 'io.github.kdy05'
-version = '1.1.0'
+subprojects {
+    apply plugin: 'java'
 
-repositories {
-    mavenCentral()
-    maven {
-        name = "spigotmc-repo"
-        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    group = 'io.github.kdy05'
+    version = '1.1.0'
+
+    repositories {
+        mavenCentral()
+        maven {
+            name = "spigotmc-repo"
+            url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/groups/public/"
+        }
     }
-    maven {
-        name = "sonatype"
-        url = "https://oss.sonatype.org/content/groups/public/"
+
+    dependencies {
+        implementation 'org.jetbrains:annotations:24.0.1'
     }
-}
 
-dependencies {
-    implementation 'org.jetbrains:annotations:24.0.1'
-    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(8)
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-//    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-//        options.release.set(targetJavaVersion)
-//    }
-}
-
-processResources {
-    def props = [version: version]
-    inputs.properties props
-    filteringCharset 'UTF-8'
-    filesMatching('plugin.yml') {
-        expand props
-    }
-}
-
-jar {
-    from('README.md') {
-        into 'META-INF'
-    }
-    from('LICENSE') {
-        into 'META-INF'
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
     }
 }
