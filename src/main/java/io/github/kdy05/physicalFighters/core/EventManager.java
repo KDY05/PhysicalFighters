@@ -7,9 +7,9 @@ import io.github.kdy05.physicalFighters.utils.EventData;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.bukkit.*;
+import org.bukkit.BanList;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -83,32 +83,33 @@ public class EventManager implements Listener {
 
     @EventHandler
     public static void onEntityDeath(EntityDeathEvent event) {
-        if (GameManager.getScenario() == GameManager.ScriptStatus.GameStart && event instanceof PlayerDeathEvent pde) {
+        if (GameManager.getScenario() == GameManager.ScriptStatus.GameStart && event instanceof PlayerDeathEvent) {
+            PlayerDeathEvent pde = (PlayerDeathEvent) event;
             Player victim = (Player) event.getEntity();
             Player killer = victim.getKiller();
 
             // 사망 시 처리 (OnKill: 0=아무것도 안함, 1=관전자 모드, 2=킥, 3=밴)
             if (ConfigManager.OnKill > 0 && !AbilityInitializer.phoenix.isOwner(victim)) {
-                switch (ConfigManager.OnKill) {
-                    case 1 -> {
-                        // 죽은 위치 저장
-                        Location deathLocation = victim.getLocation().clone();
-                        Bukkit.getScheduler().runTaskLater(PhysicalFighters.getPlugin(), () -> {
-                            victim.setGameMode(GameMode.SPECTATOR);
-                            victim.spigot().respawn();
-                            victim.teleport(deathLocation);
-                            victim.sendTitle(ChatColor.RED + "사망하였습니다!",
-                                    ChatColor.YELLOW + "관전자 모드로 전환합니다.",
-                                    10, 100 ,10);
-                        }, 1L);
-                    }
-                    case 2 -> victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
-                    case 3 -> {
-                        if (!victim.isOp()) {
-                            victim.ban("당신은 죽었습니다. 다시 들어오실 수 없습니다.", (Date) null, null, true);
-                        } else {
-                            victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
-                        }
+                if (ConfigManager.OnKill == 1) {
+                    // 죽은 위치 저장
+                    Location deathLocation = victim.getLocation().clone();
+                    Bukkit.getScheduler().runTaskLater(PhysicalFighters.getPlugin(), () -> {
+                        victim.setGameMode(GameMode.SPECTATOR);
+                        victim.spigot().respawn();
+                        victim.teleport(deathLocation);
+                        victim.sendTitle(ChatColor.RED + "사망하였습니다!",
+                                ChatColor.YELLOW + "관전자 모드로 전환합니다.",
+                                10, 100 ,10);
+                    }, 1L);
+                } else if (ConfigManager.OnKill == 2) {
+                    victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
+                } else if (ConfigManager.OnKill == 3) {
+                    if (!victim.isOp()) {
+                        Bukkit.getBanList(BanList.Type.NAME).addBan(victim.getName(),
+                                "당신은 죽었습니다. 다시 들어오실 수 없습니다.", null, null);
+                        victim.kickPlayer("당신은 죽었습니다. 다시 들어오실 수 없습니다.");
+                    } else {
+                        victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
                     }
                 }
             }
@@ -169,18 +170,16 @@ public class EventManager implements Listener {
 
     private static void AbilityEventFilter(PlayerInteractEvent event) {
         int i = 0;
-        switch (event.getAction()) {
-            case LEFT_CLICK_AIR, LEFT_CLICK_BLOCK -> {
-                while (i < LeftHandEvent.size() && !LeftHandEvent.isEmpty()) {
-                    LeftHandEvent.get(i).execute(event, 0);
-                    ++i;
-                }
+        org.bukkit.event.block.Action action = event.getAction();
+        if (action == org.bukkit.event.block.Action.LEFT_CLICK_AIR || action == org.bukkit.event.block.Action.LEFT_CLICK_BLOCK) {
+            while (i < LeftHandEvent.size() && !LeftHandEvent.isEmpty()) {
+                LeftHandEvent.get(i).execute(event, 0);
+                ++i;
             }
-            case RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK -> {
-                while (i < RightHandEvent.size() && !RightHandEvent.isEmpty()) {
-                    RightHandEvent.get(i).execute(event, 1);
-                    ++i;
-                }
+        } else if (action == org.bukkit.event.block.Action.RIGHT_CLICK_AIR || action == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK) {
+            while (i < RightHandEvent.size() && !RightHandEvent.isEmpty()) {
+                RightHandEvent.get(i).execute(event, 1);
+                ++i;
             }
         }
     }

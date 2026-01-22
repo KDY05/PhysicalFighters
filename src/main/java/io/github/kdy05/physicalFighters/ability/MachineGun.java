@@ -49,20 +49,24 @@ public class MachineGun extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        return switch (CustomData) {
-            case EVENT_RIGHT_CLICK -> handleRightClickCondition(event);
-            case EVENT_DAMAGE -> handleDamageCondition(event);
-            case EVENT_PROJECTILE_HIT -> handleProjectileHitCondition(event);
-            default -> -1;
-        };
+        if (CustomData == EVENT_RIGHT_CLICK) {
+            return handleRightClickCondition(event);
+        } else if (CustomData == EVENT_DAMAGE) {
+            return handleDamageCondition(event);
+        } else if (CustomData == EVENT_PROJECTILE_HIT) {
+            return handleProjectileHitCondition(event);
+        }
+        return -1;
     }
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        switch (CustomData) {
-            case EVENT_DAMAGE -> handleDamageEffect(event);
-            case ACTION_SHOOT -> handleShootEffect(event);
-            case ACTION_RELOAD -> handleReloadEffect(event);
+        if (CustomData == EVENT_DAMAGE) {
+            handleDamageEffect(event);
+        } else if (CustomData == ACTION_SHOOT) {
+            handleShootEffect(event);
+        } else if (CustomData == ACTION_RELOAD) {
+            handleReloadEffect(event);
         }
     }
 
@@ -83,13 +87,17 @@ public class MachineGun extends Ability {
 
     private int handleDamageCondition(Event event) {
         EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
-        if (e.getDamager() instanceof Arrow arrow) {
-            if (arrow.getShooter() instanceof Player shooter && isOwner(shooter)) {
-                // 자기 자신을 맞추는 경우 방지
-                if (e.getEntity() instanceof Player && arrow.getShooter() == e.getEntity()) {
-                    return -1;
+        if (e.getDamager() instanceof Arrow) {
+            Arrow arrow = (Arrow) e.getDamager();
+            if (arrow.getShooter() instanceof Player) {
+                Player shooter = (Player) arrow.getShooter();
+                if (isOwner(shooter)) {
+                    // 자기 자신을 맞추는 경우 방지
+                    if (e.getEntity() instanceof Player && arrow.getShooter() == e.getEntity()) {
+                        return -1;
+                    }
+                    return EVENT_DAMAGE;
                 }
-                return EVENT_DAMAGE;
             }
         }
         return -1;
@@ -97,9 +105,13 @@ public class MachineGun extends Ability {
 
     private int handleProjectileHitCondition(Event event) {
         ProjectileHitEvent e = (ProjectileHitEvent) event;
-        if (e.getEntity() instanceof Arrow arrow) {
-            if (arrow.getShooter() instanceof Player shooter && isOwner(shooter)) {
-                arrow.remove();
+        if (e.getEntity() instanceof Arrow) {
+            Arrow arrow = (Arrow) e.getEntity();
+            if (arrow.getShooter() instanceof Player) {
+                Player shooter = (Player) arrow.getShooter();
+                if (isOwner(shooter)) {
+                    arrow.remove();
+                }
             }
         }
         return -1;
@@ -108,7 +120,8 @@ public class MachineGun extends Ability {
     private void handleDamageEffect(Event event) {
         EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
         e.setDamage(BULLET_DAMAGE);
-        if (e.getEntity() instanceof LivingEntity target && Math.random() <= CRITICAL_CHANCE) {
+        if (e.getEntity() instanceof LivingEntity && Math.random() <= CRITICAL_CHANCE) {
+            LivingEntity target = (LivingEntity) e.getEntity();
             target.getWorld().createExplosion(target.getLocation(), 0.0F);
             AbilityUtils.piercingDamage(target, CRITICAL_DAMAGE);
             sendMessage(ChatColor.GREEN + "크리티컬");

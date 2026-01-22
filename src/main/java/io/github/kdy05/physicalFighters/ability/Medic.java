@@ -24,19 +24,16 @@ public class Medic extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-                if (event0.getEntity() instanceof LivingEntity &&
-                        isOwner(event0.getDamager()) && isValidItem(Ability.DefaultItem)) {
-                    return 0;
-                }
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            if (event0.getEntity() instanceof LivingEntity &&
+                    isOwner(event0.getDamager()) && isValidItem(Ability.DefaultItem)) {
+                return 0;
             }
-            case 1 -> {
-                PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-                if (isOwner(event1.getPlayer()) && isValidItem(Ability.DefaultItem)) {
-                    return 1;
-                }
+        } else if (CustomData == 1) {
+            PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+            if (isOwner(event1.getPlayer()) && isValidItem(Ability.DefaultItem)) {
+                return 1;
             }
         }
         return -1;
@@ -44,24 +41,21 @@ public class Medic extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-                LivingEntity entity = (LivingEntity) event0.getEntity();
-                AbilityUtils.healEntity(entity, 6);
-                if (getPlayer() == null) return;
-                entity.sendMessage(String.format(ChatColor.GREEN
-                        + "%s의 메딕 능력으로 체력을 6 회복했습니다.", getPlayer().getName()));
-                getPlayer().sendMessage(String.format(ChatColor.GREEN
-                        + "%s의 체력을 6 회복시켰습니다.", entity.getName()));
-                event0.setCancelled(true);
-            }
-            case 1 -> {
-                PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-                Player p2 = event1.getPlayer();
-                AbilityUtils.healEntity(p2, 6);
-                p2.sendMessage(ChatColor.GREEN + "자신의 체력을 6 회복했습니다.");
-            }
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            LivingEntity entity = (LivingEntity) event0.getEntity();
+            AbilityUtils.healEntity(entity, 6);
+            if (getPlayer() == null) return;
+            entity.sendMessage(String.format(ChatColor.GREEN
+                    + "%s의 메딕 능력으로 체력을 6 회복했습니다.", getPlayer().getName()));
+            getPlayer().sendMessage(String.format(ChatColor.GREEN
+                    + "%s의 체력을 6 회복시켰습니다.", entity.getName()));
+            event0.setCancelled(true);
+        } else if (CustomData == 1) {
+            PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+            Player p2 = event1.getPlayer();
+            AbilityUtils.healEntity(p2, 6);
+            p2.sendMessage(ChatColor.GREEN + "자신의 체력을 6 회복했습니다.");
         }
     }
 }

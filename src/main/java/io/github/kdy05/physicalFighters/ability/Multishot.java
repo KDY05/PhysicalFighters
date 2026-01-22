@@ -27,23 +27,23 @@ public class Multishot extends Ability implements BaseItem {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                ProjectileLaunchEvent event0 = (ProjectileLaunchEvent) event;
-                if (event0.getEntity() instanceof Arrow a && a.getShooter() instanceof Player p
-                        && isOwner(p) && isValidItem(Material.BOW)) {
-                    return 0;
+        if (CustomData == 0) {
+            ProjectileLaunchEvent event0 = (ProjectileLaunchEvent) event;
+            if (event0.getEntity() instanceof Arrow) {
+                Arrow a = (Arrow) event0.getEntity();
+                if (a.getShooter() instanceof Player) {
+                    Player p = (Player) a.getShooter();
+                    if (isOwner(p) && isValidItem(Material.BOW)) {
+                        return 0;
+                    }
                 }
             }
-            case ITEM_DROP_EVENT -> {
-                return handleItemDropCondition(event);
-            }
-            case ITEM_RESPAWN_EVENT -> {
-                return handleItemRespawnCondition(event);
-            }
-            case ITEM_DEATH_EVENT -> {
-                return handleItemDeathCondition(event);
-            }
+        } else if (CustomData == ITEM_DROP_EVENT) {
+            return handleItemDropCondition(event);
+        } else if (CustomData == ITEM_RESPAWN_EVENT) {
+            return handleItemRespawnCondition(event);
+        } else if (CustomData == ITEM_DEATH_EVENT) {
+            return handleItemDeathCondition(event);
         }
         return -1;
     }

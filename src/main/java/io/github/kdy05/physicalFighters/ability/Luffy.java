@@ -38,31 +38,28 @@ public class Luffy extends Ability {
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player caster = event0.getPlayer();
-        switch (CustomData) {
-            case 1 -> {
-                Location origin = caster.getLocation();
-                Vector direction = origin.getDirection();
-                for (int i = 2; i <= 5; i++) {
-                    Location blockLoc = origin.clone().add(direction.clone().multiply(i));
-                    Block targetBlock = blockLoc.getBlock();
-                    if (targetBlock.getType() != Material.SANDSTONE) {
-                        Material originalType = targetBlock.getType();
-                        targetBlock.setType(Material.SANDSTONE);
-                        Bukkit.getScheduler().runTaskLater(plugin,
-                                () -> targetBlock.setType(originalType), 5L);
-                    }
-                    AbilityUtils.splashTask(caster, blockLoc, 2.5, entity -> entity.damage(2));
+        if (CustomData == 1) {
+            Location origin = caster.getLocation();
+            Vector direction = origin.getDirection();
+            for (int i = 2; i <= 5; i++) {
+                Location blockLoc = origin.clone().add(direction.clone().multiply(i));
+                Block targetBlock = blockLoc.getBlock();
+                if (targetBlock.getType() != Material.SANDSTONE) {
+                    Material originalType = targetBlock.getType();
+                    targetBlock.setType(Material.SANDSTONE);
+                    Bukkit.getScheduler().runTaskLater(plugin,
+                            () -> targetBlock.setType(originalType), 5L);
                 }
+                AbilityUtils.splashTask(caster, blockLoc, 2.5, entity -> entity.damage(2));
             }
-            case 2 -> {
-                AbilityUtils.piercingDamage(caster, 5.0);
-                caster.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 600, 0));
-                caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
-                caster.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 200, 0));
-                caster.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 600, 0));
-                caster.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 600, 0));
-                caster.sendMessage(ChatColor.RED + "기어 세컨드를 사용하였습니다.");
-            }
+        } else if (CustomData == 2) {
+            AbilityUtils.piercingDamage(caster, 5.0);
+            caster.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 0));
+            caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
+            caster.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 0));
+            caster.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 600, 0));
+            caster.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 0));
+            caster.sendMessage(ChatColor.RED + "기어 세컨드를 사용하였습니다.");
         }
     }
 

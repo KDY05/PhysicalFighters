@@ -14,21 +14,18 @@ import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import org.bukkit.entity.Player;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public final class AbilityUtils {
 
-    @Nullable
     public static Ability findAbility(Player p) {
         for (Ability a : AbilityInitializer.AbilityList)
             if (a.isOwner(p)) return a;
         return null;
     }
 
-    @Nullable
     public static Location getTargetLocation(Player p, int bound) {
         Location location = null;
         Location eyeLoc = p.getEyeLocation();
@@ -54,7 +51,7 @@ public final class AbilityUtils {
     }
 
     public static void healEntity(LivingEntity entity, double amount) {
-        AttributeInstance maxHealth = entity.getAttribute(Attribute.MAX_HEALTH);
+        AttributeInstance maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         if (maxHealth == null) return;
         double maxHealthValue = maxHealth.getValue();
         entity.setHealth(Math.min(maxHealthValue, entity.getHealth() + amount));
@@ -150,16 +147,18 @@ public final class AbilityUtils {
 
     public static String getTypeText(Ability ability) {
         Ability.Type type = ability.getAbilityType();
-        return switch (type) {
-            case Active_Continue ->
-                    ChatColor.GREEN + "액티브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "지속" + ChatColor.WHITE;
-            case Active_Immediately ->
-                    ChatColor.GREEN + "액티브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "즉발" + ChatColor.WHITE;
-            case Passive_AutoMatic ->
-                    ChatColor.GREEN + "패시브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "자동" + ChatColor.WHITE;
-            case Passive_Manual ->
-                    ChatColor.GREEN + "패시브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "수동" + ChatColor.WHITE;
-            case null -> "Unknown";
-        };
+        if (type == null) {
+            return "Unknown";
+        } else if (type == Ability.Type.Active_Continue) {
+            return ChatColor.GREEN + "액티브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "지속" + ChatColor.WHITE;
+        } else if (type == Ability.Type.Active_Immediately) {
+            return ChatColor.GREEN + "액티브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "즉발" + ChatColor.WHITE;
+        } else if (type == Ability.Type.Passive_AutoMatic) {
+            return ChatColor.GREEN + "패시브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "자동" + ChatColor.WHITE;
+        } else if (type == Ability.Type.Passive_Manual) {
+            return ChatColor.GREEN + "패시브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "수동" + ChatColor.WHITE;
+        } else {
+            return "Unknown";
+        }
     }
 }

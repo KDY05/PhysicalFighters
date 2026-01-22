@@ -27,19 +27,16 @@ public class Zoro extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-                if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
-                    return 0;
-                }
+        if (CustomData == 0) {
+            PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+            if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
+                return 0;
             }
-            case 1 -> {
-                EntityDamageByEntityEvent event1 = (EntityDamageByEntityEvent) event;
-                if (isOwner(event1.getDamager()) && ((Player) event1.getDamager()).getInventory().getItemInMainHand()
-                        .getType().name().endsWith("_SWORD")) {
-                    event1.setDamage(((Player) event1.getDamager()).getAttackCooldown() * this.dmg);
-                }
+        } else if (CustomData == 1) {
+            EntityDamageByEntityEvent event1 = (EntityDamageByEntityEvent) event;
+            if (isOwner(event1.getDamager()) && ((Player) event1.getDamager()).getInventory().getItemInMainHand()
+                    .getType().name().endsWith("_SWORD")) {
+                event1.setDamage(((Player) event1.getDamager()).getAttackCooldown() * this.dmg);
             }
         }
         return -1;

@@ -36,39 +36,35 @@ public class Kijaru extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-                if (isOwner(event0.getDamager()) && isValidItem(Ability.DefaultItem)
-                        && !ConfigManager.DamageGuard && event0.getEntity() instanceof LivingEntity)
-                    return 0;
-            }
-            case 1 -> {
-                PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-                if (!isOwner(event1.getPlayer()) || !isValidItem(Ability.DefaultItem)) return -1;
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            if (isOwner(event0.getDamager()) && isValidItem(Ability.DefaultItem)
+                    && !ConfigManager.DamageGuard && event0.getEntity() instanceof LivingEntity)
+                return 0;
+        } else if (CustomData == 1) {
+            PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+            if (!isOwner(event1.getPlayer()) || !isValidItem(Ability.DefaultItem)) return -1;
 
-                if (!teleportManager.canUse()) {
-                    int timeLeft = teleportManager.getTimeToNextCharge();
-                    sendMessage(ChatColor.RED + "충전 중 (다음 충전까지 " + timeLeft + "초)");
-                    return -1;
-                }
-
-                Player caster = event1.getPlayer();
-                Location targetLocation = AbilityUtils.getTargetLocation(caster, 80);
-                if (targetLocation == null) {
-                    sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
-                    return -1;
-                }
-
-                executeTeleport(caster, targetLocation);
+            if (!teleportManager.canUse()) {
+                int timeLeft = teleportManager.getTimeToNextCharge();
+                sendMessage(ChatColor.RED + "충전 중 (다음 충전까지 " + timeLeft + "초)");
                 return -1;
             }
-            case 2 -> {
-                EntityDamageEvent event2 = (EntityDamageEvent) event;
-                if (isOwner(event2.getEntity()) && event2.getCause() == DamageCause.FALL) {
-                    sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 대미지를 받지 않았습니다.");
-                    event2.setCancelled(true);
-                }
+
+            Player caster = event1.getPlayer();
+            Location targetLocation = AbilityUtils.getTargetLocation(caster, 80);
+            if (targetLocation == null) {
+                sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
+                return -1;
+            }
+
+            executeTeleport(caster, targetLocation);
+            return -1;
+        } else if (CustomData == 2) {
+            EntityDamageEvent event2 = (EntityDamageEvent) event;
+            if (isOwner(event2.getEntity()) && event2.getCause() == DamageCause.FALL) {
+                sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 대미지를 받지 않았습니다.");
+                event2.setCancelled(true);
             }
         }
         return -1;

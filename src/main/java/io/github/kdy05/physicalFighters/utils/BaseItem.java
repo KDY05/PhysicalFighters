@@ -50,7 +50,8 @@ public interface BaseItem {
      * 기본 아이템 이벤트 등록
      */
     default void registerBaseItemEvents() {
-        if (this instanceof Ability ability) {
+        if (this instanceof Ability) {
+            Ability ability = (Ability) this;
             EventManager.onPlayerDropItem.add(new EventData(ability, ITEM_DROP_EVENT));
             EventManager.onPlayerRespawn.add(new EventData(ability, ITEM_RESPAWN_EVENT));
             EventManager.onEntityDeath.add(new EventData(ability, ITEM_DEATH_EVENT));

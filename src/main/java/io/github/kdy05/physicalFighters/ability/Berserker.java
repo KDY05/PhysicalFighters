@@ -32,11 +32,14 @@ public class Berserker extends Ability {
     @Override
     public void A_Effect(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-        switch (CustomData) {
-            case 0 -> event0.setDamage(event0.getDamage() * 4.0);
-            case 1 -> event0.setDamage(event0.getDamage() * 3.0);
-            case 2 -> event0.setDamage(event0.getDamage() * 2);
-            case 3 -> event0.setDamage(event0.getDamage() * 1.5);
+        if (CustomData == 0) {
+            event0.setDamage(event0.getDamage() * 4.0);
+        } else if (CustomData == 1) {
+            event0.setDamage(event0.getDamage() * 3.0);
+        } else if (CustomData == 2) {
+            event0.setDamage(event0.getDamage() * 2);
+        } else if (CustomData == 3) {
+            event0.setDamage(event0.getDamage() * 1.5);
         }
     }
 }

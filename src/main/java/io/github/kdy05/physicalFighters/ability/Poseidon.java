@@ -38,38 +38,35 @@ public class Poseidon extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-                Player player = event0.getPlayer();
-                if (!isOwner(player) || !isValidItem(Ability.DefaultItem)) {
-                    return -1;
-                }
-
-                targetLocation = AbilityUtils.getTargetLocation(player, TARGET_RANGE);
-                if (targetLocation == null) {
-                    player.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
-                    return -1;
-                }
-
-                if (ConfigManager.DamageGuard) {
-                    player.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
-                    return -1;
-                }
-                return 0;
+        if (CustomData == 0) {
+            PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+            Player player = event0.getPlayer();
+            if (!isOwner(player) || !isValidItem(Ability.DefaultItem)) {
+                return -1;
             }
-            case 1 -> {
-                PlayerMoveEvent event1 = (PlayerMoveEvent) event;
-                Player caster = event1.getPlayer();
-                if (!isOwner(caster)) break;
-                if (!caster.getLocation().getBlock().getType().equals(Material.WATER)) break;
-                caster.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 60, 0));
-                caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 0));
-                caster.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 60, 0));
-                AbilityUtils.splashTask(caster, caster.getLocation(), SLOW_RANGE,
-                        entity -> entity.getLocation().getBlock().getType().equals(Material.WATER),
-                        entity -> entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 60, 0)));
+
+            targetLocation = AbilityUtils.getTargetLocation(player, TARGET_RANGE);
+            if (targetLocation == null) {
+                player.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
+                return -1;
             }
+
+            if (ConfigManager.DamageGuard) {
+                player.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
+                return -1;
+            }
+            return 0;
+        } else if (CustomData == 1) {
+            PlayerMoveEvent event1 = (PlayerMoveEvent) event;
+            Player caster = event1.getPlayer();
+            if (!isOwner(caster)) return -1;
+            if (!caster.getLocation().getBlock().getType().equals(Material.WATER)) return -1;
+            caster.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 60, 0));
+            caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 0));
+            caster.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60, 0));
+            AbilityUtils.splashTask(caster, caster.getLocation(), SLOW_RANGE,
+                    entity -> entity.getLocation().getBlock().getType().equals(Material.WATER),
+                    entity -> entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0)));
         }
         return -1;
     }

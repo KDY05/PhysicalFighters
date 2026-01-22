@@ -3,8 +3,6 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
@@ -14,22 +12,34 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 public class Roclee extends Ability {
+    private boolean fallDamageImmune = false;
+
     public Roclee() {
         InitAbility("록리", Type.Active_Immediately, Rank.S,
                 Usage.IronAttack + "피해를 입히며 공중으로 끌어올립니다.",
                 "이때 시전자는 5초간 낙하 대미지를 받지 않습니다.");
         InitAbility(20, 0, true);
-        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.onEntityDamage.add(new EventData(this, 1));
     }
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-        if (isOwner(event0.getDamager()) && event0.getEntity() instanceof LivingEntity
-                && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard) {
-            return 0;
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            if (isOwner(event0.getDamager()) && event0.getEntity() instanceof LivingEntity
+                    && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard) {
+                return 0;
+            }
+        } else if (CustomData == 1) {
+            EntityDamageEvent event1 = (EntityDamageEvent) event;
+            if (isOwner(event1.getEntity()) && fallDamageImmune
+                    && event1.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                event1.setCancelled(true);
+            }
         }
         return -1;
     }
@@ -49,10 +59,8 @@ public class Roclee extends Ability {
         target.teleport(targetNewLoc);
         attacker.teleport(attackerNewLoc);
 
-        AttributeInstance safeFall = attacker.getAttribute(Attribute.SAFE_FALL_DISTANCE);
-        if (safeFall == null) return;
-        safeFall.setBaseValue(20.0);
-        Bukkit.getScheduler().runTaskLater(plugin, () -> safeFall.setBaseValue(3.0), 100);
+        fallDamageImmune = true;
+        Bukkit.getScheduler().runTaskLater(plugin, () -> fallDamageImmune = false, 100);
 
         target.getWorld().createExplosion(targetNewLoc, 1.0F);
         target.damage(8);

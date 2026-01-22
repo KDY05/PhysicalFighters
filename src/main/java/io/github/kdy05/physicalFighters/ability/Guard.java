@@ -79,7 +79,7 @@ public class Guard extends Ability {
                 teleportLoc.setYaw(playerLoc.getYaw());
                 teleportLoc.setPitch(playerLoc.getPitch());
                 player.teleport(teleportLoc);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 15 * 20, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 15 * 20, 1));
             }
         }
     }

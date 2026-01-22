@@ -23,28 +23,27 @@ public class Trash extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-                if (!isOwner(event0.getDamager())) break;
-                if (Math.random() > 0.03D) break;
-                if (event0.getDamager() instanceof Player caster && event0.getEntity() instanceof Player target) {
-                    Ability casterAbility = AbilityUtils.findAbility(caster);
-                    Ability targetAbility = AbilityUtils.findAbility(target);
-                    if (casterAbility == null || targetAbility == null) break;
-                    targetAbility.setPlayer(caster, false);
-                    casterAbility.setPlayer(target, false);
-                    targetAbility.setRunAbility(true);
-                    casterAbility.setRunAbility(true);
-                    caster.sendMessage("당신은 쓰레기 능력을 사용해 상대방과 능력을 바꿨습니다.");
-                    target.sendMessage("당신은 쓰레기 능력에 의해 쓰레기가 되었습니다.");
-                }
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            if (!isOwner(event0.getDamager())) return -1;
+            if (Math.random() > 0.03D) return -1;
+            if (event0.getDamager() instanceof Player && event0.getEntity() instanceof Player) {
+                Player caster = (Player) event0.getDamager();
+                Player target = (Player) event0.getEntity();
+                Ability casterAbility = AbilityUtils.findAbility(caster);
+                Ability targetAbility = AbilityUtils.findAbility(target);
+                if (casterAbility == null || targetAbility == null) return -1;
+                targetAbility.setPlayer(caster, false);
+                casterAbility.setPlayer(target, false);
+                targetAbility.setRunAbility(true);
+                casterAbility.setRunAbility(true);
+                caster.sendMessage("당신은 쓰레기 능력을 사용해 상대방과 능력을 바꿨습니다.");
+                target.sendMessage("당신은 쓰레기 능력에 의해 쓰레기가 되었습니다.");
             }
-            case 1 -> {
-                PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-                if (isOwner(event1.getPlayer()) && isValidItem(Ability.DefaultItem)) {
-                    return 1;
-                }
+        } else if (CustomData == 1) {
+            PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+            if (isOwner(event1.getPlayer()) && isValidItem(Ability.DefaultItem)) {
+                return 1;
             }
         }
         return -1;

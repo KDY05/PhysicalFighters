@@ -71,10 +71,10 @@ public class Gladiator extends Ability {
         attacker.teleport(attackerArenaLoc);
 
         // 포션 효과
-        target.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, DURATION_TICKS, 0));
+        target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, DURATION_TICKS, 0));
         target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, DURATION_TICKS, 0));
-        attacker.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, DURATION_TICKS, 0));
-        attacker.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, DURATION_TICKS, 0));
+        attacker.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, DURATION_TICKS, 0));
+        attacker.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, DURATION_TICKS, 0));
 
         // 원상 복구
         Bukkit.getScheduler().runTaskLater(plugin, () -> {

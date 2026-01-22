@@ -43,7 +43,8 @@ public class Assimilation extends Ability implements CommandInterface {
     public void A_Effect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDeathEvent event0 = (EntityDeathEvent) event;
-            if (!(event0.getEntity() instanceof Player victim) || event0.getEntity().getKiller() == null) return;
+            if (!(event0.getEntity() instanceof Player) || event0.getEntity().getKiller() == null) return;
+            Player victim = (Player) event0.getEntity();
             Ability ability = AbilityUtils.findAbility(victim);
             Player player = event0.getEntity().getKiller();
             if (ability == null) return;

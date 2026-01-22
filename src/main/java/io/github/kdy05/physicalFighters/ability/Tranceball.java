@@ -36,10 +36,12 @@ public class Tranceball extends Ability implements BaseItem {
     private Mode mode = Mode.Swap;
 
     private void switchMode() {
-        switch (this.mode) {
-            case Mode.Swap -> this.mode = Mode.Grab;
-            case Mode.Grab -> this.mode = Mode.Chase;
-            case Mode.Chase -> this.mode = Mode.Swap;
+        if (this.mode == Mode.Swap) {
+            this.mode = Mode.Grab;
+        } else if (this.mode == Mode.Grab) {
+            this.mode = Mode.Chase;
+        } else if (this.mode == Mode.Chase) {
+            this.mode = Mode.Swap;
         }
     }
 
@@ -57,32 +59,31 @@ public class Tranceball extends Ability implements BaseItem {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                ProjectileHitEvent event0 = (ProjectileHitEvent) event;
-                if (event0.getEntity() instanceof Snowball s && s.getShooter() instanceof Player p
-                        && isOwner(p) && s.getShooter() != event0.getHitEntity()
-                        && event0.getHitEntity() instanceof LivingEntity) {
-                    return 0;
+        if (CustomData == 0) {
+            ProjectileHitEvent event0 = (ProjectileHitEvent) event;
+            if (event0.getEntity() instanceof Snowball) {
+                Snowball s = (Snowball) event0.getEntity();
+                if (s.getShooter() instanceof Player) {
+                    Player p = (Player) s.getShooter();
+                    if (isOwner(p) && s.getShooter() != event0.getHitEntity()
+                            && event0.getHitEntity() instanceof LivingEntity) {
+                        return 0;
+                    }
                 }
             }
-            case 1 -> {
-                PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-                if (isValidItem(Material.SNOWBALL) && isOwner(event1.getPlayer()) && event1.getPlayer().isSneaking()) {
-                    switchMode();
-                    sendMessage(ChatColor.AQUA + mode.toString() + " 모드");
-                    event1.setCancelled(true);
-                }
+        } else if (CustomData == 1) {
+            PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+            if (isValidItem(Material.SNOWBALL) && isOwner(event1.getPlayer()) && event1.getPlayer().isSneaking()) {
+                switchMode();
+                sendMessage(ChatColor.AQUA + mode.toString() + " 모드");
+                event1.setCancelled(true);
             }
-            case ITEM_DROP_EVENT -> {
-                return handleItemDropCondition(event);
-            }
-            case ITEM_RESPAWN_EVENT -> {
-                return handleItemRespawnCondition(event);
-            }
-            case ITEM_DEATH_EVENT -> {
-                return handleItemDeathCondition(event);
-            }
+        } else if (CustomData == ITEM_DROP_EVENT) {
+            return handleItemDropCondition(event);
+        } else if (CustomData == ITEM_RESPAWN_EVENT) {
+            return handleItemRespawnCondition(event);
+        } else if (CustomData == ITEM_DEATH_EVENT) {
+            return handleItemDeathCondition(event);
         }
         return -1;
     }
@@ -96,13 +97,13 @@ public class Tranceball extends Ability implements BaseItem {
             if (target == null) return;
             Location casterLoc = getPlayer().getLocation();
             Location targetLoc = target.getLocation();
-            switch (this.mode) {
-                case Mode.Swap -> {
-                    target.teleport(casterLoc);
-                    getPlayer().teleport(targetLoc);
-                }
-                case Mode.Grab -> target.teleport(casterLoc);
-                case Mode.Chase -> getPlayer().teleport(targetLoc);
+            if (this.mode == Mode.Swap) {
+                target.teleport(casterLoc);
+                getPlayer().teleport(targetLoc);
+            } else if (this.mode == Mode.Grab) {
+                target.teleport(casterLoc);
+            } else if (this.mode == Mode.Chase) {
+                getPlayer().teleport(targetLoc);
             }
             getPlayer().getInventory().addItem(new ItemStack(Material.SNOWBALL, 1));
         }

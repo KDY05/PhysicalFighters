@@ -137,15 +137,21 @@ public class GameCommand implements CommandInterface {
     }
 
     private String getTimerText(Ability ability) {
-        return switch (ability.getAbilityType()) {
-            case Active_Continue -> String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / "
+        Ability.Type type = ability.getAbilityType();
+        if (type == null) {
+            return "None";
+        } else if (type == Ability.Type.Active_Continue) {
+            return String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / "
                     + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "%d초", ability.getCoolDown(), ability.getDuration());
-            case Active_Immediately -> String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / "
+        } else if (type == Ability.Type.Active_Immediately) {
+            return String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / "
                     + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음", ability.getCoolDown());
-            case Passive_AutoMatic, Passive_Manual -> ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "없음 / "
+        } else if (type == Ability.Type.Passive_AutoMatic || type == Ability.Type.Passive_Manual) {
+            return ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "없음 / "
                     + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음";
-            case null -> "None";
-        };
+        } else {
+            return "None";
+        }
     }
 
     private void handleStop(CommandSender sender) {

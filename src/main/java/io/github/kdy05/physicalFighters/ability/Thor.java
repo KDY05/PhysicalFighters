@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.List;
+import java.util.Arrays;
 
 public class Thor extends Ability implements BaseItem {
 
@@ -26,11 +26,11 @@ public class Thor extends Ability implements BaseItem {
     private final ItemStack mjolnir = createMjolnir();
 
     private ItemStack createMjolnir() {
-        ItemStack mjolnir = new ItemStack(Material.MACE);
+        ItemStack mjolnir = new ItemStack(Material.GOLDEN_HOE);
         ItemMeta meta = mjolnir.getItemMeta();
         assert meta != null;
         meta.setDisplayName("묠니르");
-        meta.setLore(List.of(ChatColor.GRAY + "토르 전용"));
+        meta.setLore(Arrays.asList(ChatColor.GRAY + "토르 전용"));
         mjolnir.setItemMeta(meta);
         return mjolnir;
     }
@@ -38,8 +38,8 @@ public class Thor extends Ability implements BaseItem {
     private boolean isMjolnir(ItemStack stack) {
         ItemMeta meta = stack.getItemMeta();
         if (meta == null || meta.getLore() == null) return false;
-        return stack.getType().equals(Material.MACE) && meta.getDisplayName().equals("묠니르")
-                && meta.getLore().getFirst().equals(ChatColor.GRAY + "토르 전용");
+        return stack.getType().equals(Material.GOLDEN_HOE) && meta.getDisplayName().equals("묠니르")
+                && meta.getLore().get(0).equals(ChatColor.GRAY + "토르 전용");
     }
 
     public Thor() {
@@ -54,37 +54,32 @@ public class Thor extends Ability implements BaseItem {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-                if (isOwner(event0.getDamager()) && event0.getEntity() instanceof LivingEntity entity) {
-                    Player caster = (Player) event0.getDamager();
-                    ItemStack item = caster.getInventory().getItemInMainHand();
-                    if (!isMjolnir(item)) break;
-                    if (this.charge > 0) {
-                        event0.setDamage(event0.getDamage() + 3 * this.charge);
-                        this.charge = 0;
-                        entity.getWorld().strikeLightning(entity.getLocation());
-                        caster.sendMessage(ChatColor.YELLOW + "묠니르에 농축된 번개의 대미지를 추가로 입혔습니다.");
-                    }
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            if (isOwner(event0.getDamager()) && event0.getEntity() instanceof LivingEntity) {
+                LivingEntity entity = (LivingEntity) event0.getEntity();
+                Player caster = (Player) event0.getDamager();
+                ItemStack item = caster.getInventory().getItemInMainHand();
+                if (!isMjolnir(item)) return -1;
+                if (this.charge > 0) {
+                    event0.setDamage(event0.getDamage() + 3 * this.charge);
+                    this.charge = 0;
+                    entity.getWorld().strikeLightning(entity.getLocation());
+                    caster.sendMessage(ChatColor.YELLOW + "묠니르에 농축된 번개의 대미지를 추가로 입혔습니다.");
                 }
             }
-            case 1 -> {
-                PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-                if (isOwner(event1.getPlayer()) && !ConfigManager.DamageGuard
-                        && isMjolnir(event1.getPlayer().getInventory().getItemInMainHand())) {
-                    return 1;
-                }
+        } else if (CustomData == 1) {
+            PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+            if (isOwner(event1.getPlayer()) && !ConfigManager.DamageGuard
+                    && isMjolnir(event1.getPlayer().getInventory().getItemInMainHand())) {
+                return 1;
             }
-            case ITEM_DROP_EVENT -> {
-                return handleItemDropCondition(event);
-            }
-            case ITEM_RESPAWN_EVENT -> {
-                return handleItemRespawnCondition(event);
-            }
-            case ITEM_DEATH_EVENT -> {
-                return handleItemDeathCondition(event);
-            }
+        } else if (CustomData == ITEM_DROP_EVENT) {
+            return handleItemDropCondition(event);
+        } else if (CustomData == ITEM_RESPAWN_EVENT) {
+            return handleItemRespawnCondition(event);
+        } else if (CustomData == ITEM_DEATH_EVENT) {
+            return handleItemDeathCondition(event);
         }
         return -1;
     }

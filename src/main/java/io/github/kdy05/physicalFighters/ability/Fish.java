@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Fish extends Ability implements BaseItem {
@@ -29,7 +29,7 @@ public class Fish extends Ability implements BaseItem {
         ItemMeta meta = fish.getItemMeta();
         assert meta != null;
         meta.setDisplayName(ChatColor.AQUA + "강태공의 물고기");
-        meta.setLore(List.of(ChatColor.GRAY + "강태공 전용"));
+        meta.setLore(Arrays.asList(ChatColor.GRAY + "강태공 전용"));
         fish.setItemMeta(meta);
         return fish;
     }
@@ -38,7 +38,7 @@ public class Fish extends Ability implements BaseItem {
         ItemMeta meta = stack.getItemMeta();
         if (meta == null || meta.getLore() == null) return false;
         return stack.getType().equals(Material.COD) && meta.getDisplayName().equals(ChatColor.AQUA + "강태공의 물고기")
-                && meta.getLore().getFirst().equals(ChatColor.GRAY + "강태공 전용");
+                && meta.getLore().get(0).equals(ChatColor.GRAY + "강태공 전용");
     }
 
     public Fish() {
@@ -52,42 +52,34 @@ public class Fish extends Ability implements BaseItem {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
-                if (!isOwner(damageEvent.getDamager()) || !(damageEvent.getEntity() instanceof Player)) break;
-                Player player = (Player) damageEvent.getDamager();
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
+            if (!isOwner(damageEvent.getDamager()) || !(damageEvent.getEntity() instanceof Player)) return -1;
+            Player player = (Player) damageEvent.getDamager();
 
-                if (isValidItem(Material.FISHING_ROD)) return 0;
-                if (isFish(player.getInventory().getItemInMainHand())) return 1;
-            }
-            case ITEM_DROP_EVENT -> {
-                return handleItemDropCondition(event);
-            }
-            case ITEM_RESPAWN_EVENT -> {
-                return handleItemRespawnCondition(event);
-            }
-            case ITEM_DEATH_EVENT -> {
-                return handleItemDeathCondition(event);
-            }
+            if (isValidItem(Material.FISHING_ROD)) return 0;
+            if (isFish(player.getInventory().getItemInMainHand())) return 1;
+        } else if (CustomData == ITEM_DROP_EVENT) {
+            return handleItemDropCondition(event);
+        } else if (CustomData == ITEM_RESPAWN_EVENT) {
+            return handleItemRespawnCondition(event);
+        } else if (CustomData == ITEM_DEATH_EVENT) {
+            return handleItemDeathCondition(event);
         }
         return -1;
     }
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
-                damageEvent.setDamage(damageEvent.getDamage() * FISHING_ROD_DAMAGE);
-                if (Math.random() < FISH_DROP_RATE) {
-                    Objects.requireNonNull(getPlayer()).getInventory().addItem(fish);
-                }
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
+            damageEvent.setDamage(damageEvent.getDamage() * FISHING_ROD_DAMAGE);
+            if (Math.random() < FISH_DROP_RATE) {
+                Objects.requireNonNull(getPlayer()).getInventory().addItem(fish);
             }
-            case 1 -> {
-                EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
-                damageEvent.setDamage(damageEvent.getDamage() * FISH_DAMAGE);
-            }
+        } else if (CustomData == 1) {
+            EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
+            damageEvent.setDamage(damageEvent.getDamage() * FISH_DAMAGE);
         }
     }
 

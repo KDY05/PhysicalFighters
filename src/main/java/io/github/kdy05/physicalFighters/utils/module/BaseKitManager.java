@@ -49,8 +49,8 @@ public class BaseKitManager implements Listener {
         }
         else if (code == 1) {
             ItemStack pickaxe = new ItemStack(Material.IRON_PICKAXE);
-            pickaxe.addEnchantment(Enchantment.UNBREAKING, 3);
-            pickaxe.addEnchantment(Enchantment.EFFICIENCY, 3);
+            pickaxe.addEnchantment(Enchantment.DURABILITY, 3);
+            pickaxe.addEnchantment(Enchantment.DIG_SPEED, 3);
             basicItems[0] = pickaxe;
             basicItems[1] = new ItemStack(Material.ENCHANTING_TABLE);
             basicItems[2] = new ItemStack(Material.BOOKSHELF, 64);
@@ -111,7 +111,8 @@ public class BaseKitManager implements Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        if (!(event.getPlayer() instanceof Player player)) return;
+        if (!(event.getPlayer() instanceof Player)) return;
+        Player player = (Player) event.getPlayer();
 
         // 편집 중인 인벤토리인지 확인
         if (!editingInventories.containsKey(player)) return;

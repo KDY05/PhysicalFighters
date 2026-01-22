@@ -85,7 +85,7 @@ public class SuperFan extends Ability {
         
         target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 0));
         target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 200, 2));
-        target.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 200, 2));
+        target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 2));
         target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 200, 2));
         
         target.sendMessage(ChatColor.LIGHT_PURPLE + "앗! 바람이 강하지만 시원해~♥");

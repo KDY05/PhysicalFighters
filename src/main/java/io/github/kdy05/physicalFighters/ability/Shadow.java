@@ -34,58 +34,51 @@ public class Shadow extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityTargetEvent event0 = (EntityTargetEvent) event;
-                if (isOwner(event0.getTarget()))
-                    return 0;
+        if (CustomData == 0) {
+            EntityTargetEvent event0 = (EntityTargetEvent) event;
+            if (isOwner(event0.getTarget()))
+                return 0;
+        } else if (CustomData == 1) {
+            EntityDamageEvent event1 = (EntityDamageEvent) event;
+            if (isOwner(event1.getEntity()) && Math.random() < 0.10
+                    && event1.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+                return 1;
             }
-            case 1 -> {
-                EntityDamageEvent event1 = (EntityDamageEvent) event;
-                if (isOwner(event1.getEntity()) && Math.random() < 0.10
-                        && event1.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-                    return 1;
-                }
-            }
-            case 2 -> {
-                EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
-                if (!isOwner(event2.getDamager()) || !(event2.getEntity() instanceof LivingEntity target)) {
-                    return -1;
-                }
-                Player attacker = (Player) event2.getDamager();
-                if (isBackstabAttack(attacker, target)) {
-                    return 2;
-                }
+        } else if (CustomData == 2) {
+            EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
+            if (!isOwner(event2.getDamager()) || !(event2.getEntity() instanceof LivingEntity)) {
                 return -1;
             }
+            LivingEntity target = (LivingEntity) event2.getEntity();
+            Player attacker = (Player) event2.getDamager();
+            if (isBackstabAttack(attacker, target)) {
+                return 2;
+            }
+            return -1;
         }
         return -1;
     }
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityTargetEvent event0 = (EntityTargetEvent) event;
-                event0.setTarget(null);
-                event0.setCancelled(true);
-            }
-            case 1 -> {
-                EntityDamageEvent event1 = (EntityDamageEvent) event;
-                event1.setDamage(0);
-                if (getPlayer() == null) return;
-                AbilityUtils.healEntity(getPlayer(), 4);
-                sendMessage(ChatColor.GREEN + "회피하였습니다!");
-            }
-            case 2 -> {
-                EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
-                LivingEntity target = (LivingEntity) event2.getEntity();
-                Player attacker = (Player) event2.getDamager();
-                event2.setDamage(event2.getDamage() * 2.0D);
-                attacker.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 4, 0));
-                attacker.sendMessage(ChatColor.GREEN + "기습 성공!");
-                target.sendMessage(ChatColor.RED + "기습에 당했습니다!");
-            }
+        if (CustomData == 0) {
+            EntityTargetEvent event0 = (EntityTargetEvent) event;
+            event0.setTarget(null);
+            event0.setCancelled(true);
+        } else if (CustomData == 1) {
+            EntityDamageEvent event1 = (EntityDamageEvent) event;
+            event1.setDamage(0);
+            if (getPlayer() == null) return;
+            AbilityUtils.healEntity(getPlayer(), 4);
+            sendMessage(ChatColor.GREEN + "회피하였습니다!");
+        } else if (CustomData == 2) {
+            EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
+            LivingEntity target = (LivingEntity) event2.getEntity();
+            Player attacker = (Player) event2.getDamager();
+            event2.setDamage(event2.getDamage() * 2.0D);
+            attacker.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 4, 0));
+            attacker.sendMessage(ChatColor.GREEN + "기습 성공!");
+            target.sendMessage(ChatColor.RED + "기습에 당했습니다!");
         }
     }
 

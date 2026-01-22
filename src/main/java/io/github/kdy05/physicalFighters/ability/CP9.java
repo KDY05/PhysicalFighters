@@ -31,26 +31,22 @@ public class CP9 extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-                if (event0.getEntity() instanceof LivingEntity && isOwner(event0.getDamager())
-                        && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard) {
-                    return 0;
-                }
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            if (event0.getEntity() instanceof LivingEntity && isOwner(event0.getDamager())
+                    && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard) {
+                return 0;
             }
-            case 1 -> {
-                PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-                if (isOwner(event1.getPlayer()) && isValidItem(Ability.DefaultItem)) {
-                    return 1;
-                }
+        } else if (CustomData == 1) {
+            PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+            if (isOwner(event1.getPlayer()) && isValidItem(Ability.DefaultItem)) {
+                return 1;
             }
-            case 2 -> {
-                EntityDamageEvent event2 = (EntityDamageEvent) event;
-                if (isOwner(event2.getEntity()) && event2.getCause() == DamageCause.FALL) {
-                    event2.setCancelled(true);
-                    sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 대미지를 받지 않았습니다.");
-                }
+        } else if (CustomData == 2) {
+            EntityDamageEvent event2 = (EntityDamageEvent) event;
+            if (isOwner(event2.getEntity()) && event2.getCause() == DamageCause.FALL) {
+                event2.setCancelled(true);
+                sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 대미지를 받지 않았습니다.");
             }
         }
         return -1;
@@ -58,28 +54,25 @@ public class CP9 extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-                LivingEntity entity = (LivingEntity) event0.getEntity();
-                AbilityUtils.piercingDamage(entity, 6);
-                sendMessage(String.format(ChatColor.GREEN +
-                        "%s에게 지건을 사용했습니다.", entity.getName()));
-                entity.sendMessage(String.format(ChatColor.RED +
-                        "%s(이)가 지건을 사용했습니다.", event0.getDamager().getName()));
-            }
-            case 1 -> {
-                PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-                Player player = event1.getPlayer();
-                Location playerLoc = player.getLocation();
-                Vector direction = playerLoc.getDirection().normalize();
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            LivingEntity entity = (LivingEntity) event0.getEntity();
+            AbilityUtils.piercingDamage(entity, 6);
+            sendMessage(String.format(ChatColor.GREEN +
+                    "%s에게 지건을 사용했습니다.", entity.getName()));
+            entity.sendMessage(String.format(ChatColor.RED +
+                    "%s(이)가 지건을 사용했습니다.", event0.getDamager().getName()));
+        } else if (CustomData == 1) {
+            PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+            Player player = event1.getPlayer();
+            Location playerLoc = player.getLocation();
+            Vector direction = playerLoc.getDirection().normalize();
 
-                Location explosionLoc = playerLoc.clone().subtract(direction.clone().multiply(1.5));
-                player.getWorld().createExplosion(explosionLoc, 0.0F);
+            Location explosionLoc = playerLoc.clone().subtract(direction.clone().multiply(1.5));
+            player.getWorld().createExplosion(explosionLoc, 0.0F);
 
-                Location targetLoc = playerLoc.clone().add(direction.clone().multiply(5));
-                AbilityUtils.goVelocity(player, targetLoc, 5);
-            }
+            Location targetLoc = playerLoc.clone().add(direction.clone().multiply(5));
+            AbilityUtils.goVelocity(player, targetLoc, 5);
         }
     }
 

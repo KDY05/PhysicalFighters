@@ -37,13 +37,13 @@ public class Demigod extends Ability {
         if (Math.random() <= 0.05D)
             AbilityUtils.healEntity(player, 2);
         if (Math.random() <= 0.05D)
-            player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 200, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 0));
         if (Math.random() <= 0.05D)
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 0));
         if (Math.random() <= 0.1D)
-            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 200, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 0));
         if (Math.random() <= 0.1D)
-            player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 200, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 200, 0));
         if (Math.random() <= 0.1D)
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 0));
     }

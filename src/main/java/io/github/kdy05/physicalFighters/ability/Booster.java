@@ -39,22 +39,19 @@ public class Booster extends Ability {
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-                LivingEntity entity = (LivingEntity) event0.getEntity();
-                Random rand = new Random();
-                event0.setDamage(rand.nextDouble(3, 6));
-                Bukkit.getScheduler().runTaskLater(plugin, () ->
-                        entity.setNoDamageTicks(6), 1);
-            }
-            case 1 -> {
-                EntityDamageByEntityEvent event1 = (EntityDamageByEntityEvent) event;
-                Player player = (Player) event1.getEntity();
-                double damage = event1.getDamage();
-                player.damage(damage);
-                event1.setCancelled(true);
-            }
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            LivingEntity entity = (LivingEntity) event0.getEntity();
+            Random rand = new Random();
+            event0.setDamage(3 + rand.nextDouble() * 3);
+            Bukkit.getScheduler().runTaskLater(plugin, () ->
+                    entity.setNoDamageTicks(6), 1);
+        } else if (CustomData == 1) {
+            EntityDamageByEntityEvent event1 = (EntityDamageByEntityEvent) event;
+            Player player = (Player) event1.getEntity();
+            double damage = event1.getDamage();
+            player.damage(damage);
+            event1.setCancelled(true);
         }
     }
 }

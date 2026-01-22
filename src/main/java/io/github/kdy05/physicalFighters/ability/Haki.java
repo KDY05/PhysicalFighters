@@ -77,7 +77,7 @@ public class Haki extends Ability {
         private void applyConquerorHaki() {
             AbilityUtils.splashTask(caster, caster.getLocation(), Haki.RANGE, entity -> {
                 entity.damage(Haki.DAMAGE, caster);
-                entity.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 30, 0));
+                entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 30, 0));
                 entity.sendMessage(ChatColor.DARK_RED + "패기에 압도당했습니다!");
             });
         }

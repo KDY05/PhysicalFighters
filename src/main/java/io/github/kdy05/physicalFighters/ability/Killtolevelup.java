@@ -30,46 +30,37 @@ public class Killtolevelup extends Ability implements BaseItem {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-                if (isOwner(event0.getDamager()) && isValidItem(Material.FEATHER))
-                    return 0;
-            }
-            case 1 -> {
-                EntityDeathEvent event1 = (EntityDeathEvent) event;
-                if (event1.getEntity().getKiller() != null && isOwner(event1.getEntity().getKiller())
-                        && isValidItem(Material.FEATHER) && event1.getEntity() instanceof Player)
-                    return 1;
-            }
-            case ITEM_DROP_EVENT -> {
-                return handleItemDropCondition(event);
-            }
-            case ITEM_RESPAWN_EVENT -> {
-                return handleItemRespawnCondition(event);
-            }
-            case ITEM_DEATH_EVENT -> {
-                return handleItemDeathCondition(event);
-            }
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            if (isOwner(event0.getDamager()) && isValidItem(Material.FEATHER))
+                return 0;
+        } else if (CustomData == 1) {
+            EntityDeathEvent event1 = (EntityDeathEvent) event;
+            if (event1.getEntity().getKiller() != null && isOwner(event1.getEntity().getKiller())
+                    && isValidItem(Material.FEATHER) && event1.getEntity() instanceof Player)
+                return 1;
+        } else if (CustomData == ITEM_DROP_EVENT) {
+            return handleItemDropCondition(event);
+        } else if (CustomData == ITEM_RESPAWN_EVENT) {
+            return handleItemRespawnCondition(event);
+        } else if (CustomData == ITEM_DEATH_EVENT) {
+            return handleItemDeathCondition(event);
         }
         return -1;
     }
 
     @Override
     public void A_Effect(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-                event0.setDamage(event0.getDamage() * this.dama);
-            }
-            case 1 -> {
-                EntityDeathEvent event1 = (EntityDeathEvent) event;
-                Player player = event1.getEntity().getKiller();
-                if (player == null) return;
-                this.dama += 2;
-                Bukkit.broadcastMessage(String.format(ChatColor.RED + "%s님을 죽이고 %s님이 폭주했습니다.",
-                        event1.getEntity().getName(), player.getName()));
-            }
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            event0.setDamage(event0.getDamage() * this.dama);
+        } else if (CustomData == 1) {
+            EntityDeathEvent event1 = (EntityDeathEvent) event;
+            Player player = event1.getEntity().getKiller();
+            if (player == null) return;
+            this.dama += 2;
+            Bukkit.broadcastMessage(String.format(ChatColor.RED + "%s님을 죽이고 %s님이 폭주했습니다.",
+                    event1.getEntity().getName(), player.getName()));
         }
     }
 

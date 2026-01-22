@@ -58,12 +58,12 @@ public class Hulk extends Ability {
         if (caster == null) return;
         caster.setHealth(20);
         caster.getWorld().createExplosion(caster.getLocation(), 0.0F);
-        caster.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 600, 0));
-        caster.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 600, 0));
+        caster.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 0));
+        caster.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 600, 0));
         caster.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 600, 0));
         caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
-        caster.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 600, 0));
-        caster.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 600, 0));
+        caster.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 600, 0));
+        caster.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 0));
     }
 
     @Override

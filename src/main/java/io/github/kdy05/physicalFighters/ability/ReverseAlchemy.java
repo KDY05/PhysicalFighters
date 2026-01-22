@@ -35,20 +35,17 @@ public class ReverseAlchemy extends Ability {
         if (!isOwner(player)) return -1;
         PlayerInventory inventory  = player.getInventory();
 
-        switch (CustomData) {
-            case 0 -> {
-                if (!isValidItem(Ability.DefaultItem)) break;
-                if (inventory.contains(Material.GOLD_INGOT, GOLD_FOR_DIAMOND))
-                    return 0;
-                player.sendMessage(ChatColor.RED + "금괴가 " + GOLD_FOR_DIAMOND + "개 필요합니다.");
+        if (CustomData == 0) {
+            if (!isValidItem(Ability.DefaultItem)) return -1;
+            if (inventory.contains(Material.GOLD_INGOT, GOLD_FOR_DIAMOND))
+                return 0;
+            player.sendMessage(ChatColor.RED + "금괴가 " + GOLD_FOR_DIAMOND + "개 필요합니다.");
+        } else if (CustomData == 1) {
+            if (!isValidItem(Material.GOLD_INGOT)) return -1;
+            if (inventory.contains(Material.GOLD_INGOT, GOLD_FOR_HEALING)) {
+                return 1;
             }
-            case 1 -> {
-                if (!isValidItem(Material.GOLD_INGOT)) break;
-                if (inventory.contains(Material.GOLD_INGOT, GOLD_FOR_HEALING)) {
-                    return 1;
-                }
-                player.sendMessage(ChatColor.RED + "금괴가 " + GOLD_FOR_HEALING + "개 필요합니다.");
-            }
+            player.sendMessage(ChatColor.RED + "금괴가 " + GOLD_FOR_HEALING + "개 필요합니다.");
         }
 
         return -1;
@@ -58,27 +55,25 @@ public class ReverseAlchemy extends Ability {
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player player = event0.getPlayer();
-        switch (CustomData) {
-            case 0 -> {
-                player.getInventory().removeItem(new ItemStack(Material.GOLD_INGOT, GOLD_FOR_DIAMOND));
-                player.getInventory().addItem(new ItemStack(Material.DIAMOND, 1));
-                player.sendMessage(ChatColor.GREEN + "금괴 " + GOLD_FOR_DIAMOND + "개로 다이아몬드를 만들었습니다.");
-            }
-            case 1 -> {
-                player.getInventory().removeItem(new ItemStack(Material.GOLD_INGOT, GOLD_FOR_HEALING));
-                AttributeInstance maxHealth = player.getAttribute(Attribute.MAX_HEALTH);
-                if (maxHealth == null) break;
+        if (CustomData == 0) {
+            player.getInventory().removeItem(new ItemStack(Material.GOLD_INGOT, GOLD_FOR_DIAMOND));
+            player.getInventory().addItem(new ItemStack(Material.DIAMOND, 1));
+            player.sendMessage(ChatColor.GREEN + "금괴 " + GOLD_FOR_DIAMOND + "개로 다이아몬드를 만들었습니다.");
+        } else if (CustomData == 1) {
+            player.getInventory().removeItem(new ItemStack(Material.GOLD_INGOT, GOLD_FOR_HEALING));
+            AttributeInstance maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+            if (maxHealth == null) return;
 
-                double maxHealthValue = maxHealth.getValue();
-                if (player.getHealth() >= maxHealthValue / 2) {
-                    player.setHealth(maxHealthValue);
-                } else {
-                    player.setHealth(maxHealthValue / 2);
-                }
-
-                player.sendMessage(ChatColor.GREEN + "체력을 회복하였습니다.");
+            double maxHealthValue = maxHealth.getValue();
+            if (player.getHealth() >= maxHealthValue / 2) {
+                player.setHealth(maxHealthValue);
+            } else {
+                player.setHealth(maxHealthValue / 2);
             }
-            default -> player.sendMessage(ChatColor.RED + "알 수 없는 오류가 발생했습니다.");
+
+            player.sendMessage(ChatColor.GREEN + "체력을 회복하였습니다.");
+        } else {
+            player.sendMessage(ChatColor.RED + "알 수 없는 오류가 발생했습니다.");
         }
     }
 

@@ -4,6 +4,7 @@ import io.github.kdy05.physicalFighters.utils.CommandInterface;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -22,10 +23,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
     private final LinkedList<CommandInterface> CommandEventHandler = new LinkedList<>();
     
     // 기본 명령어들
-    private static final List<String> BASIC_COMMANDS = List.of("help", "check", "yes", "no");
-    
+    private static final List<String> BASIC_COMMANDS = Arrays.asList("help", "check", "yes", "no");
+
     // 운영자 명령어들
-    private static final List<String> OPERATOR_COMMANDS = List.of("start", "stop", "skip", "ob", "ablist",
+    private static final List<String> OPERATOR_COMMANDS = Arrays.asList("start", "stop", "skip", "ob", "ablist",
             "abi", "util", "inv", "hung", "dura", "tc", "book", "scan", "reload", "kit");
 
     public CommandManager(PhysicalFighters plugin) {

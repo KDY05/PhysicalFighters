@@ -45,33 +45,30 @@ public class Akainu extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-                Player caster = event0.getPlayer();
+        if (CustomData == 0) {
+            PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+            Player caster = event0.getPlayer();
 
-                if (!isOwner(caster) || !isValidItem(Ability.DefaultItem)) {
-                    return -1;
-                }
-
-                if (ConfigManager.DamageGuard) {
-                    caster.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
-                    return -1;
-                }
-
-                targetLocation = AbilityUtils.getTargetLocation(caster, 40);
-                if (targetLocation == null) {
-                    caster.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
-                    return -1;
-                }
-
-                return 0;
+            if (!isOwner(caster) || !isValidItem(Ability.DefaultItem)) {
+                return -1;
             }
-            case 1 -> {
-                EntityDamageEvent event1 = (EntityDamageEvent) event;
-                if (isOwner(event1.getEntity()) && isLavaFireDamage(event1.getCause())) {
-                    event1.setCancelled(true);
-                }
+
+            if (ConfigManager.DamageGuard) {
+                caster.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
+                return -1;
+            }
+
+            targetLocation = AbilityUtils.getTargetLocation(caster, 40);
+            if (targetLocation == null) {
+                caster.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
+                return -1;
+            }
+
+            return 0;
+        } else if (CustomData == 1) {
+            EntityDamageEvent event1 = (EntityDamageEvent) event;
+            if (isOwner(event1.getEntity()) && isLavaFireDamage(event1.getCause())) {
+                event1.setCancelled(true);
             }
         }
 

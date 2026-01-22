@@ -199,18 +199,17 @@ public abstract class Ability {
                 getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "능력을 사용했습니다.");
         }
 
-        switch (this.type) {
+        if (this.type == Type.Active_Continue) {
             // 지속 능력 시작
-            case Type.Active_Continue ->
-                    this.DTimer.startTimer(getDuration(), true);
+            this.DTimer.startTimer(getDuration(), true);
+        } else if (this.type == Type.Active_Immediately) {
             // 즉발 능력 사용 후 쿨타임 다시 시작
-            case Type.Active_Immediately -> {
-                A_Effect(event, data);
-                if (getCoolDown() != 0)
-                    this.CTimer.startTimer(getCoolDown(), true);
-            }
+            A_Effect(event, data);
+            if (getCoolDown() != 0)
+                this.CTimer.startTimer(getCoolDown(), true);
+        } else {
             // 패시브 실행
-            default -> A_Effect(event, data);
+            A_Effect(event, data);
         }
 
     }

@@ -33,7 +33,7 @@ public class Ckyomi extends Ability {
     public void A_Effect(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         LivingEntity entity = (LivingEntity) event0.getEntity();
-        entity.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 100, 0));
+        entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 0));
         entity.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 0));
         entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 0));
     }

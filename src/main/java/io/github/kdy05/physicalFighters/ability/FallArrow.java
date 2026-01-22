@@ -27,24 +27,26 @@ public class FallArrow extends Ability implements BaseItem {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-                if (event0.getDamager() instanceof Arrow a && a.getShooter() instanceof Player player
-                        && isOwner(player) && event0.getEntity() instanceof LivingEntity entity
-                        && entity != player && !ConfigManager.DamageGuard) {
-                    return 0;
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            if (event0.getDamager() instanceof Arrow) {
+                Arrow a = (Arrow) event0.getDamager();
+                if (a.getShooter() instanceof Player) {
+                    Player player = (Player) a.getShooter();
+                    if (isOwner(player) && event0.getEntity() instanceof LivingEntity) {
+                        LivingEntity entity = (LivingEntity) event0.getEntity();
+                        if (entity != player && !ConfigManager.DamageGuard) {
+                            return 0;
+                        }
+                    }
                 }
             }
-            case ITEM_DROP_EVENT -> {
-                return handleItemDropCondition(event);
-            }
-            case ITEM_RESPAWN_EVENT -> {
-                return handleItemRespawnCondition(event);
-            }
-            case ITEM_DEATH_EVENT -> {
-                return handleItemDeathCondition(event);
-            }
+        } else if (CustomData == ITEM_DROP_EVENT) {
+            return handleItemDropCondition(event);
+        } else if (CustomData == ITEM_RESPAWN_EVENT) {
+            return handleItemRespawnCondition(event);
+        } else if (CustomData == ITEM_DEATH_EVENT) {
+            return handleItemDeathCondition(event);
         }
         return -1;
     }

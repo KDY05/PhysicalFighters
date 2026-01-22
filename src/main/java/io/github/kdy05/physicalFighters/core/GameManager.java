@@ -372,11 +372,14 @@ public class GameManager {
 
         @Override
         public void onTimerRunning(int count) {
-            switch (type) {
-                case READY -> handleReadyTimer(count);
-                case START -> handleStartTimer(count);
-                case PROGRESS -> handleProgressTimer(count);
-                case WARNING -> handleWarningTimer(count);
+            if (type == TimerType.READY) {
+                handleReadyTimer(count);
+            } else if (type == TimerType.START) {
+                handleStartTimer(count);
+            } else if (type == TimerType.PROGRESS) {
+                handleProgressTimer(count);
+            } else if (type == TimerType.WARNING) {
+                handleWarningTimer(count);
             }
         }
 
@@ -384,25 +387,36 @@ public class GameManager {
         public void onTimerEnd() {}
 
         private void handleReadyTimer(int count) {
-            switch (count) {
-                case 0 -> initializePlayerList();
-                case 3 -> showGameInfo(true);
-                case 7 -> handleAbilitySetup();
-                case 9 -> processAbilitySelection();
+            if (count == 0) {
+                initializePlayerList();
+            } else if (count == 3) {
+                showGameInfo(true);
+            } else if (count == 7) {
+                handleAbilitySetup();
+            } else if (count == 9) {
+                processAbilitySelection();
             }
         }
 
         private void handleStartTimer(int count) {
-            switch (count) {
-                case 0 -> gameWarningStop();
-                case 3 -> broadcastMessage(ChatColor.WHITE + "모든 플레이어들의 능력을 확정했습니다.");
-                case 5 -> broadcastMessage(ChatColor.YELLOW + "잠시 후 게임이 시작됩니다.");
-                case 10 -> broadcastMessage(ChatColor.GOLD + "5초 전");
-                case 11 -> broadcastMessage(ChatColor.GOLD + "4초 전");
-                case 12 -> broadcastMessage(ChatColor.GOLD + "3초 전");
-                case 13 -> broadcastMessage(ChatColor.GOLD + "2초 전");
-                case 14 -> broadcastMessage(ChatColor.GOLD + "1초 전");
-                case 15 -> startGameLogic();
+            if (count == 0) {
+                gameWarningStop();
+            } else if (count == 3) {
+                broadcastMessage(ChatColor.WHITE + "모든 플레이어들의 능력을 확정했습니다.");
+            } else if (count == 5) {
+                broadcastMessage(ChatColor.YELLOW + "잠시 후 게임이 시작됩니다.");
+            } else if (count == 10) {
+                broadcastMessage(ChatColor.GOLD + "5초 전");
+            } else if (count == 11) {
+                broadcastMessage(ChatColor.GOLD + "4초 전");
+            } else if (count == 12) {
+                broadcastMessage(ChatColor.GOLD + "3초 전");
+            } else if (count == 13) {
+                broadcastMessage(ChatColor.GOLD + "2초 전");
+            } else if (count == 14) {
+                broadcastMessage(ChatColor.GOLD + "1초 전");
+            } else if (count == 15) {
+                startGameLogic();
             }
         }
 

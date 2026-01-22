@@ -27,23 +27,26 @@ public class PoisonArrow extends Ability implements BaseItem {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-                if (event0.getDamager() instanceof Arrow a && a.getShooter() instanceof Player p && isOwner(p)
-                        && event0.getEntity() instanceof LivingEntity e && p != e) {
-                    return 0;
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            if (event0.getDamager() instanceof Arrow) {
+                Arrow a = (Arrow) event0.getDamager();
+                if (a.getShooter() instanceof Player) {
+                    Player p = (Player) a.getShooter();
+                    if (isOwner(p) && event0.getEntity() instanceof LivingEntity) {
+                        LivingEntity e = (LivingEntity) event0.getEntity();
+                        if (p != e) {
+                            return 0;
+                        }
+                    }
                 }
             }
-            case ITEM_DROP_EVENT -> {
-                return handleItemDropCondition(event);
-            }
-            case ITEM_RESPAWN_EVENT -> {
-                return handleItemRespawnCondition(event);
-            }
-            case ITEM_DEATH_EVENT -> {
-                return handleItemDeathCondition(event);
-            }
+        } else if (CustomData == ITEM_DROP_EVENT) {
+            return handleItemDropCondition(event);
+        } else if (CustomData == ITEM_RESPAWN_EVENT) {
+            return handleItemRespawnCondition(event);
+        } else if (CustomData == ITEM_DEATH_EVENT) {
+            return handleItemDeathCondition(event);
         }
         return -1;
     }
@@ -53,7 +56,7 @@ public class PoisonArrow extends Ability implements BaseItem {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             LivingEntity target = (LivingEntity) event0.getEntity();
-            target.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 60, 0));
+            target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 60, 0));
             target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 0));
         }
     }

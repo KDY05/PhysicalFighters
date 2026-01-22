@@ -35,52 +35,45 @@ public class Teleporter extends Ability implements BaseItem {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-                if (isOwner(event0.getPlayer()) && !ConfigManager.DamageGuard && isValidItem(Ability.DefaultItem)) {
-                    if (signName != null && signLoc != null) return 0;
-                    event0.getPlayer().sendMessage(ChatColor.RED + "표지판을 설치하셔야 합니다.");
-                }
+        if (CustomData == 0) {
+            PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+            if (isOwner(event0.getPlayer()) && !ConfigManager.DamageGuard && isValidItem(Ability.DefaultItem)) {
+                if (signName != null && signLoc != null) return 0;
+                event0.getPlayer().sendMessage(ChatColor.RED + "표지판을 설치하셔야 합니다.");
             }
-            case 1 -> {
-                SignChangeEvent event1 = (SignChangeEvent) event;
-                if (isOwner(event1.getPlayer()) && !ConfigManager.DamageGuard) {
-                    if (event1.getBlock().getType().name().endsWith("_SIGN")) {
-                        String line = event1.getLine(0);
-                        if (line == null || line.isEmpty()) {
-                            sendMessage(ChatColor.RED + "표지판의 첫 줄에 플레이어의 이름을 입력해주세요.");
-                            break;
-                        }
-                        Player target = Bukkit.getPlayer(line);
-                        if (target == null || !target.isOnline()) {
-                            sendMessage(ChatColor.RED + "유효한 플레이어가 아닙니다.");
-                            break;
-                        }
-                        signName = target.getName();
-                        signLoc = event1.getBlock().getLocation();
-                        event1.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "철괴를 휘두르면 " + ChatColor.WHITE + signName
-                                + ChatColor.LIGHT_PURPLE + "님은 이곳으로 텔레포트됩니다.");
+        } else if (CustomData == 1) {
+            SignChangeEvent event1 = (SignChangeEvent) event;
+            if (isOwner(event1.getPlayer()) && !ConfigManager.DamageGuard) {
+                if (event1.getBlock().getType().name().endsWith("_SIGN")) {
+                    String line = event1.getLine(0);
+                    if (line == null || line.isEmpty()) {
+                        sendMessage(ChatColor.RED + "표지판의 첫 줄에 플레이어의 이름을 입력해주세요.");
+                        return -1;
                     }
+                    Player target = Bukkit.getPlayer(line);
+                    if (target == null || !target.isOnline()) {
+                        sendMessage(ChatColor.RED + "유효한 플레이어가 아닙니다.");
+                        return -1;
+                    }
+                    signName = target.getName();
+                    signLoc = event1.getBlock().getLocation();
+                    event1.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "철괴를 휘두르면 " + ChatColor.WHITE + signName
+                            + ChatColor.LIGHT_PURPLE + "님은 이곳으로 텔레포트됩니다.");
                 }
             }
-            case 2 -> {
-                BlockBreakEvent event2 = (BlockBreakEvent) event;
-                if (signLoc != null && event2.getBlock().getLocation().equals(signLoc)) {
-                    signName = null;
-                    signLoc = null;
-                    sendMessage(ChatColor.RED + "표지판이 제거되었습니다.");
-                }
+        } else if (CustomData == 2) {
+            BlockBreakEvent event2 = (BlockBreakEvent) event;
+            if (signLoc != null && event2.getBlock().getLocation().equals(signLoc)) {
+                signName = null;
+                signLoc = null;
+                sendMessage(ChatColor.RED + "표지판이 제거되었습니다.");
             }
-            case ITEM_DROP_EVENT -> {
-                return handleItemDropCondition(event);
-            }
-            case ITEM_RESPAWN_EVENT -> {
-                return handleItemRespawnCondition(event);
-            }
-            case ITEM_DEATH_EVENT -> {
-                return handleItemDeathCondition(event);
-            }
+        } else if (CustomData == ITEM_DROP_EVENT) {
+            return handleItemDropCondition(event);
+        } else if (CustomData == ITEM_RESPAWN_EVENT) {
+            return handleItemRespawnCondition(event);
+        } else if (CustomData == ITEM_DEATH_EVENT) {
+            return handleItemDeathCondition(event);
         }
         return -1;
     }

@@ -32,32 +32,29 @@ public class Aokizi extends Ability {
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        switch (CustomData) {
-            case 0 -> {
-                PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-                if (isOwner(event0.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard)
-                    return 0;
-            }
-            case 1 -> {
-                PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-                if (isOwner(event1.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard) {
-                    Player p = event1.getPlayer();
-                    Location location = AbilityUtils.getTargetLocation(p, 5);
-                    if (location == null) {
-                        event1.getPlayer().sendMessage(ChatColor.GREEN + "5칸 이내의 물만 얼릴 수 있습니다.");
-                        break;
-                    }
-                    Block block = location.getBlock();
-                    if (block.getType() != Material.WATER) break;
-                    block.setType(Material.ICE);
+        if (CustomData == 0) {
+            PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+            if (isOwner(event0.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard)
+                return 0;
+        } else if (CustomData == 1) {
+            PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+            if (isOwner(event1.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard) {
+                Player p = event1.getPlayer();
+                Location location = AbilityUtils.getTargetLocation(p, 5);
+                if (location == null) {
+                    event1.getPlayer().sendMessage(ChatColor.GREEN + "5칸 이내의 물만 얼릴 수 있습니다.");
+                    return -1;
                 }
+                Block block = location.getBlock();
+                if (block.getType() != Material.WATER) return -1;
+                block.setType(Material.ICE);
             }
-            case 2 -> {
-                EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
-                if (isOwner(event2.getDamager()) && !ConfigManager.DamageGuard
-                        && event2.getEntity() instanceof LivingEntity entity) {
-                    entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 40, 0));
-                }
+        } else if (CustomData == 2) {
+            EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
+            if (isOwner(event2.getDamager()) && !ConfigManager.DamageGuard
+                    && event2.getEntity() instanceof LivingEntity) {
+                LivingEntity entity = (LivingEntity) event2.getEntity();
+                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40, 0));
             }
         }
         return -1;

@@ -53,12 +53,11 @@ public class Crocodile extends Ability {
     public void A_Effect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player caster = event0.getPlayer();
-        switch (CustomData) {
-            case 0 -> convertToSand(caster);
-            case 1 -> {
-                new SandstormTask(caster).runTaskTimer(plugin, 0, STORM_INTERVAL);
-                caster.sendMessage(ChatColor.GOLD + "모래 바람을 시작합니다!");
-            }
+        if (CustomData == 0) {
+            convertToSand(caster);
+        } else if (CustomData == 1) {
+            new SandstormTask(caster).runTaskTimer(plugin, 0, STORM_INTERVAL);
+            caster.sendMessage(ChatColor.GOLD + "모래 바람을 시작합니다!");
         }
     }
 
