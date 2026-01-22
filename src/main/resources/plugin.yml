@@ -1,7 +1,7 @@
 name: PhysicalFighters
 version: ${version}
 main: io.github.kdy05.physicalFighters.PhysicalFighters
-api-version: '1.21'
+api-version: '1.16'
 authors: [ Xeon, Yeomryo, Ararab ]
 website: https://github.com/KDY05
 commands:
