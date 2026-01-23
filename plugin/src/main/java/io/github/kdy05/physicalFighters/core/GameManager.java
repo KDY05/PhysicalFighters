@@ -201,7 +201,7 @@ public class GameManager {
 
     private void showGameInfo(boolean full) {
         broadcastMessage(ChatColor.DARK_RED + "Physical Fighters");
-        broadcastMessage(String.format(ChatColor.GRAY + "VER. %d", PhysicalFighters.BuildNumber));
+        broadcastMessage(String.format(ChatColor.GRAY + "VER. %d", PhysicalFighters.BUILD_NUMBER));
         if (full) {
             broadcastMessage(ChatColor.GREEN + "제작: " + ChatColor.WHITE + "염료");
             broadcastMessage(ChatColor.GREEN + "원작(VisualAbility): " + ChatColor.WHITE + "제온");

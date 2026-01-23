@@ -14,8 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 
 public class Poseidon extends Ability {
     // 능력 설정 상수
@@ -61,12 +60,12 @@ public class Poseidon extends Ability {
             Player caster = event1.getPlayer();
             if (!isOwner(caster)) return -1;
             if (!caster.getLocation().getBlock().getType().equals(Material.WATER)) return -1;
-            caster.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 60, 0));
-            caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 0));
-            caster.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60, 0));
+            caster.addPotionEffect(PotionEffectFactory.createWaterBreathing(60, 0));
+            caster.addPotionEffect(PotionEffectFactory.createSpeed(60, 0));
+            caster.addPotionEffect(PotionEffectFactory.createResistance(60, 0));
             AbilityUtils.splashTask(caster, caster.getLocation(), SLOW_RANGE,
                     entity -> entity.getLocation().getBlock().getType().equals(Material.WATER),
-                    entity -> entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0)));
+                    entity -> entity.addPotionEffect(PotionEffectFactory.createSlowness(60, 0)));
         }
         return -1;
     }

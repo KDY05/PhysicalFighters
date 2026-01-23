@@ -9,8 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 import io.github.kdy05.physicalFighters.utils.AbilityUtils;
 
 public class Luffy extends Ability {
@@ -54,11 +53,11 @@ public class Luffy extends Ability {
             }
         } else if (CustomData == 2) {
             AbilityUtils.piercingDamage(caster, 5.0);
-            caster.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 0));
-            caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
-            caster.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 0));
-            caster.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 600, 0));
-            caster.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 0));
+            caster.addPotionEffect(PotionEffectFactory.createJumpBoost(600, 0));
+            caster.addPotionEffect(PotionEffectFactory.createSpeed(600, 0));
+            caster.addPotionEffect(PotionEffectFactory.createNausea(200, 0));
+            caster.addPotionEffect(PotionEffectFactory.createStrength(600, 0));
+            caster.addPotionEffect(PotionEffectFactory.createResistance(600, 0));
             caster.sendMessage(ChatColor.RED + "기어 세컨드를 사용하였습니다.");
         }
     }

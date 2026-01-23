@@ -2,17 +2,28 @@ plugins {
     id("com.gradleup.shadow") version "9.3.1"
 }
 
+configurations {
+    versionModules
+}
+
 dependencies {
-//    implementation project(':api')
-//    implementation project(':v1_16_5')
+    implementation project(':api')
+
+    versionModules project(':v1_16_5')
+    versionModules project(':v1_20_5')
+    versionModules project(':v1_21_3')
+
     compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 }
 
 shadowJar {
     archiveFileName = "PhysicalFighters-${version}.jar"
 
-    // Include all dependencies
-    configurations = [project.configurations.runtimeClasspath]
+    // Include all dependencies + version modules
+    configurations = [
+        project.configurations.runtimeClasspath,
+        project.configurations.versionModules
+    ]
 
     // Build to standard build/libs directory
     destinationDirectory = layout.buildDirectory.dir("libs")

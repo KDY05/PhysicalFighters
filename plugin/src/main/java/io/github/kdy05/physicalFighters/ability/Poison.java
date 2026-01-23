@@ -7,8 +7,7 @@ import io.github.kdy05.physicalFighters.utils.EventData;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 
 public class Poison extends Ability {
     public Poison() {
@@ -31,7 +30,7 @@ public class Poison extends Ability {
     public void A_Effect(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         LivingEntity entity = (LivingEntity) event0.getEntity();
-        entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60, 0));
+        entity.addPotionEffect(PotionEffectFactory.createPoison(60, 0));
     }
 
 }

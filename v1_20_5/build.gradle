@@ -1,0 +1,14 @@
+dependencies {
+    implementation project(':api')
+    compileOnly("org.spigotmc:spigot-api:1.20.5-R0.1-SNAPSHOT")
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release.set(17)
+}

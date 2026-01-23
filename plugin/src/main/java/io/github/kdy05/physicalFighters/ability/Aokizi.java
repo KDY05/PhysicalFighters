@@ -8,8 +8,7 @@ import io.github.kdy05.physicalFighters.core.Ability;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import org.bukkit.block.Block;
@@ -54,7 +53,7 @@ public class Aokizi extends Ability {
             if (isOwner(event2.getDamager()) && !ConfigManager.DamageGuard
                     && event2.getEntity() instanceof LivingEntity) {
                 LivingEntity entity = (LivingEntity) event2.getEntity();
-                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40, 0));
+                entity.addPotionEffect(PotionEffectFactory.createSlowness(40, 0));
             }
         }
         return -1;

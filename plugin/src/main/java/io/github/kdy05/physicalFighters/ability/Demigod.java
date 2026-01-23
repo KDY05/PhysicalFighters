@@ -9,8 +9,7 @@ import io.github.kdy05.physicalFighters.utils.EventData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 
 public class Demigod extends Ability {
     public Demigod() {
@@ -37,14 +36,14 @@ public class Demigod extends Ability {
         if (Math.random() <= 0.05D)
             AbilityUtils.healEntity(player, 2);
         if (Math.random() <= 0.05D)
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 0));
+            player.addPotionEffect(PotionEffectFactory.createResistance(200, 0));
         if (Math.random() <= 0.05D)
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 0));
+            player.addPotionEffect(PotionEffectFactory.createRegeneration(200, 0));
         if (Math.random() <= 0.1D)
-            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 0));
+            player.addPotionEffect(PotionEffectFactory.createJumpBoost(200, 0));
         if (Math.random() <= 0.1D)
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 200, 0));
+            player.addPotionEffect(PotionEffectFactory.createHaste(200, 0));
         if (Math.random() <= 0.1D)
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 0));
+            player.addPotionEffect(PotionEffectFactory.createSpeed(200, 0));
     }
 }

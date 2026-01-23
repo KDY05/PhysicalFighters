@@ -18,8 +18,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 
 public class Phoenix extends Ability {
     private int ReviveCounter = 0;
@@ -110,13 +109,13 @@ public class Phoenix extends Ability {
                         this.ReviveCounter + "회");
             }
 
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 600, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 600, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 600, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 600, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 0));
+            player.addPotionEffect(PotionEffectFactory.createHaste(600, 0));
+            player.addPotionEffect(PotionEffectFactory.createFireResistance(600, 0));
+            player.addPotionEffect(PotionEffectFactory.createJumpBoost(600, 0));
+            player.addPotionEffect(PotionEffectFactory.createSpeed(600, 0));
+            player.addPotionEffect(PotionEffectFactory.createWaterBreathing(600, 0));
+            player.addPotionEffect(PotionEffectFactory.createRegeneration(600, 0));
+            player.addPotionEffect(PotionEffectFactory.createResistance(600, 0));
         }
     }
 

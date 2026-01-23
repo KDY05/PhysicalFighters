@@ -9,8 +9,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -83,10 +82,10 @@ public class SuperFan extends Ability {
     private void applyWindEffects(LivingEntity target, Location knockbackOrigin) {
         AbilityUtils.goVelocity(target, knockbackOrigin, -2.5);
         
-        target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 0));
-        target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 200, 2));
-        target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 2));
-        target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 200, 2));
+        target.addPotionEffect(PotionEffectFactory.createRegeneration(100, 0));
+        target.addPotionEffect(PotionEffectFactory.createBlindness(200, 2));
+        target.addPotionEffect(PotionEffectFactory.createNausea(200, 2));
+        target.addPotionEffect(PotionEffectFactory.createWeakness(200, 2));
         
         target.sendMessage(ChatColor.LIGHT_PURPLE + "앗! 바람이 강하지만 시원해~♥");
     }

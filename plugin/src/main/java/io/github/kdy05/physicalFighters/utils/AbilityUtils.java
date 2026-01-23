@@ -6,8 +6,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
@@ -51,9 +49,7 @@ public final class AbilityUtils {
     }
 
     public static void healEntity(LivingEntity entity, double amount) {
-        AttributeInstance maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        if (maxHealth == null) return;
-        double maxHealthValue = maxHealth.getValue();
+        double maxHealthValue = AttributeUtils.getMaxHealth(entity);
         entity.setHealth(Math.min(maxHealthValue, entity.getHealth() + amount));
     }
 

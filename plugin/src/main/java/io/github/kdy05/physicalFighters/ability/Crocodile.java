@@ -11,8 +11,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -138,7 +137,7 @@ public class Crocodile extends Ability {
                     .normalize().multiply(0.6);
             pullDirection.setY(pullDirection.getY() + 0.4);
             target.setVelocity(target.getVelocity().add(pullDirection));
-            target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 30, 0));
+            target.addPotionEffect(PotionEffectFactory.createBlindness(30, 0));
             target.sendMessage(ChatColor.YELLOW + "모래 바람에 휩쓸렸습니다!");
         }
     }

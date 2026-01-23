@@ -2,10 +2,9 @@ package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
 
+import io.github.kdy05.physicalFighters.utils.AttributeUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -61,10 +60,8 @@ public class ReverseAlchemy extends Ability {
             player.sendMessage(ChatColor.GREEN + "금괴 " + GOLD_FOR_DIAMOND + "개로 다이아몬드를 만들었습니다.");
         } else if (CustomData == 1) {
             player.getInventory().removeItem(new ItemStack(Material.GOLD_INGOT, GOLD_FOR_HEALING));
-            AttributeInstance maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-            if (maxHealth == null) return;
+            double maxHealthValue = AttributeUtils.getMaxHealth(player);
 
-            double maxHealthValue = maxHealth.getValue();
             if (player.getHealth() >= maxHealthValue / 2) {
                 player.setHealth(maxHealthValue);
             } else {

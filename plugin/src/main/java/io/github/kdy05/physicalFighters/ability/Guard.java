@@ -2,8 +2,7 @@ package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.Bukkit;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 import io.github.kdy05.physicalFighters.core.Ability;
 
 import org.bukkit.ChatColor;
@@ -79,7 +78,7 @@ public class Guard extends Ability {
                 teleportLoc.setYaw(playerLoc.getYaw());
                 teleportLoc.setPitch(playerLoc.getPitch());
                 player.teleport(teleportLoc);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 15 * 20, 1));
+                player.addPotionEffect(PotionEffectFactory.createMiningFatigue(15 * 20, 1));
             }
         }
     }

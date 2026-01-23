@@ -10,8 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 
 public class Hulk extends Ability {
 
@@ -58,12 +57,12 @@ public class Hulk extends Ability {
         if (caster == null) return;
         caster.setHealth(20);
         caster.getWorld().createExplosion(caster.getLocation(), 0.0F);
-        caster.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 0));
-        caster.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 600, 0));
-        caster.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 600, 0));
-        caster.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
-        caster.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 600, 0));
-        caster.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 0));
+        caster.addPotionEffect(PotionEffectFactory.createResistance(600, 0));
+        caster.addPotionEffect(PotionEffectFactory.createStrength(600, 0));
+        caster.addPotionEffect(PotionEffectFactory.createRegeneration(600, 0));
+        caster.addPotionEffect(PotionEffectFactory.createSpeed(600, 0));
+        caster.addPotionEffect(PotionEffectFactory.createNausea(600, 0));
+        caster.addPotionEffect(PotionEffectFactory.createJumpBoost(600, 0));
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 
 public class Trash extends Ability {
     public Trash() {
@@ -55,7 +55,7 @@ public class Trash extends Ability {
             PlayerInteractEvent event1 = (PlayerInteractEvent) event;
             Player p = event1.getPlayer();
             p.setHealth(p.getHealth() - 4);
-            p.addPotionEffect(new PotionEffect(org.bukkit.potion.PotionEffectType.WEAKNESS, 1200, 0));
+            p.addPotionEffect(PotionEffectFactory.createWeakness(1200, 0));
         }
     }
 }

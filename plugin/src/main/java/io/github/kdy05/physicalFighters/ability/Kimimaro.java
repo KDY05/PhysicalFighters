@@ -11,8 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 
 public class Kimimaro extends Ability implements BaseItem {
     public Kimimaro() {
@@ -48,7 +47,7 @@ public class Kimimaro extends Ability implements BaseItem {
             event0.setDamage(event0.getDamage() * 7);
             LivingEntity entity = (LivingEntity) event0.getEntity();
             if (Math.random() < 0.4D)
-                entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 0));
+                entity.addPotionEffect(PotionEffectFactory.createPoison(20 * 5, 0));
         }
     }
 

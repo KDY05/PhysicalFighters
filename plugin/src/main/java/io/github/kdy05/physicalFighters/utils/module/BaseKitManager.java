@@ -3,7 +3,6 @@ package io.github.kdy05.physicalFighters.utils.module;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -49,8 +48,6 @@ public class BaseKitManager implements Listener {
         }
         else if (code == 1) {
             ItemStack pickaxe = new ItemStack(Material.IRON_PICKAXE);
-            pickaxe.addEnchantment(Enchantment.DURABILITY, 3);
-            pickaxe.addEnchantment(Enchantment.DIG_SPEED, 3);
             basicItems[0] = pickaxe;
             basicItems[1] = new ItemStack(Material.ENCHANTING_TABLE);
             basicItems[2] = new ItemStack(Material.BOOKSHELF, 64);

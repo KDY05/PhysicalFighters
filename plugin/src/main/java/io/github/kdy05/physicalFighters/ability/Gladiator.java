@@ -13,8 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 import org.bukkit.util.Vector;
 
 public class Gladiator extends Ability {
@@ -71,10 +70,10 @@ public class Gladiator extends Ability {
         attacker.teleport(attackerArenaLoc);
 
         // 포션 효과
-        target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, DURATION_TICKS, 0));
-        target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, DURATION_TICKS, 0));
-        attacker.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, DURATION_TICKS, 0));
-        attacker.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, DURATION_TICKS, 0));
+        target.addPotionEffect(PotionEffectFactory.createNausea(DURATION_TICKS, 0));
+        target.addPotionEffect(PotionEffectFactory.createBlindness(DURATION_TICKS, 0));
+        attacker.addPotionEffect(PotionEffectFactory.createResistance(DURATION_TICKS, 0));
+        attacker.addPotionEffect(PotionEffectFactory.createStrength(DURATION_TICKS, 0));
 
         // 원상 복구
         Bukkit.getScheduler().runTaskLater(plugin, () -> {

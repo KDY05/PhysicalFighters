@@ -13,8 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.utils.EventData;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 import org.bukkit.util.Vector;
 
 public class Shadow extends Ability {
@@ -76,7 +75,7 @@ public class Shadow extends Ability {
             LivingEntity target = (LivingEntity) event2.getEntity();
             Player attacker = (Player) event2.getDamager();
             event2.setDamage(event2.getDamage() * 2.0D);
-            attacker.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 4, 0));
+            attacker.addPotionEffect(PotionEffectFactory.createSpeed(20 * 4, 0));
             attacker.sendMessage(ChatColor.GREEN + "기습 성공!");
             target.sendMessage(ChatColor.RED + "기습에 당했습니다!");
         }

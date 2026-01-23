@@ -12,8 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 
 public class PoisonArrow extends Ability implements BaseItem {
     public PoisonArrow() {
@@ -56,8 +55,8 @@ public class PoisonArrow extends Ability implements BaseItem {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             LivingEntity target = (LivingEntity) event0.getEntity();
-            target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 60, 0));
-            target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 120, 0));
+            target.addPotionEffect(PotionEffectFactory.createNausea(60, 0));
+            target.addPotionEffect(PotionEffectFactory.createPoison(120, 0));
         }
     }
 

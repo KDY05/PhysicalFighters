@@ -9,8 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Haki extends Ability {
@@ -77,7 +76,7 @@ public class Haki extends Ability {
         private void applyConquerorHaki() {
             AbilityUtils.splashTask(caster, caster.getLocation(), Haki.RANGE, entity -> {
                 entity.damage(Haki.DAMAGE, caster);
-                entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 30, 0));
+                entity.addPotionEffect(PotionEffectFactory.createNausea(30, 0));
                 entity.sendMessage(ChatColor.DARK_RED + "패기에 압도당했습니다!");
             });
         }
