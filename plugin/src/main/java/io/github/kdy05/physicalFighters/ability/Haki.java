@@ -4,12 +4,12 @@ import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
-import io.github.kdy05.physicalFighters.utils.AbilityUtils;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
+import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Haki extends Ability {

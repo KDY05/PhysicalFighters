@@ -9,8 +9,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
-import io.github.kdy05.physicalFighters.utils.AbilityUtils;
+import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
 
 public class Luffy extends Ability {
     public Luffy() {

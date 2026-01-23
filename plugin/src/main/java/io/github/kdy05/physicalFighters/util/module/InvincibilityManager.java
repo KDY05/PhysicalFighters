@@ -1,7 +1,7 @@
-package io.github.kdy05.physicalFighters.utils.module;
+package io.github.kdy05.physicalFighters.util.module;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
-import io.github.kdy05.physicalFighters.utils.TimerBase;
+import io.github.kdy05.physicalFighters.util.TimerBase;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;

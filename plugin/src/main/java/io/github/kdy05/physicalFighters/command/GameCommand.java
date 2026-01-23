@@ -2,9 +2,9 @@ package io.github.kdy05.physicalFighters.command;
 
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
-import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
+import io.github.kdy05.physicalFighters.util.AbilityInitializer;
 import io.github.kdy05.physicalFighters.core.GameManager;
-import io.github.kdy05.physicalFighters.utils.AbilityUtils;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import org.bukkit.Bukkit;
@@ -12,7 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import io.github.kdy05.physicalFighters.utils.CommandInterface;
+import io.github.kdy05.physicalFighters.util.CommandInterface;
 
 public class GameCommand implements CommandInterface {
 

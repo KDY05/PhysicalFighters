@@ -2,14 +2,14 @@ package io.github.kdy05.physicalFighters.core;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
-import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
+import io.github.kdy05.physicalFighters.util.AbilityInitializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import io.github.kdy05.physicalFighters.utils.TimerBase;
+import io.github.kdy05.physicalFighters.util.TimerBase;
 
 import java.util.UUID;
 

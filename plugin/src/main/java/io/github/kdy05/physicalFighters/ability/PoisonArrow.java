@@ -1,10 +1,10 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.utils.BaseItem;
+import io.github.kdy05.physicalFighters.util.BaseItem;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.EventData;
+import io.github.kdy05.physicalFighters.util.EventData;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
+import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 
 public class PoisonArrow extends Ability implements BaseItem {
     public PoisonArrow() {

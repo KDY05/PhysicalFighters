@@ -3,8 +3,8 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.BaseItem;
-import io.github.kdy05.physicalFighters.utils.EventData;
+import io.github.kdy05.physicalFighters.util.BaseItem;
+import io.github.kdy05.physicalFighters.util.EventData;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

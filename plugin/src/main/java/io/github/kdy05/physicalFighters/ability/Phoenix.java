@@ -3,7 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.EventData;
+import io.github.kdy05.physicalFighters.util.EventData;
 
 import java.util.HashMap;
 
@@ -18,7 +18,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
+import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 
 public class Phoenix extends Ability {
     private int ReviveCounter = 0;

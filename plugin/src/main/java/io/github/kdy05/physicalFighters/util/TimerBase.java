@@ -1,4 +1,4 @@
-package io.github.kdy05.physicalFighters.utils;
+package io.github.kdy05.physicalFighters.util;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;

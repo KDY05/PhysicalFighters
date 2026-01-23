@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import io.github.kdy05.physicalFighters.utils.AbilityUtils;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
 
 import java.util.Objects;
 

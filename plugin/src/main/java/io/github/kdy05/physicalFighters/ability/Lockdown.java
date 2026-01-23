@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.utils.AbilityUtils;
-import io.github.kdy05.physicalFighters.utils.CommandInterface;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
+import io.github.kdy05.physicalFighters.util.CommandInterface;
 
 public class Lockdown extends Ability implements CommandInterface {
     // 능력 설정 상수

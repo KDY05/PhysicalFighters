@@ -2,7 +2,7 @@ package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.Bukkit;
-import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
+import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import io.github.kdy05.physicalFighters.core.Ability;
 
 import org.bukkit.ChatColor;
@@ -11,7 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import io.github.kdy05.physicalFighters.utils.AbilityUtils;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
 
 public class Guard extends Ability {
     // 박스 크기 관련 상수

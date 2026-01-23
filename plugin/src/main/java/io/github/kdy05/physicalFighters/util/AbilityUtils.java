@@ -1,4 +1,4 @@
-package io.github.kdy05.physicalFighters.utils;
+package io.github.kdy05.physicalFighters.util;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.ConfigManager;

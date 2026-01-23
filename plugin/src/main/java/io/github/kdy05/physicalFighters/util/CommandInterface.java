@@ -1,4 +1,4 @@
-package io.github.kdy05.physicalFighters.utils;
+package io.github.kdy05.physicalFighters.util;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

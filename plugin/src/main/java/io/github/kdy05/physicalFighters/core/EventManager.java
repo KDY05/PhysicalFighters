@@ -1,9 +1,9 @@
 package io.github.kdy05.physicalFighters.core;
 
 import io.github.kdy05.physicalFighters.core.Ability.Type;
-import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
-import io.github.kdy05.physicalFighters.utils.AbilityUtils;
-import io.github.kdy05.physicalFighters.utils.EventData;
+import io.github.kdy05.physicalFighters.util.AbilityInitializer;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
+import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.ArrayList;

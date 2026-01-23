@@ -2,20 +2,20 @@ package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
-import io.github.kdy05.physicalFighters.utils.EventData;
+import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.*;
 import io.github.kdy05.physicalFighters.core.Ability;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import io.github.kdy05.physicalFighters.utils.PotionEffectFactory;
+import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
-import io.github.kdy05.physicalFighters.utils.AbilityUtils;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
 
 public class Aokizi extends Ability {
     public Aokizi() {

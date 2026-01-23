@@ -1,6 +1,6 @@
-package io.github.kdy05.physicalFighters.utils;
+package io.github.kdy05.physicalFighters.util;
 
-import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.api.AdapterRegistry;
 import io.github.kdy05.physicalFighters.api.PotionEffectTypeAdapter;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -8,7 +8,7 @@ import org.bukkit.potion.PotionEffectType;
 public class PotionEffectFactory {
 
     private static PotionEffectTypeAdapter adapter() {
-        return PhysicalFighters.getPotionEffectTypeAdapter();
+        return AdapterRegistry.potionEffectType();
     }
 
     // === Adapter 사용 (1.20.5에서 이름 변경됨) ===

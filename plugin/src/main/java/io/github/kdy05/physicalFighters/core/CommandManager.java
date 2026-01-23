@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.core;
 
-import io.github.kdy05.physicalFighters.utils.CommandInterface;
+import io.github.kdy05.physicalFighters.util.CommandInterface;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.ArrayList;

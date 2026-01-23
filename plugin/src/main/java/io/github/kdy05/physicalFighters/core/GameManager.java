@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.core;
 
-import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
-import io.github.kdy05.physicalFighters.utils.TimerBase;
+import io.github.kdy05.physicalFighters.util.AbilityInitializer;
+import io.github.kdy05.physicalFighters.util.TimerBase;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.ArrayList;

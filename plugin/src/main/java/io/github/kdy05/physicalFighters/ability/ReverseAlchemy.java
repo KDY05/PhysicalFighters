@@ -2,7 +2,7 @@ package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
 
-import io.github.kdy05.physicalFighters.utils.AttributeUtils;
+import io.github.kdy05.physicalFighters.util.AttributeUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

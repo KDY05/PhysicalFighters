@@ -1,15 +1,16 @@
 package io.github.kdy05.physicalFighters;
 
+import io.github.kdy05.physicalFighters.api.AdapterRegistry;
 import io.github.kdy05.physicalFighters.api.AttributeAdapter;
 import io.github.kdy05.physicalFighters.api.PotionEffectTypeAdapter;
 import io.github.kdy05.physicalFighters.core.*;
 import io.github.kdy05.physicalFighters.util.ServerVersionDetector;
-import io.github.kdy05.physicalFighters.utils.AbilityInitializer;
+import io.github.kdy05.physicalFighters.util.AbilityInitializer;
 import io.github.kdy05.physicalFighters.command.GameCommand;
 
 import io.github.kdy05.physicalFighters.command.UtilCommand;
-import io.github.kdy05.physicalFighters.utils.module.BaseKitManager;
-import io.github.kdy05.physicalFighters.utils.module.InvincibilityManager;
+import io.github.kdy05.physicalFighters.util.module.BaseKitManager;
+import io.github.kdy05.physicalFighters.util.module.InvincibilityManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PhysicalFighters extends JavaPlugin {
@@ -97,6 +98,9 @@ public class PhysicalFighters extends JavaPlugin {
                 getLogger().severe("지원되지 않는 서버 버전: " + version);
                 return false;
             }
+
+            // AdapterRegistry에 등록하여 api 모듈의 Factory/Utils에서 사용 가능하게 함
+            AdapterRegistry.register(attributeAdapter, potionEffectTypeAdapter);
 
             getLogger().info("어댑터 로드 완료: " + attributeAdapter.getClass().getSimpleName()
                 + ", " + potionEffectTypeAdapter.getClass().getSimpleName());
