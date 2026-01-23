@@ -119,3 +119,4 @@ runs/
 !gradle-wrapper.jar
 /CLAUDE.md
 /.claude/settings.local.json
+memo.txt

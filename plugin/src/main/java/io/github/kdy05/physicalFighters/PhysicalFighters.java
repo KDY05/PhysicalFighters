@@ -9,16 +9,18 @@ import io.github.kdy05.physicalFighters.util.AbilityInitializer;
 import io.github.kdy05.physicalFighters.command.GameCommand;
 
 import io.github.kdy05.physicalFighters.command.UtilCommand;
-import io.github.kdy05.physicalFighters.util.module.BaseKitManager;
-import io.github.kdy05.physicalFighters.util.module.InvincibilityManager;
+import io.github.kdy05.physicalFighters.module.BaseKitManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class PhysicalFighters extends JavaPlugin {
 
-    public static final int BUILD_NUMBER = 20250809;
+    public static final int BUILD_NUMBER = Integer.parseInt(
+            LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE));
     private static PhysicalFighters plugin;
-    private static AttributeAdapter attributeAdapter;
-    private static PotionEffectTypeAdapter potionEffectTypeAdapter;
 
     private GameManager gameManager;
     private GameCommand gameCommand;
@@ -43,11 +45,8 @@ public class PhysicalFighters extends JavaPlugin {
         CommandManager commandManager = new CommandManager(this);
         getServer().getPluginManager().registerEvents(new EventManager(), this);
         configManager = new ConfigManager(this);
-
-        getLogger().info("능력을 초기화합니다.");
         Ability.InitAbilityBase(this, commandManager);
 
-        getLogger().info("스크립터를 초기화합니다.");
         gameManager = new GameManager(this);
         gameCommand = new GameCommand(this, gameManager);
         commandManager.registerCommand(gameCommand);
@@ -70,6 +69,8 @@ public class PhysicalFighters extends JavaPlugin {
         getLogger().info("감지된 서버 버전: " + version);
 
         try {
+            AttributeAdapter attributeAdapter;
+            PotionEffectTypeAdapter potionEffectTypeAdapter;
             if (ServerVersionDetector.isBetween("1.16.5", "1.20.4")) {
                 // 1.16.5 ~ 1.20.4: v1_16_5 모듈 사용
                 attributeAdapter = loadAdapter(
@@ -99,9 +100,7 @@ public class PhysicalFighters extends JavaPlugin {
                 return false;
             }
 
-            // AdapterRegistry에 등록하여 api 모듈의 Factory/Utils에서 사용 가능하게 함
             AdapterRegistry.register(attributeAdapter, potionEffectTypeAdapter);
-
             getLogger().info("어댑터 로드 완료: " + attributeAdapter.getClass().getSimpleName()
                 + ", " + potionEffectTypeAdapter.getClass().getSimpleName());
             return true;
@@ -120,14 +119,6 @@ public class PhysicalFighters extends JavaPlugin {
 
     public static PhysicalFighters getPlugin() {
         return plugin;
-    }
-
-    public static AttributeAdapter getAttributeAdapter() {
-        return attributeAdapter;
-    }
-
-    public static PotionEffectTypeAdapter getPotionEffectTypeAdapter() {
-        return potionEffectTypeAdapter;
     }
 
     public GameManager getGameManager() {

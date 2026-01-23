@@ -1,4 +1,4 @@
-package io.github.kdy05.physicalFighters.util.module;
+package io.github.kdy05.physicalFighters.module;
 
 import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.util.TimerBase;
