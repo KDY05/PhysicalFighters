@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import io.github.kdy05.physicalFighters.core.Ability;
@@ -20,7 +20,7 @@ public class Ace extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-        if (!ConfigManager.DamageGuard && isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
+        if (!InvincibilityManager.isDamageGuard() && isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
             return 0;
         }
         return -1;

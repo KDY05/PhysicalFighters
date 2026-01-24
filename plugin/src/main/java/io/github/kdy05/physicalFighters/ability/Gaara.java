@@ -2,7 +2,7 @@ package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,7 +29,7 @@ public class Gaara extends Ability {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player caster = event0.getPlayer();
 
-        if (!isOwner(event0.getPlayer()) || !isValidItem(Ability.DefaultItem) || ConfigManager.DamageGuard) {
+        if (!isOwner(event0.getPlayer()) || !isValidItem(Ability.DefaultItem) || InvincibilityManager.isDamageGuard()) {
             return -1;
         }
 

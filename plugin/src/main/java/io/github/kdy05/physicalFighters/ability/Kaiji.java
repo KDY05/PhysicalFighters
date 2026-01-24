@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -27,7 +27,7 @@ public class Kaiji extends Ability implements BaseItem {
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-            if (!ConfigManager.DamageGuard && isOwner(event0.getDamager())
+            if (!InvincibilityManager.isDamageGuard() && isOwner(event0.getDamager())
                     && isValidItem(Material.DIAMOND) && event0.getEntity() instanceof Player)
                 return 0;
         } else if (CustomData == ITEM_DROP_EVENT) {

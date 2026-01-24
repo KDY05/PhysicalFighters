@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -39,7 +39,7 @@ public class Kijaru extends Ability {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (isOwner(event0.getDamager()) && isValidItem(Ability.DefaultItem)
-                    && !ConfigManager.DamageGuard && event0.getEntity() instanceof LivingEntity)
+                    && !InvincibilityManager.isDamageGuard() && event0.getEntity() instanceof LivingEntity)
                 return 0;
         } else if (CustomData == 1) {
             PlayerInteractEvent event1 = (PlayerInteractEvent) event;

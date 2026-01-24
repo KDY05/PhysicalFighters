@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -28,7 +28,7 @@ public class Flower extends Ability {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (event0.getEntity() instanceof LivingEntity && isOwner(event0.getDamager())
-                    && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard) {
+                    && isValidItem(Ability.DefaultItem) && !InvincibilityManager.isDamageGuard()) {
                 return 0;
             }
         } else if (CustomData == 1) {

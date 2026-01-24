@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
@@ -50,7 +50,7 @@ public class Poseidon extends Ability {
                 return -1;
             }
 
-            if (ConfigManager.DamageGuard) {
+            if (InvincibilityManager.isDamageGuard()) {
                 player.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
                 return -1;
             }

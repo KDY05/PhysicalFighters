@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -29,7 +29,7 @@ public class Hulk extends Ability {
         if (CustomData == 1) {
             PlayerInteractEvent event1 = (PlayerInteractEvent) event;
             if (isOwner(event1.getPlayer()) &&
-                    isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard) {
+                    isValidItem(Ability.DefaultItem) && !InvincibilityManager.isDamageGuard()) {
                 originalHealth = event1.getPlayer().getHealth();
                 return 1;
             }

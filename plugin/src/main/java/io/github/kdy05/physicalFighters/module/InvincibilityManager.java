@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.module;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.util.TimerBase;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,21 +14,32 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class InvincibilityManager implements Listener {
-    
+
+    private static boolean damageGuard = false;
+
     private BossBar invincibilityBar;
     private InvincibilityTimer timer;
     private boolean isActive = false;
     private int customMinutes = 0;
+
+    public static boolean isDamageGuard() {
+        return damageGuard;
+    }
+
+    public static void setDamageGuard(boolean value) {
+        damageGuard = value;
+    }
     
-    public InvincibilityManager() {
+    public InvincibilityManager(PhysicalFighters plugin) {
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
     
     public void startInvincibility(int minutes) {
-        if (minutes == 0) {
+        if (minutes <= 0) {
             broadcastMessage(ChatColor.RED + "무적 시간이 0분으로 설정되어 작동하지 않습니다.");
             return;
         }
-        
+
         if (isActive) {
             broadcastMessage(ChatColor.RED + "이미 무적이 활성화되어 있습니다. 먼저 해제하세요.");
             return;
@@ -36,26 +47,22 @@ public class InvincibilityManager implements Listener {
         
         this.customMinutes = minutes;
         isActive = true;
-        ConfigManager.DamageGuard = true;
+        damageGuard = true;
         
         createBossBar();
         addPlayersToBar();
         
         timer = new InvincibilityTimer();
         timer.startTimer(minutes * 60, false);
-        
-        if (minutes == ConfigManager.EarlyInvincibleTime) {
-            broadcastMessage("시작 직후 " + minutes + "분간 무적입니다.");
-        } else {
-            broadcastMessage("OP에 의해 " + minutes + "분간 무적이 설정되었습니다.");
-        }
+
+        broadcastMessage(ChatColor.GREEN + String.format("%d분간 무적이 설정되었니다.", minutes));
     }
     
     public void stopInvincibility() {
         if (!isActive) return;
         
         isActive = false;
-        ConfigManager.DamageGuard = false;
+        damageGuard = false;
         
         if (timer != null) {
             timer.stopTimer();
@@ -69,15 +76,11 @@ public class InvincibilityManager implements Listener {
         broadcastMessage(ChatColor.GREEN + "무적이 해제되었습니다. 이제 대미지를 입습니다.");
     }
     
-    public boolean isInvincible() {
-        return isActive && ConfigManager.DamageGuard;
-    }
-    
     public void forceStop() {
         if (!isActive) return;
         
         isActive = false;
-        ConfigManager.DamageGuard = false;
+        damageGuard = false;
         
         if (timer != null) {
             timer.stopTimer();
@@ -92,15 +95,15 @@ public class InvincibilityManager implements Listener {
     }
     
     public void toggle() {
-        if (ConfigManager.DamageGuard) {
+        if (damageGuard) {
             if (isActive) {
                 forceStop();
             } else {
-                ConfigManager.DamageGuard = false;
+                damageGuard = false;
                 broadcastMessage(ChatColor.GREEN + "OP에 의해 무적이 해제되었습니다. 이제 대미지를 입습니다.");
             }
         } else {
-            ConfigManager.DamageGuard = true;
+            damageGuard = true;
             broadcastMessage(ChatColor.GREEN + "OP에 의해 무적이 설정되었습니다. 이제 대미지를 입지않습니다.");
         }
     }

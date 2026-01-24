@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
@@ -35,7 +35,7 @@ public class Gladiator extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-        if (!ConfigManager.DamageGuard && isOwner(event0.getDamager())
+        if (!InvincibilityManager.isDamageGuard() && isOwner(event0.getDamager())
                 && event0.getEntity() instanceof LivingEntity && isValidItem(Ability.DefaultItem)) {
             target = (LivingEntity) event0.getEntity();
             return 0;

@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.command;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.util.AbilityInitializer;
 import io.github.kdy05.physicalFighters.core.GameManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
@@ -126,7 +126,7 @@ public class GameCommand implements CommandInterface {
         this.gameManager.gameProgressStop();
         this.gameManager.gameWarningStop();
         this.gameManager.getOKSign().clear();
-        ConfigManager.DamageGuard = false;
+        InvincibilityManager.setDamageGuard(false);
         for (int l = 0; l < AbilityInitializer.AbilityList.size(); l++) {
             AbilityInitializer.AbilityList.get(l).cancelDTimer();
             AbilityInitializer.AbilityList.get(l).cancelCTimer();

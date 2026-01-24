@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.util.Vector;
 import io.github.kdy05.physicalFighters.core.Ability;
 
@@ -23,7 +23,7 @@ public class Enel extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
-        if (ConfigManager.DamageGuard || !isOwner(Event.getPlayer()) || !isValidItem(Ability.DefaultItem))
+        if (InvincibilityManager.isDamageGuard() || !isOwner(Event.getPlayer()) || !isValidItem(Ability.DefaultItem))
             return -1;
         return 0;
     }

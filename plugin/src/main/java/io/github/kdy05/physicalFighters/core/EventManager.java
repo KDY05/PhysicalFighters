@@ -5,6 +5,7 @@ import io.github.kdy05.physicalFighters.util.AbilityInitializer;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 
 import java.util.ArrayList;
 
@@ -53,7 +54,7 @@ public class EventManager implements Listener {
     @EventHandler
     public static void onEntityTarget(EntityTargetEvent event) {
         if (event.getTarget() instanceof Player) {
-            if (ConfigManager.DamageGuard) {
+            if (InvincibilityManager.isDamageGuard()) {
                 event.setTarget(null);
                 event.setCancelled(true);
             }
@@ -67,7 +68,7 @@ public class EventManager implements Listener {
     public static void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             // 플레이어 무적
-            if (ConfigManager.DamageGuard) {
+            if (InvincibilityManager.isDamageGuard()) {
                 event.setCancelled(true);
                 event.getEntity().setFireTicks(0);
             }

@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.util.BaseItem;
@@ -70,7 +70,7 @@ public class Thor extends Ability implements BaseItem {
             }
         } else if (CustomData == 1) {
             PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-            if (isOwner(event1.getPlayer()) && !ConfigManager.DamageGuard
+            if (isOwner(event1.getPlayer()) && !InvincibilityManager.isDamageGuard()
                     && isMjolnir(event1.getPlayer().getInventory().getItemInMainHand())) {
                 return 1;
             }

@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
@@ -21,7 +21,7 @@ public class Sasuke extends Ability {
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         if (isOwner(event0.getDamager()) && isValidItem(Ability.DefaultItem)
-                && !ConfigManager.DamageGuard && event0.getEntity() instanceof LivingEntity) {
+                && !InvincibilityManager.isDamageGuard() && event0.getEntity() instanceof LivingEntity) {
             return 0;
         }
         return -1;

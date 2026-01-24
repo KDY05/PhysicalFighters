@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
@@ -22,7 +22,7 @@ public class Cuma extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-        if (isOwner(event0.getEntity()) && !ConfigManager.DamageGuard
+        if (isOwner(event0.getEntity()) && !InvincibilityManager.isDamageGuard()
                 && event0.getDamager() instanceof LivingEntity) {
             return 0;
         }

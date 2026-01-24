@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -31,7 +31,7 @@ public class Roclee extends Ability {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (isOwner(event0.getDamager()) && event0.getEntity() instanceof LivingEntity
-                    && isValidItem(Ability.DefaultItem) && !ConfigManager.DamageGuard) {
+                    && isValidItem(Ability.DefaultItem) && !InvincibilityManager.isDamageGuard()) {
                 return 0;
             }
         } else if (CustomData == 1) {

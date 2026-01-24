@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 
 import org.bukkit.ChatColor;
@@ -34,7 +34,7 @@ public class Temari extends Ability {
         if (!isOwner(p) || !isValidItem(Ability.DefaultItem)) {
             return -1;
         }
-        if (ConfigManager.DamageGuard) {
+        if (InvincibilityManager.isDamageGuard()) {
             p.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
             return -1;
         }

@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
@@ -35,7 +35,7 @@ public class FallArrow extends Ability implements BaseItem {
                     Player player = (Player) a.getShooter();
                     if (isOwner(player) && event0.getEntity() instanceof LivingEntity) {
                         LivingEntity entity = (LivingEntity) event0.getEntity();
-                        if (entity != player && !ConfigManager.DamageGuard) {
+                        if (entity != player && !InvincibilityManager.isDamageGuard()) {
                             return 0;
                         }
                     }

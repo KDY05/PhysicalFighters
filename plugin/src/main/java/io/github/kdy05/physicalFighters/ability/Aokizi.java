@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.*;
@@ -33,11 +33,11 @@ public class Aokizi extends Ability {
     public int A_Condition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-            if (isOwner(event0.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard)
+            if (isOwner(event0.getPlayer()) && isValidItem(DefaultItem) && !InvincibilityManager.isDamageGuard())
                 return 0;
         } else if (CustomData == 1) {
             PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-            if (isOwner(event1.getPlayer()) && isValidItem(DefaultItem) && !ConfigManager.DamageGuard) {
+            if (isOwner(event1.getPlayer()) && isValidItem(DefaultItem) && !InvincibilityManager.isDamageGuard()) {
                 Player p = event1.getPlayer();
                 Location location = AbilityUtils.getTargetLocation(p, 5);
                 if (location == null) {
@@ -50,7 +50,7 @@ public class Aokizi extends Ability {
             }
         } else if (CustomData == 2) {
             EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
-            if (isOwner(event2.getDamager()) && !ConfigManager.DamageGuard
+            if (isOwner(event2.getDamager()) && !InvincibilityManager.isDamageGuard()
                     && event2.getEntity() instanceof LivingEntity) {
                 LivingEntity entity = (LivingEntity) event2.getEntity();
                 entity.addPotionEffect(PotionEffectFactory.createSlowness(40, 0));

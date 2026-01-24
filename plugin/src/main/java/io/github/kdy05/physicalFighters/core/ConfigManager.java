@@ -8,7 +8,6 @@ public class ConfigManager {
     private final PhysicalFighters plugin;
     private FileConfiguration config;
 
-    public static boolean DamageGuard = false;
     public static boolean NoFoodMode = false;
     public static boolean InfinityDur = false;
     public static int OnKill;
@@ -59,6 +58,7 @@ public class ConfigManager {
         plugin.getLogger().info("설정이 다시 로드되었습니다.");
     }
 
+    @SuppressWarnings("unused")
     public FileConfiguration getConfig() {
         return config;
     }

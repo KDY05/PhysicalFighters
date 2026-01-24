@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
@@ -21,7 +21,7 @@ public class Ckyomi extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-        if (!ConfigManager.DamageGuard && isOwner(event0.getDamager())
+        if (!InvincibilityManager.isDamageGuard() && isOwner(event0.getDamager())
                 && event0.getEntity() instanceof LivingEntity) {
             return 0;
         }

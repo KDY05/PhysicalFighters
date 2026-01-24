@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
@@ -29,7 +29,7 @@ public class Booster extends Ability {
         if (isOwner(event0.getDamager()) && event0.getEntity() instanceof LivingEntity) {
             return 0;
         }
-        else if (isOwner(event0.getEntity()) && Math.random() <= 0.8D && !ConfigManager.DamageGuard
+        else if (isOwner(event0.getEntity()) && Math.random() <= 0.8D && !InvincibilityManager.isDamageGuard()
                 && (event0.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK
                 || event0.getCause() == EntityDamageEvent.DamageCause.PROJECTILE)) {
             return 1;

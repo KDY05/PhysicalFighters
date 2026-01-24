@@ -87,13 +87,6 @@ public class BaseKitManager implements Listener {
     }
 
     /**
-     * 기본 아이템 배열 반환
-     */
-    public ItemStack[] getBasicItems() {
-        return basicItems.clone();
-    }
-
-    /**
      * 기본 아이템 설정 저장
      */
     private void saveBasicItems(Player player, Inventory inventory) {

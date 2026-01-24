@@ -43,8 +43,7 @@ public class PhysicalFighters extends JavaPlugin {
         commandManager.registerCommand(new UtilCommand(this, configManager));
 
         baseKitManager = new BaseKitManager(this);
-        invincibilityManager = new InvincibilityManager();
-        getServer().getPluginManager().registerEvents(invincibilityManager, this);
+        invincibilityManager = new InvincibilityManager(this);
 
         getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityInitializer.AbilityList.size()));
     }

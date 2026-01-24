@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -23,7 +23,7 @@ public class Demigod extends Ability {
     @Override
     public int A_Condition(Event event, int CustomData) {
         EntityDamageEvent event0 = (EntityDamageEvent) event;
-        if (!ConfigManager.DamageGuard && isOwner(event0.getEntity())) {
+        if (!InvincibilityManager.isDamageGuard() && isOwner(event0.getEntity())) {
             return 0;
         }
         return -1;
