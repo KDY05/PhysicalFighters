@@ -36,11 +36,11 @@ public class GameCommand implements CommandInterface {
             handleCheck(sender);
             return true;
         } else if (args[0].equalsIgnoreCase("yes")) {
-            if (!requirePlayer(sender)) return true;
+            if (filterConsole(sender)) return true;
             this.gameManager.handleYes((Player) sender);
             return true;
         } else if (args[0].equalsIgnoreCase("no")) {
-            if (!requirePlayer(sender)) return true;
+            if (filterConsole(sender)) return true;
             this.gameManager.handleNo((Player) sender);
             return true;
         }
@@ -61,7 +61,7 @@ public class GameCommand implements CommandInterface {
             handleSkip(sender);
             return true;
         } else if (args[0].equalsIgnoreCase("ob")) {
-            if (!requirePlayer(sender)) return true;
+            if (filterConsole(sender)) return true;
             this.gameManager.handleObserve((Player) sender);
             return true;
         } else if (args[0].equalsIgnoreCase("ablist")) {
@@ -109,7 +109,7 @@ public class GameCommand implements CommandInterface {
     }
 
     public void handleCheck(CommandSender sender) {
-        if (!requirePlayer(sender)) {
+        if (filterConsole(sender)) {
             return;
         }
         AbilityUtils.showInfo((Player) sender);

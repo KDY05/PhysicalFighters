@@ -143,7 +143,7 @@ public class UtilCommand implements CommandInterface {
     }
 
     private void handleBook(CommandSender sender, String[] args) {
-        if (!requirePlayer(sender)) return;
+        if (filterConsole(sender)) return;
         Player player = (Player) sender;
 
         if (args.length != 2) {
@@ -205,7 +205,7 @@ public class UtilCommand implements CommandInterface {
     }
 
     private void handleKit(CommandSender sender, String[] args) {
-        if (!requirePlayer(sender)) return;
+        if (filterConsole(sender)) return;
         if (args.length == 2) {
             int code;
             try {

@@ -337,13 +337,13 @@ public class GameManager {
 
 
     private void showWarningMessage() {
-        broadcastMessage(ChatColor.RED + "경고, 게임이 올바르게 시작되지 않았습니다.");
-        broadcastMessage(ChatColor.RED + "/va yes나 /va no 명령으로 능력을 확정하세요.");
         for (Player player : playerList) {
             if (!okSign.contains(player)) {
                 broadcastMessage(ChatColor.YELLOW + player.getName() + "님의 능력이 확정되지 않았습니다.");
             }
         }
+        broadcastMessage(ChatColor.RED + "경고, 게임이 올바르게 시작되지 않았습니다.");
+        broadcastMessage(ChatColor.RED + "/va yes나 /va no 명령으로 능력을 확정하세요.");
     }
 
     private void showPeriodicInfo(int count) {
