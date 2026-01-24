@@ -1,7 +1,9 @@
 package io.github.kdy05.physicalFighters.core;
 
 import io.github.kdy05.physicalFighters.util.AbilityInitializer;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.util.TimerBase;
+import io.github.kdy05.physicalFighters.BuildConfig;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import java.util.ArrayList;
@@ -128,7 +130,7 @@ public class GameManager {
                 player.sendMessage(ChatColor.RED + "(!) 능력의 개수가 부족하여 재추첨이 불가합니다.");
                 return;
             }
-            plugin.getGameCommand().handleCheck(player);
+            AbilityUtils.showInfo(player);
             confirmPlayerAbility(player);
             checkAllPlayersConfirmed();
         }
@@ -201,7 +203,7 @@ public class GameManager {
 
     private void showGameInfo(boolean full) {
         broadcastMessage(ChatColor.DARK_RED + "Physical Fighters");
-        broadcastMessage(String.format(ChatColor.GRAY + "VER. %d", PhysicalFighters.BUILD_NUMBER));
+        broadcastMessage(String.format(ChatColor.GRAY + "VER. %d", BuildConfig.BUILD_NUMBER));
         if (full) {
             broadcastMessage(ChatColor.GREEN + "제작: " + ChatColor.WHITE + "염료");
             broadcastMessage(ChatColor.GREEN + "원작(VisualAbility): " + ChatColor.WHITE + "제온");

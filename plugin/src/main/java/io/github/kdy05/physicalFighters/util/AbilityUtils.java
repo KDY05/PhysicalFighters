@@ -157,4 +157,46 @@ public final class AbilityUtils {
             return "Unknown";
         }
     }
+
+    public static void showInfo(Player player) {
+        Ability ability;
+        if (AbilityInitializer.assimilation.getPlayer() == player) {
+            ability = AbilityInitializer.assimilation;
+        } else {
+            ability = findAbility(player);
+        }
+        if (ability == null) {
+            player.sendMessage(ChatColor.RED + "능력이 없거나 옵저버입니다.");
+            return;
+        }
+        player.sendMessage(ChatColor.GREEN + "---------------");
+        player.sendMessage(ChatColor.GOLD + "- 능력 정보 -");
+        if (ConfigManager.AbilityOverLap)
+            player.sendMessage(ChatColor.DARK_AQUA + "참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.");
+        player.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
+                + " [" + getTypeText(ability) + "] " + ability.getRank());
+        for (int l = 0; l < ability.getGuide().length; l++) {
+            player.sendMessage(ability.getGuide()[l]);
+        }
+        player.sendMessage(getTimerText(ability));
+        player.sendMessage(ChatColor.GREEN + "---------------");
+    }
+
+    private static String getTimerText(Ability ability) {
+        Ability.Type type = ability.getAbilityType();
+        if (type == null) {
+            return "None";
+        } else if (type == Ability.Type.Active_Continue) {
+            return String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / "
+                    + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "%d초", ability.getCoolDown(), ability.getDuration());
+        } else if (type == Ability.Type.Active_Immediately) {
+            return String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / "
+                    + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음", ability.getCoolDown());
+        } else if (type == Ability.Type.Passive_AutoMatic || type == Ability.Type.Passive_Manual) {
+            return ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "없음 / "
+                    + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음";
+        } else {
+            return "None";
+        }
+    }
 }

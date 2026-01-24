@@ -21,9 +21,11 @@ import java.util.LinkedList;
 public class UtilCommand implements CommandInterface {
 
     private final PhysicalFighters plugin;
+    private final ConfigManager configManager;
 
-    public UtilCommand(PhysicalFighters plugin) {
+    public UtilCommand(PhysicalFighters plugin, ConfigManager configManager) {
         this.plugin = plugin;
+        this.configManager = configManager;
     }
 
     public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] args) {
@@ -194,7 +196,7 @@ public class UtilCommand implements CommandInterface {
 
     private void handleReload(CommandSender sender) {
         try {
-            plugin.getConfigManager().reloadConfigs();
+            configManager.reloadConfigs();
             sender.sendMessage(ChatColor.GREEN + "플러그인 설정이 성공적으로 다시 로드되었습니다.");
         } catch (Exception e) {
             sender.sendMessage(ChatColor.RED + "설정 로드 중 오류가 발생했습니다: " + e.getMessage());

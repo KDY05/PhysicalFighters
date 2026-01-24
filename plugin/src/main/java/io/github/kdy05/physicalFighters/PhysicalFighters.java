@@ -13,44 +13,34 @@ import io.github.kdy05.physicalFighters.module.BaseKitManager;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 public class PhysicalFighters extends JavaPlugin {
 
-    public static final int BUILD_NUMBER = Integer.parseInt(
-            LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE));
     private static PhysicalFighters plugin;
-
     private GameManager gameManager;
-    private GameCommand gameCommand;
-    private ConfigManager configManager;
     private BaseKitManager baseKitManager;
     private InvincibilityManager invincibilityManager;
 
     @Override
     public void onEnable() {
         plugin = this;
-        getLogger().info("빌드정보 " + BUILD_NUMBER);
-        getLogger().info("Edit By 염료");
-        getLogger().info("Updated By 어라랍");
+        getLogger().info("빌드정보: " + BuildConfig.BUILD_NUMBER);
+        getLogger().info("(C) 어라랍, 염료, 제온");
 
         if (!initializeAdapter()) {
-            getLogger().severe("지원되지 않는 서버 버전입니다. 플러그인을 비활성화합니다.");
-            getLogger().severe("지원 버전: 1.16.5+");
+            getLogger().severe("지원하지 않는 서버 버전입니다. 플러그인을 비활성화합니다.");
+            getLogger().severe("지원 버전: 1.16.5-1.21.11");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
         CommandManager commandManager = new CommandManager(this);
         getServer().getPluginManager().registerEvents(new EventManager(), this);
-        configManager = new ConfigManager(this);
+        ConfigManager configManager = new ConfigManager(this);
         Ability.InitAbilityBase(this, commandManager);
 
         gameManager = new GameManager(this);
-        gameCommand = new GameCommand(this, gameManager);
-        commandManager.registerCommand(gameCommand);
-        commandManager.registerCommand(new UtilCommand(this));
+        commandManager.registerCommand(new GameCommand(this, gameManager));
+        commandManager.registerCommand(new UtilCommand(this, configManager));
 
         baseKitManager = new BaseKitManager(this);
         invincibilityManager = new InvincibilityManager();
@@ -62,6 +52,7 @@ public class PhysicalFighters extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("플러그인을 종료합니다.");
+        plugin = null;
     }
 
     private boolean initializeAdapter() {
@@ -96,7 +87,7 @@ public class PhysicalFighters extends JavaPlugin {
                     "io.github.kdy05.physicalFighters.v1_20_5.PotionEffectTypeAdapter_1_20_5"
                 );
             } else {
-                getLogger().severe("지원되지 않는 서버 버전: " + version);
+                getLogger().severe("지원하지 않는 서버 버전: " + version);
                 return false;
             }
 
@@ -123,14 +114,6 @@ public class PhysicalFighters extends JavaPlugin {
 
     public GameManager getGameManager() {
         return gameManager;
-    }
-
-    public GameCommand getGameCommand() {
-        return gameCommand;
-    }
-
-    public ConfigManager getConfigManager() {
-        return configManager;
     }
 
     public BaseKitManager getBaseKitManager() {
