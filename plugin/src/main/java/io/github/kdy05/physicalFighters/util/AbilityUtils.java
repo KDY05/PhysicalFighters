@@ -1,22 +1,25 @@
 package io.github.kdy05.physicalFighters.util;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.ConfigManager;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
-import io.github.kdy05.physicalFighters.core.Ability;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public final class AbilityUtils {
+    // 인스턴스화 방지용
+    private AbilityUtils() {
+        throw new AssertionError();
+    }
 
     public static Ability findAbility(Player p) {
         for (Ability a : AbilityInitializer.AbilityList)
@@ -58,6 +61,7 @@ public final class AbilityUtils {
                 .filter(entity -> entity instanceof LivingEntity)
                 .map(entity -> (LivingEntity) entity)
                 .filter(entity -> entity != caster)
+                .filter(entity -> isNotSameTeam(caster, entity))
                 .forEach(entity -> entity.damage(damage, caster));
     }
 
@@ -71,8 +75,28 @@ public final class AbilityUtils {
                 .filter(entity -> entity instanceof LivingEntity)
                 .map(entity -> (LivingEntity) entity)
                 .filter(entity -> entity != caster)
+                .filter(entity -> isNotSameTeam(caster, entity))
                 .filter(filter)
                 .forEach(action);
+    }
+
+    private static boolean isNotSameTeam(Player caster, LivingEntity target) {
+        if (!(target instanceof Player)) {
+            return true;
+        }
+        Player targetPlayer = (Player) target;
+
+        if (Bukkit.getScoreboardManager() == null) {
+            return true;
+        }
+        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+
+        Team casterTeam = scoreboard.getEntryTeam(caster.getName());
+        Team targetTeam = scoreboard.getEntryTeam(targetPlayer.getName());
+        if (casterTeam == null || targetTeam == null) {
+            return true;
+        }
+        return !casterTeam.equals(targetTeam);
     }
 
     public static void createBox(Location center, Material material, int radius, int height) {

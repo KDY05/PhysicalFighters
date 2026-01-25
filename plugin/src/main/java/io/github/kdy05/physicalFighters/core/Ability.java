@@ -15,7 +15,6 @@ import java.util.UUID;
 
 public abstract class Ability {
     protected static PhysicalFighters plugin;
-    protected static CommandManager commandManager;
     protected static Material DefaultItem = Material.IRON_INGOT;
 
     private static int AbilityCount = 0;
@@ -74,9 +73,8 @@ public abstract class Ability {
         }
     }
 
-    public static void InitAbilityBase(PhysicalFighters plugin, CommandManager commandManager) {
+    public static void initPlugin(PhysicalFighters plugin) {
         Ability.plugin = plugin;
-        Ability.commandManager = commandManager;
     }
 
     protected final void InitAbility(String AbilityName, Type type, Rank rank, String... Manual) {

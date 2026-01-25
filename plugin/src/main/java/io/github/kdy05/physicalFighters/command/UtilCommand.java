@@ -18,7 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class UtilCommand implements CommandInterface {
+public final class UtilCommand implements CommandInterface {
 
     private final PhysicalFighters plugin;
     private final ConfigManager configManager;

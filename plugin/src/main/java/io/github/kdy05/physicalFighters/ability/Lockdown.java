@@ -28,7 +28,6 @@ public class Lockdown extends Ability implements CommandInterface {
                 "\"/va lock <nickname>\" 명령어로 작동하며 대상이 60칸 이내에 있어야 합니다.",
                 String.format("게임 시작 후 %d분동안 능력 사용이 제한됩니다.", ConfigManager.RestrictionTime));
         InitAbility(80, LOCKDOWN_DURATION, true);
-        commandManager.registerCommand(this);
     }
 
     @Override

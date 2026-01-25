@@ -160,9 +160,12 @@ public class GameManager {
     }
 
     private void initializePlayerList() {
+        playerList.clear();
+        okSign.clear();
+
         broadcastMessage(ChatColor.AQUA + "인식된 플레이어 목록");
         broadcastMessage(ChatColor.GOLD + "==========");
-        
+
         Player[] onlinePlayers = Bukkit.getOnlinePlayers().toArray(new Player[0]);
         int validPlayerIndex = 0;
         

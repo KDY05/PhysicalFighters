@@ -1,10 +1,9 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.util.BaseItem;
-import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.EventManager;
+import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 
 public class Fish extends Ability implements BaseItem {
@@ -29,7 +28,7 @@ public class Fish extends Ability implements BaseItem {
         ItemMeta meta = fish.getItemMeta();
         assert meta != null;
         meta.setDisplayName(ChatColor.AQUA + "강태공의 물고기");
-        meta.setLore(Arrays.asList(ChatColor.GRAY + "강태공 전용"));
+        meta.setLore(Collections.singletonList(ChatColor.GRAY + "강태공 전용"));
         fish.setItemMeta(meta);
         return fish;
     }

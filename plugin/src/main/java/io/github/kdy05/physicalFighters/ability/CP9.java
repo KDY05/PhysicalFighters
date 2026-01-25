@@ -1,14 +1,13 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.module.InvincibilityManager;
-import io.github.kdy05.physicalFighters.util.AbilityUtils;
-import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.util.EventData;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -20,10 +19,10 @@ import org.bukkit.util.Vector;
 public class CP9 extends Ability {
     public CP9() {
         InitAbility("CP9", Type.Active_Immediately, Rank.SS,
-                Usage.IronAttack + "지건 - 상대에게 6의 고정 대미지를 줍니다.",
-                Usage.IronRight + "월보 - 바라보는 방향으로 빠르게 도약합니다.",
+                Usage.IronAttack + "상대에게 6의 고정 대미지를 줍니다.",
+                Usage.IronRight + "바라보는 방향으로 빠르게 도약합니다.",
                 Usage.Passive + "낙하 대미지를 무시합니다.");
-        InitAbility(15, 0, true);
+        InitAbility(20, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerRightClickEvent();
         EventManager.onEntityDamage.add(new EventData(this, 2));
@@ -58,10 +57,7 @@ public class CP9 extends Ability {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             LivingEntity entity = (LivingEntity) event0.getEntity();
             AbilityUtils.piercingDamage(entity, 6);
-            sendMessage(String.format(ChatColor.GREEN +
-                    "%s에게 지건을 사용했습니다.", entity.getName()));
-            entity.sendMessage(String.format(ChatColor.RED +
-                    "%s(이)가 지건을 사용했습니다.", event0.getDamager().getName()));
+            sendMessage(String.format(ChatColor.RED + "%s에게 지건을 사용했습니다.", entity.getName()));
         } else if (CustomData == 1) {
             PlayerInteractEvent event1 = (PlayerInteractEvent) event;
             Player player = event1.getPlayer();

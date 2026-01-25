@@ -1,18 +1,17 @@
 package io.github.kdy05.physicalFighters.ability;
 
-import io.github.kdy05.physicalFighters.module.InvincibilityManager;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.scheduler.BukkitRunnable;
 import io.github.kdy05.physicalFighters.core.Ability;
-
+import io.github.kdy05.physicalFighters.module.InvincibilityManager;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Ace extends Ability {
     public Ace() {
         InitAbility("에이스", Type.Active_Continue, Rank.S,
-                Usage.IronLeft + "20초간 자신의 주변에 있는 적들을 불태웁니다.");
+                Usage.IronLeft + "능력 지속시간 동안 자신의 주변에 있는 적들을 불태웁니다.");
         InitAbility(40, 20, true);
         registerLeftClickEvent();
     }
@@ -46,11 +45,8 @@ public class Ace extends Ability {
 
         @Override
         public void run() {
-            caster.getWorld().getNearbyEntities(caster.getLocation(), 10, 10, 10).stream()
-                    .filter(entity -> entity instanceof LivingEntity)
-                    .map(entity -> (LivingEntity) entity)
-                    .filter(entity -> entity != caster)
-                    .forEach(entity -> entity.setFireTicks(80));
+            AbilityUtils.splashTask(caster, caster.getLocation(), 10,
+                    entity -> entity.setFireTicks(80));
             if (this.num > 16) cancel();
             this.num += 1;
         }

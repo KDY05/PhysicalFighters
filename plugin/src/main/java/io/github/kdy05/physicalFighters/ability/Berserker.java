@@ -3,7 +3,6 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.core.Ability;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -12,7 +11,7 @@ public class Berserker extends Ability {
     public Berserker() {
         InitAbility("광전사", Type.Passive_Manual, Rank.A,
                 "체력이 낮아질수록 대미지가 증폭됩니다.",
-                "6칸 ↓ - 1.5배, 4칸 ↓ - 2배, 2칸 ↓ - 3배, 한 칸 ↓ - 4배");
+                "6칸 ↓ - 1.5배, 4칸 ↓ - 2배, 2칸 ↓ - 3배, 반 칸 ↓ - 4배");
         InitAbility(0, 0, true);
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
     }
@@ -22,7 +21,7 @@ public class Berserker extends Ability {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         if (!isOwner(event0.getDamager())) return -1;
         Player p = (Player) event0.getDamager();
-        if (p.getHealth() <= 2.0D) return 0;
+        if (p.getHealth() <= 1.0D) return 0;
         else if (p.getHealth() <= 4.0D) return 1;
         else if (p.getHealth() <= 8.0D) return 2;
         else if (p.getHealth() <= 12.0D) return 3;

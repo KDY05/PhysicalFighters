@@ -26,7 +26,6 @@ public class Assimilation extends Ability implements CommandInterface {
                 "흡수 가능한 능력의 개수는 제한이 없지만 액티브 능력은 최대 1개만 가능합니다.");
         InitAbility(0, 0, true);
         EventManager.onEntityDeath.add(new EventData(this, 0));
-        commandManager.registerCommand(this);
     }
 
     @Override

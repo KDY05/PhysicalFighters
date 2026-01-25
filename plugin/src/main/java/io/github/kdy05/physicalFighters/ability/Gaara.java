@@ -1,8 +1,8 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import io.github.kdy05.physicalFighters.util.AbilityUtils;
 
 public class Gaara extends Ability {
     private Location targetLocation = null;
@@ -66,13 +65,11 @@ public class Gaara extends Ability {
 
         Exploder(Block block) {
             this.world = block.getWorld();
-            this.location = block.getLocation();
+            this.location = block.getLocation().clone().add(0, 2, 0);
         }
 
         @Override
         public void run() {
-            this.world.createExplosion(this.location, 5.0F);
-            this.world.createExplosion(this.location, 5.0F);
             this.world.createExplosion(this.location, 5.0F);
         }
     }
