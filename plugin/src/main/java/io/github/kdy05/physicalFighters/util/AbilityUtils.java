@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.util;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.ConfigManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -119,7 +118,7 @@ public final class AbilityUtils {
         }
     }
 
-    public static void assignAbility(CommandSender sender, int abicode, Player target) {
+    public static void assignAbility(CommandSender sender, int abicode, Player target, boolean abilityOverLap) {
         // 특정 플레이어 능력 해제
         if (abicode == -1) {
             for (Ability ability : AbilityInitializer.AbilityList) {
@@ -135,7 +134,7 @@ public final class AbilityUtils {
 
         // 기존 능력 해제
         Ability ability = AbilityInitializer.AbilityList.get(abicode);
-        if (ConfigManager.AbilityOverLap) {
+        if (abilityOverLap) {
             // 중복 모드에서 액티브 능력 중복은 불가함.
             if (ability.getAbilityType() == Ability.Type.Active_Continue ||
                     ability.getAbilityType() == Ability.Type.Active_Immediately) {
@@ -182,7 +181,7 @@ public final class AbilityUtils {
         }
     }
 
-    public static void showInfo(Player player) {
+    public static void showInfo(Player player, boolean abilityOverLap) {
         Ability ability;
         if (AbilityInitializer.assimilation.getPlayer() == player) {
             ability = AbilityInitializer.assimilation;
@@ -195,7 +194,7 @@ public final class AbilityUtils {
         }
         player.sendMessage(ChatColor.GREEN + "---------------");
         player.sendMessage(ChatColor.GOLD + "- 능력 정보 -");
-        if (ConfigManager.AbilityOverLap)
+        if (abilityOverLap)
             player.sendMessage(ChatColor.DARK_AQUA + "참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.");
         player.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
                 + " [" + getTypeText(ability) + "] " + ability.getRank());

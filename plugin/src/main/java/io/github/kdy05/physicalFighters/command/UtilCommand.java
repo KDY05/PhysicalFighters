@@ -78,11 +78,8 @@ public final class UtilCommand implements CommandInterface {
         sender.sendMessage(ChatColor.GOLD + "/va dura" + ChatColor.WHITE + " - 내구도 무한 모드를 토글합니다.");
         sender.sendMessage("");
 
-        sender.sendMessage(ChatColor.YELLOW + "■ 조사 및 확인");
+        sender.sendMessage(ChatColor.YELLOW + "■ 기타");
         sender.sendMessage(ChatColor.GOLD + "/va scan" + ChatColor.WHITE + " - 현재 능력자 목록을 확인합니다.");
-        sender.sendMessage("");
-
-        sender.sendMessage(ChatColor.YELLOW + "■ 능력 관리");
         sender.sendMessage(ChatColor.GOLD + "/va tc" + ChatColor.WHITE + " - 모든 능력의 쿨타임과 지속시간을 초기화합니다.");
         sender.sendMessage(ChatColor.GOLD + "/va book [코드]" + ChatColor.WHITE + " - 능력 정보가 담긴 책을 생성합니다.");
         sender.sendMessage("");
@@ -110,24 +107,24 @@ public final class UtilCommand implements CommandInterface {
     }
 
     private void handleHung() {
-        if (!ConfigManager.NoFoodMode) {
-            ConfigManager.NoFoodMode = true;
+        if (!configManager.isNoFoodMode()) {
+            configManager.setNoFoodMode(true);
             Bukkit.broadcastMessage(ChatColor.GREEN +
                     "OP에 의해 배고픔무한이 설정되었습니다.");
         } else {
-            ConfigManager.NoFoodMode = false;
+            configManager.setNoFoodMode(false);
             Bukkit.broadcastMessage(ChatColor.RED +
                     "OP에 의해 배고픔무한이 해제되었습니다.");
         }
     }
 
     private void handleDura() {
-        if (!ConfigManager.InfinityDur) {
-            ConfigManager.InfinityDur = true;
+        if (!configManager.isInfinityDur()) {
+            configManager.setInfinityDur(true);
             Bukkit.broadcastMessage(ChatColor.GREEN +
                     "OP에 의해 내구도무한이 설정되었습니다.");
         } else {
-            ConfigManager.InfinityDur = false;
+            configManager.setInfinityDur(false);
             Bukkit.broadcastMessage(ChatColor.RED +
                     "OP에 의해 내구도무한이 해제되었습니다.");
         }

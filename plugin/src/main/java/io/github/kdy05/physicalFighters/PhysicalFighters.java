@@ -38,10 +38,10 @@ public class PhysicalFighters extends JavaPlugin {
             return;
         }
 
-        getServer().getPluginManager().registerEvents(new EventManager(), this);
         ConfigManager configManager = new ConfigManager(this);
+        getServer().getPluginManager().registerEvents(new EventManager(this, configManager), this);
 
-        Ability.initPlugin(this);
+        Ability.initPlugin(this, configManager);
         getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityInitializer.AbilityList.size()));
 
         // CommandInterface 구현 능력 수집
@@ -50,9 +50,9 @@ public class PhysicalFighters extends JavaPlugin {
                 .map(CommandInterface.class::cast)
                 .collect(Collectors.toList());
 
-        gameManager = new GameManager(this);
+        gameManager = new GameManager(this, configManager);
         CommandManager commandManager = CommandManager.builder()
-                .addCommand(new GameCommand(this, gameManager))
+                .addCommand(new GameCommand(this, configManager, gameManager))
                 .addCommand(new UtilCommand(this, configManager))
                 .addAll(abilityCommands)
                 .build();

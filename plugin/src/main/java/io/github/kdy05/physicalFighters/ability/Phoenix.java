@@ -1,7 +1,6 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -63,7 +62,8 @@ public class Phoenix extends Ability {
 
             if (this.AbilityUse) {
                 Bukkit.broadcastMessage(ChatColor.RED + "불사조가 죽었습니다. 더 이상 부활할수 없습니다.");
-                if (ConfigManager.OnKill == 1) {
+                int onKill = configManager.getOnKill();
+                if (onKill == 1) {
                     Location deathLocation = killed.getLocation().clone();
                     Bukkit.getScheduler().runTaskLater(plugin, () -> {
                         killed.setGameMode(GameMode.SPECTATOR);
@@ -73,9 +73,9 @@ public class Phoenix extends Ability {
                                 ChatColor.YELLOW + "관전자 모드로 전환합니다.",
                                 10, 100 ,10);
                     }, 1L);
-                } else if (ConfigManager.OnKill == 2) {
+                } else if (onKill == 2) {
                     killed.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
-                } else if (ConfigManager.OnKill == 3) {
+                } else if (onKill == 3) {
                     if (!killed.isOp()) {
                         Bukkit.getBanList(BanList.Type.NAME).addBan(killed.getName(),
                                 "당신은 죽었습니다. 다시 들어오실 수 없습니다.", null, null);
