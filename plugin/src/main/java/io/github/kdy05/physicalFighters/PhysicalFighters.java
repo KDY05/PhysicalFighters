@@ -22,6 +22,7 @@ public class PhysicalFighters extends JavaPlugin {
 
     private static PhysicalFighters plugin;
     private GameManager gameManager;
+    private ConfigManager configManager;
     private BaseKitManager baseKitManager;
     private InvincibilityManager invincibilityManager;
 
@@ -38,10 +39,10 @@ public class PhysicalFighters extends JavaPlugin {
             return;
         }
 
-        ConfigManager configManager = new ConfigManager(this);
-        getServer().getPluginManager().registerEvents(new EventManager(this, configManager), this);
+        configManager = new ConfigManager(this);
+        getServer().getPluginManager().registerEvents(new EventManager(this), this);
 
-        Ability.initPlugin(this, configManager);
+        Ability.initPlugin(this);
         getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityInitializer.AbilityList.size()));
 
         // CommandInterface 구현 능력 수집
@@ -50,9 +51,9 @@ public class PhysicalFighters extends JavaPlugin {
                 .map(CommandInterface.class::cast)
                 .collect(Collectors.toList());
 
-        gameManager = new GameManager(this, configManager);
+        gameManager = new GameManager(this);
         CommandManager commandManager = CommandManager.builder()
-                .addCommand(new GameCommand(this, configManager, gameManager))
+                .addCommand(new GameCommand(this, gameManager))
                 .addCommand(new UtilCommand(this, configManager))
                 .addAll(abilityCommands)
                 .build();
@@ -129,6 +130,10 @@ public class PhysicalFighters extends JavaPlugin {
 
     public GameManager getGameManager() {
         return gameManager;
+    }
+
+    public ConfigManager getConfigManager() {
+        return configManager;
     }
 
     public BaseKitManager getBaseKitManager() {

@@ -62,7 +62,7 @@ public class Phoenix extends Ability {
 
             if (this.AbilityUse) {
                 Bukkit.broadcastMessage(ChatColor.RED + "불사조가 죽었습니다. 더 이상 부활할수 없습니다.");
-                int onKill = configManager.getOnKill();
+                int onKill = plugin.getConfigManager().getOnKill();
                 if (onKill == 1) {
                     Location deathLocation = killed.getLocation().clone();
                     Bukkit.getScheduler().runTaskLater(plugin, () -> {

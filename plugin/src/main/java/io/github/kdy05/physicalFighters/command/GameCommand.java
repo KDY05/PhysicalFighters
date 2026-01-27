@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.command;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.ConfigManager;
 import io.github.kdy05.physicalFighters.core.GameManager;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.AbilityInitializer;
@@ -17,12 +16,10 @@ import org.bukkit.entity.Player;
 public final class GameCommand implements CommandInterface {
 
     private final PhysicalFighters plugin;
-    private final ConfigManager configManager;
     private final GameManager gameManager;
 
-    public GameCommand(PhysicalFighters plugin, ConfigManager configManager, GameManager gameManager) {
+    public GameCommand(PhysicalFighters plugin, GameManager gameManager) {
         this.plugin = plugin;
-        this.configManager = configManager;
         this.gameManager = gameManager;
     }
 
@@ -36,7 +33,7 @@ public final class GameCommand implements CommandInterface {
         // 유저 커맨드
         if (args[0].equalsIgnoreCase("check")) {
             if (filterConsole(sender)) return true;
-            AbilityUtils.showInfo((Player) sender, configManager.isAbilityOverLap());
+            AbilityUtils.showInfo((Player) sender, plugin.getConfigManager().isAbilityOverLap());
             return true;
         } else if (args[0].equalsIgnoreCase("yes")) {
             if (filterConsole(sender)) return true;
@@ -215,7 +212,7 @@ public final class GameCommand implements CommandInterface {
             return;
         }
 
-        AbilityUtils.assignAbility(sender, abicode, target, configManager.isAbilityOverLap());
+        AbilityUtils.assignAbility(sender, abicode, target, plugin.getConfigManager().isAbilityOverLap());
         plugin.getLogger().info("명령어에 의한 능력 할당입니다.");
     }
 

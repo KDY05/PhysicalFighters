@@ -29,7 +29,6 @@ public class GameManager {
     
     // Dependencies
     private final PhysicalFighters plugin;
-    private final ConfigManager configManager;
     private final Random random = new Random();
     
     // Game state
@@ -54,9 +53,8 @@ public class GameManager {
         READY, START, PROGRESS, WARNING
     }
 
-    public GameManager(PhysicalFighters plugin, ConfigManager configManager) {
+    public GameManager(PhysicalFighters plugin) {
         this.plugin = plugin;
-        this.configManager = configManager;
     }
 
     // =========================== Public API ===========================
@@ -132,7 +130,7 @@ public class GameManager {
                 player.sendMessage(ChatColor.RED + "(!) 능력의 개수가 부족하여 재추첨이 불가합니다.");
                 return;
             }
-            AbilityUtils.showInfo(player, configManager.isAbilityOverLap());
+            AbilityUtils.showInfo(player, plugin.getConfigManager().isAbilityOverLap());
             confirmPlayerAbility(player);
             checkAllPlayersConfirmed();
         }
@@ -219,7 +217,7 @@ public class GameManager {
     }
 
     private void handleAbilitySetup() {
-        if (!configManager.isNoAbilitySetting()) {
+        if (!plugin.getConfigManager().isNoAbilitySetting()) {
             broadcastMessage(ChatColor.GRAY + "능력 설정 초기화 및 추첨 준비...");
             resetAllAbilities();
         } else {
@@ -277,7 +275,7 @@ public class GameManager {
 
     private void startGameLogic() {
         broadcastMessage(ChatColor.GREEN + "게임이 시작되었습니다.");
-        plugin.getInvincibilityManager().startInvincibility(configManager.getEarlyInvincibleTime());
+        plugin.getInvincibilityManager().startInvincibility(plugin.getConfigManager().getEarlyInvincibleTime());
         setPlayerBase();
         enableAllAbilities();
         gameProgress();
@@ -290,8 +288,8 @@ public class GameManager {
             player.setFoodLevel(20);
             player.setSaturation(10.0f);
             player.setExhaustion(0.0f);
-            player.setLevel(configManager.getSetLev());
-            if (configManager.isClearInventory()) {
+            player.setLevel(plugin.getConfigManager().getSetLev());
+            if (plugin.getConfigManager().isClearInventory()) {
                 player.getInventory().clear();
             }
             plugin.getBaseKitManager().giveBasicItems(player);

@@ -23,7 +23,6 @@ import java.util.ArrayList;
 public final class EventManager implements Listener {
 
     private final PhysicalFighters plugin;
-    private final ConfigManager configManager;
 
     public static ArrayList<Ability> LeftHandEvent = new ArrayList<>();
     public static ArrayList<Ability> RightHandEvent = new ArrayList<>();
@@ -43,15 +42,14 @@ public final class EventManager implements Listener {
     public static ArrayList<EventData> onPlayerMoveEvent = new ArrayList<>();
     public static ArrayList<EventData> onProjectileHitEvent = new ArrayList<>();
 
-    public EventManager(PhysicalFighters plugin, ConfigManager configManager) {
+    public EventManager(PhysicalFighters plugin) {
         this.plugin = plugin;
-        this.configManager = configManager;
     }
 
     @EventHandler
     public void onPlayerItemDamage(PlayerItemDamageEvent event) {
         // 내구도 무한 모드
-        if (configManager.isInfinityDur()) {
+        if (plugin.getConfigManager().isInfinityDur()) {
             event.setCancelled(true);
         }
         executeAbility(onPlayerItemDamage, event);
@@ -60,7 +58,7 @@ public final class EventManager implements Listener {
     @EventHandler
     public void onFoodLevelChange(FoodLevelChangeEvent event) {
         // 배고픔 무한 모드
-        if (configManager.isNoFoodMode()) {
+        if (plugin.getConfigManager().isNoFoodMode()) {
             event.setFoodLevel(20);
             return;
         }
@@ -108,7 +106,7 @@ public final class EventManager implements Listener {
 
     private void handleVictim(Player victim) {
         // 사망 시 처리 (OnKill: 0=아무것도 안함, 1=관전자 모드, 2=킥, 3=밴)
-        int onKill = configManager.getOnKill();
+        int onKill = plugin.getConfigManager().getOnKill();
         if (onKill <= 0 || AbilityInitializer.phoenix.isOwner(victim)) {
             return;
         }
@@ -139,7 +137,7 @@ public final class EventManager implements Listener {
         plugin.getLogger().info(pde.getDeathMessage());
         if (killer != null) {
             // 타살인 경우
-            if (configManager.isKillerOutput()) {
+            if (plugin.getConfigManager().isKillerOutput()) {
                 pde.setDeathMessage(ChatColor.GREEN + killer.getName() + ChatColor.WHITE + "님이 "
                         + ChatColor.RED + victim.getName() + ChatColor.WHITE + "님의 살겠다는 의지를 꺾었습니다.");
             } else {
@@ -165,7 +163,7 @@ public final class EventManager implements Listener {
             String name = handItem.getItemMeta().getDisplayName();
             int n = Integer.parseInt(name.split("f")[1].split("\\.")[0]);
             player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-            AbilityUtils.assignAbility(player, n, player, configManager.isAbilityOverLap());
+            AbilityUtils.assignAbility(player, n, player, plugin.getConfigManager().isAbilityOverLap());
         }
 
         executeAbility(onPlayerInteract, event);
