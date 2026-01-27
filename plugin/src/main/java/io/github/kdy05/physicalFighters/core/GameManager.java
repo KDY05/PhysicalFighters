@@ -1,25 +1,21 @@
 package io.github.kdy05.physicalFighters.core;
 
-import io.github.kdy05.physicalFighters.util.AbilityInitializer;
-import io.github.kdy05.physicalFighters.util.AbilityUtils;
-import io.github.kdy05.physicalFighters.util.TimerBase;
 import io.github.kdy05.physicalFighters.BuildConfig;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.util.AbilityUtils;
+import io.github.kdy05.physicalFighters.util.TimerBase;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
-import org.bukkit.*;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 /**
  * 게임 상태와 플레이어 관리를 담당하는 핵심 클래스
  */
-public class GameManager {
-    
+public final class GameManager {
     // Constants
     private static final int COUNTDOWN_DURATION = 15;
     private static final int READY_DURATION = 9;
@@ -29,28 +25,26 @@ public class GameManager {
     
     // Dependencies
     private final PhysicalFighters plugin;
-    private final Random random = new Random();
+    private final AbilityDistributor abilityDistributor = new AbilityDistributor();
     
     // Game state
-    private static ScriptStatus scenario = ScriptStatus.NoPlay;
+    private ScriptStatus scenario = ScriptStatus.NoPlay;
     private final LinkedList<Player> exceptionList = new LinkedList<>();
-    private static final ArrayList<Player> playerList = new ArrayList<>();
+    private final ArrayList<Player> playerList = new ArrayList<>();
     private final ArrayList<Player> okSign = new ArrayList<>();
-    private int peopleCount = 0;
     
     // Timers
     private final GameTimer gameReadyTimer = new GameTimer(TimerType.READY);
     private final GameTimer gameStartTimer = new GameTimer(TimerType.START);
     private final GameTimer gameProgressTimer = new GameTimer(TimerType.PROGRESS);
     private final GameTimer gameWarningTimer = new GameTimer(TimerType.WARNING);
-    
+
+    private enum TimerType {
+        READY, START, PROGRESS, WARNING
+    }
 
     public enum ScriptStatus {
         NoPlay, ScriptStart, AbilitySelect, GameStart
-    }
-    
-    private enum TimerType {
-        READY, START, PROGRESS, WARNING
     }
 
     public GameManager(PhysicalFighters plugin) {
@@ -60,11 +54,7 @@ public class GameManager {
     // =========================== Public API ===========================
     
     // State management
-    public static ScriptStatus getScenario() { return scenario; }
-    public static void setScenario(ScriptStatus scenario) { GameManager.scenario = scenario; }
-    public static ArrayList<Player> getPlayerList() { return playerList; }
-    public LinkedList<Player> getExceptionList() { return exceptionList; }
-    public ArrayList<Player> getOKSign() { return okSign; }
+    public ScriptStatus getScenario() { return scenario; }
     public int getGameTime() { return gameProgressTimer.getCount(); }
 
     // Game flow control
@@ -78,26 +68,26 @@ public class GameManager {
         gameReadyTimer.startTimer(READY_DURATION, false);
     }
 
-    public void gameStart() {
+    public void startGame() {
         gameStartTimer.startTimer(COUNTDOWN_DURATION, false);
     }
 
-    public void gameProgress() {
-        gameProgressTimer.startTimer(MAX_TIMER_DURATION, false);
+    public void forceGameStart() {
+        okSign.clear();
+        okSign.addAll(playerList);
+        startGame();
     }
 
-    public void gameWarningStart() {
-        gameWarningTimer.startTimer(MAX_TIMER_DURATION, false);
-    }
-
-    // Stop methods
-    public void gameReadyStop() { gameReadyTimer.stopTimer(); }
-    public void gameStartStop() { 
+    public void stopGame() {
+        scenario = ScriptStatus.NoPlay;
+        gameReadyTimer.stopTimer();
         gameStartTimer.stopTimer();
+        gameProgressTimer.stopTimer();
+        gameWarningTimer.endTimer();
         plugin.getInvincibilityManager().forceStop();
+        okSign.clear();
+        playerList.clear();
     }
-    public void gameProgressStop() { gameProgressTimer.stopTimer(); }
-    public void gameWarningStop() { gameWarningTimer.endTimer(); }
 
     // Player actions
     public void handleObserve(Player player) {
@@ -126,13 +116,13 @@ public class GameManager {
 
     public void handleNo(Player player) {
         if (isValidAbilitySelection(player)) {
-            if (assignRandomAbility(player) == null) {
+            if (abilityDistributor.assignRandomAbility(player, playerList.size())) {
+                AbilityUtils.showInfo(player, plugin.getConfigManager().isAbilityOverLap());
+                confirmPlayerAbility(player);
+                checkAllPlayersConfirmed();
+            } else {
                 player.sendMessage(ChatColor.RED + "(!) 능력의 개수가 부족하여 재추첨이 불가합니다.");
-                return;
             }
-            AbilityUtils.showInfo(player, plugin.getConfigManager().isAbilityOverLap());
-            confirmPlayerAbility(player);
-            checkAllPlayersConfirmed();
         }
     }
 
@@ -155,7 +145,7 @@ public class GameManager {
     
     private void checkAllPlayersConfirmed() {
         if (okSign.size() == playerList.size()) {
-            gameStart();
+            startGame();
         }
     }
 
@@ -166,41 +156,40 @@ public class GameManager {
         broadcastMessage(ChatColor.AQUA + "인식된 플레이어 목록");
         broadcastMessage(ChatColor.GOLD + "==========");
 
-        Player[] onlinePlayers = Bukkit.getOnlinePlayers().toArray(new Player[0]);
-        int validPlayerIndex = 0;
-        
-        for (Player player : onlinePlayers) {
+        int abilityCount = Ability.getAbilityCount();
+        int index = 0;
+        int overflowCount = 0;
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
             if (exceptionList.contains(player)) continue;
-            
-            if (validPlayerIndex < Ability.getAbilityCount()) {
+
+            if (index < abilityCount) {
                 playerList.add(player);
                 broadcastMessage(String.format(ChatColor.GREEN + "%d. " + ChatColor.WHITE + "%s",
-                               validPlayerIndex, player.getName()));
+                        index, player.getName()));
             } else {
-                broadcastMessage(String.format(ChatColor.RED + "%d. %s (Error)",
-                               validPlayerIndex, player.getName()));
+                broadcastMessage(String.format(ChatColor.RED + "%d. %s (Error)", index, player.getName()));
+                overflowCount++;
             }
-            validPlayerIndex++;
+            index++;
         }
-        
-        peopleCount = onlinePlayers.length - exceptionList.size();
-        
-        if (peopleCount <= Ability.getAbilityCount()) {
-            broadcastMessage(String.format(ChatColor.YELLOW + "총 인원수 : %d명", peopleCount));
+
+        int totalValidPlayers = playerList.size() + overflowCount;
+        if (overflowCount == 0) {
+            broadcastMessage(String.format(ChatColor.YELLOW + "총 인원수 : %d명", totalValidPlayers));
         } else {
-            broadcastMessage(String.format(ChatColor.RED + "총 인원수 : %d명", peopleCount));
+            broadcastMessage(String.format(ChatColor.RED + "총 인원수 : %d명", totalValidPlayers));
             broadcastMessage("인원이 능력의 개수보다 많습니다. 에러 처리된 분들은 능력을");
             broadcastMessage("받을 수 없으며 모든 게임 진행 대상에서 제외됩니다.");
         }
-        
+
         broadcastMessage(ChatColor.GOLD + "==========");
-        
+
         if (playerList.isEmpty()) {
             broadcastMessage(ChatColor.RED + "경고, 실질 플레이어가 없습니다. 게임 강제 종료.");
             scenario = ScriptStatus.NoPlay;
             gameReadyTimer.stopTimer();
             broadcastMessage(ChatColor.GRAY + "모든 설정이 취소됩니다.");
-            playerList.clear();
         }
     }
 
@@ -219,32 +208,32 @@ public class GameManager {
     private void handleAbilitySetup() {
         if (!plugin.getConfigManager().isNoAbilitySetting()) {
             broadcastMessage(ChatColor.GRAY + "능력 설정 초기화 및 추첨 준비...");
-            resetAllAbilities();
+            abilityDistributor.resetAllAbilities();
         } else {
             broadcastMessage(ChatColor.GOLD + "능력을 추첨하지 않습니다.");
             broadcastMessage("시작전에 능력이 이미 부여되었다면 보존됩니다.");
             okSign.clear();
             okSign.addAll(playerList);
-            enableAllAbilities();
-            gameStart();
+            abilityDistributor.enableAllAbilities();
+            startGame();
         }
     }
 
     private void processAbilitySelection() {
         scenario = ScriptStatus.AbilitySelect;
-        
-        if (peopleCount < Ability.getAbilityCount()) {
+
+        if (playerList.size() < Ability.getAbilityCount()) {
             distributeAbilitiesWithChoice();
-            gameWarningStart();
+            gameWarningTimer.startTimer(MAX_TIMER_DURATION, false);
         } else {
             distributeAbilitiesInstantly();
-            gameStart();
+            startGame();
         }
     }
 
     private void distributeAbilitiesWithChoice() {
         for (Player player : playerList) {
-            if (assignRandomAbility(player) == null) {
+            if (!abilityDistributor.assignRandomAbility(player, playerList.size())) {
                 player.sendMessage(ChatColor.RED + "경고, 능력의 개수가 부족합니다.");
             } else {
                 player.sendMessage(ChatColor.YELLOW + "(!) /va check " + ChatColor.WHITE + "= 능력 확인");
@@ -260,11 +249,11 @@ public class GameManager {
     private void distributeAbilitiesInstantly() {
         broadcastMessage(ChatColor.AQUA + "능력 개수보다 플레이어 수가 같거나 많으므로 즉시 확정됩니다.");
         for (Player player : playerList) {
-            if (assignRandomAbility(player) == null) {
+            if (!abilityDistributor.assignRandomAbility(player, playerList.size())) {
                 player.sendMessage(ChatColor.RED + "경고, 능력의 개수가 부족합니다.");
             } else {
                 okSign.add(player);
-                player.sendMessage(ChatColor.GREEN + "당신에게 능력이 부여되었습니다. " + 
+                player.sendMessage(ChatColor.GREEN + "당신에게 능력이 부여되었습니다. " +
                                  ChatColor.YELLOW + "/va check" + ChatColor.WHITE + "로 확인하세요.");
             }
         }
@@ -277,10 +266,9 @@ public class GameManager {
         broadcastMessage(ChatColor.GREEN + "게임이 시작되었습니다.");
         plugin.getInvincibilityManager().startInvincibility(plugin.getConfigManager().getEarlyInvincibleTime());
         setPlayerBase();
-        enableAllAbilities();
-        gameProgress();
+        abilityDistributor.enableAllAbilities();
+        gameProgressTimer.startTimer(MAX_TIMER_DURATION, false);
     }
-
 
     private void setPlayerBase() {
         for (Player player : playerList) {
@@ -295,49 +283,6 @@ public class GameManager {
             plugin.getBaseKitManager().giveBasicItems(player);
         }
     }
-
-    private Ability assignRandomAbility(Player player) {
-        // Remove current ability
-        for (Ability ability : AbilityInitializer.AbilityList) {
-            if (ability.isOwner(player)) {
-                ability.setPlayer(null, false);
-                break;
-            }
-        }
-
-        List<Ability> availableAbilities = getAvailableAbilities();
-        if (availableAbilities.isEmpty()) return null;
-        
-        Ability selectedAbility = availableAbilities.get(random.nextInt(availableAbilities.size()));
-        selectedAbility.setPlayer(player, false);
-        return selectedAbility;
-    }
-
-    private List<Ability> getAvailableAbilities() {
-        List<Ability> available = new ArrayList<>();
-        for (Ability ability : AbilityInitializer.AbilityList) {
-            if (ability.getPlayer() == null && 
-                (playerList.size() > 6 || ability != AbilityInitializer.mirroring)) {
-                available.add(ability);
-            }
-        }
-        return available;
-    }
-
-    private void resetAllAbilities() {
-        for (Ability ability : AbilityInitializer.AbilityList) {
-            ability.setRunAbility(false);
-            ability.setPlayer(null, false);
-        }
-    }
-
-    private void enableAllAbilities() {
-        for (Ability ability : AbilityInitializer.AbilityList) {
-            ability.setRunAbility(true);
-            ability.setPlayer(ability.getPlayer(), false);
-        }
-    }
-
 
     private void showWarningMessage() {
         for (Player player : playerList) {
@@ -405,21 +350,13 @@ public class GameManager {
 
         private void handleStartTimer(int count) {
             if (count == 0) {
-                gameWarningStop();
+                gameWarningTimer.endTimer();
             } else if (count == 3) {
                 broadcastMessage(ChatColor.WHITE + "모든 플레이어들의 능력을 확정했습니다.");
             } else if (count == 5) {
                 broadcastMessage(ChatColor.YELLOW + "잠시 후 게임이 시작됩니다.");
-            } else if (count == 10) {
-                broadcastMessage(ChatColor.GOLD + "5초 전");
-            } else if (count == 11) {
-                broadcastMessage(ChatColor.GOLD + "4초 전");
-            } else if (count == 12) {
-                broadcastMessage(ChatColor.GOLD + "3초 전");
-            } else if (count == 13) {
-                broadcastMessage(ChatColor.GOLD + "2초 전");
-            } else if (count == 14) {
-                broadcastMessage(ChatColor.GOLD + "1초 전");
+            } else if (count >= 10 && count <= 14) {
+                broadcastMessage(ChatColor.GOLD + String.format("%d초 전", 15 - count));
             } else if (count == 15) {
                 startGameLogic();
             }

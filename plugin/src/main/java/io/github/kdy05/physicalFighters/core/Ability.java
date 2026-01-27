@@ -77,6 +77,15 @@ public abstract class Ability {
         Ability.plugin = plugin;
     }
 
+    // GameManager 위임 메서드
+    protected static GameManager.ScriptStatus getScenario() {
+        return plugin.getGameManager().getScenario();
+    }
+
+    protected static int getGameTime() {
+        return plugin.getGameManager().getGameTime();
+    }
+
     protected final void InitAbility(String AbilityName, Type type, Rank rank, String... Manual) {
         this.AbilityName = AbilityName;
         this.type = type;

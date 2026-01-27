@@ -93,7 +93,8 @@ public final class EventManager implements Listener {
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
-        if (GameManager.getScenario() == GameManager.ScriptStatus.GameStart && event instanceof PlayerDeathEvent) {
+        if (plugin.getGameManager().getScenario() == GameManager.ScriptStatus.GameStart
+                && event instanceof PlayerDeathEvent) {
             PlayerDeathEvent pde = (PlayerDeathEvent) event;
             Player victim = (Player) event.getEntity();
             Player killer = victim.getKiller();

@@ -37,9 +37,9 @@ public class Lockdown extends Ability implements CommandInterface {
             return -1;
         }
 
-        int currentTime = plugin.getGameManager().getGameTime();
+        int currentTime = getGameTime();
         int restrictionTime = plugin.getConfigManager().getRestrictionTime();
-        if (GameManager.getScenario() == GameManager.ScriptStatus.GameStart && currentTime <= restrictionTime * 60) {
+        if (getScenario() == GameManager.ScriptStatus.GameStart && currentTime <= restrictionTime * 60) {
             caster.sendMessage(ChatColor.RED + "아직 능력 제한 시간입니다. " + String.format("(%d/%d)",
                     currentTime / 60, restrictionTime));
             return -1;

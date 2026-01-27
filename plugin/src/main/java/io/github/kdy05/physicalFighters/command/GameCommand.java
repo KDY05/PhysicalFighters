@@ -109,16 +109,11 @@ public final class GameCommand implements CommandInterface {
     }
 
     private void handleStop(CommandSender sender) {
-        if (GameManager.getScenario() == GameManager.ScriptStatus.NoPlay) {
+        if (this.gameManager.getScenario() == GameManager.ScriptStatus.NoPlay) {
             sender.sendMessage(ChatColor.RED + "아직 게임을 시작하지 않았습니다.");
             return;
         }
-        GameManager.setScenario(GameManager.ScriptStatus.NoPlay);
-        this.gameManager.gameReadyStop();
-        this.gameManager.gameStartStop();
-        this.gameManager.gameProgressStop();
-        this.gameManager.gameWarningStop();
-        this.gameManager.getOKSign().clear();
+        this.gameManager.stopGame();
         InvincibilityManager.setDamageGuard(false);
         for (int l = 0; l < AbilityInitializer.AbilityList.size(); l++) {
             AbilityInitializer.AbilityList.get(l).cancelDTimer();
@@ -126,7 +121,6 @@ public final class GameCommand implements CommandInterface {
             AbilityInitializer.AbilityList.get(l).setRunAbility(false);
             AbilityInitializer.AbilityList.get(l).setPlayer(null, false);
         }
-        GameManager.getPlayerList().clear();
         Bukkit.broadcastMessage(ChatColor.GRAY + "------------------------------");
         Bukkit.broadcastMessage(String.format(ChatColor.YELLOW +
                 "관리자 %s님이 게임 카운터를 중단시켰습니다.", sender.getName()));
@@ -135,12 +129,10 @@ public final class GameCommand implements CommandInterface {
     }
 
     private void handleSkip(CommandSender sender) {
-        if (GameManager.getScenario() == GameManager.ScriptStatus.AbilitySelect) {
+        if (this.gameManager.getScenario() == GameManager.ScriptStatus.AbilitySelect) {
             Bukkit.broadcastMessage(String.format(ChatColor.GRAY +
                     "관리자 %s님이 능력을 강제로 확정시켰습니다.", sender.getName()));
-            this.gameManager.getOKSign().clear();
-            this.gameManager.getOKSign().addAll(GameManager.getPlayerList());
-            this.gameManager.gameStart();
+            gameManager.forceGameStart();
         } else {
             sender.sendMessage(ChatColor.RED + "능력 추첨중이 아닙니다.");
         }
