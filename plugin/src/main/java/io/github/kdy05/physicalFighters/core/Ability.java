@@ -1,40 +1,52 @@
 package io.github.kdy05.physicalFighters.core;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
-
-import io.github.kdy05.physicalFighters.util.AbilityInitializer;
+import io.github.kdy05.physicalFighters.util.TimerBase;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import io.github.kdy05.physicalFighters.util.TimerBase;
 
 import java.util.UUID;
 
 public abstract class Ability {
-    protected static PhysicalFighters plugin;
-    protected static Material DefaultItem = Material.IRON_INGOT;
+    protected static final PhysicalFighters plugin = PhysicalFighters.getPlugin();
+    protected static final Material DefaultItem = Material.IRON_INGOT;
 
-    private static int AbilityCount = 0;
-    private CoolDownTimer CTimer;
-    private DurationTimer DTimer;
-    private int CoolDown = 0;
-    private int Duration = 0;
+    private final int CoolDown;
+    private final int Duration;
+    private final CoolDownTimer CTimer;
+    private final DurationTimer DTimer;
+    private final String AbilityName;
+    private final Type type;
+    private final Rank rank;
+    private final String[] Guide;
+    private final ShowText showtext;
+
     private UUID playerUuid = null;
-    private String AbilityName;
-    private Type type;
-    private Rank rank;
-    private String[] Guide;
-    private boolean RunAbility = true;
-    private ShowText showtext = ShowText.All_Text;
+    private boolean RunAbility;
 
     public enum Type {
-        Passive_AutoMatic, Passive_Manual, Active_Immediately, Active_Continue
+        Passive_AutoMatic(new String[]{"패시브", "자동"}),
+        Passive_Manual(new String[]{"패시브", "수동"}),
+        Active_Immediately(new String[]{"액티브", "즉발"}),
+        Active_Continue(new String[]{"액티브", "지속"});
+
+        private final String[] text;
+
+        Type(String[] text) {
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return ChatColor.GREEN + text[0] + ChatColor.WHITE + " / " + ChatColor.GOLD + text[1] + ChatColor.WHITE;
+        }
     }
 
-    public enum Rank {
+    protected enum Rank {
         SSS(ChatColor.DARK_PURPLE + "Special Rank"), SS(ChatColor.GOLD + "SS Rank"),
         S(ChatColor.RED + "S Rank"), A(ChatColor.GREEN + "A Rank"),
         B(ChatColor.BLUE + "B Rank"), C(ChatColor.YELLOW + "C Rank"),
@@ -52,11 +64,11 @@ public abstract class Ability {
         }
     }
 
-    public enum ShowText {
+    protected enum ShowText {
         All_Text, No_CoolDownText, No_DurationText, Custom_Text
     }
 
-    public enum Usage {
+    protected enum Usage {
         IronLeft("철괴 좌클릭"), IronRight("철괴 우클릭"),
         IronAttack("철괴 타격"), GoldRight("금괴 우클릭"),
         GoldLeft("금괴 좌클릭"), Passive("패시브");
@@ -73,62 +85,21 @@ public abstract class Ability {
         }
     }
 
-    public static void initPlugin(PhysicalFighters plugin) {
-        Ability.plugin = plugin;
-    }
+    protected Ability(AbilitySpec spec) {
+        this.AbilityName = spec.name();
+        this.type = spec.type();
+        this.rank = spec.rank();
+        this.Guide = spec.guide().clone();
+        this.RunAbility = spec.runAbility();
+        this.showtext = spec.showText();
 
-    // GameManager 위임 메서드
-    protected static GameManager.ScriptStatus getScenario() {
-        return plugin.getGameManager().getScenario();
-    }
+        this.CoolDown = (type == Type.Active_Continue || type == Type.Active_Immediately)
+                ? spec.cooldown() : -1;
+        this.Duration = type == Type.Active_Continue ? spec.duration() : -1;
 
-    protected static int getGameTime() {
-        return plugin.getGameManager().getGameTime();
-    }
-
-    protected final void InitAbility(String AbilityName, Type type, Rank rank, String... Manual) {
-        this.AbilityName = AbilityName;
-        this.type = type;
-        this.Guide = new String[Manual.length];
-        System.arraycopy(Manual, 0, this.Guide, 0, Manual.length);
         this.CTimer = new CoolDownTimer(this);
         this.DTimer = new DurationTimer(this, this.CTimer);
-        this.rank = rank;
     }
-
-    protected final void InitAbility(int CoolDown, int Duration, boolean RunAbility) {
-        InitAbility(CoolDown, Duration, RunAbility, ShowText.All_Text);
-    }
-
-    protected final void InitAbility(int CoolDown, int Duration, boolean RunAbility, ShowText showtext) {
-        this.CoolDown = (this.type == Type.Active_Continue || this.type == Type.Active_Immediately)
-                ? CoolDown : -1;
-        this.Duration = this.type == Type.Active_Continue ? Duration : -1;
-        this.RunAbility = RunAbility;
-        this.showtext = showtext;
-        AbilityInitializer.AbilityList.add(this);
-        AbilityCount += 1;
-    }
-
-    // Events
-
-    public abstract int A_Condition(Event paramEvent, int paramInt);
-
-    public abstract void A_Effect(Event paramEvent, int paramInt);
-
-    public void A_SetEvent(Player p) {}
-
-    public void A_ResetEvent(Player p) {}
-
-    public void A_CoolDownStart() {}
-
-    public void A_CoolDownEnd() {}
-
-    public void A_DurationStart() {}
-
-    public void A_DurationEnd() {}
-
-    public void A_FinalDurationEnd() {}
 
     // Common Utils
 
@@ -159,7 +130,11 @@ public abstract class Ability {
         player.sendMessage(message);
     }
 
-    public final void setPlayer(Player p, boolean textout) {
+    public final Player getPlayer() {
+        return this.playerUuid != null ? Bukkit.getPlayer(this.playerUuid) : null;
+    }
+
+    public final void setPlayer(Player player, boolean textout) {
         this.DTimer.stopTimer();
         this.CTimer.stopTimer();
         Player currentPlayer = getPlayer();
@@ -170,14 +145,14 @@ public abstract class Ability {
             }
             A_ResetEvent(currentPlayer);
         }
-        if (p != null && this.RunAbility) {
+        if (player != null && this.RunAbility) {
             if (textout) {
-                p.sendMessage(String.format(ChatColor.GREEN + "%s" +
+                player.sendMessage(String.format(ChatColor.GREEN + "%s" +
                     ChatColor.WHITE + " 능력이 설정되었습니다.", getAbilityName()));
             }
-            A_SetEvent(p);
+            A_SetEvent(player);
         }
-        this.playerUuid = p != null ? p.getUniqueId() : null;
+        this.playerUuid = player != null ? player.getUniqueId() : null;
     }
 
     public final void execute(Event event, int CustomData) {
@@ -195,14 +170,14 @@ public abstract class Ability {
             }
             // 쿨타임 알림 후 종료
             if (this.CTimer.isRunning()) {
-                if (getShowText() != ShowText.No_CoolDownText) {
+                if (showtext != ShowText.No_CoolDownText) {
                     getPlayer().sendMessage(String.format(ChatColor.WHITE + "%d초"
                         + ChatColor.RED + " 후 능력을 다시 사용하실 수 있습니다.", this.CTimer.getCount()));
                 }
                 return;
             }
             // 능력 사용 알림
-            if (getShowText() != ShowText.Custom_Text)
+            if (showtext != ShowText.Custom_Text)
                 getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "능력을 사용했습니다.");
         }
 
@@ -221,6 +196,26 @@ public abstract class Ability {
 
     }
 
+    // Events
+
+    public abstract int A_Condition(Event paramEvent, int paramInt);
+
+    public abstract void A_Effect(Event paramEvent, int paramInt);
+
+    public void A_SetEvent(Player p) {}
+
+    public void A_ResetEvent(Player p) {}
+
+    public void A_CoolDownStart() {}
+
+    public void A_CoolDownEnd() {}
+
+    public void A_DurationStart() {}
+
+    public void A_DurationEnd() {}
+
+    public void A_FinalDurationEnd() {}
+
     // Timer Managing
 
     public final void cancelDTimer() {
@@ -231,23 +226,11 @@ public abstract class Ability {
         this.CTimer.stopTimer();
     }
 
-    public int getCool() {
-        return this.CTimer.getCount();
-    }
-
-    public void setCool(int i) {
-        this.CTimer.setCount(i);
-    }
-
     public final boolean getDurationState() {
         return this.DTimer.isRunning();
     }
 
     // Getter, Setter
-
-    public static int getAbilityCount() {
-        return AbilityCount;
-    }
 
     public final int getCoolDown() {
         return this.CoolDown;
@@ -255,10 +238,6 @@ public abstract class Ability {
 
     public final int getDuration() {
         return this.Duration;
-    }
-
-    public final Player getPlayer() {
-        return this.playerUuid != null ? Bukkit.getPlayer(this.playerUuid) : null;
     }
 
     public final String getAbilityName() {
@@ -269,24 +248,16 @@ public abstract class Ability {
         return this.type;
     }
 
-    public final Rank getRank() {
-        return this.rank;
+    public final String getRankText() {
+        return this.rank.toString();
     }
 
     public final String[] getGuide() {
         return this.Guide;
     }
 
-    public final boolean getRunAbility() {
-        return this.RunAbility;
-    }
-
     public final void setRunAbility(boolean RunAbility) {
         this.RunAbility = RunAbility;
-    }
-
-    public final ShowText getShowText() {
-        return this.showtext;
     }
 
     // Timer Classes
@@ -305,7 +276,7 @@ public abstract class Ability {
 
         @Override
         public void onTimerRunning(int count) {
-            ShowText showText = ability.getShowText();
+            ShowText showText = ability.showtext;
             if (count <= 3 && count >= 1 && showText != ShowText.No_CoolDownText && showText != ShowText.Custom_Text
                     && ability.getPlayer() != null) {
                 ability.getPlayer().sendMessage(String.format(ChatColor.RED
@@ -316,7 +287,7 @@ public abstract class Ability {
         @Override
         public void onTimerEnd() {
             ability.A_CoolDownEnd();
-            if (ability.getShowText() != ShowText.Custom_Text && ability.getPlayer() != null)
+            if (ability.showtext != ShowText.Custom_Text && ability.getPlayer() != null)
                 ability.getPlayer().sendMessage(ChatColor.AQUA + "다시 능력을 사용할 수 있습니다.");
         }
     }
@@ -338,7 +309,7 @@ public abstract class Ability {
         @Override
         public void onTimerRunning(int count) {
             if (ability.getPlayer() == null) return;
-            ShowText showText = ability.getShowText();
+            ShowText showText = ability.showtext;
             if (count <= 3 && count >= 1 && showText != ShowText.No_DurationText && showText != ShowText.Custom_Text
                     && ability.getPlayer() != null) {
                 ability.getPlayer().sendMessage(String.format(ChatColor.GREEN
@@ -349,7 +320,7 @@ public abstract class Ability {
         @Override
         public void onTimerEnd() {
             ability.A_DurationEnd();
-            if (ability.getShowText() != ShowText.Custom_Text && ability.getPlayer() != null)
+            if (ability.showtext != ShowText.Custom_Text && ability.getPlayer() != null)
                 ability.getPlayer().sendMessage(ChatColor.GREEN + "능력 지속시간이 끝났습니다.");
             ctimer.startTimer(ability.getCoolDown(), true);
         }

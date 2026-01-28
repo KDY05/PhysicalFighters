@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.util.Vector;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -14,10 +15,11 @@ import io.github.kdy05.physicalFighters.util.AbilityUtils;
 
 public class Luffy extends Ability {
     public Luffy() {
-        InitAbility("루피", Type.Active_Immediately, Rank.S,
-                Usage.IronLeft + "사거리가 긴 주먹질을 합니다.",
-                Usage.GoldLeft + "체력을 5 소모하여 30초간 여러 버프를 얻습니다.");
-        InitAbility(0, 0, true, ShowText.Custom_Text);
+        super(AbilitySpec.builder("루피", Type.Active_Immediately, Rank.S)
+                .showText(ShowText.Custom_Text)
+                .guide(Usage.IronLeft + "사거리가 긴 주먹질을 합니다.",
+                        Usage.GoldLeft + "체력을 5 소모하여 30초간 여러 버프를 얻습니다.")
+                .build());
         registerLeftClickEvent();
     }
 

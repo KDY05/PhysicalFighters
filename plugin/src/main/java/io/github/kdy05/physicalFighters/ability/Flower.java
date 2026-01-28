@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
@@ -15,10 +16,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Flower extends Ability {
     public Flower() {
-        InitAbility("흡혈초", Type.Active_Immediately, Rank.SS,
-               Usage.IronAttack + "맞은 사람의 체력을 흡수합니다.",
-               Usage.IronRight + "자신의 체력을 소비해 레벨을 얻습니다.");
-        InitAbility(30, 0, true);
+        super(AbilitySpec.builder("흡혈초", Type.Active_Immediately, Rank.SS)
+                .cooldown(30)
+                .guide(Usage.IronAttack + "맞은 사람의 체력을 흡수합니다.",
+                        Usage.IronRight + "자신의 체력을 소비해 레벨을 얻습니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this));
         registerRightClickEvent();
     }

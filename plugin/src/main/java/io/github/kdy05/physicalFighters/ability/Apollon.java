@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.ChatColor;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,9 +16,10 @@ public class Apollon extends Ability {
     private Location targetLocation = null;
 
     public Apollon() {
-        InitAbility("아폴론", Type.Active_Immediately, Rank.S,
-               Usage.IronLeft + "바라보는 방향에 불구덩이를 만듭니다.");
-        InitAbility(45, 0, true);
+        super(AbilitySpec.builder("아폴론", Type.Active_Immediately, Rank.S)
+                .cooldown(45)
+                .guide(Usage.IronLeft + "바라보는 방향에 불구덩이를 만듭니다.")
+                .build());
         registerLeftClickEvent();
     }
 

@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
@@ -23,10 +24,11 @@ public class Teleporter extends Ability implements BaseItem {
     private static Location signLoc = null;
 
     public Teleporter() {
-        InitAbility("소환술사", Type.Active_Immediately, Rank.A,
-                Usage.IronLeft + "표지판을 설치하고 첫 줄에 플레이어의 이름(자신도 가능)을 적으면,",
-                "능력 사용 시 이름이 적힌 플레이어가 표지판으로 이동합니다.");
-        InitAbility(300, 0, true);
+        super(AbilitySpec.builder("소환술사", Type.Active_Immediately, Rank.A)
+                .cooldown(300)
+                .guide(Usage.IronLeft + "표지판을 설치하고 첫 줄에 플레이어의 이름(자신도 가능)을 적으면,",
+                        "능력 사용 시 이름이 적힌 플레이어가 표지판으로 이동합니다.")
+                .build());
         registerLeftClickEvent();
         EventManager.onSignChangeEvent.add(new EventData(this, 1));
         EventManager.onBlockBreakEvent.add(new EventData(this, 2));

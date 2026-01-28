@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
@@ -13,10 +14,10 @@ import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 
 public class Demigod extends Ability {
     public Demigod() {
-        InitAbility("데미갓", Type.Passive_AutoMatic, Rank.S,
-                "반은 인간, 반은 신인 능력자입니다.",
-                "대미지를 받으면 일정 확률로 10초간 랜덤 버프가 발동됩니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("데미갓", Type.Passive_AutoMatic, Rank.S)
+                .guide("반은 인간, 반은 신인 능력자입니다.",
+                        "대미지를 받으면 일정 확률로 10초간 랜덤 버프가 발동됩니다.")
+                .build());
         EventManager.onEntityDamage.add(new EventData(this));
     }
 

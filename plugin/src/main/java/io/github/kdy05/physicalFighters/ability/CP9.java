@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
@@ -18,11 +19,12 @@ import org.bukkit.util.Vector;
 
 public class CP9 extends Ability {
     public CP9() {
-        InitAbility("CP9", Type.Active_Immediately, Rank.SS,
-                Usage.IronAttack + "상대에게 6의 고정 대미지를 줍니다.",
-                Usage.IronRight + "바라보는 방향으로 빠르게 도약합니다.",
-                Usage.Passive + "낙하 대미지를 무시합니다.");
-        InitAbility(20, 0, true);
+        super(AbilitySpec.builder("CP9", Type.Active_Immediately, Rank.SS)
+                .guide(Usage.IronAttack + "상대에게 6의 고정 대미지를 줍니다.",
+                        Usage.IronRight + "바라보는 방향으로 빠르게 도약합니다.",
+                        Usage.Passive + "낙하 대미지를 무시합니다.")
+                .cooldown(20)
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerRightClickEvent();
         EventManager.onEntityDamage.add(new EventData(this, 2));

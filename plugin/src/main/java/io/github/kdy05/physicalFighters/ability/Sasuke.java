@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -11,9 +12,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Sasuke extends Ability {
     public Sasuke() {
-        InitAbility("사스케", Type.Active_Immediately, Rank.S,
-                Usage.IronAttack + "치도리 - 엄청난 대미지로 감전시킵니다.");
-        InitAbility(30, 0, true);
+        super(AbilitySpec.builder("사스케", Type.Active_Immediately, Rank.S)
+                .cooldown(30)
+                .guide(Usage.IronAttack + "치도리 - 엄청난 대미지로 감전시킵니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 

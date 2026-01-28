@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -13,10 +14,11 @@ import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 
 public class Trash extends Ability {
     public Trash() {
-        InitAbility("쓰레기", Type.Active_Immediately, Rank.F,
-               Usage.IronRight + "체력을 소비하여 1분간 허약해집니다.",
-              Usage.IronAttack + "3% 확률로 능력을 서로 바꿉니다.");
-        InitAbility(10, 0, true);
+        super(AbilitySpec.builder("쓰레기", Type.Active_Immediately, Rank.F)
+                .cooldown(10)
+                .guide(Usage.IronRight + "체력을 소비하여 1분간 허약해집니다.",
+                        Usage.IronAttack + "3% 확률로 능력을 서로 바꿉니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this));
         registerRightClickEvent();
     }

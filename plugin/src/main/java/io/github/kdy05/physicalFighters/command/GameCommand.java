@@ -171,7 +171,7 @@ public final class GameCommand implements CommandInterface {
             Ability ability = AbilityInitializer.AbilityList.get(code);
             sender.sendMessage(String.format(
                     ChatColor.GREEN + "[%d] " + ChatColor.WHITE + "%s " + ChatColor.GRAY + "%s",
-                    code, ability.getAbilityName(), ability.getRank()));
+                    code, ability.getAbilityName(), ability.getRankText()));
         }
         
         if (totalAbilities == 0) {

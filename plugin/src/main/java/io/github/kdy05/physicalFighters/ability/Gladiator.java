@@ -5,6 +5,7 @@ import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -25,10 +26,12 @@ public class Gladiator extends Ability {
     private LivingEntity target = null;
 
     public Gladiator() {
-        InitAbility("글레디에이터", Type.Active_Continue, Rank.SSS,
-                Usage.IronAttack + "천공의 투기장으로 이동하여 15초간 1:1 대결을 펼칩니다.",
-                "이때 상대는 디버프, 당신은 버프를 받습니다.");
-        InitAbility(60, DURATION_TICKS / 20, true);
+        super(AbilitySpec.builder("글레디에이터", Type.Active_Continue, Rank.SSS)
+                .cooldown(60)
+                .duration(DURATION_TICKS / 20)
+                .guide(Usage.IronAttack + "천공의 투기장으로 이동하여 15초간 1:1 대결을 펼칩니다.",
+                        "이때 상대는 디버프, 당신은 버프를 받습니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
     }
 

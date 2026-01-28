@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.AbilityInitializer;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -15,9 +16,9 @@ import java.util.Objects;
 
 public class Mirroring extends Ability {
     public Mirroring() {
-        InitAbility("미러링", Type.Passive_Manual, Rank.SSS,
-                "당신을 죽인 사람을 함께 저승으로 끌고갑니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("미러링", Type.Passive_Manual, Rank.SSS)
+                .guide("당신을 죽인 사람을 함께 저승으로 끌고갑니다.")
+                .build());
         EventManager.onEntityDeath.add(new EventData(this));
     }
 

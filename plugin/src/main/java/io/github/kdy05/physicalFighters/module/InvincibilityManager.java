@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class InvincibilityManager implements Listener {
+public final class InvincibilityManager implements Listener {
 
     private static boolean damageGuard = false;
 

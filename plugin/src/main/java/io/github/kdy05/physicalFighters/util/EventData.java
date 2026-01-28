@@ -2,7 +2,7 @@ package io.github.kdy05.physicalFighters.util;
 
 import io.github.kdy05.physicalFighters.core.Ability;
 
-public class EventData {
+public final class EventData {
     public Ability ability;
     public int parameter;
 

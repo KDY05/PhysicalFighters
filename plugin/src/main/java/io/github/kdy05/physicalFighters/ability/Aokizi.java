@@ -5,6 +5,7 @@ import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.*;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -19,11 +20,13 @@ import io.github.kdy05.physicalFighters.util.AbilityUtils;
 
 public class Aokizi extends Ability {
     public Aokizi() {
-        InitAbility("아오키지", Type.Active_Immediately, Rank.S,
-               Usage.IronLeft + "자신이 보고있는 방향으로 얼음을 날립니다.",
-              Usage.IronRight + "바라보고 있는 5칸 이내의 물을 얼립니다.",
-              Usage.Passive + "자신이 공격한 적을 2초간 느리게 만듭니다.");
-        InitAbility(1, 0, true, ShowText.Custom_Text);
+        super(AbilitySpec.builder("아오키지", Type.Active_Immediately, Rank.S)
+                .cooldown(1)
+                .showText(ShowText.Custom_Text)
+                .guide(Usage.IronLeft + "자신이 보고있는 방향으로 얼음을 날립니다.",
+                        Usage.IronRight + "바라보고 있는 5칸 이내의 물을 얼립니다.",
+                        Usage.Passive + "자신이 공격한 적을 2초간 느리게 만듭니다.")
+                .build());
         registerLeftClickEvent();
         registerRightClickEvent();
         EventManager.onEntityDamageByEntity.add(new EventData(this, 2));

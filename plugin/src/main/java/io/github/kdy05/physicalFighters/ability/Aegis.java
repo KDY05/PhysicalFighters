@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -12,10 +13,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Aegis extends Ability {
     public Aegis() {
-        InitAbility("이지스", Type.Active_Continue, Rank.A,
-                Usage.IronLeft + "6초 동안 무적이 됩니다.",
-                "능력 사용 중엔 미러링 능력도 무시합니다.");
-        InitAbility(28, 6, true);
+        super(AbilitySpec.builder("이지스", Type.Active_Continue, Rank.A)
+                .cooldown(28)
+                .duration(6)
+                .guide(Usage.IronLeft + "6초 동안 무적이 됩니다.",
+                        "능력 사용 중엔 미러링 능력도 무시합니다.")
+                .build());
         registerLeftClickEvent();
         EventManager.onEntityDamage.add(new EventData(this, 1));
     }

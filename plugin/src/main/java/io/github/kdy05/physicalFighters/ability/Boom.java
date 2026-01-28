@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -12,9 +13,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Boom extends Ability {
     public Boom() {
-        InitAbility("붐포인트", Type.Active_Continue, Rank.S,
-                Usage.IronLeft + "20초간 10m 안에 있는 적을 폭발시킵니다.");
-        InitAbility(60, 20, true);
+        super(AbilitySpec.builder("붐포인트", Type.Active_Continue, Rank.S)
+                .cooldown(60)
+                .duration(20)
+                .guide(Usage.IronLeft + "20초간 10m 안에 있는 적을 폭발시킵니다.")
+                .build());
         registerLeftClickEvent();
     }
 

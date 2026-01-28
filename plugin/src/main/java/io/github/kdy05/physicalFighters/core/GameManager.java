@@ -2,6 +2,7 @@ package io.github.kdy05.physicalFighters.core;
 
 import io.github.kdy05.physicalFighters.BuildConfig;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.util.AbilityInitializer;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.util.TimerBase;
 import org.bukkit.Bukkit;
@@ -156,7 +157,7 @@ public final class GameManager {
         broadcastMessage(ChatColor.AQUA + "인식된 플레이어 목록");
         broadcastMessage(ChatColor.GOLD + "==========");
 
-        int abilityCount = Ability.getAbilityCount();
+        int abilityCount = AbilityInitializer.AbilityList.size();
         int index = 0;
         int overflowCount = 0;
 
@@ -222,7 +223,7 @@ public final class GameManager {
     private void processAbilitySelection() {
         scenario = ScriptStatus.AbilitySelect;
 
-        if (playerList.size() < Ability.getAbilityCount()) {
+        if (playerList.size() < AbilityInitializer.AbilityList.size()) {
             distributeAbilitiesWithChoice();
             gameWarningTimer.startTimer(MAX_TIMER_DURATION, false);
         } else {

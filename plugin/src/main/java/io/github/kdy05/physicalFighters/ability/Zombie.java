@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import io.github.kdy05.physicalFighters.core.EventManager;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -13,9 +14,9 @@ import io.github.kdy05.physicalFighters.util.EventData;
 
 public class Zombie extends Ability {
     public Zombie() {
-        InitAbility("좀비", Type.Passive_AutoMatic, Rank.B,
-                "모든 대미지의 반을 흡수합니다. 단, 화염 대미지를 8배로 받습니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("좀비", Type.Passive_AutoMatic, Rank.B)
+                .guide("모든 대미지의 반을 흡수합니다. 단, 화염 대미지를 8배로 받습니다.")
+                .build());
         EventManager.onEntityDamage.add(new EventData(this));
         EventManager.onEntityDamageByEntity.add(new EventData(this, 1));
     }

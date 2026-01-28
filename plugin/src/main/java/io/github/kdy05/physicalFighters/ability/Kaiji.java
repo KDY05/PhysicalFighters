@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
@@ -16,9 +17,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class Kaiji extends Ability implements BaseItem {
     public Kaiji() {
-        InitAbility("카이지", Type.Passive_Manual, Rank.S,
-                "다이아몬드로 상대 타격 시 30% 확률로 상대를 즉사시키고, 70% 확률로 자신이 사망합니다.");
-        InitAbility(20, 0, true);
+        super(AbilitySpec.builder("카이지", Type.Passive_Manual, Rank.S)
+                .cooldown(20)
+                .guide("다이아몬드로 상대 타격 시 30% 확률로 상대를 즉사시키고, 70% 확률로 자신이 사망합니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerBaseItemEvents();
     }

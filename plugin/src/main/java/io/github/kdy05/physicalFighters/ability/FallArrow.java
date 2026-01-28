@@ -4,6 +4,7 @@ import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -18,9 +19,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class FallArrow extends Ability implements BaseItem {
     public FallArrow() {
-        InitAbility("중력화살", Type.Passive_Manual, Rank.S,
-                "화살에 맞은 플레이어는 공중으로 뜹니다. [추가타 가능]");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("중력화살", Type.Passive_Manual, Rank.S)
+                .guide("화살에 맞은 플레이어는 공중으로 뜹니다. [추가타 가능]")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerBaseItemEvents();
     }

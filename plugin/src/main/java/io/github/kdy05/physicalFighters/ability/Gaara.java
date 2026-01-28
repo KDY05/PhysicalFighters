@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import org.bukkit.ChatColor;
@@ -17,9 +18,10 @@ public class Gaara extends Ability {
     private Location targetLocation = null;
 
     public Gaara() {
-        InitAbility("가아라", Type.Active_Immediately, Rank.B,
-                Usage.IronLeft + "바라보는 방향에 모래를 떨어뜨리고, 잠시 후 폭발시킵니다.");
-        InitAbility(45, 0, true);
+        super(AbilitySpec.builder("가아라", Type.Active_Immediately, Rank.B)
+                .guide(Usage.IronLeft + "바라보는 방향에 모래를 떨어뜨리고, 잠시 후 폭발시킵니다.")
+                .cooldown(45)
+                .build());
         registerLeftClickEvent();
     }
 

@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -11,9 +12,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class NuclearPunch extends Ability {
     public NuclearPunch() {
-        InitAbility("핵펀치", Type.Active_Immediately, Rank.A,
-                Usage.IronAttack + "대미지 20을 주며 매우 멀리 밀쳐버립니다.");
-        InitAbility(45, 0, true);
+        super(AbilitySpec.builder("핵펀치", Type.Active_Immediately, Rank.A)
+                .cooldown(45)
+                .guide(Usage.IronAttack + "대미지 20을 주며 매우 멀리 밀쳐버립니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 

@@ -164,23 +164,6 @@ public final class AbilityUtils {
                 senderName, target.getName(), ability.getAbilityName()));
     }
 
-    public static String getTypeText(Ability ability) {
-        Ability.Type type = ability.getAbilityType();
-        if (type == null) {
-            return "Unknown";
-        } else if (type == Ability.Type.Active_Continue) {
-            return ChatColor.GREEN + "액티브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "지속" + ChatColor.WHITE;
-        } else if (type == Ability.Type.Active_Immediately) {
-            return ChatColor.GREEN + "액티브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "즉발" + ChatColor.WHITE;
-        } else if (type == Ability.Type.Passive_AutoMatic) {
-            return ChatColor.GREEN + "패시브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "자동" + ChatColor.WHITE;
-        } else if (type == Ability.Type.Passive_Manual) {
-            return ChatColor.GREEN + "패시브 " + ChatColor.WHITE + "/ " + ChatColor.GOLD + "수동" + ChatColor.WHITE;
-        } else {
-            return "Unknown";
-        }
-    }
-
     public static void showInfo(Player player, boolean abilityOverLap) {
         Ability ability;
         if (AbilityInitializer.assimilation.getPlayer() == player) {
@@ -197,7 +180,7 @@ public final class AbilityUtils {
         if (abilityOverLap)
             player.sendMessage(ChatColor.DARK_AQUA + "참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.");
         player.sendMessage(ChatColor.AQUA + ability.getAbilityName() + ChatColor.WHITE
-                + " [" + getTypeText(ability) + "] " + ability.getRank());
+                + " [" + ability.getAbilityType() + "] " + ability.getRankText());
         for (int l = 0; l < ability.getGuide().length; l++) {
             player.sendMessage(ability.getGuide()[l]);
         }

@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import org.bukkit.entity.Player;
@@ -10,9 +11,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class Ace extends Ability {
     public Ace() {
-        InitAbility("에이스", Type.Active_Continue, Rank.S,
-                Usage.IronLeft + "능력 지속시간 동안 자신의 주변에 있는 적들을 불태웁니다.");
-        InitAbility(40, 20, true);
+        super(AbilitySpec.builder("에이스", Type.Active_Continue, Rank.S)
+                .cooldown(40)
+                .duration(20)
+                .guide(Usage.IronLeft + "능력 지속시간 동안 자신의 주변에 있는 적들을 불태웁니다.")
+                .build());
         registerLeftClickEvent();
     }
 

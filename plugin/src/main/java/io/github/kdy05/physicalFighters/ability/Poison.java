@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -11,9 +12,9 @@ import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 
 public class Poison extends Ability {
     public Poison() {
-        InitAbility("포이즌", Type.Passive_AutoMatic, Rank.A,
-                "자신에게 공격받은 사람은 3초간 독에 감염됩니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("포이즌", Type.Passive_AutoMatic, Rank.A)
+                .guide("자신에게 공격받은 사람은 3초간 독에 감염됩니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 

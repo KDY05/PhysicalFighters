@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -25,11 +26,11 @@ public class Phoenix extends Ability {
     private final HashMap<Player, ItemStack[]> invsave = new HashMap<>();
 
     public Phoenix() {
-        InitAbility("불사조", Type.Passive_Manual, Rank.A,
-                "자연사할 시 무제한으로 인벤토리를 잃지 않고 부활합니다.",
-                "타인에게 사망할 경우 1회에 한하여 자연사 판정으로 부활합니다.",
-                "부활시 자신의 능력이 모두에게 알려지게 됩니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("불사조", Type.Passive_Manual, Rank.A)
+                .guide("자연사할 시 무제한으로 인벤토리를 잃지 않고 부활합니다.",
+                        "타인에게 사망할 경우 1회에 한하여 자연사 판정으로 부활합니다.",
+                        "부활시 자신의 능력이 모두에게 알려지게 됩니다.")
+                .build());
         EventManager.onEntityDeath.add(new EventData(this, 0));
         EventManager.onPlayerRespawn.add(new EventData(this, 1));
     }

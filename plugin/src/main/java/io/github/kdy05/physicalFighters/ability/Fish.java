@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -41,10 +42,10 @@ public class Fish extends Ability implements BaseItem {
     }
 
     public Fish() {
-        InitAbility("강태공", Type.Passive_Manual, Rank.A,
-                "낚싯대로 타격 시 강한 대미지를 주고, 낮은 확률로 전용 물고기를 얻습니다.",
-                "물고기를 들고 타격 시, 더욱 강한 대미지를 줍니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("강태공", Type.Passive_Manual, Rank.A)
+                .guide("낚싯대로 타격 시 강한 대미지를 주고, 낮은 확률로 전용 물고기를 얻습니다.",
+                        "물고기를 들고 타격 시, 더욱 강한 대미지를 줍니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerBaseItemEvents();
     }

@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -18,10 +19,11 @@ public class Roclee extends Ability {
     private boolean fallDamageImmune = false;
 
     public Roclee() {
-        InitAbility("록리", Type.Active_Immediately, Rank.S,
-                Usage.IronAttack + "피해를 입히며 공중으로 끌어올립니다.",
-                "이때 시전자는 5초간 낙하 대미지를 받지 않습니다.");
-        InitAbility(20, 0, true);
+        super(AbilitySpec.builder("록리", Type.Active_Immediately, Rank.S)
+                .cooldown(20)
+                .guide(Usage.IronAttack + "피해를 입히며 공중으로 끌어올립니다.",
+                        "이때 시전자는 5초간 낙하 대미지를 받지 않습니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         EventManager.onEntityDamage.add(new EventData(this, 1));
     }

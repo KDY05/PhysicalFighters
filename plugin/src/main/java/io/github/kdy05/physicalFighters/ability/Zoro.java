@@ -2,6 +2,7 @@ package io.github.kdy05.physicalFighters.ability;
 
 import org.bukkit.ChatColor;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -18,9 +19,10 @@ public class Zoro extends Ability {
     private double dmg = 0;
 
     public Zoro() {
-        InitAbility("조로", Type.Active_Immediately, Rank.S,
-                Usage.IronLeft + "능력 사용 시 칼의 대미지가 랜덤으로 설정됩니다.");
-        InitAbility(45, 0, true);
+        super(AbilitySpec.builder("조로", Type.Active_Immediately, Rank.S)
+                .cooldown(45)
+                .guide(Usage.IronLeft + "능력 사용 시 칼의 대미지가 랜덤으로 설정됩니다.")
+                .build());
         registerLeftClickEvent();
         EventManager.onEntityDamageByEntity.add(new EventData(this, 1));
     }

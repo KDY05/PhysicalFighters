@@ -4,6 +4,7 @@ import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.Bukkit;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -24,9 +25,10 @@ public class Guard extends Ability {
     private Location targetLocation = null;
 
     public Guard() {
-        InitAbility("목둔", Type.Active_Immediately, Rank.A,
-                Usage.IronLeft + "바라보는 위치에 나무벽을 설치합니다. 주위에 플레이어가 있으면 가둡니다.");
-        InitAbility(30, 0, true);
+        super(AbilitySpec.builder("목둔", Type.Active_Immediately, Rank.A)
+                .cooldown(30)
+                .guide(Usage.IronLeft + "바라보는 위치에 나무벽을 설치합니다. 주위에 플레이어가 있으면 가둡니다.")
+                .build());
         registerLeftClickEvent();
     }
 

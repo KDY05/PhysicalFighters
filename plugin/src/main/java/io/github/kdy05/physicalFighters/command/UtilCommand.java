@@ -182,7 +182,7 @@ public final class UtilCommand implements CommandInterface {
             if (temp == null) continue;
             sender.sendMessage(String.format(ChatColor.GREEN + "%d. " + ChatColor.WHITE +
                             "%s : " + ChatColor.RED + "%s " + ChatColor.WHITE +
-                            "[" + AbilityUtils.getTypeText(ability) + "]",
+                            "[" + ability.getAbilityType() + "]",
                     count, temp.getName(), ability.getAbilityName()));
             count++;
         }

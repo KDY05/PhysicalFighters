@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -11,9 +12,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class Explosion extends Ability {
     public Explosion() {
-        InitAbility("익스플로젼", Type.Passive_Manual, Rank.B,
-                "사망 시 엄청난 연쇄 폭발을 일으킵니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("익스플로젼", Type.Passive_Manual, Rank.B)
+                .guide("사망 시 엄청난 연쇄 폭발을 일으킵니다.")
+                .build());
         EventManager.onEntityDeath.add(new EventData(this, 0));
     }
 

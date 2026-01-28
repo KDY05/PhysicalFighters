@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -12,9 +13,9 @@ import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 
 public class Ckyomi extends Ability {
     public Ckyomi() {
-        InitAbility("츠쿠요미", Type.Passive_AutoMatic, Rank.A,
-                "상대를 공격하면 상대에게 5초간 혼란 효과와 디버프를 줍니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("츠쿠요미", Type.Passive_AutoMatic, Rank.A)
+                .guide("상대를 공격하면 상대에게 5초간 혼란 효과와 디버프를 줍니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 

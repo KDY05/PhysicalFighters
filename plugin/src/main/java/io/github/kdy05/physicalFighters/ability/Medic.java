@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -14,10 +15,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Medic extends Ability {
     public Medic() {
-        InitAbility("메딕", Type.Active_Immediately, Rank.B,
-                Usage.IronAttack + "타인의 체력을 6만큼 회복합니다.",
-                Usage.IronRight + "자신의 체력을 6만큼 회복합니다.");
-        InitAbility(15, 0, true);
+        super(AbilitySpec.builder("메딕", Type.Active_Immediately, Rank.B)
+                .cooldown(15)
+                .guide(Usage.IronAttack + "타인의 체력을 6만큼 회복합니다.",
+                        Usage.IronRight + "자신의 체력을 6만큼 회복합니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this));
         registerRightClickEvent();
     }

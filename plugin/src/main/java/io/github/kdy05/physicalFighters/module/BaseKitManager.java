@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BaseKitManager implements Listener {
+public final class BaseKitManager implements Listener {
 
     private static final String FILE_NAME = "basekits.yml";
 

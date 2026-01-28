@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -19,10 +20,10 @@ public class Killtolevelup extends Ability implements BaseItem {
     private int dama = 4;
 
     public Killtolevelup() {
-        InitAbility("폭주", Type.Passive_Manual, Rank.SS,
-                "깃털의 처음 대미지는 4입니다.",
-                "깃털로 적을 처치할 때마다 대미지가 2만큼 늘어납니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("폭주", Type.Passive_Manual, Rank.SS)
+                .guide("깃털의 처음 대미지는 4입니다.",
+                        "깃털로 적을 처치할 때마다 대미지가 2만큼 늘어납니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         EventManager.onEntityDeath.add(new EventData(this, 1));
         registerBaseItemEvents();

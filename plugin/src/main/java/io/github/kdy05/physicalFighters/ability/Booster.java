@@ -4,6 +4,7 @@ import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -16,10 +17,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class Booster extends Ability {
     public Booster() {
-        InitAbility("부스터", Type.Passive_AutoMatic, Rank.A,
-                "폭주 - 매우 낮은 딜레이로 상대를 공격합니다. 단 당신의 대미지는 3~6로 랜덤입니다.",
-                "무통증 - 피격 시 80% 확률로 넉백을 무시합니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("부스터", Type.Passive_AutoMatic, Rank.A)
+                .guide("폭주 - 매우 낮은 딜레이로 상대를 공격합니다. 단 당신의 대미지는 3~6로 랜덤입니다.",
+                        "무통증 - 피격 시 80% 확률로 넉백을 무시합니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this));
     }
 

@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -17,9 +18,11 @@ public class Hulk extends Ability {
     private double originalHealth = 20;
 
     public Hulk() {
-        InitAbility("헐크", Type.Active_Continue, Rank.SSS,
-                Usage.IronRight + "30초간 각종 버프를 받으며 주는 대미지가 1.5배, 받는 대미지가 절반이 됩니다.");
-        InitAbility(180, 30, true);
+        super(AbilitySpec.builder("헐크", Type.Active_Continue, Rank.SSS)
+                .cooldown(180)
+                .duration(30)
+                .guide(Usage.IronRight + "30초간 각종 버프를 받으며 주는 대미지가 1.5배, 받는 대미지가 절반이 됩니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerRightClickEvent();
     }

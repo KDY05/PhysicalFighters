@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
@@ -16,10 +17,10 @@ import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 
 public class PoisonArrow extends Ability implements BaseItem {
     public PoisonArrow() {
-        InitAbility("독화살", Type.Passive_Manual, Rank.B,
-                "화살에 맞은 적은 6초간 독에걸립니다.",
-                "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("독화살", Type.Passive_Manual, Rank.B)
+                .guide("화살에 맞은 적은 6초간 독에걸립니다.",
+                        "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerBaseItemEvents();
     }

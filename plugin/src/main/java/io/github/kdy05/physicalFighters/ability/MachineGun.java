@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -38,10 +39,11 @@ public class MachineGun extends Ability {
     private static final int ACTION_RELOAD = 20;
 
     public MachineGun() {
-        InitAbility("기관총", Type.Active_Immediately, Rank.S,
-                Usage.GoldRight + "화살을 연사합니다. 철괴를 탄창으로 사용하며 한 탄창은 30발입니다.",
-                "크리티컬 - 20% 확률로 화살이 고정 대미지를 입힙니다.");
-        InitAbility(0, 0, true, ShowText.Custom_Text);
+        super(AbilitySpec.builder("기관총", Type.Active_Immediately, Rank.S)
+                .showText(ShowText.Custom_Text)
+                .guide(Usage.GoldRight + "화살을 연사합니다. 철괴를 탄창으로 사용하며 한 탄창은 30발입니다.",
+                        "크리티컬 - 20% 확률로 화살이 고정 대미지를 입힙니다.")
+                .build());
         registerRightClickEvent();
         EventManager.onEntityDamageByEntity.add(new EventData(this, EVENT_DAMAGE));
         EventManager.onProjectileHitEvent.add(new EventData(this, EVENT_PROJECTILE_HIT));

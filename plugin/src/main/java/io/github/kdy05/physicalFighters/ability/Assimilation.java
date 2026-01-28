@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.AbilityInitializer;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
@@ -20,11 +21,11 @@ public class Assimilation extends Ability implements CommandInterface {
     private boolean ActiveAss = false;
 
     public Assimilation() {
-        InitAbility("흡수", Type.Passive_Manual, Rank.S,
-                "자신이 죽인 플레이어의 능력을 흡수합니다.",
-                "\"/va a\" 명령으로 자신이 흡수한 능력들을 확인할 수 있습니다.",
-                "흡수 가능한 능력의 개수는 제한이 없지만 액티브 능력은 최대 1개만 가능합니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("흡수", Type.Passive_Manual, Rank.S)
+                .guide("자신이 죽인 플레이어의 능력을 흡수합니다.",
+                        "\"/va a\" 명령으로 자신이 흡수한 능력들을 확인할 수 있습니다.",
+                        "흡수 가능한 능력의 개수는 제한이 없지만 액티브 능력은 최대 1개만 가능합니다.")
+                .build());
         EventManager.onEntityDeath.add(new EventData(this, 0));
     }
 

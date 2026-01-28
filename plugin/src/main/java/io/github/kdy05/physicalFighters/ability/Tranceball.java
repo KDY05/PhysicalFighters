@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -46,12 +47,12 @@ public class Tranceball extends Ability implements BaseItem {
     }
 
     public Tranceball() {
-        InitAbility("트랜스볼", Type.Passive_Manual, Rank.SS,
-                "웅크리고 눈덩이를 우클릭하여 모드를 전환합니다.",
-                "스왑 모드 - 눈덩이를 맞은 적과 위치를 교환합니다.",
-                "그랩 모드 - 눈덩이를 맞은 적을 자신의 위치로 당겨옵니다.",
-                "추격 모드 - 눈덩이를 맞은 적의 위치로 즉시 이동합니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("트랜스볼", Type.Passive_Manual, Rank.SS)
+                .guide("웅크리고 눈덩이를 우클릭하여 모드를 전환합니다.",
+                        "스왑 모드 - 눈덩이를 맞은 적과 위치를 교환합니다.",
+                        "그랩 모드 - 눈덩이를 맞은 적을 자신의 위치로 당겨옵니다.",
+                        "추격 모드 - 눈덩이를 맞은 적의 위치로 즉시 이동합니다.")
+                .build());
         EventManager.onProjectileHitEvent.add(new EventData(this, 0));
         registerRightClickEvent();
         registerBaseItemEvents();

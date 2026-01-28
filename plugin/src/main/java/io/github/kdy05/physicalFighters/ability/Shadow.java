@@ -12,6 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import org.bukkit.util.Vector;
@@ -21,11 +22,11 @@ public class Shadow extends Ability {
     private static final double BACKSTAB_ANGLE_THRESHOLD = 90.0; // 90도 = 후방 180도 범위
 
     public Shadow() {
-        InitAbility("그림자", Type.Passive_AutoMatic, Rank.A,
-                "은신 - 몹에게 절대로 공격받지 않습니다.",
-                "회피 - 피격 시 10% 확률로 회피하며, 체력 4를 회복합니다.",
-                "기습 - 뒤에서 공격할 시 대미지를 2배로 입히고, 일시적으로 추가 이동속도를 얻습니다.");
-        InitAbility(0, 0, true);
+        super(AbilitySpec.builder("그림자", Type.Passive_AutoMatic, Rank.A)
+                .guide("은신 - 몹에게 절대로 공격받지 않습니다.",
+                        "회피 - 피격 시 10% 확률로 회피하며, 체력 4를 회복합니다.",
+                        "기습 - 뒤에서 공격할 시 대미지를 2배로 입히고, 일시적으로 추가 이동속도를 얻습니다.")
+                .build());
         EventManager.onEntityTarget.add(new EventData(this, 0));
         EventManager.onEntityDamage.add(new EventData(this, 1));
         EventManager.onEntityDamageByEntity.add(new EventData(this, 2));

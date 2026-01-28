@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class Thor extends Ability implements BaseItem {
 
@@ -30,7 +32,7 @@ public class Thor extends Ability implements BaseItem {
         ItemMeta meta = mjolnir.getItemMeta();
         assert meta != null;
         meta.setDisplayName("묠니르");
-        meta.setLore(Arrays.asList(ChatColor.GRAY + "토르 전용"));
+        meta.setLore(Collections.singletonList(ChatColor.GRAY + "토르 전용"));
         mjolnir.setItemMeta(meta);
         return mjolnir;
     }
@@ -43,10 +45,11 @@ public class Thor extends Ability implements BaseItem {
     }
 
     public Thor() {
-        InitAbility("토르", Type.Active_Immediately, Rank.GOD,
-                "묠니르(철퇴) 우클릭 시 주변의 플레이어에게 5의 대미지를 주고,",
-                "다음 공격에 +3의 대미지를 농축시킵니다. [최대 6회 중첩]");
-        InitAbility(8, 0, true);
+        super(AbilitySpec.builder("토르", Type.Active_Immediately, Rank.GOD)
+                .cooldown(8)
+                .guide("묠니르(철퇴) 우클릭 시 주변의 플레이어에게 5의 대미지를 주고,",
+                        "다음 공격에 +3의 대미지를 농축시킵니다. [최대 6회 중첩]")
+                .build());
         EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
         registerRightClickEvent();
         registerBaseItemEvents();

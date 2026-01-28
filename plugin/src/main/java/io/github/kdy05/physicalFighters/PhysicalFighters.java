@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class PhysicalFighters extends JavaPlugin {
+public final class PhysicalFighters extends JavaPlugin {
 
     private static PhysicalFighters plugin;
     private GameManager gameManager;
@@ -42,7 +42,6 @@ public class PhysicalFighters extends JavaPlugin {
         configManager = new ConfigManager(this);
         getServer().getPluginManager().registerEvents(new EventManager(this), this);
 
-        Ability.initPlugin(this);
         getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityInitializer.AbilityList.size()));
 
         // CommandInterface 구현 능력 수집

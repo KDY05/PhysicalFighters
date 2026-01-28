@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
 import io.github.kdy05.physicalFighters.core.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -27,10 +28,11 @@ public class Poseidon extends Ability {
     private Location targetLocation = null;
 
     public Poseidon() {
-        InitAbility("포세이돈", Type.Active_Immediately, Rank.SS,
-                "바라보는 곳에 거대한 어항을 만들어 가둡니다.",
-                "물 속에서 자신에게는 버프, 상대에게는 디버프를 겁니다.");
-        InitAbility(60, 0, true);
+        super(AbilitySpec.builder("포세이돈", Type.Active_Immediately, Rank.SS)
+                .cooldown(60)
+                .guide("바라보는 곳에 거대한 어항을 만들어 가둡니다.",
+                        "물 속에서 자신에게는 버프, 상대에게는 디버프를 겁니다.")
+                .build());
         registerLeftClickEvent();
         EventManager.onPlayerMoveEvent.add(new EventData(this, 1));
     }

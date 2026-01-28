@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.core.AbilitySpec;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 
 import io.github.kdy05.physicalFighters.module.InvincibilityManager;
@@ -21,9 +22,11 @@ public class Haki extends Ability {
     private static final long DELAY = 10L;
 
     public Haki() {
-        InitAbility("패기", Type.Active_Continue, Rank.SS,
-                Usage.IronLeft + "20초간 10칸 내의 적에게 강한 대미지를 줍니다.");
-        InitAbility(160, 10, true);
+        super(AbilitySpec.builder("패기", Type.Active_Continue, Rank.SS)
+                .cooldown(160)
+                .duration(10)
+                .guide(Usage.IronLeft + "20초간 10칸 내의 적에게 강한 대미지를 줍니다.")
+                .build());
         registerLeftClickEvent();
     }
 
