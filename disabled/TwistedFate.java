@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability.disabled;
 
-import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.EventManager;
+import io.github.kdy05.physicalFighters.game.Ability;
+import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
 import java.util.Timer;

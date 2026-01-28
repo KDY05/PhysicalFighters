@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.util;
 
-import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.ability.Ability;
 
 public final class EventData {
     public Ability ability;

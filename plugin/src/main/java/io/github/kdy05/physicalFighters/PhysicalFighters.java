@@ -3,15 +3,17 @@ package io.github.kdy05.physicalFighters;
 import io.github.kdy05.physicalFighters.api.AdapterRegistry;
 import io.github.kdy05.physicalFighters.api.AttributeAdapter;
 import io.github.kdy05.physicalFighters.api.PotionEffectTypeAdapter;
-import io.github.kdy05.physicalFighters.core.*;
-import io.github.kdy05.physicalFighters.util.CommandInterface;
+import io.github.kdy05.physicalFighters.command.CommandManager;
+import io.github.kdy05.physicalFighters.config.ConfigManager;
+import io.github.kdy05.physicalFighters.game.*;
+import io.github.kdy05.physicalFighters.command.CommandInterface;
 import io.github.kdy05.physicalFighters.util.ServerVersionDetector;
-import io.github.kdy05.physicalFighters.util.AbilityInitializer;
+import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import io.github.kdy05.physicalFighters.command.GameCommand;
 
 import io.github.kdy05.physicalFighters.command.UtilCommand;
-import io.github.kdy05.physicalFighters.module.BaseKitManager;
-import io.github.kdy05.physicalFighters.module.InvincibilityManager;
+import io.github.kdy05.physicalFighters.game.BaseKitManager;
+import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
@@ -42,10 +44,10 @@ public final class PhysicalFighters extends JavaPlugin {
         configManager = new ConfigManager(this);
         getServer().getPluginManager().registerEvents(new EventManager(this), this);
 
-        getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityInitializer.AbilityList.size()));
+        getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityRegistry.AbilityList.size()));
 
         // CommandInterface 구현 능력 수집
-        List<CommandInterface> abilityCommands = AbilityInitializer.AbilityList.stream()
+        List<CommandInterface> abilityCommands = AbilityRegistry.AbilityList.stream()
                 .filter(CommandInterface.class::isInstance)
                 .map(CommandInterface.class::cast)
                 .collect(Collectors.toList());

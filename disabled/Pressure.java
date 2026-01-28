@@ -1,12 +1,12 @@
 package io.github.kdy05.physicalFighters.ability.disabled;
 
-import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.game.Ability;
 
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.github.kdy05.physicalFighters.core.ConfigManager;
+import io.github.kdy05.physicalFighters.game.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

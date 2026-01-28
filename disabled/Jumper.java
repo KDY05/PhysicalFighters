@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability.disabled;
 
-import io.github.kdy05.physicalFighters.core.Ability;
+import io.github.kdy05.physicalFighters.game.Ability;
 import io.github.kdy05.physicalFighters.util.AbilityUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

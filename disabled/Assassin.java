@@ -2,8 +2,8 @@ package io.github.kdy05.physicalFighters.ability.disabled;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
-import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.EventManager;
+import io.github.kdy05.physicalFighters.game.Ability;
+import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
 import org.bukkit.ChatColor;

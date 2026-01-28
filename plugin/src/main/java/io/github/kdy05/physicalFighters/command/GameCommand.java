@@ -1,12 +1,11 @@
 package io.github.kdy05.physicalFighters.command;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
-import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.GameManager;
-import io.github.kdy05.physicalFighters.module.InvincibilityManager;
-import io.github.kdy05.physicalFighters.util.AbilityInitializer;
-import io.github.kdy05.physicalFighters.util.AbilityUtils;
-import io.github.kdy05.physicalFighters.util.CommandInterface;
+import io.github.kdy05.physicalFighters.ability.Ability;
+import io.github.kdy05.physicalFighters.game.GameManager;
+import io.github.kdy05.physicalFighters.game.GameUtils;
+import io.github.kdy05.physicalFighters.game.InvincibilityManager;
+import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -33,7 +32,7 @@ public final class GameCommand implements CommandInterface {
         // 유저 커맨드
         if (args[0].equalsIgnoreCase("check")) {
             if (filterConsole(sender)) return true;
-            AbilityUtils.showInfo((Player) sender, plugin.getConfigManager().isAbilityOverLap());
+            GameUtils.showInfo((Player) sender, plugin.getConfigManager().isAbilityOverLap());
             return true;
         } else if (args[0].equalsIgnoreCase("yes")) {
             if (filterConsole(sender)) return true;
@@ -115,11 +114,11 @@ public final class GameCommand implements CommandInterface {
         }
         this.gameManager.stopGame();
         InvincibilityManager.setDamageGuard(false);
-        for (int l = 0; l < AbilityInitializer.AbilityList.size(); l++) {
-            AbilityInitializer.AbilityList.get(l).cancelDTimer();
-            AbilityInitializer.AbilityList.get(l).cancelCTimer();
-            AbilityInitializer.AbilityList.get(l).setRunAbility(false);
-            AbilityInitializer.AbilityList.get(l).setPlayer(null, false);
+        for (int l = 0; l < AbilityRegistry.AbilityList.size(); l++) {
+            AbilityRegistry.AbilityList.get(l).cancelDTimer();
+            AbilityRegistry.AbilityList.get(l).cancelCTimer();
+            AbilityRegistry.AbilityList.get(l).setRunAbility(false);
+            AbilityRegistry.AbilityList.get(l).setPlayer(null, false);
         }
         Bukkit.broadcastMessage(ChatColor.GRAY + "------------------------------");
         Bukkit.broadcastMessage(String.format(ChatColor.YELLOW +
@@ -153,7 +152,7 @@ public final class GameCommand implements CommandInterface {
         }
         
         final int ITEMS_PER_PAGE = 8;
-        final int totalAbilities = AbilityInitializer.AbilityList.size();
+        final int totalAbilities = AbilityRegistry.AbilityList.size();
         final int maxPage = (totalAbilities - 1) / ITEMS_PER_PAGE;
         
         if (page < 0 || page > maxPage) {
@@ -168,10 +167,10 @@ public final class GameCommand implements CommandInterface {
         final int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalAbilities);
         
         for (int code = startIndex; code < endIndex; code++) {
-            Ability ability = AbilityInitializer.AbilityList.get(code);
+            Ability ability = AbilityRegistry.AbilityList.get(code);
             sender.sendMessage(String.format(
                     ChatColor.GREEN + "[%d] " + ChatColor.WHITE + "%s " + ChatColor.GRAY + "%s",
-                    code, ability.getAbilityName(), ability.getRankText()));
+                    code, ability.getAbilityName(), ability.getRank()));
         }
         
         if (totalAbilities == 0) {
@@ -199,12 +198,12 @@ public final class GameCommand implements CommandInterface {
             sender.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
             return;
         }
-        if (abicode < -1 || abicode > AbilityInitializer.AbilityList.size() - 1) {
+        if (abicode < -1 || abicode > AbilityRegistry.AbilityList.size() - 1) {
             sender.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
             return;
         }
 
-        AbilityUtils.assignAbility(sender, abicode, target, plugin.getConfigManager().isAbilityOverLap());
+        GameUtils.assignAbility(sender, abicode, target, plugin.getConfigManager().isAbilityOverLap());
         plugin.getLogger().info("명령어에 의한 능력 할당입니다.");
     }
 

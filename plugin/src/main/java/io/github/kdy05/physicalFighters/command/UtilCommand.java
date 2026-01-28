@@ -1,11 +1,9 @@
 package io.github.kdy05.physicalFighters.command;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
-import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.ConfigManager;
-import io.github.kdy05.physicalFighters.util.AbilityInitializer;
-import io.github.kdy05.physicalFighters.util.AbilityUtils;
-import io.github.kdy05.physicalFighters.util.CommandInterface;
+import io.github.kdy05.physicalFighters.ability.Ability;
+import io.github.kdy05.physicalFighters.config.ConfigManager;
+import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -131,7 +129,7 @@ public final class UtilCommand implements CommandInterface {
     }
 
     private void handleTc(CommandSender sender) {
-        for (Ability a : AbilityInitializer.AbilityList) {
+        for (Ability a : AbilityRegistry.AbilityList) {
             a.cancelDTimer();
             a.cancelCTimer();
         }
@@ -155,12 +153,12 @@ public final class UtilCommand implements CommandInterface {
             player.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
             return;
         }
-        if (abicode < 0 || abicode >= AbilityInitializer.AbilityList.size()) {
+        if (abicode < 0 || abicode >= AbilityRegistry.AbilityList.size()) {
             player.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
             return;
         }
 
-        Ability ability = AbilityInitializer.AbilityList.get(abicode);
+        Ability ability = AbilityRegistry.AbilityList.get(abicode);
         ItemStack stack = new ItemStack(Material.ENCHANTED_BOOK);
         ItemMeta meta = stack.getItemMeta();
         if (meta == null) return;
@@ -177,7 +175,7 @@ public final class UtilCommand implements CommandInterface {
         sender.sendMessage(ChatColor.GOLD + "- 능력을 스캔했습니다. -");
         sender.sendMessage(ChatColor.GREEN + "---------------");
         int count = 0;
-        for (Ability ability : AbilityInitializer.AbilityList) {
+        for (Ability ability : AbilityRegistry.AbilityList) {
             Player temp = ability.getPlayer();
             if (temp == null) continue;
             sender.sendMessage(String.format(ChatColor.GREEN + "%d. " + ChatColor.WHITE +

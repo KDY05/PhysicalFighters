@@ -3,8 +3,8 @@ package io.github.kdy05.physicalFighters.ability.disabled;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import io.github.kdy05.physicalFighters.core.Ability;
-import io.github.kdy05.physicalFighters.core.EventManager;
+import io.github.kdy05.physicalFighters.game.Ability;
+import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
 import org.bukkit.Material;
