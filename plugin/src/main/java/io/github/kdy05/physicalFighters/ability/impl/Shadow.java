@@ -21,12 +21,16 @@ public class Shadow extends Ability {
     // 백스텝 각도 범위 (도 단위)
     private static final double BACKSTAB_ANGLE_THRESHOLD = 90.0; // 90도 = 후방 180도 범위
 
-    public Shadow() {
+    public Shadow(Player player) {
         super(AbilitySpec.builder("그림자", Type.Passive_AutoMatic, Rank.A)
                 .guide("은신 - 몹에게 절대로 공격받지 않습니다.",
                         "회피 - 피격 시 10% 확률로 회피하며, 체력 4를 회복합니다.",
                         "기습 - 뒤에서 공격할 시 대미지를 2배로 입히고, 일시적으로 추가 이동속도를 얻습니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityTarget(new EventData(this, 0));
         EventManager.registerEntityDamage(new EventData(this, 1));
         EventManager.registerEntityDamageByEntity(new EventData(this, 2));

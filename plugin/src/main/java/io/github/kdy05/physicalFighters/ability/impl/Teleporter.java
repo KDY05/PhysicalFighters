@@ -23,12 +23,16 @@ public class Teleporter extends Ability implements BaseItem {
     private static String signName = null;
     private static Location signLoc = null;
 
-    public Teleporter() {
+    public Teleporter(Player player) {
         super(AbilitySpec.builder("소환술사", Type.Active_Immediately, Rank.A)
                 .cooldown(300)
                 .guide(Usage.IronLeft + "표지판을 설치하고 첫 줄에 플레이어의 이름(자신도 가능)을 적으면,",
                         "능력 사용 시 이름이 적힌 플레이어가 표지판으로 이동합니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
         EventManager.registerSignChange(new EventData(this, 1));
         EventManager.registerBlockBreak(new EventData(this, 2));

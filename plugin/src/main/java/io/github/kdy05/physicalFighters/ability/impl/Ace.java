@@ -10,12 +10,16 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Ace extends Ability {
-    public Ace() {
+    public Ace(Player player) {
         super(AbilitySpec.builder("에이스", Type.Active_Continue, Rank.S)
                 .cooldown(40)
                 .duration(20)
                 .guide(Usage.IronLeft + "능력 지속시간 동안 자신의 주변에 있는 적들을 불태웁니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
     }
 

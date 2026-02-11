@@ -16,11 +16,15 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Kaiji extends Ability implements BaseItem {
-    public Kaiji() {
+    public Kaiji(Player player) {
         super(AbilitySpec.builder("카이지", Type.Passive_Manual, Rank.S)
                 .cooldown(20)
                 .guide("다이아몬드로 상대 타격 시 30% 확률로 상대를 즉사시키고, 70% 확률로 자신이 사망합니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerBaseItemEvents();
     }

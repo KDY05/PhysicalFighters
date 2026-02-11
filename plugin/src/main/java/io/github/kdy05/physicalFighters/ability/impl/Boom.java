@@ -12,12 +12,16 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Boom extends Ability {
-    public Boom() {
+    public Boom(Player player) {
         super(AbilitySpec.builder("붐포인트", Type.Active_Continue, Rank.S)
                 .cooldown(60)
                 .duration(20)
                 .guide(Usage.IronLeft + "20초간 10m 안에 있는 적을 폭발시킵니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
     }
 

@@ -9,13 +9,17 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Clocking extends Ability {
-    public Clocking() {
+    public Clocking(Player player) {
         super(AbilitySpec.builder("클로킹", Type.Active_Continue, Rank.A)
                 .cooldown(30)
                 .duration(5)
                 .guide(Usage.IronLeft + "일정 시간동안 다른 사람에게 보이지 않습니다.",
                         "클로킹 상태에서는 타인에게 공격 받지 않습니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
     }
 

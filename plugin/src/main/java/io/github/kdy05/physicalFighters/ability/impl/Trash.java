@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
+import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
@@ -13,12 +14,16 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 
 public class Trash extends Ability {
-    public Trash() {
+    public Trash(Player player) {
         super(AbilitySpec.builder("쓰레기", Type.Active_Immediately, Rank.F)
                 .cooldown(10)
                 .guide(Usage.IronRight + "체력을 소비하여 1분간 허약해집니다.",
                         Usage.IronAttack + "3% 확률로 능력을 서로 바꿉니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this));
         registerRightClickEvent();
     }
@@ -35,10 +40,12 @@ public class Trash extends Ability {
                 Ability casterAbility = AbilityUtils.findAbility(caster);
                 Ability targetAbility = AbilityUtils.findAbility(target);
                 if (casterAbility == null || targetAbility == null) return -1;
-                targetAbility.setPlayer(caster, false);
-                casterAbility.setPlayer(target, false);
-                targetAbility.setRunAbility(true);
-                casterAbility.setRunAbility(true);
+                String casterTypeName = casterAbility.getAbilityName();
+                String targetTypeName = targetAbility.getAbilityName();
+                AbilityRegistry.deactivate(casterAbility, false);
+                AbilityRegistry.deactivate(targetAbility, false);
+                AbilityRegistry.createAndActivate(targetTypeName, caster, false);
+                AbilityRegistry.createAndActivate(casterTypeName, target, false);
                 caster.sendMessage("당신은 쓰레기 능력을 사용해 상대방과 능력을 바꿨습니다.");
                 target.sendMessage("당신은 쓰레기 능력에 의해 쓰레기가 되었습니다.");
             }

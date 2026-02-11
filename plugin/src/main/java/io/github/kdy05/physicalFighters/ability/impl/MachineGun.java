@@ -38,12 +38,16 @@ public class MachineGun extends Ability {
     private static final int ACTION_SHOOT = 10;
     private static final int ACTION_RELOAD = 20;
 
-    public MachineGun() {
+    public MachineGun(Player player) {
         super(AbilitySpec.builder("기관총", Type.Active_Immediately, Rank.S)
                 .showText(ShowText.Custom_Text)
                 .guide(Usage.GoldRight + "화살을 연사합니다. 철괴를 탄창으로 사용하며 한 탄창은 30발입니다.",
                         "크리티컬 - 20% 확률로 화살이 고정 대미지를 입힙니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerRightClickEvent();
         EventManager.registerEntityDamageByEntity(new EventData(this, EVENT_DAMAGE));
         EventManager.registerProjectileHit(new EventData(this, EVENT_PROJECTILE_HIT));

@@ -14,12 +14,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Medic extends Ability {
-    public Medic() {
+    public Medic(Player player) {
         super(AbilitySpec.builder("메딕", Type.Active_Immediately, Rank.B)
                 .cooldown(15)
                 .guide(Usage.IronAttack + "타인의 체력을 6만큼 회복합니다.",
                         Usage.IronRight + "자신의 체력을 6만큼 회복합니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this));
         registerRightClickEvent();
     }

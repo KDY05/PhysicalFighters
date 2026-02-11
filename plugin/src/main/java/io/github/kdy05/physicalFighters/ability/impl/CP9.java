@@ -18,13 +18,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 public class CP9 extends Ability {
-    public CP9() {
+    public CP9(Player player) {
         super(AbilitySpec.builder("CP9", Type.Active_Immediately, Rank.SS)
                 .guide(Usage.IronAttack + "상대에게 6의 고정 대미지를 줍니다.",
                         Usage.IronRight + "바라보는 방향으로 빠르게 도약합니다.",
                         Usage.Passive + "낙하 대미지를 무시합니다.")
                 .cooldown(20)
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerRightClickEvent();
         EventManager.registerEntityDamage(new EventData(this, 2));

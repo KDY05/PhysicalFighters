@@ -21,12 +21,16 @@ public class Haki extends Ability {
     private static final long INTERVAL = 40L;
     private static final long DELAY = 10L;
 
-    public Haki() {
+    public Haki(Player player) {
         super(AbilitySpec.builder("패기", Type.Active_Continue, Rank.SS)
                 .cooldown(160)
                 .duration(10)
                 .guide(Usage.IronLeft + "20초간 10칸 내의 적에게 강한 대미지를 줍니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
     }
 

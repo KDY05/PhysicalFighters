@@ -25,13 +25,17 @@ public class Gladiator extends Ability {
 
     private LivingEntity target = null;
 
-    public Gladiator() {
+    public Gladiator(Player player) {
         super(AbilitySpec.builder("글레디에이터", Type.Active_Continue, Rank.SSS)
                 .cooldown(60)
                 .duration(DURATION_TICKS / 20)
                 .guide(Usage.IronAttack + "천공의 투기장으로 이동하여 15초간 1:1 대결을 펼칩니다.",
                         "이때 상대는 디버프, 당신은 버프를 받습니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
     }
 

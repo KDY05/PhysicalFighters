@@ -156,7 +156,7 @@ public final class GameManager {
         broadcastMessage(ChatColor.AQUA + "인식된 플레이어 목록");
         broadcastMessage(ChatColor.GOLD + "==========");
 
-        int abilityCount = AbilityRegistry.AbilityList.size();
+        int abilityCount = AbilityRegistry.getTypeCount();
         int index = 0;
         int overflowCount = 0;
 
@@ -222,7 +222,7 @@ public final class GameManager {
     private void processAbilitySelection() {
         scenario = ScriptStatus.AbilitySelect;
 
-        if (playerList.size() < AbilityRegistry.AbilityList.size()) {
+        if (playerList.size() < AbilityRegistry.getTypeCount()) {
             distributeAbilitiesWithChoice();
             gameWarningTimer.startTimer(MAX_TIMER_DURATION, false);
         } else {

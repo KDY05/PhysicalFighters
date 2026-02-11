@@ -16,12 +16,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Archer extends Ability implements BaseItem {
-    public Archer() {
+    public Archer(Player player) {
         super(AbilitySpec.builder("아쳐", Type.Passive_Manual, Rank.A)
                 .guide("상대에게 쏘는 화살 대미지가 항상 3 상승합니다.",
                         "60% 확률로 6초간 불을 붙이며, 40% 확률로 폭발을 일으킵니다.",
                         "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerBaseItemEvents();
     }

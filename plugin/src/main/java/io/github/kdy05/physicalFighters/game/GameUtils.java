@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.game;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
+import io.github.kdy05.physicalFighters.ability.AbilityType;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,44 +20,40 @@ public final class GameUtils {
         throw new AssertionError();
     }
 
-    public static void assignAbility(CommandSender sender, int abicode, Player target, boolean abilityOverLap) {
+    public static void assignAbility(CommandSender sender, String abilityName, Player target, boolean abilityOverLap) {
         // 특정 플레이어 능력 해제
-        if (abicode == -1) {
-            for (Ability ability : AbilityRegistry.AbilityList) {
-                if (ability.isOwner(target)) {
-                    ability.setPlayer(null, true);
-                }
-            }
+        if ("해제".equals(abilityName)) {
+            AbilityRegistry.deactivateAll(target);
             target.sendMessage(ChatColor.RED + "당신의 능력이 모두 해제되었습니다.");
             sender.sendMessage(String.format(ChatColor.GREEN + "%s" +
                     ChatColor.WHITE + "님의 능력을 모두 해제했습니다.", target.getName()));
             return;
         }
 
+        AbilityType type = AbilityRegistry.getType(abilityName);
+        if (type == null) {
+            sender.sendMessage(ChatColor.RED + "존재하지 않는 능력입니다.");
+            return;
+        }
+
         // 기존 능력 해제
-        Ability ability = AbilityRegistry.AbilityList.get(abicode);
         if (abilityOverLap) {
             // 중복 모드에서 액티브 능력 중복은 불가함.
-            if (ability.getAbilityType() == Ability.Type.Active_Continue ||
-                    ability.getAbilityType() == Ability.Type.Active_Immediately) {
-                for (Ability ab : AbilityRegistry.AbilityList) {
-                    if ((ab.getAbilityType() == Ability.Type.Active_Continue || ab.getAbilityType() == Ability.Type.Active_Immediately)
-                            && ab.isOwner(target)) {
-                        ab.setPlayer(null, true);
+            if (type.getType() == Ability.Type.Active_Continue ||
+                    type.getType() == Ability.Type.Active_Immediately) {
+                for (Ability ab : AbilityRegistry.findAbilities(target)) {
+                    if (ab.getAbilityType() == Ability.Type.Active_Continue ||
+                            ab.getAbilityType() == Ability.Type.Active_Immediately) {
+                        AbilityRegistry.deactivate(ab);
                     }
                 }
             }
         } else {
-            for (Ability ab : AbilityRegistry.AbilityList) {
-                if (ab.isOwner(target)) {
-                    ab.setPlayer(null, true);
-                }
-            }
+            AbilityRegistry.deactivateAll(target);
         }
 
         // 새로운 능력 적용
-        ability.setPlayer(target, true);
-        ability.setRunAbility(true);
+        Ability ability = AbilityRegistry.createAndActivate(abilityName, target);
         sender.sendMessage(String.format(ChatColor.GREEN + "%s" + ChatColor.WHITE + "님에게 " +
                             ChatColor.GREEN + "%s" + ChatColor.WHITE + " 능력 할당이 완료되었습니다.",
                             Objects.requireNonNull(target).getName(), ability.getAbilityName()));
@@ -137,14 +134,10 @@ public final class GameUtils {
     }
 
     private static Ability findPrimaryAbility(Player p) {
-        for (Ability a : AbilityRegistry.AbilityList)
-            if (a.isOwner(p) && a.isInfoPrimary()) return a;
-        return null;
+        return AbilityRegistry.findPrimaryAbility(p);
     }
 
     private static Ability findAbility(Player p) {
-        for (Ability a : AbilityRegistry.AbilityList)
-            if (a.isOwner(p)) return a;
-        return null;
+        return AbilityRegistry.findAbility(p);
     }
 }

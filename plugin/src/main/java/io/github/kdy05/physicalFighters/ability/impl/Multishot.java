@@ -17,12 +17,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 public class Multishot extends Ability implements BaseItem {
-    public Multishot() {
+    public Multishot(Player player) {
         super(AbilitySpec.builder("멀티샷", Type.Active_Immediately, Rank.A)
                 .cooldown(3)
                 .guide("화살 발사 시 여러 발이 퍼지면서 날라갑니다.",
                         "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerProjectileLaunch(new EventData(this, 0));
         registerBaseItemEvents();
     }

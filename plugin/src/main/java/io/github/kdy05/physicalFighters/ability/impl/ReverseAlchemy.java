@@ -17,7 +17,7 @@ public class ReverseAlchemy extends Ability {
     private static final int GOLD_FOR_HEALING = 1;
     private static final int GOLD_FOR_DIAMOND = 3;
 
-    public ReverseAlchemy() {
+    public ReverseAlchemy(Player player) {
         super(AbilitySpec.builder("반 연금술", Type.Active_Immediately, Rank.A)
                 .cooldown(5)
                 .showText(ShowText.No_CoolDownText)
@@ -25,7 +25,11 @@ public class ReverseAlchemy extends Ability {
                         Usage.GoldRight + "금괴를 소모하여 자신의 체력을 회복합니다.",
                         "이때 체력이 최대 채력의 절반 이상이라면 체력을 전부 회복하며,",
                         "절반 이하라면 최대 체력의 절반까지 회복합니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
         registerRightClickEvent();
     }

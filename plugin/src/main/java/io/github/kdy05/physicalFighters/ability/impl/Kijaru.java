@@ -23,14 +23,18 @@ public class Kijaru extends Ability {
 
     private final TeleportChargeManager teleportManager = new TeleportChargeManager();
 
-    public Kijaru() {
+    public Kijaru(Player player) {
         super(AbilitySpec.builder("키자루", Type.Active_Immediately, Rank.SS)
                 .cooldown(45)
                 .guide(Usage.IronAttack + "타격한 상대를 빛의 속도로 타격합니다.",
                         "상대는 엄청난 속도로 멀리 날라갑니다. 당신도 상대를 따라 근접하게 날라갑니다.",
                         Usage.IronRight + "바라보는 곳으로 순간이동합니다. (충전시간: 120초 / 최대 충전량 2회)",
                         Usage.Passive + "낙하 대미지를 받지 않습니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this));
         registerRightClickEvent();
         EventManager.registerEntityDamage(new EventData(this, 2));

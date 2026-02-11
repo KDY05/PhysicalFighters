@@ -1,9 +1,9 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
+import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
-import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import io.github.kdy05.physicalFighters.util.EventData;
 
 import org.bukkit.Bukkit;
@@ -15,10 +15,14 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import java.util.Objects;
 
 public class Mirroring extends Ability {
-    public Mirroring() {
+    public Mirroring(Player player) {
         super(AbilitySpec.builder("미러링", Type.Passive_Manual, Rank.SSS)
                 .guide("당신을 죽인 사람을 함께 저승으로 끌고갑니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDeath(new EventData(this));
     }
 
@@ -39,12 +43,13 @@ public class Mirroring extends Ability {
         Player player = (Player) event0.getEntity();
         Bukkit.broadcastMessage(String.format(ChatColor.RED +
                 "%s님의 미러링 능력이 발동되었습니다.", player.getName()));
-        if (AbilityRegistry.assimilation.getPlayer() == player.getKiller()) {
-            AbilityRegistry.assimilation.A_Effect(event0, 1);
+        Ability assimilation = AbilityRegistry.findByType("흡수", player.getKiller());
+        if (assimilation != null) {
             Bukkit.broadcastMessage(ChatColor.GREEN + "흡수 능력에 의해 미러링 능력이 무력화 되었습니다.");
             return;
         }
-        if (AbilityRegistry.aegis.getPlayer() == player.getKiller() && AbilityRegistry.aegis.getDurationState()) {
+        Ability aegis = AbilityRegistry.findByType("이지스", player.getKiller());
+        if (aegis != null && aegis.getDurationState()) {
             Bukkit.broadcastMessage(ChatColor.GREEN + "이지스 능력에 의해 미러링 능력이 무력화 되었습니다.");
             return;
         }

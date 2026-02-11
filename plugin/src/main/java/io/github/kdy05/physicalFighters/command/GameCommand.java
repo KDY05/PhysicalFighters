@@ -114,12 +114,7 @@ public final class GameCommand implements CommandInterface {
         }
         this.gameManager.stopGame();
         InvincibilityManager.setDamageGuard(false);
-        for (int l = 0; l < AbilityRegistry.AbilityList.size(); l++) {
-            AbilityRegistry.AbilityList.get(l).cancelDTimer();
-            AbilityRegistry.AbilityList.get(l).cancelCTimer();
-            AbilityRegistry.AbilityList.get(l).setRunAbility(false);
-            AbilityRegistry.AbilityList.get(l).setPlayer(null, false);
-        }
+        AbilityRegistry.deactivateAll();
         Bukkit.broadcastMessage(ChatColor.GRAY + "------------------------------");
         Bukkit.broadcastMessage(String.format(ChatColor.YELLOW +
                 "관리자 %s님이 게임 카운터를 중단시켰습니다.", sender.getName()));
@@ -142,7 +137,7 @@ public final class GameCommand implements CommandInterface {
             sender.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va ablist [페이지번호]]");
             return;
         }
-        
+
         int page;
         try {
             page = Integer.parseInt(args[1]);
@@ -150,29 +145,30 @@ public final class GameCommand implements CommandInterface {
             sender.sendMessage(ChatColor.RED + "페이지가 올바르지 않습니다.");
             return;
         }
-        
+
         final int ITEMS_PER_PAGE = 8;
-        final int totalAbilities = AbilityRegistry.AbilityList.size();
-        final int maxPage = (totalAbilities - 1) / ITEMS_PER_PAGE;
-        
+        final int totalAbilities = AbilityRegistry.getTypeCount();
+        final int maxPage = Math.max(0, (totalAbilities - 1) / ITEMS_PER_PAGE);
+
         if (page < 0 || page > maxPage) {
             sender.sendMessage(ChatColor.RED + String.format("페이지 범위를 벗어났습니다. (0~%d)", maxPage));
             return;
         }
-        
-        sender.sendMessage(ChatColor.GOLD + "==== 능력 목록 및 코드 ====");
+
+        sender.sendMessage(ChatColor.GOLD + "==== 능력 목록 ====");
         sender.sendMessage(String.format(ChatColor.AQUA + "페이지 %d/%d (총 %d개 능력)", page, maxPage, totalAbilities));
-        
+
+        java.util.List<io.github.kdy05.physicalFighters.ability.AbilityType> types = AbilityRegistry.getAllTypes();
         final int startIndex = page * ITEMS_PER_PAGE;
         final int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalAbilities);
-        
-        for (int code = startIndex; code < endIndex; code++) {
-            Ability ability = AbilityRegistry.AbilityList.get(code);
+
+        for (int i = startIndex; i < endIndex; i++) {
+            io.github.kdy05.physicalFighters.ability.AbilityType type = types.get(i);
             sender.sendMessage(String.format(
-                    ChatColor.GREEN + "[%d] " + ChatColor.WHITE + "%s " + ChatColor.GRAY + "%s",
-                    code, ability.getAbilityName(), ability.getRank()));
+                    ChatColor.GREEN + "%s " + ChatColor.GRAY + "%s",
+                    type.getName(), type.getRank()));
         }
-        
+
         if (totalAbilities == 0) {
             sender.sendMessage(ChatColor.YELLOW + "등록된 능력이 없습니다.");
         }
@@ -181,7 +177,7 @@ public final class GameCommand implements CommandInterface {
     private void handleAbi(CommandSender sender, String[] d) {
         // 예외 처리
         if (d.length != 3) {
-            sender.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va abi [플레이어] [명령코드]]");
+            sender.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va abi [플레이어] [능력이름]]");
             return;
         }
 
@@ -191,19 +187,13 @@ public final class GameCommand implements CommandInterface {
             return;
         }
 
-        int abicode;
-        try {
-            abicode = Integer.parseInt(d[2]);
-        } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
-            return;
-        }
-        if (abicode < -1 || abicode > AbilityRegistry.AbilityList.size() - 1) {
-            sender.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
-            return;
+        String abilityName = d[2];
+        // 레거시 호환: "-1" → "해제"
+        if ("-1".equals(abilityName)) {
+            abilityName = "해제";
         }
 
-        GameUtils.assignAbility(sender, abicode, target, plugin.getConfigManager().isAbilityOverLap());
+        GameUtils.assignAbility(sender, abilityName, target, plugin.getConfigManager().isAbilityOverLap());
         plugin.getLogger().info("명령어에 의한 능력 할당입니다.");
     }
 

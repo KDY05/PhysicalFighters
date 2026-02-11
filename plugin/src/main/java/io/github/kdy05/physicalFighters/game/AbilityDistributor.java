@@ -2,6 +2,7 @@ package io.github.kdy05.physicalFighters.game;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
+import io.github.kdy05.physicalFighters.ability.AbilityType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -17,60 +18,44 @@ final class AbilityDistributor {
 
     /**
      * 플레이어에게 랜덤 능력을 할당합니다.
-     *
-     * @param player 대상 플레이어
-     * @param playerCount 현재 플레이어 수 (최소 인원 제한에 사용)
-     * @return 능력 할당 성공 여부
+     * 선택 단계에서 호출 — 이벤트는 등록하지 않음 (activate 하지 않음).
      */
     public boolean assignRandomAbility(Player player, int playerCount) {
-        // Remove current ability
-        for (Ability ability : AbilityRegistry.AbilityList) {
-            if (ability.isOwner(player)) {
-                ability.setPlayer(null, false);
-                break;
-            }
-        }
+        AbilityRegistry.deactivateAll(player);
 
-        List<Ability> availableAbilities = getAvailableAbilities(playerCount);
-        if (availableAbilities.isEmpty()) return false;
+        List<AbilityType> available = getAvailableTypes(playerCount);
+        if (available.isEmpty()) return false;
 
-        Ability selectedAbility = availableAbilities.get(random.nextInt(availableAbilities.size()));
-        selectedAbility.setPlayer(player, false);
+        AbilityType selected = available.get(random.nextInt(available.size()));
+        Ability instance = selected.createInstance(player);
+        AbilityRegistry.addActive(instance);
         return true;
     }
 
     /**
-     * 모든 능력을 초기화합니다.
+     * 모든 활성 능력을 초기화합니다.
      */
     public void resetAllAbilities() {
-        for (Ability ability : AbilityRegistry.AbilityList) {
-            ability.setRunAbility(false);
-            ability.setPlayer(null, false);
-        }
+        AbilityRegistry.deactivateAll();
     }
 
     /**
-     * 모든 능력을 활성화합니다.
+     * 모든 활성 능력을 활성화합니다 (이벤트 등록 + A_SetEvent).
      */
     public void enableAllAbilities() {
-        for (Ability ability : AbilityRegistry.AbilityList) {
-            ability.setRunAbility(true);
-            ability.setPlayer(ability.getPlayer(), false);
+        for (Ability ability : AbilityRegistry.getActiveAbilities()) {
+            ability.activate(false);
         }
     }
 
     /**
-     * 현재 할당 가능한 능력 목록을 반환합니다.
-     *
-     * @param playerCount 현재 플레이어 수
-     * @return 가용 능력 목록
+     * 현재 할당 가능한 능력 타입 목록을 반환합니다.
      */
-    private List<Ability> getAvailableAbilities(int playerCount) {
-        List<Ability> available = new ArrayList<>();
-        for (Ability ability : AbilityRegistry.AbilityList) {
-            if (ability.getPlayer() == null &&
-                playerCount >= ability.getMinimumPlayers()) {
-                available.add(ability);
+    private List<AbilityType> getAvailableTypes(int playerCount) {
+        List<AbilityType> available = new ArrayList<>();
+        for (AbilityType type : AbilityRegistry.getAllTypes()) {
+            if (playerCount >= type.getMinimumPlayers()) {
+                available.add(type);
             }
         }
         return available;

@@ -24,11 +24,15 @@ public class Guard extends Ability {
 
     private Location targetLocation = null;
 
-    public Guard() {
+    public Guard(Player player) {
         super(AbilitySpec.builder("목둔", Type.Active_Immediately, Rank.A)
                 .cooldown(30)
                 .guide(Usage.IronLeft + "바라보는 위치에 나무벽을 설치합니다. 주위에 플레이어가 있으면 가둡니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
     }
 

@@ -19,14 +19,18 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 
 public class Aokizi extends Ability {
-    public Aokizi() {
+    public Aokizi(Player player) {
         super(AbilitySpec.builder("아오키지", Type.Active_Immediately, Rank.S)
                 .cooldown(1)
                 .showText(ShowText.Custom_Text)
                 .guide(Usage.IronLeft + "자신이 보고있는 방향으로 얼음을 날립니다.",
                         Usage.IronRight + "바라보고 있는 5칸 이내의 물을 얼립니다.",
                         Usage.Passive + "자신이 공격한 적을 2초간 느리게 만듭니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
         registerRightClickEvent();
         EventManager.registerEntityDamageByEntity(new EventData(this, 2));

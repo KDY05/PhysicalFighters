@@ -16,13 +16,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SuperFan extends Ability {
-    public SuperFan() {
+    public SuperFan(Player player) {
         super(AbilitySpec.builder("선풍기", Type.Active_Immediately, Rank.C)
                 .cooldown(20)
                 .guide(Usage.IronLeft + "바라보는 방향의 플레이어들을 날려버립니다.",
                         "플레이어들은 무더위에 시원함을 느껴 체력이 회복됩니다.",
                         "하지만 강한 바람에 의해 눈을 뜨기가 힘들고 허약해집니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
     }
 

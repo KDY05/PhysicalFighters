@@ -18,10 +18,14 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class FallArrow extends Ability implements BaseItem {
-    public FallArrow() {
+    public FallArrow(Player player) {
         super(AbilitySpec.builder("중력화살", Type.Passive_Manual, Rank.S)
                 .guide("화살에 맞은 플레이어는 공중으로 뜹니다. [추가타 가능]")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerBaseItemEvents();
     }

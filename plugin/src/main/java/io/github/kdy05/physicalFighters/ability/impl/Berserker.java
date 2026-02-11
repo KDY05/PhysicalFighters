@@ -9,11 +9,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Berserker extends Ability {
-    public Berserker() {
+    public Berserker(Player player) {
         super(AbilitySpec.builder("광전사", Type.Passive_Manual, Rank.A)
                 .guide("체력이 낮아질수록 대미지가 증폭됩니다.",
                         "6칸 ↓ - 1.5배, 4칸 ↓ - 2배, 2칸 ↓ - 3배, 반 칸 ↓ - 4배")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
     }
 

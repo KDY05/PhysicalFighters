@@ -11,10 +11,14 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class Explosion extends Ability {
-    public Explosion() {
+    public Explosion(Player player) {
         super(AbilitySpec.builder("익스플로젼", Type.Passive_Manual, Rank.B)
                 .guide("사망 시 엄청난 연쇄 폭발을 일으킵니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDeath(new EventData(this, 0));
     }
 

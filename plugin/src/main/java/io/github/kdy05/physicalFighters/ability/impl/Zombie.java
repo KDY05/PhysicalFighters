@@ -12,11 +12,15 @@ import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.util.EventData;
 
 public class Zombie extends Ability {
-    public Zombie() {
+    public Zombie(Player player) {
         super(AbilitySpec.builder("좀비", Type.Passive_AutoMatic, Rank.B)
                 .guide("모든 대미지의 반을 흡수합니다. 단, 화염 대미지를 8배로 받습니다.")
-                .build());
+                .build(), player);
         // onEntityDamage는 EntityDamageByEntityEvent도 수신하므로 단일 등록으로 통합
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamage(new EventData(this));
     }
 

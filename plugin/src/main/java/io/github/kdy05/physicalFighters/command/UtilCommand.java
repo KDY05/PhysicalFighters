@@ -125,7 +125,7 @@ public final class UtilCommand implements CommandInterface {
     }
 
     private void handleTc(CommandSender sender) {
-        for (Ability a : AbilityRegistry.AbilityList) {
+        for (Ability a : AbilityRegistry.getActiveAbilities()) {
             a.cancelDTimer();
             a.cancelCTimer();
         }
@@ -138,38 +138,26 @@ public final class UtilCommand implements CommandInterface {
         Player player = (Player) sender;
 
         if (args.length != 2) {
-            player.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va book [능력코드]]");
+            player.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va book [능력이름]]");
             return;
         }
 
-        int abicode;
-        try {
-            abicode = Integer.parseInt(args[1]);
-        } catch (NumberFormatException e) {
-            player.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
-            return;
-        }
-        if (abicode < 0 || abicode >= AbilityRegistry.AbilityList.size()) {
-            player.sendMessage(ChatColor.RED + "능력 코드가 올바르지 않습니다.");
-            return;
-        }
-
-        ItemStack stack = AbilityBook.create(abicode);
+        String abilityName = args[1];
+        ItemStack stack = AbilityBook.create(abilityName);
         if (stack == null) {
-            player.sendMessage(ChatColor.RED + "능력서 생성에 실패했습니다.");
+            player.sendMessage(ChatColor.RED + "존재하지 않는 능력입니다.");
             return;
         }
 
-        Ability ability = AbilityRegistry.AbilityList.get(abicode);
         player.getInventory().addItem(stack);
-        player.sendMessage("능력서를 만들었습니다. " + ChatColor.GOLD + ability.getAbilityName());
+        player.sendMessage("능력서를 만들었습니다. " + ChatColor.GOLD + abilityName);
     }
 
     private void handleScan(CommandSender sender) {
         sender.sendMessage(ChatColor.GOLD + "- 능력을 스캔했습니다. -");
         sender.sendMessage(ChatColor.GREEN + "---------------");
         int count = 0;
-        for (Ability ability : AbilityRegistry.AbilityList) {
+        for (Ability ability : AbilityRegistry.getActiveAbilities()) {
             Player temp = ability.getPlayer();
             if (temp == null) continue;
             sender.sendMessage(String.format(ChatColor.GREEN + "%d. " + ChatColor.WHITE +

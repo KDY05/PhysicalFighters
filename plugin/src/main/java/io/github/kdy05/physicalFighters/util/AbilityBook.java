@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.util;
 
-import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
+import io.github.kdy05.physicalFighters.ability.AbilityType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -24,21 +24,19 @@ public final class AbilityBook {
     /**
      * 능력서 아이템을 생성합니다.
      *
-     * @param abilityCode 능력 코드 (AbilityRegistry.AbilityList 인덱스)
+     * @param abilityName 능력 이름
      * @return 생성된 능력서 ItemStack, 실패 시 null
      */
-    public static ItemStack create(int abilityCode) {
-        if (abilityCode < 0 || abilityCode >= AbilityRegistry.AbilityList.size()) {
-            return null;
-        }
+    public static ItemStack create(String abilityName) {
+        AbilityType type = AbilityRegistry.getType(abilityName);
+        if (type == null) return null;
 
-        Ability ability = AbilityRegistry.AbilityList.get(abilityCode);
         ItemStack stack = new ItemStack(Material.ENCHANTED_BOOK);
         ItemMeta meta = stack.getItemMeta();
         if (meta == null) return null;
 
-        meta.setDisplayName(PREFIX + abilityCode + ". " + ability.getAbilityName());
-        meta.setLore(new LinkedList<>(Arrays.asList(ability.getGuide())));
+        meta.setDisplayName(PREFIX + abilityName);
+        meta.setLore(new LinkedList<>(Arrays.asList(type.getGuide())));
         stack.setItemMeta(meta);
         return stack;
     }
@@ -53,25 +51,32 @@ public final class AbilityBook {
     }
 
     /**
-     * 능력서에서 능력 코드를 파싱합니다.
+     * 능력서에서 능력 이름을 파싱합니다.
      *
      * @param item 능력서 아이템
-     * @return 능력 코드, 파싱 실패 시 -1
+     * @return 능력 이름, 파싱 실패 시 null
      */
-    public static int parseAbilityCode(ItemStack item) {
-        if (!isAbilityBook(item)) return -1;
+    public static String parseAbilityName(ItemStack item) {
+        if (!isAbilityBook(item)) return null;
 
         String displayName = item.getItemMeta().getDisplayName();
         String afterPrefix = displayName.substring(PREFIX.length());
-        int dotIndex = afterPrefix.indexOf('.');
-        if (dotIndex <= 0) return -1;
 
-        try {
-            int code = Integer.parseInt(afterPrefix.substring(0, dotIndex));
-            if (code < 0 || code >= AbilityRegistry.AbilityList.size()) return -1;
-            return code;
-        } catch (NumberFormatException e) {
-            return -1;
+        // 레거시 형식 호환: "42. 불사조" → "불사조"
+        int dotIndex = afterPrefix.indexOf(". ");
+        if (dotIndex >= 0) {
+            String beforeDot = afterPrefix.substring(0, dotIndex);
+            try {
+                Integer.parseInt(beforeDot);
+                afterPrefix = afterPrefix.substring(dotIndex + 2);
+            } catch (NumberFormatException ignored) {
+                // 숫자가 아니면 레거시 형식이 아님
+            }
         }
+
+        if (AbilityRegistry.getType(afterPrefix) != null) {
+            return afterPrefix;
+        }
+        return null;
     }
 }

@@ -21,9 +21,7 @@ public final class AbilityUtils {
     }
 
     public static Ability findAbility(Player p) {
-        for (Ability a : AbilityRegistry.AbilityList)
-            if (a.isOwner(p)) return a;
-        return null;
+        return AbilityRegistry.findAbility(p);
     }
 
     public static Location getTargetLocation(Player p, int bound) {

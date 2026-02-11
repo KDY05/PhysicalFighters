@@ -16,9 +16,7 @@ import io.github.kdy05.physicalFighters.game.BaseKitManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public final class PhysicalFighters extends JavaPlugin {
 
@@ -44,19 +42,24 @@ public final class PhysicalFighters extends JavaPlugin {
         configManager = new ConfigManager(this);
         getServer().getPluginManager().registerEvents(new EventManager(this), this);
 
-        getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityRegistry.AbilityList.size()));
+        getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityRegistry.getTypeCount()));
 
-        // CommandInterface 구현 능력 수집
-        List<CommandInterface> abilityCommands = AbilityRegistry.AbilityList.stream()
-                .filter(CommandInterface.class::isInstance)
-                .map(CommandInterface.class::cast)
-                .collect(Collectors.toList());
+        // 활성 능력의 CommandInterface를 동적으로 라우팅
+        CommandInterface abilityCommandRouter = (sender, command, label, args) -> {
+            for (io.github.kdy05.physicalFighters.ability.Ability ability : AbilityRegistry.getActiveAbilities()) {
+                if (ability instanceof CommandInterface) {
+                    if (((CommandInterface) ability).onCommandEvent(sender, command, label, args))
+                        return true;
+                }
+            }
+            return false;
+        };
 
         gameManager = new GameManager(this);
         CommandManager commandManager = CommandManager.builder()
                 .addCommand(new GameCommand(this, gameManager))
                 .addCommand(new UtilCommand(this, configManager))
-                .addAll(abilityCommands)
+                .addCommand(abilityCommandRouter)
                 .build();
 
         Objects.requireNonNull(getCommand("va")).setExecutor(commandManager);

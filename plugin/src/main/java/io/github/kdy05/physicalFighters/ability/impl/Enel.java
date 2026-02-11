@@ -14,11 +14,15 @@ import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import java.util.Objects;
 
 public class Enel extends Ability {
-    public Enel() {
+    public Enel(Player player) {
         super(AbilitySpec.builder("갓 에넬", Type.Active_Immediately, Rank.S)
                 .cooldown(30)
                 .guide(Usage.IronLeft + "바라보는 방향으로 번개를 발사하여 강한 범위 대미지를 줍니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
     }
 

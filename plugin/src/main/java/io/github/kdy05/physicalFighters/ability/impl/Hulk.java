@@ -17,12 +17,16 @@ public class Hulk extends Ability {
 
     private double originalHealth = 20;
 
-    public Hulk() {
+    public Hulk(Player player) {
         super(AbilitySpec.builder("헐크", Type.Active_Continue, Rank.SSS)
                 .cooldown(180)
                 .duration(30)
                 .guide(Usage.IronRight + "30초간 각종 버프를 받으며 주는 대미지가 1.5배, 받는 대미지가 절반이 됩니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerRightClickEvent();
     }

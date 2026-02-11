@@ -18,11 +18,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class Zoro extends Ability {
     private double dmg = 0;
 
-    public Zoro() {
+    public Zoro(Player player) {
         super(AbilitySpec.builder("조로", Type.Active_Immediately, Rank.S)
                 .cooldown(45)
                 .guide(Usage.IronLeft + "능력 사용 시 칼의 대미지가 랜덤으로 설정됩니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
         EventManager.registerEntityDamageByEntity(new EventData(this, 1));
     }

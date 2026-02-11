@@ -13,7 +13,6 @@ public final class AbilitySpec {
     private final Rank rank;
     private final int cooldown;
     private final int duration;
-    private final boolean runAbility;
     private final ShowText showText;
     private final String[] guide;
 
@@ -23,7 +22,6 @@ public final class AbilitySpec {
         this.rank = builder.rank;
         this.cooldown = builder.cooldown;
         this.duration = builder.duration;
-        this.runAbility = builder.runAbility;
         this.showText = builder.showText;
         this.guide = builder.guide;
     }
@@ -33,7 +31,6 @@ public final class AbilitySpec {
     public Rank rank() { return rank; }
     public int cooldown() { return cooldown; }
     public int duration() { return duration; }
-    public boolean runAbility() { return runAbility; }
     public ShowText showText() { return showText; }
     public String[] guide() { return guide; }
 
@@ -50,7 +47,6 @@ public final class AbilitySpec {
         // Optional with defaults
         private int cooldown = 0;
         private int duration = 0;
-        private boolean runAbility = true;
         private ShowText showText = ShowText.All_Text;
         private String[] guide = new String[0];
 
@@ -67,11 +63,6 @@ public final class AbilitySpec {
 
         public Builder duration(int duration) {
             this.duration = duration;
-            return this;
-        }
-
-        public Builder runAbility(boolean runAbility) {
-            this.runAbility = runAbility;
             return this;
         }
 

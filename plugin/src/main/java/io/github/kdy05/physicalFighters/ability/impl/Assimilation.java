@@ -15,17 +15,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import java.util.Objects;
-
 public class Assimilation extends Ability implements CommandInterface {
     private boolean ActiveAss = false;
 
-    public Assimilation() {
+    public Assimilation(Player player) {
         super(AbilitySpec.builder("흡수", Type.Passive_Manual, Rank.S)
                 .guide("자신이 죽인 플레이어의 능력을 흡수합니다.",
                         "\"/va a\" 명령으로 자신이 흡수한 능력들을 확인할 수 있습니다.",
                         "흡수 가능한 능력의 개수는 제한이 없지만 액티브 능력은 최대 1개만 가능합니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDeath(new EventData(this, 0));
     }
 
@@ -48,16 +50,17 @@ public class Assimilation extends Ability implements CommandInterface {
             Ability ability = AbilityUtils.findAbility(victim);
             Player player = event0.getEntity().getKiller();
             if (ability == null) return;
-            ability.cancelCTimer();
-            ability.cancelDTimer();
+            String absorbedTypeName = ability.getAbilityName();
             if (ability.getAbilityType() == Type.Passive_AutoMatic || ability.getAbilityType() == Type.Passive_Manual) {
-                ability.setPlayer(player, false);
+                AbilityRegistry.deactivate(ability, false);
+                AbilityRegistry.createAndActivate(absorbedTypeName, player, false);
                 player.sendMessage(ChatColor.GREEN + "새로운 패시브 능력을 흡수하였습니다.");
-                player.sendMessage(ChatColor.YELLOW + "새로운 능력 : " + ChatColor.WHITE + ability.getAbilityName());
+                player.sendMessage(ChatColor.YELLOW + "새로운 능력 : " + ChatColor.WHITE + absorbedTypeName);
             } else if (!this.ActiveAss) {
-                ability.setPlayer(player, false);
+                AbilityRegistry.deactivate(ability, false);
+                AbilityRegistry.createAndActivate(absorbedTypeName, player, false);
                 player.sendMessage(ChatColor.GREEN + "새로운 액티브 능력을 흡수하였습니다.");
-                player.sendMessage(ChatColor.YELLOW + "새로운 능력 : " + ChatColor.WHITE + ability.getAbilityName());
+                player.sendMessage(ChatColor.YELLOW + "새로운 능력 : " + ChatColor.WHITE + absorbedTypeName);
                 player.sendMessage(ChatColor.RED + "더이상 액티브 흡수는 불가능합니다.");
                 this.ActiveAss = true;
             } else {
@@ -79,10 +82,8 @@ public class Assimilation extends Ability implements CommandInterface {
         if (sender instanceof Player && isOwner((Player) sender)
                 && args[0].equalsIgnoreCase("a") && args.length == 1) {
             sender.sendMessage(ChatColor.GREEN + "-- 당신이 소유한 능력 --");
-            for (Ability ability : AbilityRegistry.AbilityList) {
-                if (ability.isOwner(getPlayer())) {
-                    Objects.requireNonNull(getPlayer()).sendMessage(ability.getAbilityName());
-                }
+            for (Ability ability : AbilityRegistry.findAbilities((Player) sender)) {
+                sender.sendMessage(ability.getAbilityName());
             }
             return true;
         }

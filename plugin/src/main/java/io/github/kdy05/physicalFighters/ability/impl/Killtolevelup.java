@@ -19,11 +19,15 @@ public class Killtolevelup extends Ability implements BaseItem {
 
     private int dama = 4;
 
-    public Killtolevelup() {
+    public Killtolevelup(Player player) {
         super(AbilitySpec.builder("폭주", Type.Passive_Manual, Rank.SS)
                 .guide("깃털의 처음 대미지는 4입니다.",
                         "깃털로 적을 처치할 때마다 대미지가 2만큼 늘어납니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         EventManager.registerEntityDeath(new EventData(this, 1));
         registerBaseItemEvents();

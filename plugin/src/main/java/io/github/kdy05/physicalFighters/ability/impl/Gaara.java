@@ -17,11 +17,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Gaara extends Ability {
     private Location targetLocation = null;
 
-    public Gaara() {
+    public Gaara(Player player) {
         super(AbilitySpec.builder("가아라", Type.Active_Immediately, Rank.B)
                 .guide(Usage.IronLeft + "바라보는 방향에 모래를 떨어뜨리고, 잠시 후 폭발시킵니다.")
                 .cooldown(45)
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
     }
 
@@ -72,6 +76,8 @@ public class Gaara extends Ability {
 
         @Override
         public void run() {
+            this.world.createExplosion(this.location, 5.0F);
+            this.world.createExplosion(this.location, 5.0F);
             this.world.createExplosion(this.location, 5.0F);
         }
     }

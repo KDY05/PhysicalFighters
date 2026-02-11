@@ -15,11 +15,15 @@ public class Apollon extends Ability {
     // 타겟 위치 저장
     private Location targetLocation = null;
 
-    public Apollon() {
+    public Apollon(Player player) {
         super(AbilitySpec.builder("아폴론", Type.Active_Immediately, Rank.S)
                 .cooldown(45)
                 .guide(Usage.IronLeft + "바라보는 방향에 불구덩이를 만듭니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
     }
 

@@ -22,14 +22,14 @@ public class Lockdown extends Ability implements CommandInterface {
     private Player caster = null;
     private String targetName = null;
 
-    public Lockdown() {
+    public Lockdown(Player player) {
         super(AbilitySpec.builder("봉인", Type.Active_Continue, Rank.B)
                 .cooldown(80)
                 .duration(LOCKDOWN_DURATION)
                 .guide("특정 플레이어의 능력을 1분간 봉인하며 배고픔 수치를 0으로 만듭니다.",
                         "\"/va lock <nickname>\" 명령어로 작동하며 대상이 60칸 이내에 있어야 합니다.",
                         "게임 시작 후 제약 시간 동안 능력 사용이 제한됩니다.")
-                .build());
+                .build(), player);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class Lockdown extends Ability implements CommandInterface {
 
         targetAbility.cancelDTimer();
         targetAbility.cancelCTimer();
-        targetAbility.setRunAbility(false);
+        targetAbility.unregisterEvents();
 
         if (!plugin.getConfigManager().isNoFoodMode()) {
             targetAbility.getPlayer().setFoodLevel(0);
@@ -114,10 +114,13 @@ public class Lockdown extends Ability implements CommandInterface {
 
     @Override
     public void A_FinalDurationEnd() {
-        if (targetAbility != null && targetAbility.getPlayer() != null) {
+        if (targetAbility != null) {
             Player target = targetAbility.getPlayer();
-            target.sendMessage(ChatColor.GREEN + "봉인이 해제되었습니다.");
-            targetAbility.setRunAbility(true);
+            if (target != null) {
+                target.sendMessage(ChatColor.GREEN + "봉인이 해제되었습니다.");
+                targetAbility.registerEvents();
+            }
+            targetAbility = null;
         }
     }
 

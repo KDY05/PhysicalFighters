@@ -12,13 +12,17 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Aegis extends Ability {
-    public Aegis() {
+    public Aegis(Player player) {
         super(AbilitySpec.builder("이지스", Type.Active_Continue, Rank.A)
                 .cooldown(28)
                 .duration(6)
                 .guide(Usage.IronLeft + "6초 동안 무적이 됩니다.",
                         "능력 사용 중엔 미러링 능력도 무시합니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
         EventManager.registerEntityDamage(new EventData(this, 1));
     }

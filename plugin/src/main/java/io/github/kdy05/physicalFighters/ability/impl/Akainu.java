@@ -34,13 +34,17 @@ public class Akainu extends Ability {
     private Location targetLocation = null;
     private final Map<Location, Material> originalBlocks = new HashMap<>();
 
-    public Akainu() {
+    public Akainu(Player player) {
         super(AbilitySpec.builder("아카이누", Type.Active_Immediately, Rank.SS)
                 .cooldown(45)
                 .guide(Usage.IronLeft + "바라보는 곳의 땅을 용암으로 바꿉니다.",
                         "4초 뒤에 용암이 다시 굳으며 적을 땅속에 가둡니다.",
                         Usage.Passive + "화염 및 용암 대미지를 무시합니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
         EventManager.registerEntityDamage(new EventData(this, 1));
     }
@@ -91,7 +95,8 @@ public class Akainu extends Ability {
         Location center = targetLocation.clone();
         saveAndReplaceBlocks(world, center);
         placeLava(center);
-        new LavaRestoreTask().runTaskLater(plugin, RESTORE_DELAY);
+        new LavaRestoreTask(new HashMap<>(originalBlocks)).runTaskLater(plugin, RESTORE_DELAY);
+        originalBlocks.clear();
 
         targetLocation = null;
     }
@@ -125,10 +130,16 @@ public class Akainu extends Ability {
         AbilityUtils.createBox(center.clone().add(0, -LAVA_DEPTH, 0), Material.LAVA, INNER_RADIUS, LAVA_DEPTH);
     }
 
-    private class LavaRestoreTask extends BukkitRunnable {
+    private static class LavaRestoreTask extends BukkitRunnable {
+        private final Map<Location, Material> blocksToRestore;
+
+        LavaRestoreTask(Map<Location, Material> blocksToRestore) {
+            this.blocksToRestore = blocksToRestore;
+        }
+
         @Override
         public void run() {
-            for (Map.Entry<Location, Material> entry : originalBlocks.entrySet()) {
+            for (Map.Entry<Location, Material> entry : blocksToRestore.entrySet()) {
                 Location loc = entry.getKey();
                 Material originalType = entry.getValue();
 
@@ -136,7 +147,6 @@ public class Akainu extends Ability {
                     loc.getWorld().getBlockAt(loc).setType(originalType);
                 }
             }
-            originalBlocks.clear();
         }
     }
 }

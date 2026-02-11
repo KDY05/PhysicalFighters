@@ -25,13 +25,17 @@ public class Crocodile extends Ability {
     private static final long STORM_INTERVAL = 30L;
     private static final double ENTITY_CHECK_RADIUS = 50.0;
 
-    public Crocodile() {
+    public Crocodile(Player player) {
         super(AbilitySpec.builder("크로커다일", Type.Active_Immediately, Rank.S)
                 .cooldown(20)
                 .guide(Usage.IronLeft + "자신의 주변의 있는 블록을 모래로 바꿉니다.",
                         Usage.IronRight + "모래 위에 있는 50칸 이내의 적에게",
                         "10초 동안 피해를 주며 끌어당기는 모래 바람을 일으킵니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
         registerRightClickEvent();
     }

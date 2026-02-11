@@ -10,15 +10,20 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.entity.Player;
 
 public class Fly extends Ability {
-    public Fly() {
+    public Fly(Player player) {
         super(AbilitySpec.builder("플라이", Type.Active_Continue, Rank.GOD)
                 .cooldown(60)
                 .duration(10)
                 .guide(Usage.IronLeft + "10초간 하늘을 날라다닐 수 있습니다.",
                         Usage.Passive + "낙하 대미지를 받지 않습니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
         EventManager.registerEntityDamage(new EventData(this, 1));
     }

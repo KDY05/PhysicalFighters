@@ -18,26 +18,27 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class EventManager implements Listener {
 
     private final PhysicalFighters plugin;
 
-    private static final ArrayList<Ability> leftClickHandlers = new ArrayList<>();
-    private static final ArrayList<Ability> rightClickHandlers = new ArrayList<>();
+    private static final CopyOnWriteArrayList<Ability> leftClickHandlers = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<Ability> rightClickHandlers = new CopyOnWriteArrayList<>();
 
-    private static final ArrayList<EventData> onEntityTarget = new ArrayList<>();
-    private static final ArrayList<EventData> onEntityDamage = new ArrayList<>();
-    private static final ArrayList<EventData> onEntityDamageByEntity = new ArrayList<>();
-    private static final ArrayList<EventData> onEntityDeath = new ArrayList<>();
-    private static final ArrayList<EventData> onPlayerRespawn = new ArrayList<>();
-    private static final ArrayList<EventData> onBlockBreakEvent = new ArrayList<>();
-    private static final ArrayList<EventData> onSignChangeEvent = new ArrayList<>();
-    private static final ArrayList<EventData> onProjectileLaunchEvent = new ArrayList<>();
-    private static final ArrayList<EventData> onPlayerDropItem = new ArrayList<>();
-    private static final ArrayList<EventData> onPlayerMoveEvent = new ArrayList<>();
-    private static final ArrayList<EventData> onProjectileHitEvent = new ArrayList<>();
+    private static final CopyOnWriteArrayList<EventData> onEntityTarget = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<EventData> onEntityDamage = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<EventData> onEntityDamageByEntity = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<EventData> onEntityDeath = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<EventData> onPlayerRespawn = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<EventData> onBlockBreakEvent = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<EventData> onSignChangeEvent = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<EventData> onProjectileLaunchEvent = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<EventData> onPlayerDropItem = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<EventData> onPlayerMoveEvent = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<EventData> onProjectileHitEvent = new CopyOnWriteArrayList<>();
 
     // --- 이벤트 등록 API ---
 
@@ -55,6 +56,38 @@ public final class EventManager implements Listener {
     public static void registerPlayerDropItem(EventData data) { onPlayerDropItem.add(data); }
     public static void registerPlayerMove(EventData data) { onPlayerMoveEvent.add(data); }
     public static void registerProjectileHit(EventData data) { onProjectileHitEvent.add(data); }
+
+    public static void unregisterAll(Ability ability) {
+        leftClickHandlers.remove(ability);
+        rightClickHandlers.remove(ability);
+        onEntityTarget.removeIf(d -> d.ability == ability);
+        onEntityDamage.removeIf(d -> d.ability == ability);
+        onEntityDamageByEntity.removeIf(d -> d.ability == ability);
+        onEntityDeath.removeIf(d -> d.ability == ability);
+        onPlayerRespawn.removeIf(d -> d.ability == ability);
+        onBlockBreakEvent.removeIf(d -> d.ability == ability);
+        onSignChangeEvent.removeIf(d -> d.ability == ability);
+        onProjectileLaunchEvent.removeIf(d -> d.ability == ability);
+        onPlayerDropItem.removeIf(d -> d.ability == ability);
+        onPlayerMoveEvent.removeIf(d -> d.ability == ability);
+        onProjectileHitEvent.removeIf(d -> d.ability == ability);
+    }
+
+    public static void clearAll() {
+        leftClickHandlers.clear();
+        rightClickHandlers.clear();
+        onEntityTarget.clear();
+        onEntityDamage.clear();
+        onEntityDamageByEntity.clear();
+        onEntityDeath.clear();
+        onPlayerRespawn.clear();
+        onBlockBreakEvent.clear();
+        onSignChangeEvent.clear();
+        onProjectileLaunchEvent.clear();
+        onPlayerDropItem.clear();
+        onPlayerMoveEvent.clear();
+        onProjectileHitEvent.clear();
+    }
 
     public EventManager(PhysicalFighters plugin) {
         this.plugin = plugin;
@@ -120,7 +153,7 @@ public final class EventManager implements Listener {
     }
 
     private void handleVictim(Player victim) {
-        for (Ability ability : AbilityRegistry.AbilityList) {
+        for (Ability ability : AbilityRegistry.getActiveAbilities()) {
             if (ability.isOwner(victim) && ability.isDeathExempt()) {
                 return;
             }
@@ -152,14 +185,14 @@ public final class EventManager implements Listener {
         // 능력서 사용
         Player player = event.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
-        int bookCode = AbilityBook.parseAbilityCode(handItem);
-        if (bookCode >= 0) {
+        String bookAbility = AbilityBook.parseAbilityName(handItem);
+        if (bookAbility != null) {
             player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-            GameUtils.assignAbility(player, bookCode, player, plugin.getConfigManager().isAbilityOverLap());
+            GameUtils.assignAbility(player, bookAbility, player, plugin.getConfigManager().isAbilityOverLap());
         }
     }
 
-    private void executeAbility(ArrayList<EventData> dataList, Event event) {
+    private void executeAbility(List<EventData> dataList, Event event) {
         for (EventData data : dataList) {
             Ability ability = data.ability;
             if (ability.getAbilityType() == Type.Active_Continue

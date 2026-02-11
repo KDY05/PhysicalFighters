@@ -9,13 +9,18 @@ import io.github.kdy05.physicalFighters.util.EventData;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.entity.Player;
 
 public class Sasuke extends Ability {
-    public Sasuke() {
+    public Sasuke(Player player) {
         super(AbilitySpec.builder("사스케", Type.Active_Immediately, Rank.S)
                 .cooldown(30)
                 .guide(Usage.IronAttack + "치도리 - 엄청난 대미지로 감전시킵니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this));
     }
 

@@ -18,12 +18,16 @@ import org.bukkit.event.entity.EntityDamageEvent;
 public class Roclee extends Ability {
     private boolean fallDamageImmune = false;
 
-    public Roclee() {
+    public Roclee(Player player) {
         super(AbilitySpec.builder("록리", Type.Active_Immediately, Rank.S)
                 .cooldown(20)
                 .guide(Usage.IronAttack + "피해를 입히며 공중으로 끌어올립니다.",
                         "이때 시전자는 5초간 낙하 대미지를 받지 않습니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         EventManager.registerEntityDamage(new EventData(this, 1));
     }

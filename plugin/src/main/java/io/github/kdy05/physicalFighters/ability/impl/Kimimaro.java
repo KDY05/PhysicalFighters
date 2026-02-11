@@ -15,11 +15,15 @@ import org.bukkit.inventory.ItemStack;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 
 public class Kimimaro extends Ability implements BaseItem {
-    public Kimimaro() {
+    public Kimimaro(Player player) {
         super(AbilitySpec.builder("키미마로", Type.Passive_Manual, Rank.SS)
                 .guide("뼈다귀로 상대를 공격할 시에 강한 대미지를 주고,",
                         "40% 확률로 상대에게 5초간 독 효과를 겁니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerBaseItemEvents();
     }

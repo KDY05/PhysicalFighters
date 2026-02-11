@@ -15,12 +15,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Flower extends Ability {
-    public Flower() {
+    public Flower(Player player) {
         super(AbilitySpec.builder("흡혈초", Type.Active_Immediately, Rank.SS)
                 .cooldown(30)
                 .guide(Usage.IronAttack + "맞은 사람의 체력을 흡수합니다.",
                         Usage.IronRight + "자신의 체력을 소비해 레벨을 얻습니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this));
         registerRightClickEvent();
     }

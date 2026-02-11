@@ -13,10 +13,14 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Cuma extends Ability {
-    public Cuma() {
+    public Cuma(Player player) {
         super(AbilitySpec.builder("바솔로뮤 쿠마", Type.Passive_AutoMatic, Rank.S)
                 .guide("피격 시 상대를 넉백시키며, 일정 확률로 받은 공격을 상대에게 되돌려줍니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this));
     }
 

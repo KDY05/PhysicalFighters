@@ -27,12 +27,16 @@ public class Poseidon extends Ability {
 
     private Location targetLocation = null;
 
-    public Poseidon() {
+    public Poseidon(Player player) {
         super(AbilitySpec.builder("포세이돈", Type.Active_Immediately, Rank.SS)
                 .cooldown(60)
                 .guide("바라보는 곳에 거대한 어항을 만들어 가둡니다.",
                         "물 속에서 자신에게는 버프, 상대에게는 디버프를 겁니다.")
-                .build());
+                .build(), player);
+    }
+
+    @Override
+    public void registerEvents() {
         registerLeftClickEvent();
         EventManager.registerPlayerMove(new EventData(this, 1));
     }
