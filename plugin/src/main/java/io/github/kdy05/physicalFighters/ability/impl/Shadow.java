@@ -27,9 +27,9 @@ public class Shadow extends Ability {
                         "회피 - 피격 시 10% 확률로 회피하며, 체력 4를 회복합니다.",
                         "기습 - 뒤에서 공격할 시 대미지를 2배로 입히고, 일시적으로 추가 이동속도를 얻습니다.")
                 .build());
-        EventManager.onEntityTarget.add(new EventData(this, 0));
-        EventManager.onEntityDamage.add(new EventData(this, 1));
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 2));
+        EventManager.registerEntityTarget(new EventData(this, 0));
+        EventManager.registerEntityDamage(new EventData(this, 1));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 2));
     }
 
     @Override

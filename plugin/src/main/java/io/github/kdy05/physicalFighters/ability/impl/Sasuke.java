@@ -16,7 +16,7 @@ public class Sasuke extends Ability {
                 .cooldown(30)
                 .guide(Usage.IronAttack + "치도리 - 엄청난 대미지로 감전시킵니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        EventManager.registerEntityDamageByEntity(new EventData(this));
     }
 
     @Override

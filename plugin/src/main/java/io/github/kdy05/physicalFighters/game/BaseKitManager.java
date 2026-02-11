@@ -16,13 +16,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public final class BaseKitManager implements Listener {
 
     private static final String FILE_NAME = "basekits.yml";
 
     private final PhysicalFighters plugin;
-    private final Map<Player, Inventory> editingInventories;
+    private final Map<UUID, Inventory> editingInventories;
     private final File dataFile;
     private FileConfiguration dataConfig;
 
@@ -109,7 +110,7 @@ public final class BaseKitManager implements Listener {
                 gui.setItem(i, basicItems[i].clone());
             }
         }
-        editingInventories.put(player, gui);
+        editingInventories.put(player.getUniqueId(), gui);
         player.openInventory(gui);
     }
 
@@ -140,9 +141,10 @@ public final class BaseKitManager implements Listener {
         if (!(event.getPlayer() instanceof Player)) return;
         Player player = (Player) event.getPlayer();
 
-        if (!editingInventories.containsKey(player)) return;
+        UUID uuid = player.getUniqueId();
+        if (!editingInventories.containsKey(uuid)) return;
         Inventory closedInventory = event.getInventory();
         saveBasicItems(player, closedInventory);
-        editingInventories.remove(player);
+        editingInventories.remove(uuid);
     }
 }

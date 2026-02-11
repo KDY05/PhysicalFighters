@@ -4,17 +4,13 @@ import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.config.ConfigManager;
 import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
+import io.github.kdy05.physicalFighters.util.AbilityBook;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.Arrays;
-import java.util.LinkedList;
 
 public final class UtilCommand implements CommandInterface {
 
@@ -158,15 +154,13 @@ public final class UtilCommand implements CommandInterface {
             return;
         }
 
+        ItemStack stack = AbilityBook.create(abicode);
+        if (stack == null) {
+            player.sendMessage(ChatColor.RED + "능력서 생성에 실패했습니다.");
+            return;
+        }
+
         Ability ability = AbilityRegistry.AbilityList.get(abicode);
-        ItemStack stack = new ItemStack(Material.ENCHANTED_BOOK);
-        ItemMeta meta = stack.getItemMeta();
-        if (meta == null) return;
-
-        meta.setDisplayName(ChatColor.GOLD + "[능력서]" + ChatColor.WHITE + abicode + ". " + ability.getAbilityName());
-        meta.setLore(new LinkedList<>(Arrays.asList(ability.getGuide())));
-        stack.setItemMeta(meta);
-
         player.getInventory().addItem(stack);
         player.sendMessage("능력서를 만들었습니다. " + ChatColor.GOLD + ability.getAbilityName());
     }

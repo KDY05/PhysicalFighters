@@ -19,7 +19,7 @@ public class Trash extends Ability {
                 .guide(Usage.IronRight + "체력을 소비하여 1분간 허약해집니다.",
                         Usage.IronAttack + "3% 확률로 능력을 서로 바꿉니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        EventManager.registerEntityDamageByEntity(new EventData(this));
         registerRightClickEvent();
     }
 

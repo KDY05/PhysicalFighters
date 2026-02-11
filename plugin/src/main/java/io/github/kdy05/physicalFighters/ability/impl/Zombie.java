@@ -1,6 +1,5 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
@@ -17,51 +16,42 @@ public class Zombie extends Ability {
         super(AbilitySpec.builder("좀비", Type.Passive_AutoMatic, Rank.B)
                 .guide("모든 대미지의 반을 흡수합니다. 단, 화염 대미지를 8배로 받습니다.")
                 .build());
-        EventManager.onEntityDamage.add(new EventData(this));
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 1));
+        // onEntityDamage는 EntityDamageByEntityEvent도 수신하므로 단일 등록으로 통합
+        EventManager.registerEntityDamage(new EventData(this));
     }
 
     @Override
     public int A_Condition(Event event, int CustomData) {
-        if (CustomData == 0) {
-            EntityDamageEvent event0 = (EntityDamageEvent) event;
-            if (isOwner(event0.getEntity())) {
-                if (event0.getCause() == DamageCause.LAVA || event0.getCause() == DamageCause.FIRE
-                        || event0.getCause() == DamageCause.FIRE_TICK)
-                    return 0;
-                if (event0.getCause() == DamageCause.BLOCK_EXPLOSION
-                        || event0.getCause() == DamageCause.ENTITY_EXPLOSION)
-                    return 1;
-                if (event0.getCause() == DamageCause.FALL || event0.getCause() == DamageCause.POISON
-                        || event0.getCause() == DamageCause.PROJECTILE)
-                    return 1;
-            }
-        } else if (CustomData == 1) {
-            EntityDamageByEntityEvent event1 = (EntityDamageByEntityEvent) event;
-            if (isOwner(event1.getEntity()) && event1.getDamager() instanceof LivingEntity) {
-                LivingEntity entity = (LivingEntity) event1.getDamager();
-                if (!(entity instanceof Player)) return 2;
-                Player p = (Player) entity;
-                Material handItem = p.getInventory().getItemInMainHand().getType();
-                if (handItem != Material.GOLD_INGOT && handItem != DefaultItem) {
-                    return 2;
-                }
+        EntityDamageEvent event0 = (EntityDamageEvent) event;
+        if (!isOwner(event0.getEntity())) return -1;
+
+        // 화염 대미지 → 8배
+        if (event0.getCause() == DamageCause.LAVA || event0.getCause() == DamageCause.FIRE
+                || event0.getCause() == DamageCause.FIRE_TICK)
+            return 0;
+
+        // 능력 아이템(철괴/금괴)에 의한 공격은 감소 없음
+        if (event0 instanceof EntityDamageByEntityEvent) {
+            EntityDamageByEntityEvent entityEvent = (EntityDamageByEntityEvent) event0;
+            if (entityEvent.getDamager() instanceof Player) {
+                Player attacker = (Player) entityEvent.getDamager();
+                Material handItem = attacker.getInventory().getItemInMainHand().getType();
+                if (handItem == Material.GOLD_INGOT || handItem == DefaultItem)
+                    return -1;
             }
         }
-        return -1;
+
+        // 그 외 모든 대미지 → 0.5배
+        return 1;
     }
 
     @Override
     public void A_Effect(Event event, int CustomData) {
+        EntityDamageEvent event0 = (EntityDamageEvent) event;
         if (CustomData == 0) {
-            EntityDamageEvent event0 = (EntityDamageEvent) event;
             event0.setDamage(event0.getDamage() * 8);
-        } else if (CustomData == 1) {
-            EntityDamageEvent event1 = (EntityDamageEvent) event;
-            event1.setDamage(event1.getDamage() * 0.5);
-        } else if (CustomData == 2) {
-            EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
-            event2.setDamage(event2.getDamage() * 0.5);
+        } else {
+            event0.setDamage(event0.getDamage() * 0.5);
         }
     }
 }

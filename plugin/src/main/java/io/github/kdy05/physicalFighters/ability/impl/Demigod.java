@@ -18,7 +18,7 @@ public class Demigod extends Ability {
                 .guide("반은 인간, 반은 신인 능력자입니다.",
                         "대미지를 받으면 일정 확률로 10초간 랜덤 버프가 발동됩니다.")
                 .build());
-        EventManager.onEntityDamage.add(new EventData(this));
+        EventManager.registerEntityDamage(new EventData(this));
     }
 
     @Override

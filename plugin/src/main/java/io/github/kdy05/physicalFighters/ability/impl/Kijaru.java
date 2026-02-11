@@ -31,9 +31,9 @@ public class Kijaru extends Ability {
                         Usage.IronRight + "바라보는 곳으로 순간이동합니다. (충전시간: 120초 / 최대 충전량 2회)",
                         Usage.Passive + "낙하 대미지를 받지 않습니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        EventManager.registerEntityDamageByEntity(new EventData(this));
         registerRightClickEvent();
-        EventManager.onEntityDamage.add(new EventData(this, 2));
+        EventManager.registerEntityDamage(new EventData(this, 2));
     }
 
     @Override

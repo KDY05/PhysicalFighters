@@ -14,7 +14,7 @@ public class Berserker extends Ability {
                 .guide("체력이 낮아질수록 대미지가 증폭됩니다.",
                         "6칸 ↓ - 1.5배, 4칸 ↓ - 2배, 2칸 ↓ - 3배, 반 칸 ↓ - 4배")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 0));
     }
 
     @Override

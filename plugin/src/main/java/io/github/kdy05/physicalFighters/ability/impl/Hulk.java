@@ -23,7 +23,7 @@ public class Hulk extends Ability {
                 .duration(30)
                 .guide(Usage.IronRight + "30초간 각종 버프를 받으며 주는 대미지가 1.5배, 받는 대미지가 절반이 됩니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerRightClickEvent();
     }
 

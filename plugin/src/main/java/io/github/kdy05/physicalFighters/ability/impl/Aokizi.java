@@ -29,7 +29,7 @@ public class Aokizi extends Ability {
                 .build());
         registerLeftClickEvent();
         registerRightClickEvent();
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 2));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 2));
     }
 
     @Override

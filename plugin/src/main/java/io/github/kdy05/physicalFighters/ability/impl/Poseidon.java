@@ -34,7 +34,7 @@ public class Poseidon extends Ability {
                         "물 속에서 자신에게는 버프, 상대에게는 디버프를 겁니다.")
                 .build());
         registerLeftClickEvent();
-        EventManager.onPlayerMoveEvent.add(new EventData(this, 1));
+        EventManager.registerPlayerMove(new EventData(this, 1));
     }
 
     @Override

@@ -53,7 +53,7 @@ public class Tranceball extends Ability implements BaseItem {
                         "그랩 모드 - 눈덩이를 맞은 적을 자신의 위치로 당겨옵니다.",
                         "추격 모드 - 눈덩이를 맞은 적의 위치로 즉시 이동합니다.")
                 .build());
-        EventManager.onProjectileHitEvent.add(new EventData(this, 0));
+        EventManager.registerProjectileHit(new EventData(this, 0));
         registerRightClickEvent();
         registerBaseItemEvents();
     }

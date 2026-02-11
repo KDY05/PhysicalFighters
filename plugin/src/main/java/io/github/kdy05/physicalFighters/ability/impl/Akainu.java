@@ -42,7 +42,7 @@ public class Akainu extends Ability {
                         Usage.Passive + "화염 및 용암 대미지를 무시합니다.")
                 .build());
         registerLeftClickEvent();
-        EventManager.onEntityDamage.add(new EventData(this, 1));
+        EventManager.registerEntityDamage(new EventData(this, 1));
     }
 
     @Override

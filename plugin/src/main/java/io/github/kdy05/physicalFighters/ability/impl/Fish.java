@@ -46,7 +46,7 @@ public class Fish extends Ability implements BaseItem {
                 .guide("낚싯대로 타격 시 강한 대미지를 주고, 낮은 확률로 전용 물고기를 얻습니다.",
                         "물고기를 들고 타격 시, 더욱 강한 대미지를 줍니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerBaseItemEvents();
     }
 

@@ -21,7 +21,7 @@ public class PoisonArrow extends Ability implements BaseItem {
                 .guide("화살에 맞은 적은 6초간 독에걸립니다.",
                         "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerBaseItemEvents();
     }
 

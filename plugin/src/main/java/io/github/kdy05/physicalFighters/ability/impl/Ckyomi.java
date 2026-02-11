@@ -16,7 +16,7 @@ public class Ckyomi extends Ability {
         super(AbilitySpec.builder("츠쿠요미", Type.Passive_AutoMatic, Rank.A)
                 .guide("상대를 공격하면 상대에게 5초간 혼란 효과와 디버프를 줍니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        EventManager.registerEntityDamageByEntity(new EventData(this));
     }
 
     @Override

@@ -20,7 +20,7 @@ public class Kimimaro extends Ability implements BaseItem {
                 .guide("뼈다귀로 상대를 공격할 시에 강한 대미지를 주고,",
                         "40% 확률로 상대에게 5초간 독 효과를 겁니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerBaseItemEvents();
     }
 

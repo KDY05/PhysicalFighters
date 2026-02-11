@@ -32,7 +32,7 @@ public class Gladiator extends Ability {
                 .guide(Usage.IronAttack + "천공의 투기장으로 이동하여 15초간 1:1 대결을 펼칩니다.",
                         "이때 상대는 디버프, 당신은 버프를 받습니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 0));
     }
 
     @Override

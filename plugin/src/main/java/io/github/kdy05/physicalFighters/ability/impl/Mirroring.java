@@ -19,8 +19,11 @@ public class Mirroring extends Ability {
         super(AbilitySpec.builder("미러링", Type.Passive_Manual, Rank.SSS)
                 .guide("당신을 죽인 사람을 함께 저승으로 끌고갑니다.")
                 .build());
-        EventManager.onEntityDeath.add(new EventData(this));
+        EventManager.registerEntityDeath(new EventData(this));
     }
+
+    @Override
+    public int getMinimumPlayers() { return 7; }
 
     @Override
     public int A_Condition(Event event, int CustomData) {

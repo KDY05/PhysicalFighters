@@ -22,7 +22,7 @@ public class FallArrow extends Ability implements BaseItem {
         super(AbilitySpec.builder("중력화살", Type.Passive_Manual, Rank.S)
                 .guide("화살에 맞은 플레이어는 공중으로 뜹니다. [추가타 가능]")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerBaseItemEvents();
     }
 

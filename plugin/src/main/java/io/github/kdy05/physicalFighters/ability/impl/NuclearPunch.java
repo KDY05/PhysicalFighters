@@ -16,7 +16,7 @@ public class NuclearPunch extends Ability {
                 .cooldown(45)
                 .guide(Usage.IronAttack + "대미지 20을 주며 매우 멀리 밀쳐버립니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        EventManager.registerEntityDamageByEntity(new EventData(this));
     }
 
     @Override

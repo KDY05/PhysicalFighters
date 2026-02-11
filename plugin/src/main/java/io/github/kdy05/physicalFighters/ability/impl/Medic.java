@@ -20,7 +20,7 @@ public class Medic extends Ability {
                 .guide(Usage.IronAttack + "타인의 체력을 6만큼 회복합니다.",
                         Usage.IronRight + "자신의 체력을 6만큼 회복합니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        EventManager.registerEntityDamageByEntity(new EventData(this));
         registerRightClickEvent();
     }
 

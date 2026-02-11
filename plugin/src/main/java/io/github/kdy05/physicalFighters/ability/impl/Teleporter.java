@@ -30,8 +30,8 @@ public class Teleporter extends Ability implements BaseItem {
                         "능력 사용 시 이름이 적힌 플레이어가 표지판으로 이동합니다.")
                 .build());
         registerLeftClickEvent();
-        EventManager.onSignChangeEvent.add(new EventData(this, 1));
-        EventManager.onBlockBreakEvent.add(new EventData(this, 2));
+        EventManager.registerSignChange(new EventData(this, 1));
+        EventManager.registerBlockBreak(new EventData(this, 2));
         registerBaseItemEvents();
     }
 

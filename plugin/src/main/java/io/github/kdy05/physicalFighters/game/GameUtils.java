@@ -3,7 +3,11 @@ package io.github.kdy05.physicalFighters.game;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
+import org.bukkit.BanList;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -62,10 +66,8 @@ public final class GameUtils {
     }
 
     public static void showInfo(Player player, boolean abilityOverLap) {
-        Ability ability;
-        if (AbilityRegistry.assimilation.getPlayer() == player) {
-            ability = AbilityRegistry.assimilation;
-        } else {
+        Ability ability = findPrimaryAbility(player);
+        if (ability == null) {
             ability = findAbility(player);
         }
         if (ability == null) {
@@ -101,6 +103,43 @@ public final class GameUtils {
         } else {
             return "None";
         }
+    }
+
+    /**
+     * OnKill 설정에 따라 사망 처리를 실행합니다.
+     * (관전자 모드 전환 / 킥 / 밴)
+     */
+    public static void applyDeathPenalty(Player victim) {
+        PhysicalFighters plugin = PhysicalFighters.getPlugin();
+        int onKill = plugin.getConfigManager().getOnKill();
+        if (onKill <= 0) return;
+
+        if (onKill == 1) {
+            Location deathLocation = victim.getLocation().clone();
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                victim.setGameMode(GameMode.SPECTATOR);
+                victim.spigot().respawn();
+                victim.teleport(deathLocation);
+                victim.sendTitle(ChatColor.RED + "사망하였습니다!",
+                        ChatColor.YELLOW + "관전자 모드로 전환합니다.", 10, 100, 10);
+            }, 1L);
+        } else if (onKill == 2) {
+            victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
+        } else if (onKill == 3) {
+            if (!victim.isOp()) {
+                Bukkit.getBanList(BanList.Type.NAME).addBan(victim.getName(),
+                        "당신은 죽었습니다. 다시 들어오실 수 없습니다.", null, null);
+                victim.kickPlayer("당신은 죽었습니다. 다시 들어오실 수 없습니다.");
+            } else {
+                victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
+            }
+        }
+    }
+
+    private static Ability findPrimaryAbility(Player p) {
+        for (Ability a : AbilityRegistry.AbilityList)
+            if (a.isOwner(p) && a.isInfoPrimary()) return a;
+        return null;
     }
 
     private static Ability findAbility(Player p) {

@@ -4,6 +4,7 @@ import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.Ability.Type;
 import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
+import io.github.kdy05.physicalFighters.util.AbilityBook;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -23,23 +24,37 @@ public final class EventManager implements Listener {
 
     private final PhysicalFighters plugin;
 
-    public static ArrayList<Ability> LeftHandEvent = new ArrayList<>();
-    public static ArrayList<Ability> RightHandEvent = new ArrayList<>();
+    private static final ArrayList<Ability> leftClickHandlers = new ArrayList<>();
+    private static final ArrayList<Ability> rightClickHandlers = new ArrayList<>();
 
-    public static ArrayList<EventData> onPlayerItemDamage = new ArrayList<>();
-    public static ArrayList<EventData> onFoodLevelChange = new ArrayList<>();
-    public static ArrayList<EventData> onEntityTarget = new ArrayList<>();
-    public static ArrayList<EventData> onEntityDamage = new ArrayList<>();
-    public static ArrayList<EventData> onEntityDamageByEntity = new ArrayList<>();
-    public static ArrayList<EventData> onEntityDeath = new ArrayList<>();
-    public static ArrayList<EventData> onPlayerInteract = new ArrayList<>();
-    public static ArrayList<EventData> onPlayerRespawn = new ArrayList<>();
-    public static ArrayList<EventData> onBlockBreakEvent = new ArrayList<>();
-    public static ArrayList<EventData> onSignChangeEvent = new ArrayList<>();
-    public static ArrayList<EventData> onProjectileLaunchEvent = new ArrayList<>();
-    public static ArrayList<EventData> onPlayerDropItem = new ArrayList<>();
-    public static ArrayList<EventData> onPlayerMoveEvent = new ArrayList<>();
-    public static ArrayList<EventData> onProjectileHitEvent = new ArrayList<>();
+    private static final ArrayList<EventData> onEntityTarget = new ArrayList<>();
+    private static final ArrayList<EventData> onEntityDamage = new ArrayList<>();
+    private static final ArrayList<EventData> onEntityDamageByEntity = new ArrayList<>();
+    private static final ArrayList<EventData> onEntityDeath = new ArrayList<>();
+    private static final ArrayList<EventData> onPlayerRespawn = new ArrayList<>();
+    private static final ArrayList<EventData> onBlockBreakEvent = new ArrayList<>();
+    private static final ArrayList<EventData> onSignChangeEvent = new ArrayList<>();
+    private static final ArrayList<EventData> onProjectileLaunchEvent = new ArrayList<>();
+    private static final ArrayList<EventData> onPlayerDropItem = new ArrayList<>();
+    private static final ArrayList<EventData> onPlayerMoveEvent = new ArrayList<>();
+    private static final ArrayList<EventData> onProjectileHitEvent = new ArrayList<>();
+
+    // --- 이벤트 등록 API ---
+
+    public static void registerLeftClick(Ability ability) { leftClickHandlers.add(ability); }
+    public static void registerRightClick(Ability ability) { rightClickHandlers.add(ability); }
+
+    public static void registerEntityTarget(EventData data) { onEntityTarget.add(data); }
+    public static void registerEntityDamage(EventData data) { onEntityDamage.add(data); }
+    public static void registerEntityDamageByEntity(EventData data) { onEntityDamageByEntity.add(data); }
+    public static void registerEntityDeath(EventData data) { onEntityDeath.add(data); }
+    public static void registerPlayerRespawn(EventData data) { onPlayerRespawn.add(data); }
+    public static void registerBlockBreak(EventData data) { onBlockBreakEvent.add(data); }
+    public static void registerSignChange(EventData data) { onSignChangeEvent.add(data); }
+    public static void registerProjectileLaunch(EventData data) { onProjectileLaunchEvent.add(data); }
+    public static void registerPlayerDropItem(EventData data) { onPlayerDropItem.add(data); }
+    public static void registerPlayerMove(EventData data) { onPlayerMoveEvent.add(data); }
+    public static void registerProjectileHit(EventData data) { onProjectileHitEvent.add(data); }
 
     public EventManager(PhysicalFighters plugin) {
         this.plugin = plugin;
@@ -51,7 +66,6 @@ public final class EventManager implements Listener {
         if (plugin.getConfigManager().isInfinityDur()) {
             event.setCancelled(true);
         }
-        executeAbility(onPlayerItemDamage, event);
     }
 
     @EventHandler
@@ -59,9 +73,7 @@ public final class EventManager implements Listener {
         // 배고픔 무한 모드
         if (plugin.getConfigManager().isNoFoodMode()) {
             event.setFoodLevel(20);
-            return;
         }
-        executeAbility(onFoodLevelChange, event);
     }
 
     @EventHandler
@@ -84,6 +96,9 @@ public final class EventManager implements Listener {
                 event.getEntity().setFireTicks(0);
             }
         }
+        // 주의: EntityDamageByEntityEvent는 EntityDamageEvent의 하위 클래스이므로
+        // 양쪽 리스트에 같은 능력을 등록하면 이중 실행됩니다.
+        // 양쪽 등록이 필요한 경우, A_Condition에서 조건이 겹치지 않도록 해야 합니다.
         if (event instanceof EntityDamageByEntityEvent) {
             executeAbility(onEntityDamageByEntity, event);
         }
@@ -105,32 +120,12 @@ public final class EventManager implements Listener {
     }
 
     private void handleVictim(Player victim) {
-        // 사망 시 처리 (OnKill: 0=아무것도 안함, 1=관전자 모드, 2=킥, 3=밴)
-        int onKill = plugin.getConfigManager().getOnKill();
-        if (onKill <= 0 || AbilityRegistry.phoenix.isOwner(victim)) {
-            return;
-        }
-        if (onKill == 1) {
-            // 죽은 위치 저장
-            Location deathLocation = victim.getLocation().clone();
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                victim.setGameMode(GameMode.SPECTATOR);
-                victim.spigot().respawn();
-                victim.teleport(deathLocation);
-                victim.sendTitle(ChatColor.RED + "사망하였습니다!",
-                        ChatColor.YELLOW + "관전자 모드로 전환합니다.", 10, 100 ,10);
-            }, 1L);
-        } else if (onKill == 2) {
-            victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
-        } else if (onKill == 3) {
-            if (!victim.isOp()) {
-                Bukkit.getBanList(BanList.Type.NAME).addBan(victim.getName(),
-                        "당신은 죽었습니다. 다시 들어오실 수 없습니다.", null, null);
-                victim.kickPlayer("당신은 죽었습니다. 다시 들어오실 수 없습니다.");
-            } else {
-                victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
+        for (Ability ability : AbilityRegistry.AbilityList) {
+            if (ability.isOwner(victim) && ability.isDeathExempt()) {
+                return;
             }
         }
+        GameUtils.applyDeathPenalty(victim);
     }
 
     private void printDeathMessage(PlayerDeathEvent pde, Player killer, Player victim) {
@@ -154,19 +149,14 @@ public final class EventManager implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         filterAbilityExecution(event);
-
         // 능력서 사용
         Player player = event.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
-        if (handItem.getType() == Material.ENCHANTED_BOOK && handItem.getItemMeta() != null
-                && handItem.getItemMeta().getDisplayName().startsWith(ChatColor.GOLD + "[능력서]")) {
-            String name = handItem.getItemMeta().getDisplayName();
-            int n = Integer.parseInt(name.split("f")[1].split("\\.")[0]);
+        int bookCode = AbilityBook.parseAbilityCode(handItem);
+        if (bookCode >= 0) {
             player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-            GameUtils.assignAbility(player, n, player, plugin.getConfigManager().isAbilityOverLap());
+            GameUtils.assignAbility(player, bookCode, player, plugin.getConfigManager().isAbilityOverLap());
         }
-
-        executeAbility(onPlayerInteract, event);
     }
 
     private void executeAbility(ArrayList<EventData> dataList, Event event) {
@@ -183,11 +173,11 @@ public final class EventManager implements Listener {
     private void filterAbilityExecution(PlayerInteractEvent event) {
         Action action = event.getAction();
         if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
-            for (Ability ability : LeftHandEvent) {
+            for (Ability ability : leftClickHandlers) {
                 ability.execute(event, 0);
             }
         } else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-            for (Ability ability : RightHandEvent) {
+            for (Ability ability : rightClickHandlers) {
                 ability.execute(event, 1);
             }
         }

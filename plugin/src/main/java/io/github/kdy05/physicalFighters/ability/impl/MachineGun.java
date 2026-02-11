@@ -45,8 +45,8 @@ public class MachineGun extends Ability {
                         "크리티컬 - 20% 확률로 화살이 고정 대미지를 입힙니다.")
                 .build());
         registerRightClickEvent();
-        EventManager.onEntityDamageByEntity.add(new EventData(this, EVENT_DAMAGE));
-        EventManager.onProjectileHitEvent.add(new EventData(this, EVENT_PROJECTILE_HIT));
+        EventManager.registerEntityDamageByEntity(new EventData(this, EVENT_DAMAGE));
+        EventManager.registerProjectileHit(new EventData(this, EVENT_PROJECTILE_HIT));
     }
 
     @Override

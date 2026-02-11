@@ -52,9 +52,9 @@ public interface BaseItem {
     default void registerBaseItemEvents() {
         if (this instanceof Ability) {
             Ability ability = (Ability) this;
-            EventManager.onPlayerDropItem.add(new EventData(ability, ITEM_DROP_EVENT));
-            EventManager.onPlayerRespawn.add(new EventData(ability, ITEM_RESPAWN_EVENT));
-            EventManager.onEntityDeath.add(new EventData(ability, ITEM_DEATH_EVENT));
+            EventManager.registerPlayerDropItem(new EventData(ability, ITEM_DROP_EVENT));
+            EventManager.registerPlayerRespawn(new EventData(ability, ITEM_RESPAWN_EVENT));
+            EventManager.registerEntityDeath(new EventData(ability, ITEM_DEATH_EVENT));
         }
     }
 

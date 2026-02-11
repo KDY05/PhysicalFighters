@@ -21,7 +21,7 @@ public class Flower extends Ability {
                 .guide(Usage.IronAttack + "맞은 사람의 체력을 흡수합니다.",
                         Usage.IronRight + "자신의 체력을 소비해 레벨을 얻습니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        EventManager.registerEntityDamageByEntity(new EventData(this));
         registerRightClickEvent();
     }
 

@@ -24,7 +24,7 @@ public class Zoro extends Ability {
                 .guide(Usage.IronLeft + "능력 사용 시 칼의 대미지가 랜덤으로 설정됩니다.")
                 .build());
         registerLeftClickEvent();
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 1));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 1));
     }
 
     @Override

@@ -15,7 +15,7 @@ public class Explosion extends Ability {
         super(AbilitySpec.builder("익스플로젼", Type.Passive_Manual, Rank.B)
                 .guide("사망 시 엄청난 연쇄 폭발을 일으킵니다.")
                 .build());
-        EventManager.onEntityDeath.add(new EventData(this, 0));
+        EventManager.registerEntityDeath(new EventData(this, 0));
     }
 
     @Override

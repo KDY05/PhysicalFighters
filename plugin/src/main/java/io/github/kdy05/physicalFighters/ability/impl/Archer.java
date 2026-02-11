@@ -22,7 +22,7 @@ public class Archer extends Ability implements BaseItem {
                         "60% 확률로 6초간 불을 붙이며, 40% 확률로 폭발을 일으킵니다.",
                         "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerBaseItemEvents();
     }
 

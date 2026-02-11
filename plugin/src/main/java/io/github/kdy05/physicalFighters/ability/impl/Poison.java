@@ -15,7 +15,7 @@ public class Poison extends Ability {
         super(AbilitySpec.builder("포이즌", Type.Passive_AutoMatic, Rank.A)
                 .guide("자신에게 공격받은 사람은 3초간 독에 감염됩니다.")
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this));
+        EventManager.registerEntityDamageByEntity(new EventData(this));
     }
 
     @Override

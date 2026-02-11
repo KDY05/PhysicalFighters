@@ -20,7 +20,7 @@ public class Fly extends Ability {
                         Usage.Passive + "낙하 대미지를 받지 않습니다.")
                 .build());
         registerLeftClickEvent();
-        EventManager.onEntityDamage.add(new EventData(this, 1));
+        EventManager.registerEntityDamage(new EventData(this, 1));
     }
 
     @Override

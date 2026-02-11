@@ -19,7 +19,7 @@ final class AbilityDistributor {
      * 플레이어에게 랜덤 능력을 할당합니다.
      *
      * @param player 대상 플레이어
-     * @param playerCount 현재 플레이어 수 (mirroring 능력 제한에 사용)
+     * @param playerCount 현재 플레이어 수 (최소 인원 제한에 사용)
      * @return 능력 할당 성공 여부
      */
     public boolean assignRandomAbility(Player player, int playerCount) {
@@ -69,7 +69,7 @@ final class AbilityDistributor {
         List<Ability> available = new ArrayList<>();
         for (Ability ability : AbilityRegistry.AbilityList) {
             if (ability.getPlayer() == null &&
-                (playerCount > 6 || ability != AbilityRegistry.mirroring)) {
+                playerCount >= ability.getMinimumPlayers()) {
                 available.add(ability);
             }
         }

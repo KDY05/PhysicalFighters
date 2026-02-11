@@ -25,9 +25,9 @@ public class CP9 extends Ability {
                         Usage.Passive + "낙하 대미지를 무시합니다.")
                 .cooldown(20)
                 .build());
-        EventManager.onEntityDamageByEntity.add(new EventData(this, 0));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerRightClickEvent();
-        EventManager.onEntityDamage.add(new EventData(this, 2));
+        EventManager.registerEntityDamage(new EventData(this, 2));
     }
 
     @Override

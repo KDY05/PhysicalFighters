@@ -105,11 +105,11 @@ public abstract class Ability {
     // Common Utils
 
     public final void registerLeftClickEvent() {
-        EventManager.LeftHandEvent.add(this);
+        EventManager.registerLeftClick(this);
     }
 
     public final void registerRightClickEvent() {
-        EventManager.RightHandEvent.add(this);
+        EventManager.registerRightClick(this);
     }
 
     public final boolean isValidItem(Material material) {
@@ -206,6 +206,17 @@ public abstract class Ability {
     public void A_SetEvent(Player p) {}
 
     public void A_ResetEvent(Player p) {}
+
+    // Hooks — 서브클래스에서 필요 시 오버라이드
+
+    /** 사망 시 페널티를 면제받는 능력인지 여부 (예: 불사조) */
+    public boolean isDeathExempt() { return false; }
+
+    /** showInfo에서 우선 표시되는 능력인지 여부 (예: 흡수) */
+    public boolean isInfoPrimary() { return false; }
+
+    /** 랜덤 분배 시 필요한 최소 플레이어 수 (기본 0 = 제한 없음) */
+    public int getMinimumPlayers() { return 0; }
 
     public void A_CoolDownStart() {}
 

@@ -20,7 +20,7 @@ public class Aegis extends Ability {
                         "능력 사용 중엔 미러링 능력도 무시합니다.")
                 .build());
         registerLeftClickEvent();
-        EventManager.onEntityDamage.add(new EventData(this, 1));
+        EventManager.registerEntityDamage(new EventData(this, 1));
     }
 
     @Override

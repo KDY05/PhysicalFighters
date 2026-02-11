@@ -3,15 +3,14 @@ package io.github.kdy05.physicalFighters.ability.impl;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
+import io.github.kdy05.physicalFighters.game.GameUtils;
 import io.github.kdy05.physicalFighters.util.EventData;
 
 import java.util.HashMap;
+import java.util.UUID;
 
-import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -23,7 +22,7 @@ import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 public class Phoenix extends Ability {
     private int ReviveCounter = 0;
     private boolean AbilityUse = false;
-    private final HashMap<Player, ItemStack[]> invsave = new HashMap<>();
+    private final HashMap<UUID, ItemStack[]> invsave = new HashMap<>();
 
     public Phoenix() {
         super(AbilitySpec.builder("불사조", Type.Passive_Manual, Rank.A)
@@ -31,8 +30,8 @@ public class Phoenix extends Ability {
                         "타인에게 사망할 경우 1회에 한하여 자연사 판정으로 부활합니다.",
                         "부활시 자신의 능력이 모두에게 알려지게 됩니다.")
                 .build());
-        EventManager.onEntityDeath.add(new EventData(this, 0));
-        EventManager.onPlayerRespawn.add(new EventData(this, 1));
+        EventManager.registerEntityDeath(new EventData(this, 0));
+        EventManager.registerPlayerRespawn(new EventData(this, 1));
     }
 
     @Override
@@ -58,33 +57,12 @@ public class Phoenix extends Ability {
             PlayerDeathEvent event0 = (PlayerDeathEvent) event;
             Player killed = event0.getEntity();
 
-            invsave.put(killed, killed.getInventory().getContents());
+            invsave.put(killed.getUniqueId(), killed.getInventory().getContents());
             event0.getDrops().clear();
 
             if (this.AbilityUse) {
                 Bukkit.broadcastMessage(ChatColor.RED + "불사조가 죽었습니다. 더 이상 부활할수 없습니다.");
-                int onKill = plugin.getConfigManager().getOnKill();
-                if (onKill == 1) {
-                    Location deathLocation = killed.getLocation().clone();
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                        killed.setGameMode(GameMode.SPECTATOR);
-                        killed.spigot().respawn();
-                        killed.teleport(deathLocation);
-                        killed.sendTitle(ChatColor.RED + "사망하였습니다!",
-                                ChatColor.YELLOW + "관전자 모드로 전환합니다.",
-                                10, 100 ,10);
-                    }, 1L);
-                } else if (onKill == 2) {
-                    killed.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
-                } else if (onKill == 3) {
-                    if (!killed.isOp()) {
-                        Bukkit.getBanList(BanList.Type.NAME).addBan(killed.getName(),
-                                "당신은 죽었습니다. 다시 들어오실 수 없습니다.", null, null);
-                        killed.kickPlayer("당신은 죽었습니다. 다시 들어오실 수 없습니다.");
-                    } else {
-                        killed.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.");
-                    }
-                }
+                GameUtils.applyDeathPenalty(killed);
             } else {
                 Bukkit.broadcastMessage(ChatColor.RED + "불사조가 죽었습니다. 다시 부활할 수 있습니다.");
             }
@@ -96,13 +74,14 @@ public class Phoenix extends Ability {
         } else if (CustomData == 1) {
             PlayerRespawnEvent event1 = (PlayerRespawnEvent) event;
             Player player = event1.getPlayer();
-            ItemStack[] inv = invsave.get(player);
+            UUID uuid = player.getUniqueId();
+            ItemStack[] inv = invsave.get(uuid);
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 if (inv != null && player.isOnline()) {
                     player.getInventory().setContents(inv);
                 }
-                invsave.remove(player);
+                invsave.remove(uuid);
             }, 1L);
 
             if (!this.AbilityUse) {
@@ -119,6 +98,9 @@ public class Phoenix extends Ability {
             player.addPotionEffect(PotionEffectFactory.createResistance(600, 0));
         }
     }
+
+    @Override
+    public boolean isDeathExempt() { return true; }
 
     @Override
     public void A_SetEvent(Player p) {
