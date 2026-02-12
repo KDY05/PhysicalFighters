@@ -18,6 +18,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import java.util.UUID;
 
 public class MachineGun extends Ability {
     // 능력 설정 필드
@@ -38,12 +39,12 @@ public class MachineGun extends Ability {
     private static final int ACTION_SHOOT = 10;
     private static final int ACTION_RELOAD = 20;
 
-    public MachineGun(Player player) {
+    public MachineGun(UUID playerUuid) {
         super(AbilitySpec.builder("기관총", Type.Active_Immediately, Rank.S)
                 .showText(ShowText.Custom_Text)
                 .guide(Usage.GoldRight + "화살을 연사합니다. 철괴를 탄창으로 사용하며 한 탄창은 30발입니다.",
                         "크리티컬 - 20% 확률로 화살이 고정 대미지를 입힙니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

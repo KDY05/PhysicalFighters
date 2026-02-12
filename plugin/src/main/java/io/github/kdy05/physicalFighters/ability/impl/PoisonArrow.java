@@ -14,13 +14,14 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
+import java.util.UUID;
 
 public class PoisonArrow extends Ability implements BaseItem {
-    public PoisonArrow(Player player) {
+    public PoisonArrow(UUID playerUuid) {
         super(AbilitySpec.builder("독화살", Type.Passive_Manual, Rank.B)
                 .guide("화살에 맞은 적은 6초간 독에걸립니다.",
                         "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

@@ -13,15 +13,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import java.util.UUID;
 
 public class Gaara extends Ability {
     private Location targetLocation = null;
 
-    public Gaara(Player player) {
+    public Gaara(UUID playerUuid) {
         super(AbilitySpec.builder("가아라", Type.Active_Immediately, Rank.B)
                 .guide(Usage.IronLeft + "바라보는 방향에 모래를 떨어뜨리고, 잠시 후 폭발시킵니다.")
                 .cooldown(45)
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

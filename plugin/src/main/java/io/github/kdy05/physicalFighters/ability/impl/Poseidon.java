@@ -16,6 +16,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
+import java.util.UUID;
 
 public class Poseidon extends Ability {
     // 능력 설정 상수
@@ -27,12 +28,12 @@ public class Poseidon extends Ability {
 
     private Location targetLocation = null;
 
-    public Poseidon(Player player) {
+    public Poseidon(UUID playerUuid) {
         super(AbilitySpec.builder("포세이돈", Type.Active_Immediately, Rank.SS)
                 .cooldown(60)
                 .guide("바라보는 곳에 거대한 어항을 만들어 가둡니다.",
                         "물 속에서 자신에게는 버프, 상대에게는 디버프를 겁니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

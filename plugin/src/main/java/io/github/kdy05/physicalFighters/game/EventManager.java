@@ -153,8 +153,8 @@ public final class EventManager implements Listener {
     }
 
     private void handleVictim(Player victim) {
-        for (Ability ability : AbilityRegistry.getActiveAbilities()) {
-            if (ability.isOwner(victim) && ability.isDeathExempt()) {
+        for (Ability ability : AbilityRegistry.findAbilities(victim)) {
+            if (ability.isDeathExempt()) {
                 return;
             }
         }

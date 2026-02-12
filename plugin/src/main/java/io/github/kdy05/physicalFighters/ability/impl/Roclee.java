@@ -14,16 +14,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import java.util.UUID;
 
 public class Roclee extends Ability {
     private boolean fallDamageImmune = false;
 
-    public Roclee(Player player) {
+    public Roclee(UUID playerUuid) {
         super(AbilitySpec.builder("록리", Type.Active_Immediately, Rank.S)
                 .cooldown(20)
                 .guide(Usage.IronAttack + "피해를 입히며 공중으로 끌어올립니다.",
                         "이때 시전자는 5초간 낙하 대미지를 받지 않습니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

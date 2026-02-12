@@ -44,22 +44,11 @@ public final class PhysicalFighters extends JavaPlugin {
 
         getLogger().info(String.format("능력 %d개가 등록되었습니다.", AbilityRegistry.getTypeCount()));
 
-        // 활성 능력의 CommandInterface를 동적으로 라우팅
-        CommandInterface abilityCommandRouter = (sender, command, label, args) -> {
-            for (io.github.kdy05.physicalFighters.ability.Ability ability : AbilityRegistry.getActiveAbilities()) {
-                if (ability instanceof CommandInterface) {
-                    if (((CommandInterface) ability).onCommandEvent(sender, command, label, args))
-                        return true;
-                }
-            }
-            return false;
-        };
-
         gameManager = new GameManager(this);
         CommandManager commandManager = CommandManager.builder()
                 .addCommand(new GameCommand(this, gameManager))
                 .addCommand(new UtilCommand(this, configManager))
-                .addCommand(abilityCommandRouter)
+                .addCommand(AbilityRegistry::dispatchCommand)
                 .build();
 
         Objects.requireNonNull(getCommand("va")).setExecutor(commandManager);

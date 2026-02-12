@@ -22,6 +22,7 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Akainu extends Ability {
     // 범위 설정 상수
@@ -34,13 +35,13 @@ public class Akainu extends Ability {
     private Location targetLocation = null;
     private final Map<Location, Material> originalBlocks = new HashMap<>();
 
-    public Akainu(Player player) {
+    public Akainu(UUID playerUuid) {
         super(AbilitySpec.builder("아카이누", Type.Active_Immediately, Rank.SS)
                 .cooldown(45)
                 .guide(Usage.IronLeft + "바라보는 곳의 땅을 용암으로 바꿉니다.",
                         "4초 뒤에 용암이 다시 굳으며 적을 땅속에 가둡니다.",
                         Usage.Passive + "화염 및 용암 대미지를 무시합니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

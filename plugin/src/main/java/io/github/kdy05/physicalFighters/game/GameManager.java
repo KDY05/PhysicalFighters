@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.game;
 
 import io.github.kdy05.physicalFighters.BuildConfig;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
-import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import io.github.kdy05.physicalFighters.util.TimerBase;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -116,7 +115,7 @@ public final class GameManager {
 
     public void handleNo(Player player) {
         if (isValidAbilitySelection(player)) {
-            if (abilityDistributor.assignRandomAbility(player, playerList.size())) {
+            if (abilityDistributor.reassignRandomAbility(player, playerList.size())) {
                 GameUtils.showInfo(player, plugin.getConfigManager().isAbilityOverLap());
                 confirmPlayerAbility(player);
                 checkAllPlayersConfirmed();
@@ -156,33 +155,16 @@ public final class GameManager {
         broadcastMessage(ChatColor.AQUA + "인식된 플레이어 목록");
         broadcastMessage(ChatColor.GOLD + "==========");
 
-        int abilityCount = AbilityRegistry.getTypeCount();
         int index = 0;
-        int overflowCount = 0;
-
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (exceptionList.contains(player)) continue;
-
-            if (index < abilityCount) {
-                playerList.add(player);
-                broadcastMessage(String.format(ChatColor.GREEN + "%d. " + ChatColor.WHITE + "%s",
-                        index, player.getName()));
-            } else {
-                broadcastMessage(String.format(ChatColor.RED + "%d. %s (Error)", index, player.getName()));
-                overflowCount++;
-            }
+            playerList.add(player);
+            broadcastMessage(String.format(ChatColor.GREEN + "%d. " + ChatColor.WHITE + "%s",
+                    index, player.getName()));
             index++;
         }
 
-        int totalValidPlayers = playerList.size() + overflowCount;
-        if (overflowCount == 0) {
-            broadcastMessage(String.format(ChatColor.YELLOW + "총 인원수 : %d명", totalValidPlayers));
-        } else {
-            broadcastMessage(String.format(ChatColor.RED + "총 인원수 : %d명", totalValidPlayers));
-            broadcastMessage("인원이 능력의 개수보다 많습니다. 에러 처리된 분들은 능력을");
-            broadcastMessage("받을 수 없으며 모든 게임 진행 대상에서 제외됩니다.");
-        }
-
+        broadcastMessage(String.format(ChatColor.YELLOW + "총 인원수 : %d명", playerList.size()));
         broadcastMessage(ChatColor.GOLD + "==========");
 
         if (playerList.isEmpty()) {
@@ -221,44 +203,22 @@ public final class GameManager {
 
     private void processAbilitySelection() {
         scenario = ScriptStatus.AbilitySelect;
-
-        if (playerList.size() < AbilityRegistry.getTypeCount()) {
-            distributeAbilitiesWithChoice();
-            gameWarningTimer.startTimer(MAX_TIMER_DURATION, false);
-        } else {
-            distributeAbilitiesInstantly();
-            startGame();
-        }
+        distributeAbilitiesWithChoice();
+        gameWarningTimer.startTimer(MAX_TIMER_DURATION, false);
     }
 
     private void distributeAbilitiesWithChoice() {
+        if (!abilityDistributor.distributeAbilities(playerList)) {
+            broadcastMessage(ChatColor.RED + "경고, 할당 가능한 능력이 없습니다.");
+            return;
+        }
         for (Player player : playerList) {
-            if (!abilityDistributor.assignRandomAbility(player, playerList.size())) {
-                player.sendMessage(ChatColor.RED + "경고, 능력의 개수가 부족합니다.");
-            } else {
-                player.sendMessage(ChatColor.YELLOW + "(!) /va check " + ChatColor.WHITE + "= 능력 확인");
-                player.sendMessage(ChatColor.YELLOW + "(!) /va yes " + ChatColor.WHITE + "= 능력 사용.");
-                player.sendMessage(ChatColor.YELLOW + "(!) /va no " + ChatColor.WHITE + "= 능력 재추첨.(1회)");
-            }
+            player.sendMessage(ChatColor.YELLOW + "(!) /va check " + ChatColor.WHITE + "= 능력 확인");
+            player.sendMessage(ChatColor.YELLOW + "(!) /va yes " + ChatColor.WHITE + "= 능력 사용.");
+            player.sendMessage(ChatColor.YELLOW + "(!) /va no " + ChatColor.WHITE + "= 능력 재추첨.(1회)");
         }
         for (Player player : exceptionList) {
             player.sendMessage(ChatColor.GREEN + "능력 추첨중입니다");
-        }
-    }
-
-    private void distributeAbilitiesInstantly() {
-        broadcastMessage(ChatColor.AQUA + "능력 개수보다 플레이어 수가 같거나 많으므로 즉시 확정됩니다.");
-        for (Player player : playerList) {
-            if (!abilityDistributor.assignRandomAbility(player, playerList.size())) {
-                player.sendMessage(ChatColor.RED + "경고, 능력의 개수가 부족합니다.");
-            } else {
-                okSign.add(player);
-                player.sendMessage(ChatColor.GREEN + "당신에게 능력이 부여되었습니다. " +
-                                 ChatColor.YELLOW + "/va check" + ChatColor.WHITE + "로 확인하세요.");
-            }
-        }
-        for (Player player : exceptionList) {
-            player.sendMessage(ChatColor.GREEN + "능력 추첨 완료");
         }
     }
 

@@ -12,6 +12,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import java.util.UUID;
 
 public class Temari extends Ability {
     // 능력 설정 상수
@@ -20,13 +21,13 @@ public class Temari extends Ability {
     private static final int MAX_COUNT = 13;
     private static final long INTERVAL = 30L;
 
-    public Temari(Player player) {
+    public Temari(UUID playerUuid) {
         super(AbilitySpec.builder("테마리", Type.Active_Continue, Rank.S)
                 .cooldown(60)
                 .duration(20)
                 .guide(Usage.IronLeft + "능력 지속 시간동안 자신의 주변에 있는 적들을 공중으로 날려버립니다.",
                         "이때 날아간 플레이어는 일정 확률로 손에 쥐고 있는 아이템을 떨어뜨립니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

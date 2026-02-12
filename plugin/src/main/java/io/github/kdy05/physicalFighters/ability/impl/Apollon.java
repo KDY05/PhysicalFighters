@@ -10,16 +10,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
+import java.util.UUID;
 
 public class Apollon extends Ability {
     // 타겟 위치 저장
     private Location targetLocation = null;
 
-    public Apollon(Player player) {
+    public Apollon(UUID playerUuid) {
         super(AbilitySpec.builder("아폴론", Type.Active_Immediately, Rank.S)
                 .cooldown(45)
                 .guide(Usage.IronLeft + "바라보는 방향에 불구덩이를 만듭니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

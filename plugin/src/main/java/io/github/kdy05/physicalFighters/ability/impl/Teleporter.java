@@ -17,18 +17,19 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import java.util.UUID;
 
 public class Teleporter extends Ability implements BaseItem {
     // 표지판 정보 저장 필드
     private static String signName = null;
     private static Location signLoc = null;
 
-    public Teleporter(Player player) {
+    public Teleporter(UUID playerUuid) {
         super(AbilitySpec.builder("소환술사", Type.Active_Immediately, Rank.A)
                 .cooldown(300)
                 .guide(Usage.IronLeft + "표지판을 설치하고 첫 줄에 플레이어의 이름(자신도 가능)을 적으면,",
                         "능력 사용 시 이름이 적힌 플레이어가 표지판으로 이동합니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

@@ -2,6 +2,7 @@ package io.github.kdy05.physicalFighters.ability;
 
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -18,9 +19,9 @@ public final class AbilityType {
     private final int minimumPlayers;
     private final boolean deathExempt;
     private final boolean infoPrimary;
-    private final Function<Player, Ability> factory;
+    private final Function<UUID, Ability> factory;
 
-    AbilityType(Ability prototype, Function<Player, Ability> factory) {
+    AbilityType(Ability prototype, Function<UUID, Ability> factory) {
         this.name = prototype.getAbilityName();
         this.rank = prototype.getRank();
         this.type = prototype.getAbilityType();
@@ -34,7 +35,7 @@ public final class AbilityType {
     }
 
     public Ability createInstance(Player player) {
-        return factory.apply(player);
+        return factory.apply(player.getUniqueId());
     }
 
     public String getName() { return name; }

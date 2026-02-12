@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
+import java.util.UUID;
 
 public class Guard extends Ability {
     // 박스 크기 관련 상수
@@ -24,11 +25,11 @@ public class Guard extends Ability {
 
     private Location targetLocation = null;
 
-    public Guard(Player player) {
+    public Guard(UUID playerUuid) {
         super(AbilitySpec.builder("목둔", Type.Active_Immediately, Rank.A)
                 .cooldown(30)
                 .guide(Usage.IronLeft + "바라보는 위치에 나무벽을 설치합니다. 주위에 플레이어가 있으면 가둡니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
+import io.github.kdy05.physicalFighters.command.CommandInterface;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.TimerBase;
 import org.bukkit.Bukkit;
@@ -9,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -85,7 +87,7 @@ public abstract class Ability {
         }
     }
 
-    protected Ability(AbilitySpec spec, Player player) {
+    protected Ability(AbilitySpec spec, UUID playerUuid) {
         this.AbilityName = spec.name();
         this.type = spec.type();
         this.rank = spec.rank();
@@ -99,7 +101,13 @@ public abstract class Ability {
         this.CTimer = new CoolDownTimer(this);
         this.DTimer = new DurationTimer(this, this.CTimer);
 
-        this.playerUuid = player != null ? player.getUniqueId() : null;
+        this.playerUuid = playerUuid;
+    }
+
+    public void registerEvents() {}
+
+    public void unregisterEvents() {
+        EventManager.unregisterAll(this);
     }
 
     // Common Utils
@@ -125,30 +133,22 @@ public abstract class Ability {
         return this.playerUuid != null && p != null && p.getUniqueId().equals(this.playerUuid);
     }
 
+    @Nullable
+    public final Player getPlayer() {
+        return Bukkit.getPlayer(this.playerUuid);
+    }
+
     public final void sendMessage(String message) {
         Player player = getPlayer();
         if (player == null) return;
         player.sendMessage(message);
     }
 
-    public final Player getPlayer() {
-        return this.playerUuid != null ? Bukkit.getPlayer(this.playerUuid) : null;
-    }
-
-    /** 서브클래스에서 오버라이드하여 EventManager에 이벤트를 등록 */
-    public void registerEvents() {}
-
-    /** 이 능력의 모든 이벤트 등록을 해제 */
-    public void unregisterEvents() {
-        EventManager.unregisterAll(this);
-    }
-
-    /**
-     * 능력 활성화: 이벤트 등록 + A_SetEvent 호출.
-     * 게임 시작 시 또는 게임 중 할당 시 호출.
-     */
     public final void activate(boolean textout) {
         registerEvents();
+        if (this instanceof CommandInterface) {
+            AbilityRegistry.registerCommand((CommandInterface) this);
+        }
         Player player = getPlayer();
         if (player != null) {
             if (textout) {
@@ -159,9 +159,6 @@ public abstract class Ability {
         }
     }
 
-    /**
-     * 능력 비활성화: 타이머 취소 + A_ResetEvent + 이벤트 해제 + UUID 초기화.
-     */
     public final void deactivate(boolean textout) {
         cancelDTimer();
         cancelCTimer();
@@ -174,6 +171,9 @@ public abstract class Ability {
             A_ResetEvent(player);
         }
         unregisterEvents();
+        if (this instanceof CommandInterface) {
+            AbilityRegistry.unregisterCommand((CommandInterface) this);
+        }
     }
 
     public final void execute(Event event, int CustomData) {
@@ -227,6 +227,16 @@ public abstract class Ability {
 
     public void A_ResetEvent(Player p) {}
 
+    public void A_CoolDownStart() {}
+
+    public void A_CoolDownEnd() {}
+
+    public void A_DurationStart() {}
+
+    public void A_DurationEnd() {}
+
+    public void A_FinalDurationEnd() {}
+
     // Hooks — 서브클래스에서 필요 시 오버라이드
 
     /** 사망 시 페널티를 면제받는 능력인지 여부 (예: 불사조) */
@@ -237,16 +247,6 @@ public abstract class Ability {
 
     /** 랜덤 분배 시 필요한 최소 플레이어 수 (기본 0 = 제한 없음) */
     public int getMinimumPlayers() { return 0; }
-
-    public void A_CoolDownStart() {}
-
-    public void A_CoolDownEnd() {}
-
-    public void A_DurationStart() {}
-
-    public void A_DurationEnd() {}
-
-    public void A_FinalDurationEnd() {}
 
     // Timer Managing
 
@@ -262,8 +262,7 @@ public abstract class Ability {
         return this.DTimer.isRunning();
     }
 
-    // Getter, Setter
-
+    // Getters
     public final int getCoolDown() {
         return this.CoolDown;
     }

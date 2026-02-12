@@ -14,16 +14,17 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import java.util.UUID;
 
 public class Killtolevelup extends Ability implements BaseItem {
 
     private int dama = 4;
 
-    public Killtolevelup(Player player) {
+    public Killtolevelup(UUID playerUuid) {
         super(AbilitySpec.builder("폭주", Type.Passive_Manual, Rank.SS)
                 .guide("깃털의 처음 대미지는 4입니다.",
                         "깃털로 적을 처치할 때마다 대미지가 2만큼 늘어납니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

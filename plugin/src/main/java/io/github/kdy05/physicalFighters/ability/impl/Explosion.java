@@ -9,12 +9,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import java.util.UUID;
 
 public class Explosion extends Ability {
-    public Explosion(Player player) {
+    public Explosion(UUID playerUuid) {
         super(AbilitySpec.builder("익스플로젼", Type.Passive_Manual, Rank.B)
                 .guide("사망 시 엄청난 연쇄 폭발을 일으킵니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

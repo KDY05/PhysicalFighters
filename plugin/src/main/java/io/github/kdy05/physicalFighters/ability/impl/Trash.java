@@ -12,14 +12,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
+import java.util.UUID;
 
 public class Trash extends Ability {
-    public Trash(Player player) {
+    public Trash(UUID playerUuid) {
         super(AbilitySpec.builder("쓰레기", Type.Active_Immediately, Rank.F)
                 .cooldown(10)
                 .guide(Usage.IronRight + "체력을 소비하여 1분간 허약해집니다.",
                         Usage.IronAttack + "3% 확률로 능력을 서로 바꿉니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

@@ -14,13 +14,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import java.util.UUID;
 
 public class Booster extends Ability {
-    public Booster(Player player) {
+    public Booster(UUID playerUuid) {
         super(AbilitySpec.builder("부스터", Type.Passive_AutoMatic, Rank.A)
                 .guide("폭주 - 매우 낮은 딜레이로 상대를 공격합니다. 단 당신의 대미지는 3~6로 랜덤입니다.",
                         "무통증 - 피격 시 80% 확률로 넉백을 무시합니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

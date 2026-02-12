@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Collections;
+import java.util.UUID;
 
 public class Thor extends Ability implements BaseItem {
 
@@ -43,12 +44,12 @@ public class Thor extends Ability implements BaseItem {
                 && meta.getLore().get(0).equals(ChatColor.GRAY + "토르 전용");
     }
 
-    public Thor(Player player) {
+    public Thor(UUID playerUuid) {
         super(AbilitySpec.builder("토르", Type.Active_Immediately, Rank.GOD)
                 .cooldown(8)
                 .guide("묠니르(철퇴) 우클릭 시 주변의 플레이어에게 5의 대미지를 주고,",
                         "다음 공격에 +3의 대미지를 농축시킵니다. [최대 6회 중첩]")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

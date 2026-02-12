@@ -12,13 +12,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class Enel extends Ability {
-    public Enel(Player player) {
+    public Enel(UUID playerUuid) {
         super(AbilitySpec.builder("갓 에넬", Type.Active_Immediately, Rank.S)
                 .cooldown(30)
                 .guide(Usage.IronLeft + "바라보는 방향으로 번개를 발사하여 강한 범위 대미지를 줍니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

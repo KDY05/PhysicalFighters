@@ -11,13 +11,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
+import java.util.UUID;
 
 public class Demigod extends Ability {
-    public Demigod(Player player) {
+    public Demigod(UUID playerUuid) {
         super(AbilitySpec.builder("데미갓", Type.Passive_AutoMatic, Rank.S)
                 .guide("반은 인간, 반은 신인 능력자입니다.",
                         "대미지를 받으면 일정 확률로 10초간 랜덤 버프가 발동됩니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

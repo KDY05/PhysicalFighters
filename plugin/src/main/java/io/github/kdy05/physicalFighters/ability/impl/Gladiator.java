@@ -16,6 +16,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import org.bukkit.util.Vector;
+import java.util.UUID;
 
 public class Gladiator extends Ability {
     private static final int ARENA_SIZE = 5;
@@ -25,13 +26,13 @@ public class Gladiator extends Ability {
 
     private LivingEntity target = null;
 
-    public Gladiator(Player player) {
+    public Gladiator(UUID playerUuid) {
         super(AbilitySpec.builder("글레디에이터", Type.Active_Continue, Rank.SSS)
                 .cooldown(60)
                 .duration(DURATION_TICKS / 20)
                 .guide(Usage.IronAttack + "천공의 투기장으로 이동하여 15초간 1:1 대결을 펼칩니다.",
                         "이때 상대는 디버프, 당신은 버프를 받습니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

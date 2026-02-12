@@ -12,14 +12,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import java.util.UUID;
 
 public class Medic extends Ability {
-    public Medic(Player player) {
+    public Medic(UUID playerUuid) {
         super(AbilitySpec.builder("메딕", Type.Active_Immediately, Rank.B)
                 .cooldown(15)
                 .guide(Usage.IronAttack + "타인의 체력을 6만큼 회복합니다.",
                         Usage.IronRight + "자신의 체력을 6만큼 회복합니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

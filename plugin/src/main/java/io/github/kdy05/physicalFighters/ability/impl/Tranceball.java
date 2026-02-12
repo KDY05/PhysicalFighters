@@ -16,6 +16,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import java.util.UUID;
 
 public class Tranceball extends Ability implements BaseItem {
 
@@ -46,13 +47,13 @@ public class Tranceball extends Ability implements BaseItem {
         }
     }
 
-    public Tranceball(Player player) {
+    public Tranceball(UUID playerUuid) {
         super(AbilitySpec.builder("트랜스볼", Type.Passive_Manual, Rank.SS)
                 .guide("웅크리고 눈덩이를 우클릭하여 모드를 전환합니다.",
                         "스왑 모드 - 눈덩이를 맞은 적과 위치를 교환합니다.",
                         "그랩 모드 - 눈덩이를 맞은 적을 자신의 위치로 당겨옵니다.",
                         "추격 모드 - 눈덩이를 맞은 적의 위치로 즉시 이동합니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

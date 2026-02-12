@@ -13,12 +13,13 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class Mirroring extends Ability {
-    public Mirroring(Player player) {
+    public Mirroring(UUID playerUuid) {
         super(AbilitySpec.builder("미러링", Type.Passive_Manual, Rank.SSS)
                 .guide("당신을 죽인 사람을 함께 저승으로 끌고갑니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

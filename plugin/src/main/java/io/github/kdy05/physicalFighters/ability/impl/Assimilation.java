@@ -14,16 +14,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
+import java.util.UUID;
 
 public class Assimilation extends Ability implements CommandInterface {
     private boolean ActiveAss = false;
 
-    public Assimilation(Player player) {
+    public Assimilation(UUID playerUuid) {
         super(AbilitySpec.builder("흡수", Type.Passive_Manual, Rank.S)
                 .guide("자신이 죽인 플레이어의 능력을 흡수합니다.",
                         "\"/va a\" 명령으로 자신이 흡수한 능력들을 확인할 수 있습니다.",
                         "흡수 가능한 능력의 개수는 제한이 없지만 액티브 능력은 최대 1개만 가능합니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

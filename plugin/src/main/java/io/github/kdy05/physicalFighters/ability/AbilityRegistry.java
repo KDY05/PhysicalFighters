@@ -1,6 +1,9 @@
 package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.ability.impl.*;
+import io.github.kdy05.physicalFighters.command.CommandInterface;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -17,12 +20,15 @@ public final class AbilityRegistry {
 
     // --- 활성 인스턴스 (게임 진행 중 동적 변화) ---
 
-    private static final CopyOnWriteArrayList<Ability> activeAbilities = new CopyOnWriteArrayList<>();
     private static final ConcurrentHashMap<UUID, CopyOnWriteArrayList<Ability>> abilitiesByPlayer = new ConcurrentHashMap<>();
+
+    // --- 커맨드 핸들러 (activate/deactivate 시 등록/해제) ---
+
+    private static final CopyOnWriteArrayList<CommandInterface> commandHandlers = new CopyOnWriteArrayList<>();
 
     // --- 타입 등록 ---
 
-    private static void register(Function<Player, Ability> factory) {
+    private static void register(Function<UUID, Ability> factory) {
         Ability prototype = factory.apply(null);
         AbilityType type = new AbilityType(prototype, factory);
         typesByName.put(type.getName(), type);
@@ -53,9 +59,8 @@ public final class AbilityRegistry {
         AbilityType type = typesByName.get(typeName);
         if (type == null) return null;
         Ability instance = type.createInstance(player);
-        instance.activate(textout);
         addToIndex(instance, player);
-        activeAbilities.add(instance);
+        instance.activate(textout);
         return instance;
     }
 
@@ -66,7 +71,6 @@ public final class AbilityRegistry {
     public static void deactivate(Ability ability, boolean textout) {
         ability.deactivate(textout);
         removeFromIndex(ability);
-        activeAbilities.remove(ability);
     }
 
     public static void deactivateAll(Player player) {
@@ -74,24 +78,42 @@ public final class AbilityRegistry {
         if (list == null) return;
         for (Ability ability : list) {
             ability.deactivate(true);
-            activeAbilities.remove(ability);
         }
     }
 
     public static void deactivateAll() {
-        for (Ability ability : activeAbilities) {
-            ability.deactivate(false);
+        for (CopyOnWriteArrayList<Ability> list : abilitiesByPlayer.values()) {
+            for (Ability ability : list) {
+                ability.deactivate(false);
+            }
         }
-        activeAbilities.clear();
         abilitiesByPlayer.clear();
+        commandHandlers.clear();
     }
 
+    /** 선택 단계에서 인스턴스를 등록 (activate 하지 않음) */
     public static void addActive(Ability ability) {
-        activeAbilities.add(ability);
         Player player = ability.getPlayer();
         if (player != null) {
             addToIndex(ability, player);
         }
+    }
+
+    // --- 커맨드 등록 API ---
+
+    public static void registerCommand(CommandInterface handler) {
+        commandHandlers.add(handler);
+    }
+
+    public static void unregisterCommand(CommandInterface handler) {
+        commandHandlers.remove(handler);
+    }
+
+    public static boolean dispatchCommand(CommandSender sender, Command command, String label, String[] args) {
+        for (CommandInterface handler : commandHandlers) {
+            if (handler.onCommandEvent(sender, command, label, args)) return true;
+        }
+        return false;
     }
 
     // --- 조회 API ---
@@ -124,8 +146,13 @@ public final class AbilityRegistry {
         return null;
     }
 
+    /** 전체 활성 능력 목록 (운영 명령어 등 비빈번 용도) */
     public static List<Ability> getActiveAbilities() {
-        return Collections.unmodifiableList(activeAbilities);
+        List<Ability> all = new ArrayList<>();
+        for (CopyOnWriteArrayList<Ability> list : abilitiesByPlayer.values()) {
+            all.addAll(list);
+        }
+        return Collections.unmodifiableList(all);
     }
 
     // --- 인덱스 관리 ---

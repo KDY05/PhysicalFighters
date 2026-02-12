@@ -2,6 +2,7 @@ package io.github.kdy05.physicalFighters.ability;
 
 import io.github.kdy05.physicalFighters.util.AttributeUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -10,6 +11,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.RayTraceResult;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -25,17 +27,11 @@ public final class AbilityUtils {
     }
 
     public static Location getTargetLocation(Player p, int bound) {
-        Location location = null;
-        Location eyeLoc = p.getEyeLocation();
-        for (double distance = 0.5; distance <= bound; distance += 0.5) {
-            Location checkLoc = eyeLoc.clone().add(eyeLoc.getDirection().multiply(distance));
-            Block checkBlock = p.getWorld().getBlockAt(checkLoc);
-            if (checkBlock.getType().isSolid() || checkBlock.getType() == Material.WATER) {
-                location = checkBlock.getLocation().clone();
-                break;
-            }
-        }
-        return location;
+        RayTraceResult result = p.getWorld().rayTraceBlocks(
+                p.getEyeLocation(), p.getEyeLocation().getDirection(),
+                bound, FluidCollisionMode.ALWAYS);
+        return result != null && result.getHitBlock() != null
+                ? result.getHitBlock().getLocation() : null;
     }
 
     public static void goVelocity(LivingEntity entity, Location target, double value) {

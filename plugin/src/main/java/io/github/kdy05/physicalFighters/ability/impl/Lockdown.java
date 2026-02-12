@@ -12,6 +12,7 @@ import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.command.CommandInterface;
+import java.util.UUID;
 
 public class Lockdown extends Ability implements CommandInterface {
     // 능력 설정 상수
@@ -22,14 +23,14 @@ public class Lockdown extends Ability implements CommandInterface {
     private Player caster = null;
     private String targetName = null;
 
-    public Lockdown(Player player) {
+    public Lockdown(UUID playerUuid) {
         super(AbilitySpec.builder("봉인", Type.Active_Continue, Rank.B)
                 .cooldown(80)
                 .duration(LOCKDOWN_DURATION)
                 .guide("특정 플레이어의 능력을 1분간 봉인하며 배고픔 수치를 0으로 만듭니다.",
                         "\"/va lock <nickname>\" 명령어로 작동하며 대상이 60칸 이내에 있어야 합니다.",
                         "게임 시작 후 제약 시간 동안 능력 사용이 제한됩니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override
@@ -127,6 +128,9 @@ public class Lockdown extends Ability implements CommandInterface {
     @Override
     public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] args) {
         if (args.length != 2 || !args[0].equalsIgnoreCase("lock")) {
+            return false;
+        }
+        if (!(sender instanceof Player) || !isOwner((Player) sender)) {
             return false;
         }
 

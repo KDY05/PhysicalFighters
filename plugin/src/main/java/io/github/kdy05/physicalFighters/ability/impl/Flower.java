@@ -13,14 +13,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import java.util.UUID;
 
 public class Flower extends Ability {
-    public Flower(Player player) {
+    public Flower(UUID playerUuid) {
         super(AbilitySpec.builder("흡혈초", Type.Active_Immediately, Rank.SS)
                 .cooldown(30)
                 .guide(Usage.IronAttack + "맞은 사람의 체력을 흡수합니다.",
                         Usage.IronRight + "자신의 체력을 소비해 레벨을 얻습니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

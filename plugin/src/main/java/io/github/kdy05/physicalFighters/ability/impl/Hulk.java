@@ -12,17 +12,18 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
+import java.util.UUID;
 
 public class Hulk extends Ability {
 
     private double originalHealth = 20;
 
-    public Hulk(Player player) {
+    public Hulk(UUID playerUuid) {
         super(AbilitySpec.builder("헐크", Type.Active_Continue, Rank.SSS)
                 .cooldown(180)
                 .duration(30)
                 .guide(Usage.IronRight + "30초간 각종 버프를 받으며 주는 대미지가 1.5배, 받는 대미지가 절반이 됩니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

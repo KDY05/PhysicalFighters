@@ -8,14 +8,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import java.util.UUID;
 
 public class Ace extends Ability {
-    public Ace(Player player) {
+    public Ace(UUID playerUuid) {
         super(AbilitySpec.builder("에이스", Type.Active_Continue, Rank.S)
                 .cooldown(40)
                 .duration(20)
                 .guide(Usage.IronLeft + "능력 지속시간 동안 자신의 주변에 있는 적들을 불태웁니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

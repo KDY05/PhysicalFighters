@@ -11,12 +11,13 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import org.bukkit.entity.Player;
+import java.util.UUID;
 
 public class Ckyomi extends Ability {
-    public Ckyomi(Player player) {
+    public Ckyomi(UUID playerUuid) {
         super(AbilitySpec.builder("츠쿠요미", Type.Passive_AutoMatic, Rank.A)
                 .guide("상대를 공격하면 상대에게 5초간 혼란 효과와 디버프를 줍니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

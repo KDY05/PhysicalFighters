@@ -9,14 +9,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import java.util.UUID;
 
 public class ShockWave extends Ability {
-    public ShockWave(Player player) {
+    public ShockWave(UUID playerUuid) {
         super(AbilitySpec.builder("쇼크웨이브", Type.Active_Immediately, Rank.A)
                 .cooldown(45)
                 .guide(Usage.IronLeft + "철괴를 소모하여 보고있는 방향으로 막강한 직선 충격포를 쏩니다.",
                         "충격포는 물과 벽 건너편까지 통과할 수 있습니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

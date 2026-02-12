@@ -12,14 +12,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
+import java.util.UUID;
 
 public class Luffy extends Ability {
-    public Luffy(Player player) {
+    public Luffy(UUID playerUuid) {
         super(AbilitySpec.builder("루피", Type.Active_Immediately, Rank.S)
                 .showText(ShowText.Custom_Text)
                 .guide(Usage.IronLeft + "사거리가 긴 주먹질을 합니다.",
                         Usage.GoldLeft + "체력을 5 소모하여 30초간 여러 버프를 얻습니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

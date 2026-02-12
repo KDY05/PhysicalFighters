@@ -7,15 +7,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import java.util.UUID;
 
 public class Clocking extends Ability {
-    public Clocking(Player player) {
+    public Clocking(UUID playerUuid) {
         super(AbilitySpec.builder("클로킹", Type.Active_Continue, Rank.A)
                 .cooldown(30)
                 .duration(5)
                 .guide(Usage.IronLeft + "일정 시간동안 다른 사람에게 보이지 않습니다.",
                         "클로킹 상태에서는 타인에게 공격 받지 않습니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

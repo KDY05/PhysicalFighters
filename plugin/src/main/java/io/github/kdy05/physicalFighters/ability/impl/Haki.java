@@ -12,6 +12,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import org.bukkit.scheduler.BukkitRunnable;
+import java.util.UUID;
 
 public class Haki extends Ability {
     // 능력 설정 상수
@@ -21,12 +22,12 @@ public class Haki extends Ability {
     private static final long INTERVAL = 40L;
     private static final long DELAY = 10L;
 
-    public Haki(Player player) {
+    public Haki(UUID playerUuid) {
         super(AbilitySpec.builder("패기", Type.Active_Continue, Rank.SS)
                 .cooldown(160)
                 .duration(10)
                 .guide(Usage.IronLeft + "20초간 10칸 내의 적에게 강한 대미지를 줍니다.")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override

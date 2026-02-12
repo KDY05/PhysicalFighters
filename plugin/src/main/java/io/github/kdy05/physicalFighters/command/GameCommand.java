@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.command;
 
 import io.github.kdy05.physicalFighters.PhysicalFighters;
-import io.github.kdy05.physicalFighters.ability.Ability;
+import io.github.kdy05.physicalFighters.ability.AbilityType;
 import io.github.kdy05.physicalFighters.game.GameManager;
 import io.github.kdy05.physicalFighters.game.GameUtils;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
@@ -11,6 +11,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public final class GameCommand implements CommandInterface {
 
@@ -158,12 +160,12 @@ public final class GameCommand implements CommandInterface {
         sender.sendMessage(ChatColor.GOLD + "==== 능력 목록 ====");
         sender.sendMessage(String.format(ChatColor.AQUA + "페이지 %d/%d (총 %d개 능력)", page, maxPage, totalAbilities));
 
-        java.util.List<io.github.kdy05.physicalFighters.ability.AbilityType> types = AbilityRegistry.getAllTypes();
+        List<AbilityType> types = AbilityRegistry.getAllTypes();
         final int startIndex = page * ITEMS_PER_PAGE;
         final int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalAbilities);
 
         for (int i = startIndex; i < endIndex; i++) {
-            io.github.kdy05.physicalFighters.ability.AbilityType type = types.get(i);
+            AbilityType type = types.get(i);
             sender.sendMessage(String.format(
                     ChatColor.GREEN + "%s " + ChatColor.GRAY + "%s",
                     type.getName(), type.getRank()));

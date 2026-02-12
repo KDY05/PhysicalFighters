@@ -16,12 +16,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import java.util.UUID;
 
 public class FallArrow extends Ability implements BaseItem {
-    public FallArrow(Player player) {
+    public FallArrow(UUID playerUuid) {
         super(AbilitySpec.builder("중력화살", Type.Passive_Manual, Rank.S)
                 .guide("화살에 맞은 플레이어는 공중으로 뜹니다. [추가타 가능]")
-                .build(), player);
+                .build(), playerUuid);
     }
 
     @Override
