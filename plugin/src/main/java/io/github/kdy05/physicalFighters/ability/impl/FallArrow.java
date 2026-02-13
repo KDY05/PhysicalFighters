@@ -28,7 +28,6 @@ public class FallArrow extends Ability implements BaseItem {
     @Override
     public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
-        registerBaseItemEvents();
     }
 
     @Override
@@ -47,12 +46,6 @@ public class FallArrow extends Ability implements BaseItem {
                     }
                 }
             }
-        } else if (CustomData == ITEM_DROP_EVENT) {
-            return handleItemDropCondition(event);
-        } else if (CustomData == ITEM_RESPAWN_EVENT) {
-            return handleItemRespawnCondition(event);
-        } else if (CustomData == ITEM_DEATH_EVENT) {
-            return handleItemDeathCondition(event);
         }
         return -1;
     }
@@ -69,16 +62,6 @@ public class FallArrow extends Ability implements BaseItem {
             entity.getWorld().createExplosion(entity.getLocation(), 0.0F);
             entity.teleport(l2);
         }
-    }
-
-    @Override
-    public void A_SetEvent(Player p) {
-        giveBaseItem(p);
-    }
-
-    @Override
-    public void A_ResetEvent(Player p) {
-        removeBaseItem(p);
     }
 
     @Override

@@ -27,7 +27,6 @@ public class Kaiji extends Ability implements BaseItem {
     @Override
     public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
-        registerBaseItemEvents();
     }
 
     @Override
@@ -37,12 +36,6 @@ public class Kaiji extends Ability implements BaseItem {
             if (!InvincibilityManager.isDamageGuard() && isOwner(event0.getDamager())
                     && isValidItem(Material.DIAMOND) && event0.getEntity() instanceof Player)
                 return 0;
-        } else if (CustomData == ITEM_DROP_EVENT) {
-            return handleItemDropCondition(event);
-        } else if (CustomData == ITEM_RESPAWN_EVENT) {
-            return handleItemRespawnCondition(event);
-        } else if (CustomData == ITEM_DEATH_EVENT) {
-            return handleItemDeathCondition(event);
         }
         return -1;
     }
@@ -63,16 +56,6 @@ public class Kaiji extends Ability implements BaseItem {
                         "%s님이 도박하다가 손목이 날라갔습니다.", getPlayer().getName()));
             }
         }
-    }
-
-    @Override
-    public void A_SetEvent(Player p) {
-        giveBaseItem(p);
-    }
-
-    @Override
-    public void A_ResetEvent(Player p) {
-        removeBaseItem(p);
     }
 
     @Override

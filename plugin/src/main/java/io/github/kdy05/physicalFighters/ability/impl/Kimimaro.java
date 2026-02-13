@@ -26,7 +26,6 @@ public class Kimimaro extends Ability implements BaseItem {
     @Override
     public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
-        registerBaseItemEvents();
     }
 
     @Override
@@ -36,12 +35,6 @@ public class Kimimaro extends Ability implements BaseItem {
             if (isOwner(event0.getDamager()) && isValidItem(Material.BONE)
                     && event0.getEntity() instanceof LivingEntity)
                 return 0;
-        } else if (CustomData == ITEM_DROP_EVENT) {
-            return handleItemDropCondition(event);
-        } else if (CustomData == ITEM_RESPAWN_EVENT) {
-            return handleItemRespawnCondition(event);
-        } else if (CustomData == ITEM_DEATH_EVENT) {
-            return handleItemDeathCondition(event);
         }
         return -1;
     }
@@ -55,16 +48,6 @@ public class Kimimaro extends Ability implements BaseItem {
             if (Math.random() < 0.4D)
                 entity.addPotionEffect(PotionEffectFactory.createPoison(20 * 5, 0));
         }
-    }
-
-    @Override
-    public void A_SetEvent(Player p) {
-        giveBaseItem(p);
-    }
-
-    @Override
-    public void A_ResetEvent(Player p) {
-        removeBaseItem(p);
     }
 
     @Override

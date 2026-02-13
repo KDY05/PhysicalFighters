@@ -21,8 +21,8 @@ import java.util.UUID;
 
 public class Teleporter extends Ability implements BaseItem {
     // 표지판 정보 저장 필드
-    private static String signName = null;
-    private static Location signLoc = null;
+    private String signName = null;
+    private Location signLoc = null;
 
     public Teleporter(UUID playerUuid) {
         super(AbilitySpec.builder("소환술사", Type.Active_Immediately, Rank.A)
@@ -37,7 +37,6 @@ public class Teleporter extends Ability implements BaseItem {
         registerLeftClickEvent();
         EventManager.registerSignChange(new EventData(this, 1));
         EventManager.registerBlockBreak(new EventData(this, 2));
-        registerBaseItemEvents();
     }
 
     @Override
@@ -75,12 +74,6 @@ public class Teleporter extends Ability implements BaseItem {
                 signLoc = null;
                 sendMessage(ChatColor.RED + "표지판이 제거되었습니다.");
             }
-        } else if (CustomData == ITEM_DROP_EVENT) {
-            return handleItemDropCondition(event);
-        } else if (CustomData == ITEM_RESPAWN_EVENT) {
-            return handleItemRespawnCondition(event);
-        } else if (CustomData == ITEM_DEATH_EVENT) {
-            return handleItemDeathCondition(event);
         }
         return -1;
     }
@@ -96,16 +89,6 @@ public class Teleporter extends Ability implements BaseItem {
             signName = null;
             signLoc = null;
         }
-    }
-
-    @Override
-    public void A_SetEvent(Player p) {
-        giveBaseItem(p);
-    }
-
-    @Override
-    public void A_ResetEvent(Player p) {
-        removeBaseItem(p);
     }
 
     @Override

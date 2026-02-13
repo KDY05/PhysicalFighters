@@ -52,7 +52,6 @@ public class Fish extends Ability implements BaseItem {
     @Override
     public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
-        registerBaseItemEvents();
     }
 
     @Override
@@ -64,12 +63,6 @@ public class Fish extends Ability implements BaseItem {
 
             if (isValidItem(Material.FISHING_ROD)) return 0;
             if (isFish(player.getInventory().getItemInMainHand())) return 1;
-        } else if (CustomData == ITEM_DROP_EVENT) {
-            return handleItemDropCondition(event);
-        } else if (CustomData == ITEM_RESPAWN_EVENT) {
-            return handleItemRespawnCondition(event);
-        } else if (CustomData == ITEM_DEATH_EVENT) {
-            return handleItemDeathCondition(event);
         }
         return -1;
     }
@@ -80,22 +73,12 @@ public class Fish extends Ability implements BaseItem {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
             damageEvent.setDamage(damageEvent.getDamage() * FISHING_ROD_DAMAGE);
             if (Math.random() < FISH_DROP_RATE) {
-                Objects.requireNonNull(getPlayer()).getInventory().addItem(fish);
+                Objects.requireNonNull(getPlayer()).getInventory().addItem(fish.clone());
             }
         } else if (CustomData == 1) {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
             damageEvent.setDamage(damageEvent.getDamage() * FISH_DAMAGE);
         }
-    }
-
-    @Override
-    public void A_SetEvent(Player p) {
-        giveBaseItem(p);
-    }
-
-    @Override
-    public void A_ResetEvent(Player p) {
-        removeBaseItem(p);
     }
 
     @Override

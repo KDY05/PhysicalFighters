@@ -29,7 +29,6 @@ public class Multishot extends Ability implements BaseItem {
     @Override
     public void registerEvents() {
         EventManager.registerProjectileLaunch(new EventData(this, 0));
-        registerBaseItemEvents();
     }
 
     @Override
@@ -45,12 +44,6 @@ public class Multishot extends Ability implements BaseItem {
                     }
                 }
             }
-        } else if (CustomData == ITEM_DROP_EVENT) {
-            return handleItemDropCondition(event);
-        } else if (CustomData == ITEM_RESPAWN_EVENT) {
-            return handleItemRespawnCondition(event);
-        } else if (CustomData == ITEM_DEATH_EVENT) {
-            return handleItemDeathCondition(event);
         }
         return -1;
     }
@@ -75,16 +68,6 @@ public class Multishot extends Ability implements BaseItem {
                 arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
             }
         }
-    }
-
-    @Override
-    public void A_SetEvent(Player p) {
-        giveBaseItem(p);
-    }
-
-    @Override
-    public void A_ResetEvent(Player p) {
-        removeBaseItem(p);
     }
 
     @Override

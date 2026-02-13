@@ -63,9 +63,9 @@ public final class GameUtils {
     }
 
     public static void showInfo(Player player, boolean abilityOverLap) {
-        Ability ability = findPrimaryAbility(player);
+        Ability ability = AbilityRegistry.findPrimaryAbility(player);
         if (ability == null) {
-            ability = findAbility(player);
+            ability = AbilityRegistry.findAbility(player);
         }
         if (ability == null) {
             player.sendMessage(ChatColor.RED + "능력이 없거나 옵저버입니다.");
@@ -133,11 +133,4 @@ public final class GameUtils {
         }
     }
 
-    private static Ability findPrimaryAbility(Player p) {
-        return AbilityRegistry.findPrimaryAbility(p);
-    }
-
-    private static Ability findAbility(Player p) {
-        return AbilityRegistry.findAbility(p);
-    }
 }

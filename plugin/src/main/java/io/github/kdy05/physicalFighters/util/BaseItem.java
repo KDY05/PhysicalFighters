@@ -1,7 +1,5 @@
 package io.github.kdy05.physicalFighters.util;
 
-import io.github.kdy05.physicalFighters.ability.Ability;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -47,26 +45,13 @@ public interface BaseItem {
     Player getPlayer();
 
     /**
-     * 기본 아이템 이벤트 등록
-     */
-    default void registerBaseItemEvents() {
-        if (this instanceof Ability) {
-            Ability ability = (Ability) this;
-            EventManager.registerPlayerDropItem(new EventData(ability, ITEM_DROP_EVENT));
-            EventManager.registerPlayerRespawn(new EventData(ability, ITEM_RESPAWN_EVENT));
-            EventManager.registerEntityDeath(new EventData(ability, ITEM_DEATH_EVENT));
-        }
-    }
-
-    /**
      * 아이템 드롭 조건 처리
      */
-    default int handleItemDropCondition(Event event) {
+    default void handleItemDrop(Event event) {
         PlayerDropItemEvent dropEvent = (PlayerDropItemEvent) event;
         if (!isOwner(dropEvent.getPlayer())) {
-            return -1;
+            return;
         }
-
         Material droppedType = dropEvent.getItemDrop().getItemStack().getType();
         for (ItemStack baseItem : getBaseItem()) {
             if (baseItem.getType() == droppedType) {
@@ -74,30 +59,27 @@ public interface BaseItem {
                 if (inv.contains(droppedType, baseItem.getAmount())) break;
                 dropEvent.getPlayer().sendMessage(ChatColor.RED + getItemName() + "(은/는) 버릴 수 없습니다.");
                 dropEvent.setCancelled(true);
-                return -1;
+                return;
             }
         }
-
-        return -1;
     }
 
     /**
      * 아이템 리스폰 조건 처리
      */
-    default int handleItemRespawnCondition(Event event) {
+    default void handleItemRespawn(Event event) {
         PlayerRespawnEvent respawnEvent = (PlayerRespawnEvent) event;
         if (isOwner(respawnEvent.getPlayer())) {
             Player player = respawnEvent.getPlayer();
             player.sendMessage(ChatColor.GREEN + getItemName() + "(이/가) 지급됩니다.");
             giveBaseItem(player);
         }
-        return -1;
     }
 
     /**
      * 플레이어 사망 조건 처리
      */
-    default int handleItemDeathCondition(Event event) {
+    default void handleItemDeath(Event event) {
         EntityDeathEvent deathEvent = (EntityDeathEvent) event;
         if (isOwner(deathEvent.getEntity())) {
             List<ItemStack> itemlist = deathEvent.getDrops();
@@ -106,7 +88,6 @@ public interface BaseItem {
                 itemlist.removeIf(item -> item.getType() == material);
             }
         }
-        return -1;
     }
 
     /**

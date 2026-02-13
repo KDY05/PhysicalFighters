@@ -56,7 +56,6 @@ public class Thor extends Ability implements BaseItem {
     public void registerEvents() {
         EventManager.registerEntityDamageByEntity(new EventData(this, 0));
         registerRightClickEvent();
-        registerBaseItemEvents();
     }
 
     @Override
@@ -81,12 +80,6 @@ public class Thor extends Ability implements BaseItem {
                     && isMjolnir(event1.getPlayer().getInventory().getItemInMainHand())) {
                 return 1;
             }
-        } else if (CustomData == ITEM_DROP_EVENT) {
-            return handleItemDropCondition(event);
-        } else if (CustomData == ITEM_RESPAWN_EVENT) {
-            return handleItemRespawnCondition(event);
-        } else if (CustomData == ITEM_DEATH_EVENT) {
-            return handleItemDeathCondition(event);
         }
         return -1;
     }
@@ -104,16 +97,6 @@ public class Thor extends Ability implements BaseItem {
                 caster.sendMessage(ChatColor.YELLOW + "묠니르에 농축된 번개 : (" + this.charge + "/6)");
             }
         }
-    }
-
-    @Override
-    public void A_SetEvent(Player p) {
-        giveBaseItem(p);
-    }
-
-    @Override
-    public void A_ResetEvent(Player p) {
-        removeBaseItem(p);
     }
 
     @Override

@@ -3,6 +3,8 @@ package io.github.kdy05.physicalFighters.ability;
 import io.github.kdy05.physicalFighters.PhysicalFighters;
 import io.github.kdy05.physicalFighters.command.CommandInterface;
 import io.github.kdy05.physicalFighters.game.EventManager;
+import io.github.kdy05.physicalFighters.util.BaseItem;
+import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.TimerBase;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -146,6 +148,11 @@ public abstract class Ability {
 
     public final void activate(boolean textout) {
         registerEvents();
+        if (this instanceof BaseItem) {
+            EventManager.registerPlayerDropItem(new EventData(this, BaseItem.ITEM_DROP_EVENT));
+            EventManager.registerPlayerRespawn(new EventData(this, BaseItem.ITEM_RESPAWN_EVENT));
+            EventManager.registerEntityDeath(new EventData(this, BaseItem.ITEM_DEATH_EVENT));
+        }
         if (this instanceof CommandInterface) {
             AbilityRegistry.registerCommand((CommandInterface) this);
         }
@@ -156,6 +163,9 @@ public abstract class Ability {
                     ChatColor.WHITE + " 능력이 설정되었습니다.", getAbilityName()));
             }
             A_SetEvent(player);
+            if (this instanceof BaseItem) {
+                ((BaseItem) this).giveBaseItem(player);
+            }
         }
     }
 
@@ -168,6 +178,9 @@ public abstract class Ability {
                 player.sendMessage(String.format(ChatColor.RED + "%s" +
                     ChatColor.WHITE + " 능력이 해제되었습니다.", getAbilityName()));
             }
+            if (this instanceof BaseItem) {
+                ((BaseItem) this).removeBaseItem(player);
+            }
             A_ResetEvent(player);
         }
         unregisterEvents();
@@ -178,6 +191,21 @@ public abstract class Ability {
 
     public final void execute(Event event, int CustomData) {
         if (getPlayer() == null) return;
+
+        // BaseItem 이벤트는 A_Condition/A_Effect를 거치지 않고 직접 처리
+        if (this instanceof BaseItem) {
+            BaseItem baseItem = (BaseItem) this;
+            if (CustomData == BaseItem.ITEM_DROP_EVENT) {
+                baseItem.handleItemDrop(event);
+                return;
+            } else if (CustomData == BaseItem.ITEM_RESPAWN_EVENT) {
+                baseItem.handleItemRespawn(event);
+                return;
+            } else if (CustomData == BaseItem.ITEM_DEATH_EVENT) {
+                baseItem.handleItemDeath(event);
+                return;
+            }
+        }
 
         int data = A_Condition(event, CustomData);
         if (data < 0) return;

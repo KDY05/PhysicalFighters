@@ -5,7 +5,6 @@ import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -60,7 +59,6 @@ public class Tranceball extends Ability implements BaseItem {
     public void registerEvents() {
         EventManager.registerProjectileHit(new EventData(this, 0));
         registerRightClickEvent();
-        registerBaseItemEvents();
     }
 
     @Override
@@ -84,12 +82,6 @@ public class Tranceball extends Ability implements BaseItem {
                 sendMessage(ChatColor.AQUA + mode.toString() + " 모드");
                 event1.setCancelled(true);
             }
-        } else if (CustomData == ITEM_DROP_EVENT) {
-            return handleItemDropCondition(event);
-        } else if (CustomData == ITEM_RESPAWN_EVENT) {
-            return handleItemRespawnCondition(event);
-        } else if (CustomData == ITEM_DEATH_EVENT) {
-            return handleItemDeathCondition(event);
         }
         return -1;
     }
@@ -117,13 +109,7 @@ public class Tranceball extends Ability implements BaseItem {
 
     @Override
     public void A_SetEvent(Player p) {
-        giveBaseItem(p);
         this.mode = Mode.Swap;
-    }
-
-    @Override
-    public void A_ResetEvent(Player p) {
-        removeBaseItem(p);
     }
 
     @Override
