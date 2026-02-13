@@ -1,19 +1,19 @@
 package io.github.kdy05.physicalFighters;
 
+import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import io.github.kdy05.physicalFighters.api.AdapterRegistry;
 import io.github.kdy05.physicalFighters.api.AttributeAdapter;
 import io.github.kdy05.physicalFighters.api.PotionEffectTypeAdapter;
+import io.github.kdy05.physicalFighters.api.VersionedAdapter;
 import io.github.kdy05.physicalFighters.command.CommandManager;
-import io.github.kdy05.physicalFighters.config.ConfigManager;
-import io.github.kdy05.physicalFighters.game.*;
-import io.github.kdy05.physicalFighters.command.CommandInterface;
-import io.github.kdy05.physicalFighters.util.ServerVersionDetector;
-import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import io.github.kdy05.physicalFighters.command.GameCommand;
-
 import io.github.kdy05.physicalFighters.command.UtilCommand;
+import io.github.kdy05.physicalFighters.config.ConfigManager;
 import io.github.kdy05.physicalFighters.game.BaseKitManager;
+import io.github.kdy05.physicalFighters.game.EventManager;
+import io.github.kdy05.physicalFighters.game.GameManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
+import io.github.kdy05.physicalFighters.util.ServerVersionDetector;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
@@ -25,6 +25,16 @@ public final class PhysicalFighters extends JavaPlugin {
     private ConfigManager configManager;
     private BaseKitManager baseKitManager;
     private InvincibilityManager invincibilityManager;
+
+    private static final String[] ATTRIBUTE_ADAPTERS = {
+            "io.github.kdy05.physicalFighters.v1_21_3.AttributeAdapter_1_21_3",
+            "io.github.kdy05.physicalFighters.v1_16_5.AttributeAdapter_1_16_5",
+    };
+
+    private static final String[] POTION_EFFECT_TYPE_ADAPTERS = {
+            "io.github.kdy05.physicalFighters.v1_20_5.PotionEffectTypeAdapter_1_20_5",
+            "io.github.kdy05.physicalFighters.v1_16_5.PotionEffectTypeAdapter_1_16_5",
+    };
 
     @Override
     public void onEnable() {
@@ -61,60 +71,39 @@ public final class PhysicalFighters extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("플러그인을 종료합니다.");
-        plugin = null;
     }
 
     private boolean initializeAdapter() {
         String version = ServerVersionDetector.detectVersion();
         getLogger().info("감지된 서버 버전: " + version);
 
-        try {
-            AttributeAdapter attributeAdapter;
-            PotionEffectTypeAdapter potionEffectTypeAdapter;
-            if (ServerVersionDetector.isBetween("1.16.5", "1.20.4")) {
-                // 1.16.5 ~ 1.20.4: v1_16_5 모듈 사용
-                attributeAdapter = loadAdapter(
-                    "io.github.kdy05.physicalFighters.v1_16_5.AttributeAdapter_1_16_5"
-                );
-                potionEffectTypeAdapter = loadAdapter(
-                    "io.github.kdy05.physicalFighters.v1_16_5.PotionEffectTypeAdapter_1_16_5"
-                );
-            } else if (ServerVersionDetector.isBetween("1.20.5", "1.21.2")) {
-                // 1.20.5 ~ 1.21.2: Attribute는 1.16.5, PotionEffectType은 1.20.5
-                attributeAdapter = loadAdapter(
-                    "io.github.kdy05.physicalFighters.v1_16_5.AttributeAdapter_1_16_5"
-                );
-                potionEffectTypeAdapter = loadAdapter(
-                    "io.github.kdy05.physicalFighters.v1_20_5.PotionEffectTypeAdapter_1_20_5"
-                );
-            } else if (ServerVersionDetector.isAtLeast("1.21.3")) {
-                // 1.21.3+: Attribute는 1.21.3, PotionEffectType은 1.20.5
-                attributeAdapter = loadAdapter(
-                    "io.github.kdy05.physicalFighters.v1_21_3.AttributeAdapter_1_21_3"
-                );
-                potionEffectTypeAdapter = loadAdapter(
-                    "io.github.kdy05.physicalFighters.v1_20_5.PotionEffectTypeAdapter_1_20_5"
-                );
-            } else {
-                getLogger().severe("지원하지 않는 서버 버전: " + version);
-                return false;
-            }
+        AttributeAdapter attributeAdapter = findCompatibleAdapter(version, ATTRIBUTE_ADAPTERS);
+        PotionEffectTypeAdapter potionEffectTypeAdapter = findCompatibleAdapter(version, POTION_EFFECT_TYPE_ADAPTERS);
 
-            AdapterRegistry.register(attributeAdapter, potionEffectTypeAdapter);
-            getLogger().info("어댑터 로드 완료: " + attributeAdapter.getClass().getSimpleName()
-                + ", " + potionEffectTypeAdapter.getClass().getSimpleName());
-            return true;
-
-        } catch (Exception e) {
-            getLogger().severe("어댑터 로드 실패: " + e.getMessage());
+        if (attributeAdapter == null || potionEffectTypeAdapter == null) {
+            getLogger().severe("지원하지 않는 서버 버전: " + version);
             return false;
         }
+
+        AdapterRegistry.register(attributeAdapter, potionEffectTypeAdapter);
+        getLogger().info("어댑터 로드 완료: " + attributeAdapter.getClass().getSimpleName()
+                + ", " + potionEffectTypeAdapter.getClass().getSimpleName());
+        return true;
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T loadAdapter(String className) throws Exception {
-        Class<?> clazz = Class.forName(className);
-        return (T) clazz.getDeclaredConstructor().newInstance();
+    private <T extends VersionedAdapter> T findCompatibleAdapter(String version, String[] candidates) {
+        for (String className : candidates) {
+            try {
+                T adapter = (T) Class.forName(className).getDeclaredConstructor().newInstance();
+                if (adapter.isCompatible(version)) {
+                    return adapter;
+                }
+            } catch (Exception e) {
+                // 클래스 로드 실패 (해당 버전에서 존재하지 않는 API 참조) — 다음 후보로
+            }
+        }
+        return null;
     }
 
     public static PhysicalFighters getPlugin() {
