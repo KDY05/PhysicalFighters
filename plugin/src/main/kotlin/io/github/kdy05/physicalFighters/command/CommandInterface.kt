@@ -4,7 +4,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-interface CommandInterface {
+fun interface CommandInterface {
     fun onCommandEvent(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean
 
     fun filterConsole(sender: CommandSender): Boolean {

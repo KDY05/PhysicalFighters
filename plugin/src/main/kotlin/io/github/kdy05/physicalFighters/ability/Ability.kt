@@ -12,7 +12,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
-import java.util.*
+import java.util.UUID
 
 abstract class Ability protected constructor(spec: AbilitySpec, private val playerUuid: UUID?) {
 
@@ -66,7 +66,7 @@ abstract class Ability protected constructor(spec: AbilitySpec, private val play
 
     companion object {
         @JvmField
-        val plugin: PhysicalFighters = PhysicalFighters.getPlugin()
+        val plugin: PhysicalFighters = PhysicalFighters.plugin
 
         @JvmField
         val DefaultItem: Material = Material.IRON_INGOT

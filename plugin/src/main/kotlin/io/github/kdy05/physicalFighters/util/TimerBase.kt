@@ -37,7 +37,7 @@ abstract class TimerBase {
                     count += if (this@TimerBase.reverse) -1 else 1
                 }
             }
-        }.runTaskTimer(PhysicalFighters.getPlugin(), 0L, 20L)
+        }.runTaskTimer(PhysicalFighters.plugin, 0L, 20L)
 
         onTimerStart()
     }

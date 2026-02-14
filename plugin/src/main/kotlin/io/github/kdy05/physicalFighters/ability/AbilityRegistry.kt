@@ -5,7 +5,7 @@ import io.github.kdy05.physicalFighters.command.CommandInterface
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import java.util.*
+import java.util.UUID
 
 object AbilityRegistry {
 
@@ -24,7 +24,7 @@ object AbilityRegistry {
     // --- 타입 카탈로그 API ---
 
     @JvmStatic
-    fun getAllTypes(): List<AbilityType> = Collections.unmodifiableList(typeList)
+    fun getAllTypes(): List<AbilityType> = typeList.toList()
 
     @JvmStatic
     fun getType(name: String): AbilityType? = typesByName[name]
@@ -91,24 +91,19 @@ object AbilityRegistry {
 
     @JvmStatic
     fun dispatchCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
-        for (handler in commandHandlers) {
-            if (handler.onCommandEvent(sender, command, label, args)) return true
-        }
-        return false
+        return commandHandlers.any { it.onCommandEvent(sender, command, label, args) }
     }
 
     // --- 조회 API ---
 
     @JvmStatic
     fun findAbility(player: Player): Ability? {
-        val list = abilitiesByPlayer[player.uniqueId]
-        return if (!list.isNullOrEmpty()) list[0] else null
+        return abilitiesByPlayer[player.uniqueId]?.firstOrNull()
     }
 
     @JvmStatic
     fun findAbilities(player: Player): List<Ability> {
-        val list = abilitiesByPlayer[player.uniqueId]
-        return if (list != null) Collections.unmodifiableList(list) else Collections.emptyList()
+        return abilitiesByPlayer[player.uniqueId]?.toList() ?: emptyList()
     }
 
     @JvmStatic
@@ -125,11 +120,7 @@ object AbilityRegistry {
 
     @JvmStatic
     fun getActiveAbilities(): List<Ability> {
-        val all = mutableListOf<Ability>()
-        for (list in abilitiesByPlayer.values) {
-            all.addAll(list)
-        }
-        return Collections.unmodifiableList(all)
+        return abilitiesByPlayer.values.flatten()
     }
 
     // --- 인덱스 관리 ---
