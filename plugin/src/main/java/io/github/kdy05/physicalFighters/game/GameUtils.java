@@ -21,15 +21,6 @@ public final class GameUtils {
     }
 
     public static void assignAbility(CommandSender sender, String abilityName, Player target, boolean abilityOverLap) {
-        // 특정 플레이어 능력 해제
-        if ("해제".equals(abilityName)) {
-            AbilityRegistry.deactivateAll(target);
-            target.sendMessage(ChatColor.RED + "당신의 능력이 모두 해제되었습니다.");
-            sender.sendMessage(String.format(ChatColor.GREEN + "%s" +
-                    ChatColor.WHITE + "님의 능력을 모두 해제했습니다.", target.getName()));
-            return;
-        }
-
         AbilityType type = AbilityRegistry.getType(abilityName);
         if (type == null) {
             sender.sendMessage(ChatColor.RED + "존재하지 않는 능력입니다.");

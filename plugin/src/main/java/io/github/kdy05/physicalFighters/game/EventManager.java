@@ -60,17 +60,17 @@ public final class EventManager implements Listener {
     public static void unregisterAll(Ability ability) {
         leftClickHandlers.remove(ability);
         rightClickHandlers.remove(ability);
-        onEntityTarget.removeIf(d -> d.ability == ability);
-        onEntityDamage.removeIf(d -> d.ability == ability);
-        onEntityDamageByEntity.removeIf(d -> d.ability == ability);
-        onEntityDeath.removeIf(d -> d.ability == ability);
-        onPlayerRespawn.removeIf(d -> d.ability == ability);
-        onBlockBreakEvent.removeIf(d -> d.ability == ability);
-        onSignChangeEvent.removeIf(d -> d.ability == ability);
-        onProjectileLaunchEvent.removeIf(d -> d.ability == ability);
-        onPlayerDropItem.removeIf(d -> d.ability == ability);
-        onPlayerMoveEvent.removeIf(d -> d.ability == ability);
-        onProjectileHitEvent.removeIf(d -> d.ability == ability);
+        onEntityTarget.removeIf(d -> d.getAbility() == ability);
+        onEntityDamage.removeIf(d -> d.getAbility() == ability);
+        onEntityDamageByEntity.removeIf(d -> d.getAbility() == ability);
+        onEntityDeath.removeIf(d -> d.getAbility() == ability);
+        onPlayerRespawn.removeIf(d -> d.getAbility() == ability);
+        onBlockBreakEvent.removeIf(d -> d.getAbility() == ability);
+        onSignChangeEvent.removeIf(d -> d.getAbility() == ability);
+        onProjectileLaunchEvent.removeIf(d -> d.getAbility() == ability);
+        onPlayerDropItem.removeIf(d -> d.getAbility() == ability);
+        onPlayerMoveEvent.removeIf(d -> d.getAbility() == ability);
+        onProjectileHitEvent.removeIf(d -> d.getAbility() == ability);
     }
 
     public static void clearAll() {
@@ -194,12 +194,12 @@ public final class EventManager implements Listener {
 
     private void executeAbility(List<EventData> dataList, Event event) {
         for (EventData data : dataList) {
-            Ability ability = data.ability;
+            Ability ability = data.getAbility();
             if (ability.getAbilityType() == Type.Active_Continue
                     && ability.getPlayer() != null && ability.getDurationState()) {
-                ability.A_Effect(event, data.parameter);
+                ability.A_Effect(event, data.getParameter());
             }
-            ability.execute(event, data.parameter);
+            ability.execute(event, data.getParameter());
         }
     }
 

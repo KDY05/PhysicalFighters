@@ -1,5 +1,7 @@
 package io.github.kdy05.physicalFighters.command;
 
+import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
+import io.github.kdy05.physicalFighters.ability.AbilityType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,8 +17,8 @@ import java.util.*;
 public final class CommandManager implements CommandExecutor, TabCompleter {
 
     private static final List<String> BASIC_COMMANDS = Arrays.asList("help", "check", "yes", "no");
-    private static final List<String> OPERATOR_COMMANDS = Arrays.asList("start", "stop", "skip", "ob", "ablist",
-            "abi", "util", "inv", "hung", "dura", "tc", "book", "scan", "reload", "kit");
+    private static final List<String> OPERATOR_COMMANDS = Arrays.asList("start", "stop", "skip", "ob", "list",
+            "assign", "reset", "util", "inv", "hung", "dura", "tc", "book", "scan", "reload", "kit");
 
     private final List<CommandInterface> handlers;
 
@@ -97,11 +99,22 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
             }
         } else if (args.length == 2) {
             String subcommand = args[0].toLowerCase();
-            if (subcommand.equals("abi") && sender.hasPermission("va.operate")) {
+            if ((subcommand.equals("assign") || subcommand.equals("reset")) && sender.hasPermission("va.operate")) {
                 String input = args[1].toLowerCase();
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player.getName().toLowerCase().startsWith(input)) {
                         completions.add(player.getName());
+                    }
+                }
+            }
+        } else if (args.length == 3) {
+            String subcommand = args[0].toLowerCase();
+            if (subcommand.equals("assign") && sender.hasPermission("va.operate")) {
+                String input = args[2].toLowerCase();
+                for (AbilityType type : AbilityRegistry.getAllTypes()) {
+                    String tabName = type.getName().replace(' ', '_');
+                    if (tabName.toLowerCase().startsWith(input)) {
+                        completions.add(tabName);
                     }
                 }
             }

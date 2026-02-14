@@ -1,5 +1,6 @@
 plugins {
     id("com.gradleup.shadow") version "9.3.1"
+    id 'org.jetbrains.kotlin.jvm'
 }
 
 configurations {
@@ -36,9 +37,10 @@ shadowJar {
     }
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(8)
+kotlin {
+    jvmToolchain(8)
+    compilerOptions {
+        freeCompilerArgs.add('-Xjvm-default=all')
     }
 }
 
@@ -73,6 +75,7 @@ public final class BuildConfig {
 
 sourceSets.main.java.srcDir(generatedDir)
 compileJava.dependsOn(generateBuildConfig)
+compileKotlin.dependsOn(generateBuildConfig)
 
 processResources {
     def props = [version: project.version]

@@ -65,11 +65,14 @@ public final class GameCommand implements CommandInterface {
             if (filterConsole(sender)) return true;
             this.gameManager.handleObserve((Player) sender);
             return true;
-        } else if (args[0].equalsIgnoreCase("ablist")) {
-            handleAblist(sender, args);
+        } else if (args[0].equalsIgnoreCase("list")) {
+            handleList(sender, args);
             return true;
-        } else if (args[0].equalsIgnoreCase("abi")) {
-            handleAbi(sender, args);
+        } else if (args[0].equalsIgnoreCase("assign")) {
+            handleAssign(sender, args);
+            return true;
+        } else if (args[0].equalsIgnoreCase("reset")) {
+            handleReset(sender, args);
             return true;
         }
 
@@ -98,8 +101,9 @@ public final class GameCommand implements CommandInterface {
             sender.sendMessage("");
             
             sender.sendMessage(ChatColor.YELLOW + "■ 능력 관리 명령어");
-            sender.sendMessage(ChatColor.GOLD + "/va ablist [페이지]" + ChatColor.WHITE + " - 능력 목록과 코드를 표시합니다.");
-            sender.sendMessage(ChatColor.GOLD + "/va abi [플레이어] [코드]" + ChatColor.WHITE + " - 플레이어에게 능력을 할당합니다.");
+            sender.sendMessage(ChatColor.GOLD + "/va list [페이지]" + ChatColor.WHITE + " - 능력 목록을 표시합니다.");
+            sender.sendMessage(ChatColor.GOLD + "/va assign [플레이어] [능력이름]" + ChatColor.WHITE + " - 플레이어에게 능력을 할당합니다.");
+            sender.sendMessage(ChatColor.GOLD + "/va reset [플레이어]" + ChatColor.WHITE + " - 플레이어의 능력을 해제합니다.");
             sender.sendMessage("");
             
             sender.sendMessage(ChatColor.YELLOW + "■ 유틸리티 명령어");
@@ -134,26 +138,23 @@ public final class GameCommand implements CommandInterface {
         }
     }
 
-    private void handleAblist(CommandSender sender, String[] args) {
-        if (args.length != 2) {
-            sender.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va ablist [페이지번호]]");
-            return;
-        }
-
-        int page;
-        try {
-            page = Integer.parseInt(args[1]);
-        } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.RED + "페이지가 올바르지 않습니다.");
-            return;
+    private void handleList(CommandSender sender, String[] args) {
+        int page = 1;
+        if (args.length >= 2) {
+            try {
+                page = Integer.parseInt(args[1]);
+            } catch (NumberFormatException e) {
+                sender.sendMessage(ChatColor.RED + "페이지가 올바르지 않습니다.");
+                return;
+            }
         }
 
         final int ITEMS_PER_PAGE = 8;
         final int totalAbilities = AbilityRegistry.getTypeCount();
-        final int maxPage = Math.max(0, (totalAbilities - 1) / ITEMS_PER_PAGE);
+        final int maxPage = Math.max(1, (totalAbilities + ITEMS_PER_PAGE - 1) / ITEMS_PER_PAGE);
 
-        if (page < 0 || page > maxPage) {
-            sender.sendMessage(ChatColor.RED + String.format("페이지 범위를 벗어났습니다. (0~%d)", maxPage));
+        if (page < 1 || page > maxPage) {
+            sender.sendMessage(ChatColor.RED + String.format("페이지 범위를 벗어났습니다. (1~%d)", maxPage));
             return;
         }
 
@@ -161,7 +162,7 @@ public final class GameCommand implements CommandInterface {
         sender.sendMessage(String.format(ChatColor.AQUA + "페이지 %d/%d (총 %d개 능력)", page, maxPage, totalAbilities));
 
         List<AbilityType> types = AbilityRegistry.getAllTypes();
-        final int startIndex = page * ITEMS_PER_PAGE;
+        final int startIndex = (page - 1) * ITEMS_PER_PAGE;
         final int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalAbilities);
 
         for (int i = startIndex; i < endIndex; i++) {
@@ -176,27 +177,41 @@ public final class GameCommand implements CommandInterface {
         }
     }
 
-    private void handleAbi(CommandSender sender, String[] d) {
-        // 예외 처리
-        if (d.length != 3) {
-            sender.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va abi [플레이어] [능력이름]]");
+    private void handleAssign(CommandSender sender, String[] args) {
+        // /va assign [플레이어] [능력이름] (띄어쓰기는 _로 입력)
+        if (args.length != 3) {
+            sender.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va assign [플레이어] [능력이름]]");
+            sender.sendMessage(ChatColor.RED + "띄어쓰기가 포함된 능력은 _로 대체합니다. (예: 갓_에넬)");
             return;
         }
 
-        Player target = Bukkit.getServer().getPlayerExact(d[1]);
+        Player target = Bukkit.getServer().getPlayerExact(args[1]);
         if (target == null) {
             sender.sendMessage(ChatColor.RED + "존재하지 않는 플레이어입니다.");
             return;
         }
 
-        String abilityName = d[2];
-        // 레거시 호환: "-1" → "해제"
-        if ("-1".equals(abilityName)) {
-            abilityName = "해제";
+        String abilityName = args[2].replace('_', ' ');
+        GameUtils.assignAbility(sender, abilityName, target, plugin.getConfigManager().isAbilityOverLap());
+    }
+
+    private void handleReset(CommandSender sender, String[] args) {
+        // /va reset [플레이어]
+        if (args.length != 2) {
+            sender.sendMessage(ChatColor.RED + "명령이 올바르지 않습니다. [/va reset [플레이어]]");
+            return;
         }
 
-        GameUtils.assignAbility(sender, abilityName, target, plugin.getConfigManager().isAbilityOverLap());
-        plugin.getLogger().info("명령어에 의한 능력 할당입니다.");
+        Player target = Bukkit.getServer().getPlayerExact(args[1]);
+        if (target == null) {
+            sender.sendMessage(ChatColor.RED + "존재하지 않는 플레이어입니다.");
+            return;
+        }
+
+        AbilityRegistry.deactivateAll(target);
+        target.sendMessage(ChatColor.RED + "당신의 능력이 모두 해제되었습니다.");
+        sender.sendMessage(String.format(ChatColor.GREEN + "%s" +
+                ChatColor.WHITE + "님의 능력을 모두 해제했습니다.", target.getName()));
     }
 
 }
