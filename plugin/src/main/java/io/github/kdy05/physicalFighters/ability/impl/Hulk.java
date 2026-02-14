@@ -19,7 +19,7 @@ public class Hulk extends Ability {
     private double originalHealth = 20;
 
     public Hulk(UUID playerUuid) {
-        super(AbilitySpec.builder("헐크", Type.Active_Continue, Rank.SSS)
+        super(AbilitySpec.builder("헐크", Type.ActiveContinue, Rank.SSS)
                 .cooldown(180)
                 .duration(30)
                 .guide(Usage.IronRight + "30초간 각종 버프를 받으며 주는 대미지가 1.5배, 받는 대미지가 절반이 됩니다.")
@@ -33,7 +33,7 @@ public class Hulk extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 1) {
             PlayerInteractEvent event1 = (PlayerInteractEvent) event;
             if (isOwner(event1.getPlayer()) &&
@@ -46,7 +46,7 @@ public class Hulk extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData != 0) return;
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         // 공격력 1.5배
@@ -60,7 +60,7 @@ public class Hulk extends Ability {
     }
 
     @Override
-    public void A_DurationStart() {
+    public void onDurationStart() {
         Player caster = getPlayer();
         if (caster == null) return;
         caster.setHealth(20);
@@ -74,7 +74,7 @@ public class Hulk extends Ability {
     }
 
     @Override
-    public void A_FinalDurationEnd() {
+    public void onDurationFinalize() {
         Player caster = getPlayer();
         if (caster == null) return;
         caster.setHealth(originalHealth);

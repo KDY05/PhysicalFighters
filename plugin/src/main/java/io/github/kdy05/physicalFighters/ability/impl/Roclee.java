@@ -20,7 +20,7 @@ public class Roclee extends Ability {
     private boolean fallDamageImmune = false;
 
     public Roclee(UUID playerUuid) {
-        super(AbilitySpec.builder("록리", Type.Active_Immediately, Rank.S)
+        super(AbilitySpec.builder("록리", Type.ActiveImmediately, Rank.S)
                 .cooldown(20)
                 .guide(Usage.IronAttack + "피해를 입히며 공중으로 끌어올립니다.",
                         "이때 시전자는 5초간 낙하 대미지를 받지 않습니다.")
@@ -34,7 +34,7 @@ public class Roclee extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (isOwner(event0.getDamager()) && event0.getEntity() instanceof LivingEntity
@@ -52,7 +52,7 @@ public class Roclee extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         LivingEntity target = (LivingEntity) event0.getEntity();
         Player attacker = getPlayer();

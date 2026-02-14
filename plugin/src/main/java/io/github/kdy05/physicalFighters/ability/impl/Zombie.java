@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class Zombie extends Ability {
     public Zombie(UUID playerUuid) {
-        super(AbilitySpec.builder("좀비", Type.Passive_AutoMatic, Rank.B)
+        super(AbilitySpec.builder("좀비", Type.PassiveAutoMatic, Rank.B)
                 .guide("모든 대미지의 반을 흡수합니다. 단, 화염 대미지를 8배로 받습니다.")
                 .build(), playerUuid);
         // onEntityDamage는 EntityDamageByEntityEvent도 수신하므로 단일 등록으로 통합
@@ -26,7 +26,7 @@ public class Zombie extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         EntityDamageEvent event0 = (EntityDamageEvent) event;
         if (!isOwner(event0.getEntity())) return -1;
 
@@ -51,7 +51,7 @@ public class Zombie extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         EntityDamageEvent event0 = (EntityDamageEvent) event;
         if (CustomData == 0) {
             event0.setDamage(event0.getDamage() * 8);

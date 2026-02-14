@@ -43,7 +43,7 @@ public class Fish extends Ability implements BaseItem {
     }
 
     public Fish(UUID playerUuid) {
-        super(AbilitySpec.builder("강태공", Type.Passive_Manual, Rank.A)
+        super(AbilitySpec.builder("강태공", Type.PassiveManual, Rank.A)
                 .guide("낚싯대로 타격 시 강한 대미지를 주고, 낮은 확률로 전용 물고기를 얻습니다.",
                         "물고기를 들고 타격 시, 더욱 강한 대미지를 줍니다.")
                 .build(), playerUuid);
@@ -55,7 +55,7 @@ public class Fish extends Ability implements BaseItem {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
             if (!isOwner(damageEvent.getDamager()) || !(damageEvent.getEntity() instanceof Player)) return -1;
@@ -68,7 +68,7 @@ public class Fish extends Ability implements BaseItem {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
             damageEvent.setDamage(damageEvent.getDamage() * FISHING_ROD_DAMAGE);

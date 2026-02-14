@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class Clocking extends Ability {
     public Clocking(UUID playerUuid) {
-        super(AbilitySpec.builder("클로킹", Type.Active_Continue, Rank.A)
+        super(AbilitySpec.builder("클로킹", Type.ActiveContinue, Rank.A)
                 .cooldown(30)
                 .duration(5)
                 .guide(Usage.IronLeft + "일정 시간동안 다른 사람에게 보이지 않습니다.",
@@ -25,7 +25,7 @@ public class Clocking extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem))
             return 0;
@@ -33,7 +33,7 @@ public class Clocking extends Ability {
     }
 
     @Override
-    public void A_DurationStart() {
+    public void onDurationStart() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (getPlayer() == null) return;
             p.hidePlayer(plugin, getPlayer());
@@ -41,7 +41,7 @@ public class Clocking extends Ability {
     }
 
     @Override
-    public void A_FinalDurationEnd() {
+    public void onDurationFinalize() {
         if (getPlayer() == null) return;
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.showPlayer(plugin, getPlayer());
@@ -49,11 +49,11 @@ public class Clocking extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
     }
 
     @Override
-    public void A_ResetEvent(Player owner) {
+    public void onDeactivate(Player owner) {
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.showPlayer(plugin, owner);
         }

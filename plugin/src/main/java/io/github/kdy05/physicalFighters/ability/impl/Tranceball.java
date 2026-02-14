@@ -47,7 +47,7 @@ public class Tranceball extends Ability implements BaseItem {
     }
 
     public Tranceball(UUID playerUuid) {
-        super(AbilitySpec.builder("트랜스볼", Type.Passive_Manual, Rank.SS)
+        super(AbilitySpec.builder("트랜스볼", Type.PassiveManual, Rank.SS)
                 .guide("웅크리고 눈덩이를 우클릭하여 모드를 전환합니다.",
                         "스왑 모드 - 눈덩이를 맞은 적과 위치를 교환합니다.",
                         "그랩 모드 - 눈덩이를 맞은 적을 자신의 위치로 당겨옵니다.",
@@ -62,7 +62,7 @@ public class Tranceball extends Ability implements BaseItem {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             ProjectileHitEvent event0 = (ProjectileHitEvent) event;
             if (event0.getEntity() instanceof Snowball) {
@@ -87,7 +87,7 @@ public class Tranceball extends Ability implements BaseItem {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             ProjectileHitEvent event0 = (ProjectileHitEvent) event;
             LivingEntity target = (LivingEntity) event0.getHitEntity();
@@ -108,7 +108,7 @@ public class Tranceball extends Ability implements BaseItem {
     }
 
     @Override
-    public void A_SetEvent(Player p) {
+    public void onActivate(Player p) {
         this.mode = Mode.Swap;
     }
 

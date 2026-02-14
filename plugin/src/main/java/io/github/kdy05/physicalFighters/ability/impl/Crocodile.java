@@ -27,7 +27,7 @@ public class Crocodile extends Ability {
     private static final double ENTITY_CHECK_RADIUS = 50.0;
 
     public Crocodile(UUID playerUuid) {
-        super(AbilitySpec.builder("크로커다일", Type.Active_Immediately, Rank.S)
+        super(AbilitySpec.builder("크로커다일", Type.ActiveImmediately, Rank.S)
                 .cooldown(20)
                 .guide(Usage.IronLeft + "자신의 주변의 있는 블록을 모래로 바꿉니다.",
                         Usage.IronRight + "모래 위에 있는 50칸 이내의 적에게",
@@ -42,7 +42,7 @@ public class Crocodile extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player p = event0.getPlayer();
         if (!isOwner(p) || !isValidItem(Ability.DefaultItem)) {
@@ -56,7 +56,7 @@ public class Crocodile extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player caster = event0.getPlayer();
         if (CustomData == 0) {

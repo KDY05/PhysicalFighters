@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class Demigod extends Ability {
     public Demigod(UUID playerUuid) {
-        super(AbilitySpec.builder("데미갓", Type.Passive_AutoMatic, Rank.S)
+        super(AbilitySpec.builder("데미갓", Type.PassiveAutoMatic, Rank.S)
                 .guide("반은 인간, 반은 신인 능력자입니다.",
                         "대미지를 받으면 일정 확률로 10초간 랜덤 버프가 발동됩니다.")
                 .build(), playerUuid);
@@ -27,7 +27,7 @@ public class Demigod extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         EntityDamageEvent event0 = (EntityDamageEvent) event;
         if (!InvincibilityManager.isDamageGuard() && isOwner(event0.getEntity())) {
             return 0;
@@ -36,7 +36,7 @@ public class Demigod extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         EntityDamageEvent event0 = (EntityDamageEvent) event;
         Player player = (Player) event0.getEntity();
         if (Math.random() <= 0.05D)

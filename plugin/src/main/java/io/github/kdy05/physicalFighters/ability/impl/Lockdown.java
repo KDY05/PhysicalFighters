@@ -24,7 +24,7 @@ public class Lockdown extends Ability implements CommandInterface {
     private String targetName = null;
 
     public Lockdown(UUID playerUuid) {
-        super(AbilitySpec.builder("봉인", Type.Active_Continue, Rank.B)
+        super(AbilitySpec.builder("봉인", Type.ActiveContinue, Rank.B)
                 .cooldown(80)
                 .duration(LOCKDOWN_DURATION)
                 .guide("특정 플레이어의 능력을 1분간 봉인하며 배고픔 수치를 0으로 만듭니다.",
@@ -34,7 +34,10 @@ public class Lockdown extends Ability implements CommandInterface {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public void registerEvents() {}
+
+    @Override
+    public int checkCondition(Event event, int CustomData) {
         if (caster == null || !isOwner(caster)) {
             if (caster != null) caster.sendMessage(ChatColor.RED + "이 명령은 사용할 수 없습니다.");
             clearTempData();
@@ -82,12 +85,12 @@ public class Lockdown extends Ability implements CommandInterface {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         // A_DurationStart에서 실제 효과 처리
     }
 
     @Override
-    public void A_DurationStart() {
+    public void onDurationStart() {
         if (caster == null || targetAbility == null) {
             return;
         }
@@ -114,7 +117,7 @@ public class Lockdown extends Ability implements CommandInterface {
     }
 
     @Override
-    public void A_FinalDurationEnd() {
+    public void onDurationFinalize() {
         if (targetAbility != null) {
             Player target = targetAbility.getPlayer();
             if (target != null) {

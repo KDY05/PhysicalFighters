@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class Medic extends Ability {
     public Medic(UUID playerUuid) {
-        super(AbilitySpec.builder("메딕", Type.Active_Immediately, Rank.B)
+        super(AbilitySpec.builder("메딕", Type.ActiveImmediately, Rank.B)
                 .cooldown(15)
                 .guide(Usage.IronAttack + "타인의 체력을 6만큼 회복합니다.",
                         Usage.IronRight + "자신의 체력을 6만큼 회복합니다.")
@@ -30,7 +30,7 @@ public class Medic extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (event0.getEntity() instanceof LivingEntity &&
@@ -47,7 +47,7 @@ public class Medic extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             LivingEntity entity = (LivingEntity) event0.getEntity();

@@ -19,9 +19,9 @@ public class ReverseAlchemy extends Ability {
     private static final int GOLD_FOR_DIAMOND = 3;
 
     public ReverseAlchemy(UUID playerUuid) {
-        super(AbilitySpec.builder("반 연금술", Type.Active_Immediately, Rank.A)
+        super(AbilitySpec.builder("반 연금술", Type.ActiveImmediately, Rank.A)
                 .cooldown(5)
-                .showText(ShowText.No_CoolDownText)
+                .showText(ShowText.NoCoolDownText)
                 .guide(Usage.IronLeft + "금괴 3개를 다이아몬드 1개로 변환합니다.",
                         Usage.GoldRight + "금괴를 소모하여 자신의 체력을 회복합니다.",
                         "이때 체력이 최대 채력의 절반 이상이라면 체력을 전부 회복하며,",
@@ -36,7 +36,7 @@ public class ReverseAlchemy extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player player = event0.getPlayer();
         if (!isOwner(player)) return -1;
@@ -59,7 +59,7 @@ public class ReverseAlchemy extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player player = event0.getPlayer();
         if (CustomData == 0) {

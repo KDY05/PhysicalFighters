@@ -36,7 +36,7 @@ public class Akainu extends Ability {
     private final Map<Location, Material> originalBlocks = new HashMap<>();
 
     public Akainu(UUID playerUuid) {
-        super(AbilitySpec.builder("아카이누", Type.Active_Immediately, Rank.SS)
+        super(AbilitySpec.builder("아카이누", Type.ActiveImmediately, Rank.SS)
                 .cooldown(45)
                 .guide(Usage.IronLeft + "바라보는 곳의 땅을 용암으로 바꿉니다.",
                         "4초 뒤에 용암이 다시 굳으며 적을 땅속에 가둡니다.",
@@ -51,7 +51,7 @@ public class Akainu extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent event0 = (PlayerInteractEvent) event;
             Player caster = event0.getPlayer();
@@ -83,7 +83,7 @@ public class Akainu extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player caster = event0.getPlayer();
 

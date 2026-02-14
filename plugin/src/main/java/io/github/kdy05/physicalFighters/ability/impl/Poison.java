@@ -9,12 +9,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
-import org.bukkit.entity.Player;
+
 import java.util.UUID;
 
 public class Poison extends Ability {
     public Poison(UUID playerUuid) {
-        super(AbilitySpec.builder("포이즌", Type.Passive_AutoMatic, Rank.A)
+        super(AbilitySpec.builder("포이즌", Type.PassiveAutoMatic, Rank.A)
                 .guide("자신에게 공격받은 사람은 3초간 독에 감염됩니다.")
                 .build(), playerUuid);
     }
@@ -25,7 +25,7 @@ public class Poison extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         if (isOwner(event0.getDamager()) && event0.getEntity() instanceof LivingEntity) {
             return 0;
@@ -34,7 +34,7 @@ public class Poison extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         LivingEntity entity = (LivingEntity) event0.getEntity();
         entity.addPotionEffect(PotionEffectFactory.createPoison(60, 0));

@@ -10,12 +10,12 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.entity.Player;
+
 import java.util.UUID;
 
 public class Fly extends Ability {
     public Fly(UUID playerUuid) {
-        super(AbilitySpec.builder("플라이", Type.Active_Continue, Rank.GOD)
+        super(AbilitySpec.builder("플라이", Type.ActiveContinue, Rank.GOD)
                 .cooldown(60)
                 .duration(10)
                 .guide(Usage.IronLeft + "10초간 하늘을 날라다닐 수 있습니다.",
@@ -30,7 +30,7 @@ public class Fly extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent event0 = (PlayerInteractEvent) event;
             if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
@@ -47,18 +47,18 @@ public class Fly extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
     }
 
     @Override
-    public void A_DurationStart() {
+    public void onDurationStart() {
         if (getPlayer() == null) return;
         getPlayer().setAllowFlight(true);
         getPlayer().setFlying(true);
     }
 
     @Override
-    public void A_FinalDurationEnd() {
+    public void onDurationFinalize() {
         if (getPlayer() == null) return;
         getPlayer().setAllowFlight(false);
         getPlayer().setFlying(false);

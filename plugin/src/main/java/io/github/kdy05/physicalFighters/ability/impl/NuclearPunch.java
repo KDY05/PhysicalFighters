@@ -9,12 +9,12 @@ import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.entity.Player;
+
 import java.util.UUID;
 
 public class NuclearPunch extends Ability {
     public NuclearPunch(UUID playerUuid) {
-        super(AbilitySpec.builder("핵펀치", Type.Active_Immediately, Rank.A)
+        super(AbilitySpec.builder("핵펀치", Type.ActiveImmediately, Rank.A)
                 .cooldown(45)
                 .guide(Usage.IronAttack + "대미지 20을 주며 매우 멀리 밀쳐버립니다.")
                 .build(), playerUuid);
@@ -26,7 +26,7 @@ public class NuclearPunch extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         if (isOwner(event0.getDamager()) && isValidItem(Ability.DefaultItem)
                 && event0.getEntity() instanceof LivingEntity) {
@@ -36,7 +36,7 @@ public class NuclearPunch extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         LivingEntity entity = (LivingEntity) event0.getEntity();
         event0.setDamage(20);

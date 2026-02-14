@@ -8,7 +8,6 @@ import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
@@ -17,7 +16,7 @@ import java.util.UUID;
 
 public class Kimimaro extends Ability implements BaseItem {
     public Kimimaro(UUID playerUuid) {
-        super(AbilitySpec.builder("키미마로", Type.Passive_Manual, Rank.SS)
+        super(AbilitySpec.builder("키미마로", Type.PassiveManual, Rank.SS)
                 .guide("뼈다귀로 상대를 공격할 시에 강한 대미지를 주고,",
                         "40% 확률로 상대에게 5초간 독 효과를 겁니다.")
                 .build(), playerUuid);
@@ -29,7 +28,7 @@ public class Kimimaro extends Ability implements BaseItem {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (isOwner(event0.getDamager()) && isValidItem(Material.BONE)
@@ -40,7 +39,7 @@ public class Kimimaro extends Ability implements BaseItem {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             event0.setDamage(event0.getDamage() * 7);

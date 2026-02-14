@@ -16,8 +16,8 @@ import java.util.UUID;
 
 public class Luffy extends Ability {
     public Luffy(UUID playerUuid) {
-        super(AbilitySpec.builder("루피", Type.Active_Immediately, Rank.S)
-                .showText(ShowText.Custom_Text)
+        super(AbilitySpec.builder("루피", Type.ActiveImmediately, Rank.S)
+                .showText(ShowText.CustomText)
                 .guide(Usage.IronLeft + "사거리가 긴 주먹질을 합니다.",
                         Usage.GoldLeft + "체력을 5 소모하여 30초간 여러 버프를 얻습니다.")
                 .build(), playerUuid);
@@ -29,7 +29,7 @@ public class Luffy extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem) && !InvincibilityManager.isDamageGuard()) {
             return 1;
@@ -41,7 +41,7 @@ public class Luffy extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player caster = event0.getPlayer();
         if (CustomData == 1) {

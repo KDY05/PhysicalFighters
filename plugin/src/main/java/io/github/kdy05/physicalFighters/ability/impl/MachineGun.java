@@ -40,8 +40,8 @@ public class MachineGun extends Ability {
     private static final int ACTION_RELOAD = 20;
 
     public MachineGun(UUID playerUuid) {
-        super(AbilitySpec.builder("기관총", Type.Active_Immediately, Rank.S)
-                .showText(ShowText.Custom_Text)
+        super(AbilitySpec.builder("기관총", Type.ActiveImmediately, Rank.S)
+                .showText(ShowText.CustomText)
                 .guide(Usage.GoldRight + "화살을 연사합니다. 철괴를 탄창으로 사용하며 한 탄창은 30발입니다.",
                         "크리티컬 - 20% 확률로 화살이 고정 대미지를 입힙니다.")
                 .build(), playerUuid);
@@ -55,7 +55,7 @@ public class MachineGun extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == EVENT_RIGHT_CLICK) {
             return handleRightClickCondition(event);
         } else if (CustomData == EVENT_DAMAGE) {
@@ -67,7 +67,7 @@ public class MachineGun extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == EVENT_DAMAGE) {
             handleDamageEffect(event);
         } else if (CustomData == ACTION_SHOOT) {

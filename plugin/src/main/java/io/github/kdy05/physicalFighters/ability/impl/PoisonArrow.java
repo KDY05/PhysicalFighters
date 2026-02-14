@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class PoisonArrow extends Ability implements BaseItem {
     public PoisonArrow(UUID playerUuid) {
-        super(AbilitySpec.builder("독화살", Type.Passive_Manual, Rank.B)
+        super(AbilitySpec.builder("독화살", Type.PassiveManual, Rank.B)
                 .guide("화살에 맞은 적은 6초간 독에걸립니다.",
                         "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.")
                 .build(), playerUuid);
@@ -30,7 +30,7 @@ public class PoisonArrow extends Ability implements BaseItem {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (event0.getDamager() instanceof Arrow) {
@@ -50,7 +50,7 @@ public class PoisonArrow extends Ability implements BaseItem {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             LivingEntity target = (LivingEntity) event0.getEntity();

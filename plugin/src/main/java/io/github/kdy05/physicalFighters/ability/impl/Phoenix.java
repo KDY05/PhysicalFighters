@@ -25,7 +25,7 @@ public class Phoenix extends Ability {
     private final HashMap<UUID, ItemStack[]> invsave = new HashMap<>();
 
     public Phoenix(UUID playerUuid) {
-        super(AbilitySpec.builder("불사조", Type.Passive_Manual, Rank.A)
+        super(AbilitySpec.builder("불사조", Type.PassiveManual, Rank.A)
                 .guide("자연사할 시 무제한으로 인벤토리를 잃지 않고 부활합니다.",
                         "타인에게 사망할 경우 1회에 한하여 자연사 판정으로 부활합니다.",
                         "부활시 자신의 능력이 모두에게 알려지게 됩니다.")
@@ -39,7 +39,7 @@ public class Phoenix extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         switch (CustomData) {
             case 0:
                 EntityDeathEvent event0 = (EntityDeathEvent) event;
@@ -56,7 +56,7 @@ public class Phoenix extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerDeathEvent event0 = (PlayerDeathEvent) event;
             Player killed = event0.getEntity();
@@ -107,7 +107,7 @@ public class Phoenix extends Ability {
     public boolean isDeathExempt() { return true; }
 
     @Override
-    public void A_SetEvent(Player p) {
+    public void onActivate(Player p) {
         this.ReviveCounter = 0;
         this.AbilityUse = false;
     }

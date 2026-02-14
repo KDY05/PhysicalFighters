@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class Berserker extends Ability {
     public Berserker(UUID playerUuid) {
-        super(AbilitySpec.builder("광전사", Type.Passive_Manual, Rank.A)
+        super(AbilitySpec.builder("광전사", Type.PassiveManual, Rank.A)
                 .guide("체력이 낮아질수록 대미지가 증폭됩니다.",
                         "6칸 ↓ - 1.5배, 4칸 ↓ - 2배, 2칸 ↓ - 3배, 반 칸 ↓ - 4배")
                 .build(), playerUuid);
@@ -23,7 +23,7 @@ public class Berserker extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         if (!isOwner(event0.getDamager())) return -1;
         Player p = (Player) event0.getDamager();
@@ -35,7 +35,7 @@ public class Berserker extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         if (CustomData == 0) {
             event0.setDamage(event0.getDamage() * 4.0);

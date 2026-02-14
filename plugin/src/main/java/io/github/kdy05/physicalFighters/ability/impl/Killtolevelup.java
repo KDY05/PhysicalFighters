@@ -21,7 +21,7 @@ public class Killtolevelup extends Ability implements BaseItem {
     private int dama = 4;
 
     public Killtolevelup(UUID playerUuid) {
-        super(AbilitySpec.builder("폭주", Type.Passive_Manual, Rank.SS)
+        super(AbilitySpec.builder("폭주", Type.PassiveManual, Rank.SS)
                 .guide("깃털의 처음 대미지는 4입니다.",
                         "깃털로 적을 처치할 때마다 대미지가 2만큼 늘어납니다.")
                 .build(), playerUuid);
@@ -34,7 +34,7 @@ public class Killtolevelup extends Ability implements BaseItem {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (isOwner(event0.getDamager()) && isValidItem(Material.FEATHER))
@@ -49,7 +49,7 @@ public class Killtolevelup extends Ability implements BaseItem {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             event0.setDamage(event0.getDamage() * this.dama);

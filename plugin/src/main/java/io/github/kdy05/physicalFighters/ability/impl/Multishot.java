@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class Multishot extends Ability implements BaseItem {
     public Multishot(UUID playerUuid) {
-        super(AbilitySpec.builder("멀티샷", Type.Active_Immediately, Rank.A)
+        super(AbilitySpec.builder("멀티샷", Type.ActiveImmediately, Rank.A)
                 .cooldown(3)
                 .guide("화살 발사 시 여러 발이 퍼지면서 날라갑니다.",
                         "죽거나 게임 시작시 활과 화살이 고정적으로 주어집니다.")
@@ -32,7 +32,7 @@ public class Multishot extends Ability implements BaseItem {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             ProjectileLaunchEvent event0 = (ProjectileLaunchEvent) event;
             if (event0.getEntity() instanceof Arrow) {
@@ -49,7 +49,7 @@ public class Multishot extends Ability implements BaseItem {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             ProjectileLaunchEvent event0 = (ProjectileLaunchEvent) event;
             Arrow originalArrow = (Arrow) event0.getEntity();

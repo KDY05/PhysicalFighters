@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class ShockWave extends Ability {
     public ShockWave(UUID playerUuid) {
-        super(AbilitySpec.builder("쇼크웨이브", Type.Active_Immediately, Rank.A)
+        super(AbilitySpec.builder("쇼크웨이브", Type.ActiveImmediately, Rank.A)
                 .cooldown(45)
                 .guide(Usage.IronLeft + "철괴를 소모하여 보고있는 방향으로 막강한 직선 충격포를 쏩니다.",
                         "충격포는 물과 벽 건너편까지 통과할 수 있습니다.")
@@ -26,7 +26,7 @@ public class ShockWave extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         if (isOwner(event0.getPlayer()) && isValidItem(DefaultItem)) {
             PlayerInventory inv = event0.getPlayer().getInventory();
@@ -40,7 +40,7 @@ public class ShockWave extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player player = event0.getPlayer();
         player.getInventory().removeItem(new ItemStack(Material.IRON_INGOT, 1));

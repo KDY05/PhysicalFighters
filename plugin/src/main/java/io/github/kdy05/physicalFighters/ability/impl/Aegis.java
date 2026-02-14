@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class Aegis extends Ability {
     public Aegis(UUID playerUuid) {
-        super(AbilitySpec.builder("이지스", Type.Active_Continue, Rank.A)
+        super(AbilitySpec.builder("이지스", Type.ActiveContinue, Rank.A)
                 .cooldown(28)
                 .duration(6)
                 .guide(Usage.IronLeft + "6초 동안 무적이 됩니다.",
@@ -29,7 +29,7 @@ public class Aegis extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent event0 = (PlayerInteractEvent) event;
             if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem) && !InvincibilityManager.isDamageGuard())
@@ -39,7 +39,7 @@ public class Aegis extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 1) {
             EntityDamageEvent event1 = (EntityDamageEvent) event;
             if (isOwner(event1.getEntity())) {

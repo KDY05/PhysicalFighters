@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class Flower extends Ability {
     public Flower(UUID playerUuid) {
-        super(AbilitySpec.builder("흡혈초", Type.Active_Immediately, Rank.SS)
+        super(AbilitySpec.builder("흡혈초", Type.ActiveImmediately, Rank.SS)
                 .cooldown(30)
                 .guide(Usage.IronAttack + "맞은 사람의 체력을 흡수합니다.",
                         Usage.IronRight + "자신의 체력을 소비해 레벨을 얻습니다.")
@@ -31,7 +31,7 @@ public class Flower extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (event0.getEntity() instanceof LivingEntity && isOwner(event0.getDamager())
@@ -52,7 +52,7 @@ public class Flower extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             LivingEntity entity = (LivingEntity) event0.getEntity();

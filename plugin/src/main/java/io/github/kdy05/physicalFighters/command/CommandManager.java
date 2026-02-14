@@ -40,11 +40,6 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
             return this;
         }
 
-        public Builder addAll(Collection<? extends CommandInterface> commands) {
-            handlers.addAll(commands);
-            return this;
-        }
-
         public CommandManager build() {
             return new CommandManager(handlers);
         }

@@ -9,12 +9,12 @@ import io.github.kdy05.physicalFighters.util.EventData;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.entity.Player;
+
 import java.util.UUID;
 
 public class Sasuke extends Ability {
     public Sasuke(UUID playerUuid) {
-        super(AbilitySpec.builder("사스케", Type.Active_Immediately, Rank.S)
+        super(AbilitySpec.builder("사스케", Type.ActiveImmediately, Rank.S)
                 .cooldown(30)
                 .guide(Usage.IronAttack + "치도리 - 엄청난 대미지로 감전시킵니다.")
                 .build(), playerUuid);
@@ -26,7 +26,7 @@ public class Sasuke extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         if (isOwner(event0.getDamager()) && isValidItem(Ability.DefaultItem)
                 && !InvincibilityManager.isDamageGuard() && event0.getEntity() instanceof LivingEntity) {
@@ -36,7 +36,7 @@ public class Sasuke extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         LivingEntity entity = (LivingEntity) event0.getEntity();
         entity.getWorld().strikeLightning(entity.getLocation());

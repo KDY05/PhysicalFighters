@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class Booster extends Ability {
     public Booster(UUID playerUuid) {
-        super(AbilitySpec.builder("부스터", Type.Passive_AutoMatic, Rank.A)
+        super(AbilitySpec.builder("부스터", Type.PassiveAutoMatic, Rank.A)
                 .guide("폭주 - 매우 낮은 딜레이로 상대를 공격합니다. 단 당신의 대미지는 3~6로 랜덤입니다.",
                         "무통증 - 피격 시 80% 확률로 넉백을 무시합니다.")
                 .build(), playerUuid);
@@ -30,7 +30,7 @@ public class Booster extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         if (isOwner(event0.getDamager()) && event0.getEntity() instanceof LivingEntity) {
             return 0;
@@ -44,7 +44,7 @@ public class Booster extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             LivingEntity entity = (LivingEntity) event0.getEntity();

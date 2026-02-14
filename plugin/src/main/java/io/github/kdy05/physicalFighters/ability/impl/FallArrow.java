@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class FallArrow extends Ability implements BaseItem {
     public FallArrow(UUID playerUuid) {
-        super(AbilitySpec.builder("중력화살", Type.Passive_Manual, Rank.S)
+        super(AbilitySpec.builder("중력화살", Type.PassiveManual, Rank.S)
                 .guide("화살에 맞은 플레이어는 공중으로 뜹니다. [추가타 가능]")
                 .build(), playerUuid);
     }
@@ -31,7 +31,7 @@ public class FallArrow extends Ability implements BaseItem {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (event0.getDamager() instanceof Arrow) {
@@ -51,7 +51,7 @@ public class FallArrow extends Ability implements BaseItem {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             LivingEntity entity = (LivingEntity) event0.getEntity();

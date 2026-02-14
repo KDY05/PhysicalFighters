@@ -22,7 +22,7 @@ public class Temari extends Ability {
     private static final long INTERVAL = 30L;
 
     public Temari(UUID playerUuid) {
-        super(AbilitySpec.builder("테마리", Type.Active_Continue, Rank.S)
+        super(AbilitySpec.builder("테마리", Type.ActiveContinue, Rank.S)
                 .cooldown(60)
                 .duration(20)
                 .guide(Usage.IronLeft + "능력 지속 시간동안 자신의 주변에 있는 적들을 공중으로 날려버립니다.",
@@ -36,7 +36,7 @@ public class Temari extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player p = event0.getPlayer();
         if (!isOwner(p) || !isValidItem(Ability.DefaultItem)) {
@@ -50,13 +50,13 @@ public class Temari extends Ability {
     }
 
     @Override
-    public void A_DurationStart() {
+    public void onDurationStart() {
         if (getPlayer() == null) return;
         new WindBlastTask(getPlayer()).runTaskTimer(plugin, 10L, INTERVAL);
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
     }
 
     private static class WindBlastTask extends BukkitRunnable {

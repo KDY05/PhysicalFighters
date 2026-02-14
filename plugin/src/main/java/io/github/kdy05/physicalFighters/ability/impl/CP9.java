@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class CP9 extends Ability {
     public CP9(UUID playerUuid) {
-        super(AbilitySpec.builder("CP9", Type.Active_Immediately, Rank.SS)
+        super(AbilitySpec.builder("CP9", Type.ActiveImmediately, Rank.SS)
                 .guide(Usage.IronAttack + "상대에게 6의 고정 대미지를 줍니다.",
                         Usage.IronRight + "바라보는 방향으로 빠르게 도약합니다.",
                         Usage.Passive + "낙하 대미지를 무시합니다.")
@@ -36,7 +36,7 @@ public class CP9 extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (event0.getEntity() instanceof LivingEntity && isOwner(event0.getDamager())
@@ -59,7 +59,7 @@ public class CP9 extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             LivingEntity entity = (LivingEntity) event0.getEntity();

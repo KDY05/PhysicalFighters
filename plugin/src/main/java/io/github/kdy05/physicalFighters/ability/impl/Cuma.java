@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class Cuma extends Ability {
     public Cuma(UUID playerUuid) {
-        super(AbilitySpec.builder("바솔로뮤 쿠마", Type.Passive_AutoMatic, Rank.S)
+        super(AbilitySpec.builder("바솔로뮤 쿠마", Type.PassiveAutoMatic, Rank.S)
                 .guide("피격 시 상대를 넉백시키며, 일정 확률로 받은 공격을 상대에게 되돌려줍니다.")
                 .build(), playerUuid);
     }
@@ -26,7 +26,7 @@ public class Cuma extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         if (isOwner(event0.getEntity()) && !InvincibilityManager.isDamageGuard()
                 && event0.getDamager() instanceof LivingEntity) {
@@ -36,7 +36,7 @@ public class Cuma extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         Player caster = (Player) event0.getEntity();
         LivingEntity target = (LivingEntity) event0.getDamager();

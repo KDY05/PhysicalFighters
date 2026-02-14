@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class SuperFan extends Ability {
     public SuperFan(UUID playerUuid) {
-        super(AbilitySpec.builder("선풍기", Type.Active_Immediately, Rank.C)
+        super(AbilitySpec.builder("선풍기", Type.ActiveImmediately, Rank.C)
                 .cooldown(20)
                 .guide(Usage.IronLeft + "바라보는 방향의 플레이어들을 날려버립니다.",
                         "플레이어들은 무더위에 시원함을 느껴 체력이 회복됩니다.",
@@ -32,7 +32,7 @@ public class SuperFan extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem) && !InvincibilityManager.isDamageGuard()) {
             return 0;
@@ -41,7 +41,7 @@ public class SuperFan extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         Player caster = getPlayer();
         if (caster == null) return;
         

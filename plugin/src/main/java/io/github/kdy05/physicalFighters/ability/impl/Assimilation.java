@@ -20,7 +20,7 @@ public class Assimilation extends Ability implements CommandInterface {
     private boolean ActiveAss = false;
 
     public Assimilation(UUID playerUuid) {
-        super(AbilitySpec.builder("흡수", Type.Passive_Manual, Rank.S)
+        super(AbilitySpec.builder("흡수", Type.PassiveManual, Rank.S)
                 .guide("자신이 죽인 플레이어의 능력을 흡수합니다.",
                         "\"/va a\" 명령으로 자신이 흡수한 능력들을 확인할 수 있습니다.",
                         "흡수 가능한 능력의 개수는 제한이 없지만 액티브 능력은 최대 1개만 가능합니다.")
@@ -33,7 +33,7 @@ public class Assimilation extends Ability implements CommandInterface {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDeathEvent event0 = (EntityDeathEvent) event;
             if (event0.getEntity() instanceof Player && isOwner(event0.getEntity().getKiller()))
@@ -43,7 +43,7 @@ public class Assimilation extends Ability implements CommandInterface {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDeathEvent event0 = (EntityDeathEvent) event;
             if (!(event0.getEntity() instanceof Player) || event0.getEntity().getKiller() == null) return;
@@ -52,7 +52,7 @@ public class Assimilation extends Ability implements CommandInterface {
             Player player = event0.getEntity().getKiller();
             if (ability == null) return;
             String absorbedTypeName = ability.getAbilityName();
-            if (ability.getAbilityType() == Type.Passive_AutoMatic || ability.getAbilityType() == Type.Passive_Manual) {
+            if (ability.getAbilityType() == Type.PassiveAutoMatic || ability.getAbilityType() == Type.PassiveManual) {
                 AbilityRegistry.deactivate(ability, false);
                 AbilityRegistry.createAndActivate(absorbedTypeName, player, false);
                 player.sendMessage(ChatColor.GREEN + "새로운 패시브 능력을 흡수하였습니다.");
@@ -74,7 +74,7 @@ public class Assimilation extends Ability implements CommandInterface {
     public boolean isInfoPrimary() { return true; }
 
     @Override
-    public void A_SetEvent(Player p) {
+    public void onActivate(Player p) {
         this.ActiveAss = false;
     }
 

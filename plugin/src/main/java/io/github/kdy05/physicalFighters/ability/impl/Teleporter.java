@@ -25,7 +25,7 @@ public class Teleporter extends Ability implements BaseItem {
     private Location signLoc = null;
 
     public Teleporter(UUID playerUuid) {
-        super(AbilitySpec.builder("소환술사", Type.Active_Immediately, Rank.A)
+        super(AbilitySpec.builder("소환술사", Type.ActiveImmediately, Rank.A)
                 .cooldown(300)
                 .guide(Usage.IronLeft + "표지판을 설치하고 첫 줄에 플레이어의 이름(자신도 가능)을 적으면,",
                         "능력 사용 시 이름이 적힌 플레이어가 표지판으로 이동합니다.")
@@ -40,7 +40,7 @@ public class Teleporter extends Ability implements BaseItem {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent event0 = (PlayerInteractEvent) event;
             if (isOwner(event0.getPlayer()) && !InvincibilityManager.isDamageGuard() && isValidItem(Ability.DefaultItem)) {
@@ -79,7 +79,7 @@ public class Teleporter extends Ability implements BaseItem {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             Player target = Bukkit.getPlayer(signName);
             if (target == null) return;

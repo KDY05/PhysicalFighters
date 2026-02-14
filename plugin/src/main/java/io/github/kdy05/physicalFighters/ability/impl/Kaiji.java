@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class Kaiji extends Ability implements BaseItem {
     public Kaiji(UUID playerUuid) {
-        super(AbilitySpec.builder("카이지", Type.Passive_Manual, Rank.S)
+        super(AbilitySpec.builder("카이지", Type.PassiveManual, Rank.S)
                 .cooldown(20)
                 .guide("다이아몬드로 상대 타격 시 30% 확률로 상대를 즉사시키고, 70% 확률로 자신이 사망합니다.")
                 .build(), playerUuid);
@@ -30,7 +30,7 @@ public class Kaiji extends Ability implements BaseItem {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (!InvincibilityManager.isDamageGuard() && isOwner(event0.getDamager())
@@ -41,7 +41,7 @@ public class Kaiji extends Ability implements BaseItem {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             Player player = (Player) event0.getEntity();

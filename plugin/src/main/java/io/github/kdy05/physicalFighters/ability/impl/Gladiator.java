@@ -27,7 +27,7 @@ public class Gladiator extends Ability {
     private LivingEntity target = null;
 
     public Gladiator(UUID playerUuid) {
-        super(AbilitySpec.builder("글레디에이터", Type.Active_Continue, Rank.SSS)
+        super(AbilitySpec.builder("글레디에이터", Type.ActiveContinue, Rank.SSS)
                 .cooldown(60)
                 .duration(DURATION_TICKS / 20)
                 .guide(Usage.IronAttack + "천공의 투기장으로 이동하여 15초간 1:1 대결을 펼칩니다.",
@@ -41,7 +41,7 @@ public class Gladiator extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         if (!InvincibilityManager.isDamageGuard() && isOwner(event0.getDamager())
                 && event0.getEntity() instanceof LivingEntity && isValidItem(Ability.DefaultItem)) {
@@ -52,7 +52,7 @@ public class Gladiator extends Ability {
     }
 
     @Override
-    public void A_DurationStart() {
+    public void onDurationStart() {
         if (target == null) return;
         Player attacker = getPlayer();
         if (attacker == null) return;
@@ -92,7 +92,7 @@ public class Gladiator extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
     }
 
     private void createArena(Location base) {

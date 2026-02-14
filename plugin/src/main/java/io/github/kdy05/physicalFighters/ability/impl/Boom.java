@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class Boom extends Ability {
     public Boom(UUID playerUuid) {
-        super(AbilitySpec.builder("붐포인트", Type.Active_Continue, Rank.S)
+        super(AbilitySpec.builder("붐포인트", Type.ActiveContinue, Rank.S)
                 .cooldown(60)
                 .duration(20)
                 .guide(Usage.IronLeft + "20초간 10m 안에 있는 적을 폭발시킵니다.")
@@ -27,7 +27,7 @@ public class Boom extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         if (!InvincibilityManager.isDamageGuard() && isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
             return 0;
@@ -36,11 +36,11 @@ public class Boom extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
     }
 
     @Override
-    public void A_DurationStart() {
+    public void onDurationStart() {
         new Exploder(getPlayer()).runTaskTimer(plugin, 10L, 30L);
     }
 

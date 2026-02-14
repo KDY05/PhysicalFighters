@@ -25,7 +25,7 @@ public class Kijaru extends Ability {
     private final TeleportChargeManager teleportManager = new TeleportChargeManager();
 
     public Kijaru(UUID playerUuid) {
-        super(AbilitySpec.builder("키자루", Type.Active_Immediately, Rank.SS)
+        super(AbilitySpec.builder("키자루", Type.ActiveImmediately, Rank.SS)
                 .cooldown(45)
                 .guide(Usage.IronAttack + "타격한 상대를 빛의 속도로 타격합니다.",
                         "상대는 엄청난 속도로 멀리 날라갑니다. 당신도 상대를 따라 근접하게 날라갑니다.",
@@ -42,7 +42,7 @@ public class Kijaru extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             if (isOwner(event0.getDamager()) && isValidItem(Ability.DefaultItem)
@@ -78,7 +78,7 @@ public class Kijaru extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         LivingEntity entity = (LivingEntity) event0.getEntity();
         if (getPlayer() == null) return;
@@ -90,7 +90,7 @@ public class Kijaru extends Ability {
     }
 
     @Override
-    public void A_SetEvent(Player p) {
+    public void onActivate(Player p) {
         teleportManager.reset();
     }
 

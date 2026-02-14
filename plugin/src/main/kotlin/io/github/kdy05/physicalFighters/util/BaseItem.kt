@@ -10,10 +10,10 @@ import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.inventory.ItemStack
 
 interface BaseItem {
+    val player: Player?
     fun getBaseItem(): Array<ItemStack>
     fun getItemName(): String
     fun isOwner(e: Entity): Boolean
-    fun getPlayer(): Player?
 
     fun handleItemDrop(event: Event) {
         val dropEvent = event as PlayerDropItemEvent

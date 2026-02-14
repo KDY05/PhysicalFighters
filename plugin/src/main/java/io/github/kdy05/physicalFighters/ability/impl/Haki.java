@@ -23,7 +23,7 @@ public class Haki extends Ability {
     private static final long DELAY = 10L;
 
     public Haki(UUID playerUuid) {
-        super(AbilitySpec.builder("패기", Type.Active_Continue, Rank.SS)
+        super(AbilitySpec.builder("패기", Type.ActiveContinue, Rank.SS)
                 .cooldown(160)
                 .duration(10)
                 .guide(Usage.IronLeft + "20초간 10칸 내의 적에게 강한 대미지를 줍니다.")
@@ -36,7 +36,7 @@ public class Haki extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player p = event0.getPlayer();
         if (!isOwner(p) || !isValidItem(Ability.DefaultItem)) {
@@ -50,13 +50,13 @@ public class Haki extends Ability {
     }
 
     @Override
-    public void A_DurationStart() {
+    public void onDurationStart() {
         if (getPlayer() == null) return;
         new ConquerorHakiTask(getPlayer()).runTaskTimer(PhysicalFighters.getPlugin(), DELAY, INTERVAL);
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
     }
 
     private static class ConquerorHakiTask extends BukkitRunnable {

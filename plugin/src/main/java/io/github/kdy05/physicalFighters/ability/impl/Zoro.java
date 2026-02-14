@@ -20,7 +20,7 @@ public class Zoro extends Ability {
     private double dmg = 0;
 
     public Zoro(UUID playerUuid) {
-        super(AbilitySpec.builder("조로", Type.Active_Immediately, Rank.S)
+        super(AbilitySpec.builder("조로", Type.ActiveImmediately, Rank.S)
                 .cooldown(45)
                 .guide(Usage.IronLeft + "능력 사용 시 칼의 대미지가 랜덤으로 설정됩니다.")
                 .build(), playerUuid);
@@ -33,7 +33,7 @@ public class Zoro extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent event0 = (PlayerInteractEvent) event;
             if (isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
@@ -50,7 +50,7 @@ public class Zoro extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Random random = new Random();
         this.dmg = random.nextInt(5) + 5;

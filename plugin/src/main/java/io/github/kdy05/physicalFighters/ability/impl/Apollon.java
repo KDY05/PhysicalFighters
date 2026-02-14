@@ -17,7 +17,7 @@ public class Apollon extends Ability {
     private Location targetLocation = null;
 
     public Apollon(UUID playerUuid) {
-        super(AbilitySpec.builder("아폴론", Type.Active_Immediately, Rank.S)
+        super(AbilitySpec.builder("아폴론", Type.ActiveImmediately, Rank.S)
                 .cooldown(45)
                 .guide(Usage.IronLeft + "바라보는 방향에 불구덩이를 만듭니다.")
                 .build(), playerUuid);
@@ -29,7 +29,7 @@ public class Apollon extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player p = event0.getPlayer();
 
@@ -52,7 +52,7 @@ public class Apollon extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         PlayerInteractEvent Event = (PlayerInteractEvent) event;
         Player p = Event.getPlayer();
 

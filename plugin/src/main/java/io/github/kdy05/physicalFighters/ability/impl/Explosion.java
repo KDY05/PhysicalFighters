@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class Explosion extends Ability {
     public Explosion(UUID playerUuid) {
-        super(AbilitySpec.builder("익스플로젼", Type.Passive_Manual, Rank.B)
+        super(AbilitySpec.builder("익스플로젼", Type.PassiveManual, Rank.B)
                 .guide("사망 시 엄청난 연쇄 폭발을 일으킵니다.")
                 .build(), playerUuid);
     }
@@ -24,7 +24,7 @@ public class Explosion extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDeathEvent event0 = (EntityDeathEvent) event;
             if (isOwner(event0.getEntity())) return 0;
@@ -33,7 +33,7 @@ public class Explosion extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerDeathEvent event0 = (PlayerDeathEvent) event;
             Player killed = event0.getEntity();

@@ -30,11 +30,11 @@ public final class GameUtils {
         // 기존 능력 해제
         if (abilityOverLap) {
             // 중복 모드에서 액티브 능력 중복은 불가함.
-            if (type.getType() == Ability.Type.Active_Continue ||
-                    type.getType() == Ability.Type.Active_Immediately) {
+            if (type.getType() == Ability.Type.ActiveContinue ||
+                    type.getType() == Ability.Type.ActiveImmediately) {
                 for (Ability ab : AbilityRegistry.findAbilities(target)) {
-                    if (ab.getAbilityType() == Ability.Type.Active_Continue ||
-                            ab.getAbilityType() == Ability.Type.Active_Immediately) {
+                    if (ab.getAbilityType() == Ability.Type.ActiveContinue ||
+                            ab.getAbilityType() == Ability.Type.ActiveImmediately) {
                         AbilityRegistry.deactivate(ab);
                     }
                 }
@@ -79,13 +79,13 @@ public final class GameUtils {
         Ability.Type type = ability.getAbilityType();
         if (type == null) {
             return "None";
-        } else if (type == Ability.Type.Active_Continue) {
+        } else if (type == Ability.Type.ActiveContinue) {
             return String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / "
                     + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "%d초", ability.getCoolDown(), ability.getDuration());
-        } else if (type == Ability.Type.Active_Immediately) {
+        } else if (type == Ability.Type.ActiveImmediately) {
             return String.format(ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "%d초 / "
                     + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음", ability.getCoolDown());
-        } else if (type == Ability.Type.Passive_AutoMatic || type == Ability.Type.Passive_Manual) {
+        } else if (type == Ability.Type.PassiveAutoMatic || type == Ability.Type.PassiveManual) {
             return ChatColor.RED + "쿨타임 : " + ChatColor.WHITE + "없음 / "
                     + ChatColor.RED + "지속시간 : " + ChatColor.WHITE + "없음";
         } else {

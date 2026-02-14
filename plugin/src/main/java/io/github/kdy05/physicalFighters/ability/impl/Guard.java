@@ -26,7 +26,7 @@ public class Guard extends Ability {
     private Location targetLocation = null;
 
     public Guard(UUID playerUuid) {
-        super(AbilitySpec.builder("목둔", Type.Active_Immediately, Rank.A)
+        super(AbilitySpec.builder("목둔", Type.ActiveImmediately, Rank.A)
                 .cooldown(30)
                 .guide(Usage.IronLeft + "바라보는 위치에 나무벽을 설치합니다. 주위에 플레이어가 있으면 가둡니다.")
                 .build(), playerUuid);
@@ -38,7 +38,7 @@ public class Guard extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player caster = event0.getPlayer();
 
@@ -60,7 +60,7 @@ public class Guard extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player p = event0.getPlayer();
 

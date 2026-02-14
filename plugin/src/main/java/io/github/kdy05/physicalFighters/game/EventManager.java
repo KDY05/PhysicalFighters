@@ -195,9 +195,9 @@ public final class EventManager implements Listener {
     private void executeAbility(List<EventData> dataList, Event event) {
         for (EventData data : dataList) {
             Ability ability = data.getAbility();
-            if (ability.getAbilityType() == Type.Active_Continue
-                    && ability.getPlayer() != null && ability.getDurationState()) {
-                ability.A_Effect(event, data.getParameter());
+            if (ability.getAbilityType() == Type.ActiveContinue
+                    && ability.getPlayer() != null && ability.isDurationRunning()) {
+                ability.applyEffect(event, data.getParameter());
             }
             ability.execute(event, data.getParameter());
         }

@@ -19,7 +19,7 @@ public class Gaara extends Ability {
     private Location targetLocation = null;
 
     public Gaara(UUID playerUuid) {
-        super(AbilitySpec.builder("가아라", Type.Active_Immediately, Rank.B)
+        super(AbilitySpec.builder("가아라", Type.ActiveImmediately, Rank.B)
                 .guide(Usage.IronLeft + "바라보는 방향에 모래를 떨어뜨리고, 잠시 후 폭발시킵니다.")
                 .cooldown(45)
                 .build(), playerUuid);
@@ -31,7 +31,7 @@ public class Gaara extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player caster = event0.getPlayer();
 
@@ -49,7 +49,7 @@ public class Gaara extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player caster = event0.getPlayer();
 

@@ -21,9 +21,9 @@ import java.util.UUID;
 
 public class Aokizi extends Ability {
     public Aokizi(UUID playerUuid) {
-        super(AbilitySpec.builder("아오키지", Type.Active_Immediately, Rank.S)
+        super(AbilitySpec.builder("아오키지", Type.ActiveImmediately, Rank.S)
                 .cooldown(1)
-                .showText(ShowText.Custom_Text)
+                .showText(ShowText.CustomText)
                 .guide(Usage.IronLeft + "자신이 보고있는 방향으로 얼음을 날립니다.",
                         Usage.IronRight + "바라보고 있는 5칸 이내의 물을 얼립니다.",
                         Usage.Passive + "자신이 공격한 적을 2초간 느리게 만듭니다.")
@@ -38,7 +38,7 @@ public class Aokizi extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent event0 = (PlayerInteractEvent) event;
             if (isOwner(event0.getPlayer()) && isValidItem(DefaultItem) && !InvincibilityManager.isDamageGuard())
@@ -68,7 +68,7 @@ public class Aokizi extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Location l = event0.getPlayer().getLocation();
         Location l2 = event0.getPlayer().getLocation();

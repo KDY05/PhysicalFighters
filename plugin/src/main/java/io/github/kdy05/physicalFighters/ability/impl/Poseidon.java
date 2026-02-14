@@ -29,7 +29,7 @@ public class Poseidon extends Ability {
     private Location targetLocation = null;
 
     public Poseidon(UUID playerUuid) {
-        super(AbilitySpec.builder("포세이돈", Type.Active_Immediately, Rank.SS)
+        super(AbilitySpec.builder("포세이돈", Type.ActiveImmediately, Rank.SS)
                 .cooldown(60)
                 .guide("바라보는 곳에 거대한 어항을 만들어 가둡니다.",
                         "물 속에서 자신에게는 버프, 상대에게는 디버프를 겁니다.")
@@ -43,7 +43,7 @@ public class Poseidon extends Ability {
     }
 
     @Override
-    public int A_Condition(Event event, int CustomData) {
+    public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             PlayerInteractEvent event0 = (PlayerInteractEvent) event;
             Player player = event0.getPlayer();
@@ -78,7 +78,7 @@ public class Poseidon extends Ability {
     }
 
     @Override
-    public void A_Effect(Event event, int CustomData) {
+    public void applyEffect(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player player = event0.getPlayer();
 
