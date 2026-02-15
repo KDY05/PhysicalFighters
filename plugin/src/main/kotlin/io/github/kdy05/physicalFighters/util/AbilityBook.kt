@@ -15,7 +15,7 @@ object AbilityBook {
         val stack = ItemStack(Material.ENCHANTED_BOOK)
         val meta = stack.itemMeta ?: return null
         meta.setDisplayName("$PREFIX$abilityName")
-        meta.lore = type.guide.toList()
+        meta.lore = type.guide
         stack.itemMeta = meta
         return stack
     }

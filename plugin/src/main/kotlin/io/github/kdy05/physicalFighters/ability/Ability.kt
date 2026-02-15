@@ -1,7 +1,6 @@
 package io.github.kdy05.physicalFighters.ability
 
 import io.github.kdy05.physicalFighters.PhysicalFighters
-import io.github.kdy05.physicalFighters.command.CommandInterface
 import io.github.kdy05.physicalFighters.game.EventManager
 import io.github.kdy05.physicalFighters.util.BaseItem
 import io.github.kdy05.physicalFighters.util.EventData
@@ -14,19 +13,23 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import java.util.UUID
 
-abstract class Ability protected constructor(spec: AbilitySpec, private val playerUuid: UUID?) {
+abstract class Ability protected constructor(val spec: AbilitySpec, private val playerUuid: UUID) {
 
-    val player: Player? get() = playerUuid?.let { Bukkit.getPlayer(it) }
     val abilityName: String = spec.name
     val abilityType: Type = spec.type
     val rank: Rank = spec.rank
-    val guide: Array<String> = spec.guide.clone()
-    val coolDown: Int = if (spec.type == Type.ActiveContinue || spec.type == Type.ActiveImmediately)
-        spec.cooldown else -1
-    val duration: Int = if (spec.type == Type.ActiveContinue) spec.duration else -1
+    val coolDown: Int = spec.cooldown
+    val duration: Int = spec.duration
     private val showText: ShowText = spec.showText
+    val guide: List<String> = spec.guide
+
     private val cTimer = CoolDownTimer(this)
     private val dTimer = DurationTimer(this, cTimer)
+
+    val isDeathExempt: Boolean get() = spec.isDeathExempt
+    val isInfoPrimary: Boolean get() = spec.isInfoPrimary
+    val minimumPlayers: Int get() = spec.minimumPlayers
+    val player: Player? get() = Bukkit.getPlayer(playerUuid)
 
     enum class Type(private val text: Array<String>) {
         PassiveAutoMatic(arrayOf("패시브", "자동")),
@@ -94,12 +97,6 @@ abstract class Ability protected constructor(spec: AbilitySpec, private val play
 
     open fun onDurationFinalize() {}
 
-    open val isDeathExempt: Boolean get() = false
-
-    open val isInfoPrimary: Boolean get() = false
-
-    open val minimumPlayers: Int get() = 0
-
     // --- Final methods ---
 
     fun registerLeftClickEvent() {
@@ -117,7 +114,7 @@ abstract class Ability protected constructor(spec: AbilitySpec, private val play
 
     fun isOwner(e: Entity): Boolean = e is Player && isOwner(e)
 
-    fun isOwner(p: Player): Boolean = playerUuid != null && p.uniqueId == playerUuid
+    fun isOwner(p: Player): Boolean = p.uniqueId == playerUuid
 
     fun sendMessage(message: String) {
         player?.sendMessage(message)
@@ -175,9 +172,6 @@ abstract class Ability protected constructor(spec: AbilitySpec, private val play
             EventManager.registerPlayerRespawn(EventData(this, BaseItem.ITEM_RESPAWN_EVENT))
             EventManager.registerEntityDeath(EventData(this, BaseItem.ITEM_DEATH_EVENT))
         }
-        if (this is CommandInterface) {
-            AbilityRegistry.registerCommand(this)
-        }
         val player = player
         if (player != null) {
             if (textout) {
@@ -204,9 +198,6 @@ abstract class Ability protected constructor(spec: AbilitySpec, private val play
             onDeactivate(player)
         }
         unregisterEvents()
-        if (this is CommandInterface) {
-            AbilityRegistry.unregisterCommand(this)
-        }
     }
 
     fun unregisterEvents() {

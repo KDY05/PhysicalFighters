@@ -2,8 +2,8 @@ package io.github.kdy05.physicalFighters.api
 
 object AdapterRegistry {
 
-    private var attributeAdapter: AttributeAdapter? = null
-    private var potionEffectTypeAdapter: PotionEffectTypeAdapter? = null
+    private lateinit var attributeAdapter: AttributeAdapter
+    private lateinit var potionEffectTypeAdapter: PotionEffectTypeAdapter
 
     @JvmStatic
     fun register(attribute: AttributeAdapter, potionEffectType: PotionEffectTypeAdapter) {
@@ -12,8 +12,8 @@ object AdapterRegistry {
     }
 
     @JvmStatic
-    fun attribute(): AttributeAdapter = attributeAdapter!!
+    fun attribute(): AttributeAdapter = attributeAdapter
 
     @JvmStatic
-    fun potionEffectType(): PotionEffectTypeAdapter = potionEffectTypeAdapter!!
+    fun potionEffectType(): PotionEffectTypeAdapter = potionEffectTypeAdapter
 }

@@ -14,9 +14,11 @@ object AbilityRegistry {
     private val abilitiesByPlayer = mutableMapOf<UUID, MutableList<Ability>>()
     private val commandHandlers = mutableListOf<CommandInterface>()
 
-    private fun register(factory: (UUID?) -> Ability) {
-        val prototype = factory(null)
-        val type = AbilityType(prototype, factory)
+    private val PROTOTYPE_UUID = UUID(0, 0)
+
+    private fun register(factory: (UUID) -> Ability) {
+        val spec = factory(PROTOTYPE_UUID).spec
+        val type = AbilityType(spec, factory)
         typesByName[type.name] = type
         typeList.add(type)
     }
@@ -40,13 +42,21 @@ object AbilityRegistry {
         val type = typesByName[typeName] ?: return null
         val instance = type.createInstance(player)
         addToIndex(instance, player)
-        instance.activate(textout)
+        activate(instance, textout)
         return instance
     }
 
     @JvmStatic
     @JvmOverloads
+    fun activate(ability: Ability, textout: Boolean = true) {
+        ability.activate(textout)
+        if (ability is CommandInterface) commandHandlers.add(ability)
+    }
+
+    @JvmStatic
+    @JvmOverloads
     fun deactivate(ability: Ability, textout: Boolean = true) {
+        if (ability is CommandInterface) commandHandlers.remove(ability)
         ability.deactivate(textout)
         removeFromIndex(ability)
     }
@@ -55,6 +65,7 @@ object AbilityRegistry {
     fun deactivateAll(player: Player) {
         val list = abilitiesByPlayer.remove(player.uniqueId) ?: return
         for (ability in list) {
+            if (ability is CommandInterface) commandHandlers.remove(ability)
             ability.deactivate(true)
         }
     }
@@ -75,18 +86,6 @@ object AbilityRegistry {
     fun addActive(ability: Ability) {
         val player = ability.player ?: return
         addToIndex(ability, player)
-    }
-
-    // --- 커맨드 등록 API ---
-
-    @JvmStatic
-    fun registerCommand(handler: CommandInterface) {
-        commandHandlers.add(handler)
-    }
-
-    @JvmStatic
-    fun unregisterCommand(handler: CommandInterface) {
-        commandHandlers.remove(handler)
     }
 
     @JvmStatic

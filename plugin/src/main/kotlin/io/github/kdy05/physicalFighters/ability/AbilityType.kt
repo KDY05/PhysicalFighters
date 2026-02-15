@@ -8,19 +8,18 @@ import java.util.UUID
  * 플러그인 로드 시 한 번 생성되며 게임 중 변경되지 않는다.
  */
 class AbilityType(
-    prototype: Ability,
-    private val factory: (UUID?) -> Ability
+    val spec: AbilitySpec,
+    private val factory: (UUID) -> Ability
 ) {
-    val name: String = prototype.abilityName
-    val rank: Ability.Rank = prototype.rank
-    val type: Ability.Type = prototype.abilityType
-    private val guideSource: Array<String> = prototype.guide.clone()
-    val guide: Array<String> get() = guideSource.clone()
-    val cooldown: Int = prototype.coolDown
-    val duration: Int = prototype.duration
-    val minimumPlayers: Int = prototype.minimumPlayers
-    val isDeathExempt: Boolean = prototype.isDeathExempt
-    val isInfoPrimary: Boolean = prototype.isInfoPrimary
+    val name: String get() = spec.name
+    val rank: Ability.Rank get() = spec.rank
+    val type: Ability.Type get() = spec.type
+    val guide: List<String> get() = spec.guide
+    val cooldown: Int get() = spec.cooldown
+    val duration: Int get() = spec.duration
+    val minimumPlayers: Int get() = spec.minimumPlayers
+    val isDeathExempt: Boolean get() = spec.isDeathExempt
+    val isInfoPrimary: Boolean get() = spec.isInfoPrimary
 
     fun createInstance(player: Player): Ability = factory(player.uniqueId)
 }

@@ -20,21 +20,15 @@ dependencies {
 shadowJar {
     archiveFileName = "PhysicalFighters-${version}.jar"
 
-    // Include all dependencies + version modules
     configurations = [
         project.configurations.runtimeClasspath,
         project.configurations.versionModules
     ]
 
-    // Build to standard build/libs directory
     destinationDirectory = layout.buildDirectory.dir("libs")
 
-    from(rootProject.file('README.md')) {
-        into 'META-INF'
-    }
-    from(rootProject.file('LICENSE')) {
-        into 'META-INF'
-    }
+    from(rootProject.file('README.md')) { into 'META-INF' }
+    from(rootProject.file('LICENSE')) { into 'META-INF' }
 }
 
 kotlin {
@@ -44,33 +38,20 @@ kotlin {
     }
 }
 
-// BuildConfig 클래스 자동 생성
+// BuildConfig 클래스 자동 생성 (템플릿: src/main/templates/)
 def generatedDir = layout.buildDirectory.dir("generated/sources/buildConfig")
 
-tasks.register('generateBuildConfig') {
-    def outputDir = generatedDir
-    outputs.dir(outputDir)
-
-    doLast {
-        def buildDate = new Date().format('yyyyMMdd')
-        def packageDir = outputDir.get().file("io/github/kdy05/physicalFighters").asFile
-        packageDir.mkdirs()
-
-        def buildConfigFile = new File(packageDir, "BuildConfig.java")
-        buildConfigFile.text = """package io.github.kdy05.physicalFighters;
-
-/**
- * 빌드 시점에 자동 생성되는 클래스.
- * 직접 수정하지 마세요.
- */
-public final class BuildConfig {
-    public static final int BUILD_NUMBER = ${buildDate};
-    public static final String VERSION = "${project.version}";
-
-    private BuildConfig() {}
-}
-"""
+tasks.register('generateBuildConfig', Copy) {
+    from('BuildConfig.java.template') {
+        rename { 'BuildConfig.java' }
+        into 'io/github/kdy05/physicalFighters'
     }
+    into generatedDir
+    expand(
+        buildDate: new Date().format('yyyyMMdd'),
+        version: project.version
+    )
+    outputs.upToDateWhen { false }
 }
 
 sourceSets.main.java.srcDir(generatedDir)

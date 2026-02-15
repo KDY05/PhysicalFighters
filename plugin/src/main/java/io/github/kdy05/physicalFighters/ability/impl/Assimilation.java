@@ -24,6 +24,7 @@ public class Assimilation extends Ability implements CommandInterface {
                 .guide("자신이 죽인 플레이어의 능력을 흡수합니다.",
                         "\"/va a\" 명령으로 자신이 흡수한 능력들을 확인할 수 있습니다.",
                         "흡수 가능한 능력의 개수는 제한이 없지만 액티브 능력은 최대 1개만 가능합니다.")
+                .infoPrimary(true)
                 .build(), playerUuid);
     }
 
@@ -69,9 +70,6 @@ public class Assimilation extends Ability implements CommandInterface {
             }
         }
     }
-
-    @Override
-    public boolean isInfoPrimary() { return true; }
 
     @Override
     public void onActivate(Player p) {

@@ -63,7 +63,7 @@ class AbilityDistributor {
 
     fun enableAllAbilities() {
         for (ability in AbilityRegistry.getActiveAbilities()) {
-            ability.activate(false)
+            AbilityRegistry.activate(ability, false)
         }
     }
 

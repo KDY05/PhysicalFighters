@@ -29,6 +29,7 @@ public class Phoenix extends Ability {
                 .guide("자연사할 시 무제한으로 인벤토리를 잃지 않고 부활합니다.",
                         "타인에게 사망할 경우 1회에 한하여 자연사 판정으로 부활합니다.",
                         "부활시 자신의 능력이 모두에게 알려지게 됩니다.")
+                .deathExempt(true)
                 .build(), playerUuid);
     }
 
@@ -102,9 +103,6 @@ public class Phoenix extends Ability {
             player.addPotionEffect(PotionEffectFactory.createResistance(600, 0));
         }
     }
-
-    @Override
-    public boolean isDeathExempt() { return true; }
 
     @Override
     public void onActivate(Player p) {
