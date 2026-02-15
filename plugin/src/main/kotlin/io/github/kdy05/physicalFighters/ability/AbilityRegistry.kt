@@ -5,7 +5,7 @@ import io.github.kdy05.physicalFighters.command.CommandInterface
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
 object AbilityRegistry {
 

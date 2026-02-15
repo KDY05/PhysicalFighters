@@ -30,7 +30,7 @@ class PhysicalFighters : JavaPlugin() {
     override fun onEnable() {
         plugin = this
         logger.info("빌드정보: ${BuildConfig.BUILD_NUMBER} (v${BuildConfig.VERSION})")
-        logger.info("© 어라랍, 염료, 제온")
+        logger.info("© 어라랍 | 염료 | 제온")
 
         if (!initializeAdapter()) {
             logger.severe("지원하지 않는 서버 버전입니다. 플러그인을 비활성화합니다.")
@@ -80,8 +80,9 @@ class PhysicalFighters : JavaPlugin() {
         return true
     }
 
-    private fun findCompatibleAdapter(version: String, candidates: Array<String>): VersionedAdapter? {
-        for (className in candidates) {
+    private fun findCompatibleAdapter(version: String, candidates: List<Pair<String, String>>): VersionedAdapter? {
+        for ((minVersion, className) in candidates) {
+            if (ServerVersionDetector.compareVersions(version, minVersion) < 0) continue
             try {
                 val adapter = Class.forName(className).getDeclaredConstructor().newInstance() as VersionedAdapter
                 if (adapter.isCompatible(version)) return adapter
@@ -97,14 +98,14 @@ class PhysicalFighters : JavaPlugin() {
         lateinit var plugin: PhysicalFighters
             private set
 
-        private val ATTRIBUTE_ADAPTERS = arrayOf(
-            "io.github.kdy05.physicalFighters.v1_21_3.AttributeAdapter_1_21_3",
-            "io.github.kdy05.physicalFighters.v1_16_5.AttributeAdapter_1_16_5",
+        private val ATTRIBUTE_ADAPTERS = listOf(
+            "1.21.3" to "io.github.kdy05.physicalFighters.v1_21_3.AttributeAdapter_1_21_3",
+            "1.16.5" to "io.github.kdy05.physicalFighters.v1_16_5.AttributeAdapter_1_16_5",
         )
 
-        private val POTION_EFFECT_TYPE_ADAPTERS = arrayOf(
-            "io.github.kdy05.physicalFighters.v1_20_5.PotionEffectTypeAdapter_1_20_5",
-            "io.github.kdy05.physicalFighters.v1_16_5.PotionEffectTypeAdapter_1_16_5",
+        private val POTION_EFFECT_TYPE_ADAPTERS = listOf(
+            "1.20.5" to "io.github.kdy05.physicalFighters.v1_20_5.PotionEffectTypeAdapter_1_20_5",
+            "1.16.5" to "io.github.kdy05.physicalFighters.v1_16_5.PotionEffectTypeAdapter_1_16_5",
         )
     }
 }

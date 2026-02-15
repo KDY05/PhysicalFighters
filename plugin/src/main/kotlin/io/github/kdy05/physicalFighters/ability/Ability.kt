@@ -11,7 +11,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
-import java.util.UUID
+import java.util.*
 
 abstract class Ability protected constructor(val spec: AbilitySpec, private val playerUuid: UUID) {
 

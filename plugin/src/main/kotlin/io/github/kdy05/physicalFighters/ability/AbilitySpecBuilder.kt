@@ -1,8 +1,6 @@
 package io.github.kdy05.physicalFighters.ability
 
-import io.github.kdy05.physicalFighters.ability.Ability.Rank
-import io.github.kdy05.physicalFighters.ability.Ability.ShowText
-import io.github.kdy05.physicalFighters.ability.Ability.Type
+import io.github.kdy05.physicalFighters.ability.Ability.*
 
 class AbilitySpecBuilder(
     private val name: String,

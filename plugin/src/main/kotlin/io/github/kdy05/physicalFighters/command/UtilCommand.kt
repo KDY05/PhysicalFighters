@@ -121,7 +121,7 @@ class UtilCommand(
         for (ability in AbilityRegistry.getActiveAbilities()) {
             val player = ability.player ?: continue
             sender.sendMessage(
-                "${ChatColor.GREEN}$count. ${ChatColor.WHITE}${player.name} : " +
+                "${ChatColor.GREEN}${count+1}. ${ChatColor.WHITE}${player.name} : " +
                     "${ChatColor.RED}${ability.abilityName} ${ChatColor.WHITE}[${ability.abilityType}]"
             )
             count++

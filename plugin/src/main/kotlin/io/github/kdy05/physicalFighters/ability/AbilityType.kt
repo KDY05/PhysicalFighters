@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.ability
 
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
 /**
  * 능력의 메타데이터(타입 카탈로그)와 팩토리를 담는 불변 객체.

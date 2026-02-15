@@ -11,7 +11,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemStack
 import java.io.File
 import java.io.IOException
-import java.util.UUID
+import java.util.*
 
 class BaseKitManager(private val plugin: PhysicalFighters) : Listener {
 

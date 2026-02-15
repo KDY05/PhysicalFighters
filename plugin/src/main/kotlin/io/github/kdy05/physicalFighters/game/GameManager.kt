@@ -7,7 +7,7 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
 class GameManager(private val plugin: PhysicalFighters) {
 
@@ -158,10 +158,10 @@ class GameManager(private val plugin: PhysicalFighters) {
         broadcastMessage("${ChatColor.DARK_RED}Physical Fighters")
         broadcastMessage("${ChatColor.GRAY}VER. ${BuildConfig.BUILD_NUMBER}")
         if (full) {
-            broadcastMessage("${ChatColor.GREEN}제작: ${ChatColor.WHITE}어라랍, 염료")
+            broadcastMessage("${ChatColor.GREEN}제작: ${ChatColor.WHITE}염료, 어라랍")
             broadcastMessage("${ChatColor.GREEN}원작(VisualAbility): ${ChatColor.WHITE}제온")
-            broadcastMessage("${ChatColor.AQUA}공식 배포처: ${ChatColor.WHITE}https://github.com/KDY05/PhysicalFighters")
             broadcastMessage("${ChatColor.AQUA}원작자 카페: ${ChatColor.WHITE}https://cafe.naver.com/craftproducer")
+            broadcastMessage("${ChatColor.AQUA}공식 배포처: ${ChatColor.WHITE}https://github.com/KDY05/PhysicalFighters")
         }
     }
 
