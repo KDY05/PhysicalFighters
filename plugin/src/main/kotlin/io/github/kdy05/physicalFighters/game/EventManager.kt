@@ -36,6 +36,12 @@ class EventManager(private val plugin: PhysicalFighters) : Listener {
         private val onPlayerMoveEvent = mutableListOf<EventData>()
         private val onProjectileHitEvent = mutableListOf<EventData>()
 
+        private val allEventDataLists = listOf(
+            onEntityTarget, onEntityDamage, onEntityDamageByEntity, onEntityDeath,
+            onPlayerRespawn, onBlockBreakEvent, onSignChangeEvent,
+            onProjectileLaunchEvent, onPlayerDropItem, onPlayerMoveEvent, onProjectileHitEvent
+        )
+
         // --- 이벤트 등록 API ---
 
         @JvmStatic fun registerLeftClick(ability: Ability) { leftClickHandlers.add(ability) }
@@ -57,17 +63,7 @@ class EventManager(private val plugin: PhysicalFighters) : Listener {
         fun unregisterAll(ability: Ability) {
             leftClickHandlers.remove(ability)
             rightClickHandlers.remove(ability)
-            onEntityTarget.removeAll { it.ability === ability }
-            onEntityDamage.removeAll { it.ability === ability }
-            onEntityDamageByEntity.removeAll { it.ability === ability }
-            onEntityDeath.removeAll { it.ability === ability }
-            onPlayerRespawn.removeAll { it.ability === ability }
-            onBlockBreakEvent.removeAll { it.ability === ability }
-            onSignChangeEvent.removeAll { it.ability === ability }
-            onProjectileLaunchEvent.removeAll { it.ability === ability }
-            onPlayerDropItem.removeAll { it.ability === ability }
-            onPlayerMoveEvent.removeAll { it.ability === ability }
-            onProjectileHitEvent.removeAll { it.ability === ability }
+            allEventDataLists.forEach { list -> list.removeAll { it.ability === ability } }
         }
     }
 
@@ -173,18 +169,13 @@ class EventManager(private val plugin: PhysicalFighters) : Listener {
     }
 
     private fun filterAbilityExecution(event: PlayerInteractEvent) {
-        when (event.action) {
-            Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK -> {
-                for (ability in leftClickHandlers) {
-                    ability.execute(event, 0)
-                }
-            }
-            Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK -> {
-                for (ability in rightClickHandlers) {
-                    ability.execute(event, 1)
-                }
-            }
-            else -> {}
+        val (handlers, parameter) = when (event.action) {
+            Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK -> leftClickHandlers to 0
+            Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK -> rightClickHandlers to 1
+            else -> return
+        }
+        for (ability in handlers) {
+            ability.execute(event, parameter)
         }
     }
 

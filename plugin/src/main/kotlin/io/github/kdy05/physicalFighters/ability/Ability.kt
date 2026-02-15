@@ -22,13 +22,13 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
     val duration: Int = spec.duration
     private val showText: ShowText = spec.showText
     val guide: List<String> = spec.guide
+    val minimumPlayers: Int get() = spec.minimumPlayers
+    val isDeathExempt: Boolean get() = spec.isDeathExempt
+    val isInfoPrimary: Boolean get() = spec.isInfoPrimary
 
     private val cTimer = CoolDownTimer(this)
     private val dTimer = DurationTimer(this, cTimer)
 
-    val isDeathExempt: Boolean get() = spec.isDeathExempt
-    val isInfoPrimary: Boolean get() = spec.isInfoPrimary
-    val minimumPlayers: Int get() = spec.minimumPlayers
     val player: Player? get() = Bukkit.getPlayer(playerUuid)
 
     enum class Type(private val text: Array<String>) {

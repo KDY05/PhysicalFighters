@@ -8,17 +8,9 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 
-class CommandManager private constructor(handlers: List<CommandInterface>) : CommandExecutor, TabCompleter {
+class CommandManager(vararg handlers: CommandInterface) : CommandExecutor, TabCompleter {
 
     private val handlers: List<CommandInterface> = handlers.toList()
-
-    class Builder {
-        private val handlers = mutableListOf<CommandInterface>()
-
-        fun addCommand(handler: CommandInterface) = apply { handlers.add(handler) }
-
-        fun build() = CommandManager(handlers)
-    }
 
     companion object {
         private val BASIC_COMMANDS = listOf("help", "check", "yes", "no")
@@ -26,9 +18,6 @@ class CommandManager private constructor(handlers: List<CommandInterface>) : Com
             "start", "stop", "skip", "ob", "list",
             "assign", "reset", "util", "inv", "hung", "dura", "tc", "book", "scan", "reload", "kit"
         )
-
-        @JvmStatic
-        fun builder() = Builder()
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {

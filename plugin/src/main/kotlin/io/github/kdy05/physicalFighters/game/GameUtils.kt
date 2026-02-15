@@ -23,14 +23,10 @@ object GameUtils {
         // 기존 능력 해제
         if (abilityOverLap) {
             // 중복 모드에서 액티브 능력 중복은 불가함.
-            if (type.type == Ability.Type.ActiveContinue || type.type == Ability.Type.ActiveImmediately) {
-                for (ab in AbilityRegistry.findAbilities(target)) {
-                    if (ab.abilityType == Ability.Type.ActiveContinue ||
-                        ab.abilityType == Ability.Type.ActiveImmediately
-                    ) {
-                        AbilityRegistry.deactivate(ab)
-                    }
-                }
+            if (type.type.isActive) {
+                AbilityRegistry.findAbilities(target)
+                    .filter { it.abilityType.isActive }
+                    .forEach { AbilityRegistry.deactivate(it) }
             }
         } else {
             AbilityRegistry.deactivateAll(target)
@@ -56,34 +52,26 @@ object GameUtils {
             player.sendMessage("${ChatColor.RED}능력이 없거나 옵저버입니다.")
             return
         }
-        player.sendMessage("${ChatColor.GREEN}---------------")
-        player.sendMessage("${ChatColor.GOLD}- 능력 정보 -")
-        if (abilityOverLap) {
-            player.sendMessage("${ChatColor.DARK_AQUA}참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.")
-        }
-        player.sendMessage(
-            "${ChatColor.AQUA}${ability.abilityName}${ChatColor.WHITE}" +
-                " [${ability.abilityType}] ${ability.rank}"
-        )
-        for (line in ability.guide) {
-            player.sendMessage(line)
-        }
-        player.sendMessage(getTimerText(ability))
-        player.sendMessage("${ChatColor.GREEN}---------------")
+        buildList {
+            add("${ChatColor.GREEN}---------------")
+            add("${ChatColor.GOLD}- 능력 정보 -")
+            if (abilityOverLap) {
+                add("${ChatColor.DARK_AQUA}참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.")
+            }
+            add(
+                "${ChatColor.AQUA}${ability.abilityName}${ChatColor.WHITE}" +
+                    " [${ability.abilityType}] ${ability.rank}"
+            )
+            addAll(ability.guide)
+            add(getTimerText(ability))
+            add("${ChatColor.GREEN}---------------")
+        }.forEach { player.sendMessage(it) }
     }
 
-    private fun getTimerText(ability: Ability): String = when (ability.abilityType) {
-        Ability.Type.ActiveContinue ->
-            "${ChatColor.RED}쿨타임 : ${ChatColor.WHITE}${ability.coolDown}초 / " +
-                "${ChatColor.RED}지속시간 : ${ChatColor.WHITE}${ability.duration}초"
-
-        Ability.Type.ActiveImmediately ->
-            "${ChatColor.RED}쿨타임 : ${ChatColor.WHITE}${ability.coolDown}초 / " +
-                "${ChatColor.RED}지속시간 : ${ChatColor.WHITE}없음"
-
-        Ability.Type.PassiveAutoMatic, Ability.Type.PassiveManual ->
-            "${ChatColor.RED}쿨타임 : ${ChatColor.WHITE}없음 / " +
-                "${ChatColor.RED}지속시간 : ${ChatColor.WHITE}없음"
+    private fun getTimerText(ability: Ability): String {
+        val cooldown = if (ability.abilityType.isActive) "${ability.coolDown}초" else "없음"
+        val duration = if (ability.abilityType == Ability.Type.ActiveContinue) "${ability.duration}초" else "없음"
+        return "${ChatColor.RED}쿨타임 : ${ChatColor.WHITE}$cooldown / ${ChatColor.RED}지속시간 : ${ChatColor.WHITE}$duration"
     }
 
     /**
@@ -126,3 +114,6 @@ object GameUtils {
         }
     }
 }
+
+private val Ability.Type.isActive
+    get() = this == Ability.Type.ActiveContinue || this == Ability.Type.ActiveImmediately

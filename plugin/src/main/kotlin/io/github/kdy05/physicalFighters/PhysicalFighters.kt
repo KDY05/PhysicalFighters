@@ -45,11 +45,11 @@ class PhysicalFighters : JavaPlugin() {
         logger.info("능력 ${AbilityRegistry.getTypeCount()}개가 등록되었습니다.")
 
         gameManager = GameManager(this)
-        val commandManager = CommandManager.builder()
-            .addCommand(GameCommand(this, gameManager))
-            .addCommand(UtilCommand(this, configManager))
-            .addCommand(AbilityRegistry::dispatchCommand)
-            .build()
+        val commandManager = CommandManager(
+            GameCommand(this, gameManager),
+            UtilCommand(this, configManager),
+            AbilityRegistry::dispatchCommand
+        )
 
         getCommand("va")!!.setExecutor(commandManager)
         getCommand("va")!!.tabCompleter = commandManager
