@@ -2,11 +2,12 @@ package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 public class Clocking extends Ability {
@@ -53,7 +54,7 @@ public class Clocking extends Ability {
     }
 
     @Override
-    public void onDeactivate(Player owner) {
+    public void onDeactivate(@NotNull Player owner) {
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.showPlayer(plugin, owner);
         }

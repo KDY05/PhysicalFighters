@@ -1,5 +1,9 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
+import io.github.kdy05.physicalFighters.ability.Ability;
+import io.github.kdy05.physicalFighters.ability.AbilitySpec;
+import io.github.kdy05.physicalFighters.ability.AbilityUtils;
+import io.github.kdy05.physicalFighters.command.CommandInterface;
 import io.github.kdy05.physicalFighters.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -7,11 +11,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.NotNull;
 
-import io.github.kdy05.physicalFighters.ability.Ability;
-import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.ability.AbilityUtils;
-import io.github.kdy05.physicalFighters.command.CommandInterface;
 import java.util.UUID;
 
 public class Lockdown extends Ability implements CommandInterface {
@@ -129,7 +130,8 @@ public class Lockdown extends Ability implements CommandInterface {
     }
 
     @Override
-    public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommandEvent(@NotNull CommandSender sender, @NotNull Command command,
+                                  @NotNull String label, String[] args) {
         if (args.length != 2 || !args[0].equalsIgnoreCase("lock")) {
             return false;
         }

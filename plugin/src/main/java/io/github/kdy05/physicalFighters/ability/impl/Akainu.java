@@ -2,11 +2,10 @@ package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.InvincibilityManager;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
+import io.github.kdy05.physicalFighters.game.EventManager;
+import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,6 +21,7 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Akainu extends Ability {
@@ -121,7 +121,7 @@ public class Akainu extends Ability {
         }
         AbilityUtils.createBox(center.clone().add(0, -DEPTH, 0), Material.AIR, OUTER_RADIUS, DEPTH + 1);
         
-        AbilityUtils.splashTask(getPlayer(), center, OUTER_RADIUS, entity -> {
+        AbilityUtils.splashTask(Objects.requireNonNull(getPlayer()), center, OUTER_RADIUS, entity -> {
             Vector downwardVelocity = new Vector(0, -1.0, 0);
             entity.setVelocity(entity.getVelocity().add(downwardVelocity));
         });

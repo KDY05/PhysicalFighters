@@ -1,19 +1,20 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
-import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
+import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.command.CommandInterface;
+import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 public class Assimilation extends Ability implements CommandInterface {
@@ -37,7 +38,8 @@ public class Assimilation extends Ability implements CommandInterface {
     public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDeathEvent event0 = (EntityDeathEvent) event;
-            if (event0.getEntity() instanceof Player && isOwner(event0.getEntity().getKiller()))
+            if (event0.getEntity() instanceof Player && event0.getEntity().getKiller() != null
+                    && isOwner(event0.getEntity().getKiller()))
                 return 0;
         }
         return -1;
@@ -51,7 +53,7 @@ public class Assimilation extends Ability implements CommandInterface {
             Player victim = (Player) event0.getEntity();
             Ability ability = AbilityUtils.findAbility(victim);
             Player player = event0.getEntity().getKiller();
-            if (ability == null) return;
+            if (ability == null || player  == null) return;
             String absorbedTypeName = ability.getAbilityName();
             if (ability.getAbilityType() == Type.PassiveAutoMatic || ability.getAbilityType() == Type.PassiveManual) {
                 AbilityRegistry.deactivate(ability, false);
@@ -66,18 +68,19 @@ public class Assimilation extends Ability implements CommandInterface {
                 player.sendMessage(ChatColor.RED + "더이상 액티브 흡수는 불가능합니다.");
                 this.ActiveAss = true;
             } else {
-                player.sendMessage(ChatColor.RED + "흡수할 수 없는 능력입니다.");
+                sendMessage(ChatColor.RED + "흡수할 수 없는 능력입니다.");
             }
         }
     }
 
     @Override
-    public void onActivate(Player p) {
+    public void onActivate(@NotNull Player p) {
         this.ActiveAss = false;
     }
 
     @Override
-    public boolean onCommandEvent(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommandEvent(@NotNull CommandSender sender, @NotNull Command command,
+                                  @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player && isOwner((Player) sender)
                 && args[0].equalsIgnoreCase("a") && args.length == 1) {
             sender.sendMessage(ChatColor.GREEN + "-- 당신이 소유한 능력 --");

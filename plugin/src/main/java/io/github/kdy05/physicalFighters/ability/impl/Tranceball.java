@@ -15,6 +15,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 public class Tranceball extends Ability implements BaseItem {
@@ -108,10 +110,11 @@ public class Tranceball extends Ability implements BaseItem {
     }
 
     @Override
-    public void onActivate(Player p) {
+    public void onActivate(@NotNull Player p) {
         this.mode = Mode.Swap;
     }
 
+    @NotNull
     @Override
     public ItemStack[] getBaseItem() {
         return new ItemStack[] {
@@ -119,6 +122,7 @@ public class Tranceball extends Ability implements BaseItem {
         };
     }
 
+    @NotNull
     @Override
     public String getItemName() {
         return "눈덩이";

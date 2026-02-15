@@ -29,8 +29,8 @@ class PhysicalFighters : JavaPlugin() {
 
     override fun onEnable() {
         plugin = this
-        logger.info("빌드정보: ${BuildConfig.BUILD_NUMBER}")
-        logger.info("(C) 어라랍, 염료, 제온")
+        logger.info("빌드정보: ${BuildConfig.BUILD_NUMBER} (v${BuildConfig.VERSION})")
+        logger.info("© 어라랍, 염료, 제온")
 
         if (!initializeAdapter()) {
             logger.severe("지원하지 않는 서버 버전입니다. 플러그인을 비활성화합니다.")

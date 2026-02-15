@@ -1,16 +1,16 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import io.github.kdy05.physicalFighters.game.InvincibilityManager;
-import io.github.kdy05.physicalFighters.ability.AbilityUtils;
-import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
+import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.EventManager;
+import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
-
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+
 import java.util.UUID;
 
 public class Cuma extends Ability {

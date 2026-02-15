@@ -5,7 +5,6 @@ import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,6 +13,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 public class Killtolevelup extends Ability implements BaseItem {
@@ -63,6 +64,7 @@ public class Killtolevelup extends Ability implements BaseItem {
         }
     }
 
+    @NotNull
     @Override
     public ItemStack[] getBaseItem() {
         return new ItemStack[] {
@@ -70,6 +72,7 @@ public class Killtolevelup extends Ability implements BaseItem {
         };
     }
 
+    @NotNull
     @Override
     public String getItemName() {
         return "깃털";

@@ -1,23 +1,23 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import io.github.kdy05.physicalFighters.game.InvincibilityManager;
-import org.bukkit.entity.LivingEntity;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
+import io.github.kdy05.physicalFighters.game.EventManager;
+import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.UUID;
 
 public class MachineGun extends Ability {

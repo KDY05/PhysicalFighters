@@ -1,17 +1,16 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import org.bukkit.ChatColor;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
-
-import java.util.Random;
-
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+
+import java.util.Random;
 import java.util.UUID;
 
 // TODO: 리메이크, 대미지 계수로 조정(1.0~1.8배), 시간 지날 수록 0.1배수씩 자동 하락

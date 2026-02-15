@@ -37,6 +37,9 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
         ActiveImmediately(arrayOf("액티브", "즉발")),
         ActiveContinue(arrayOf("액티브", "지속"));
 
+        val isActive: Boolean
+            get() = this == ActiveContinue || this == ActiveImmediately
+
         override fun toString(): String =
             "${ChatColor.GREEN}${text[0]}${ChatColor.WHITE} / ${ChatColor.GOLD}${text[1]}${ChatColor.WHITE}"
     }
@@ -79,9 +82,9 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
 
     abstract fun registerEvents()
 
-    abstract fun checkCondition(event: Event, customData: Int): Int
+    abstract fun checkCondition(event: Event?, customData: Int): Int
 
-    abstract fun applyEffect(event: Event, customData: Int)
+    abstract fun applyEffect(event: Event?, customData: Int)
 
     open fun onActivate(p: Player) {}
 
@@ -120,10 +123,10 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
         player?.sendMessage(message)
     }
 
-    fun execute(event: Event, customData: Int) {
+    fun execute(event: Event?, customData: Int) {
         val player = player ?: return
 
-        if (this is BaseItem) {
+        if (this is BaseItem && event != null) {
             when (customData) {
                 BaseItem.ITEM_DROP_EVENT -> { handleItemDrop(event); return }
                 BaseItem.ITEM_RESPAWN_EVENT -> { handleItemRespawn(event); return }
@@ -134,7 +137,7 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
         val data = checkCondition(event, customData)
         if (data < 0) return
 
-        if (abilityType == Type.ActiveContinue || abilityType == Type.ActiveImmediately) {
+        if (abilityType.isActive) {
             // 지속 시간 알림 후 종료
             if (dTimer.isRunning) {
                 player.sendMessage("${ChatColor.WHITE}${dTimer.count}초${ChatColor.GREEN} 후 지속시간이 끝납니다.")

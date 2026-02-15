@@ -5,10 +5,7 @@ import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.GameUtils;
 import io.github.kdy05.physicalFighters.util.EventData;
-
-import java.util.HashMap;
-import java.util.UUID;
-
+import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,7 +14,10 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class Phoenix extends Ability {
     private int ReviveCounter = 0;
@@ -105,7 +105,7 @@ public class Phoenix extends Ability {
     }
 
     @Override
-    public void onActivate(Player p) {
+    public void onActivate(@NotNull Player p) {
         this.ReviveCounter = 0;
         this.AbilityUse = false;
     }

@@ -114,6 +114,3 @@ object GameUtils {
         }
     }
 }
-
-private val Ability.Type.isActive
-    get() = this == Ability.Type.ActiveContinue || this == Ability.Type.ActiveImmediately

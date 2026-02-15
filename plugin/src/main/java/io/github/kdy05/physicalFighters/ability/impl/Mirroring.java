@@ -5,7 +5,6 @@ import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -40,18 +39,22 @@ public class Mirroring extends Ability {
     public void applyEffect(Event event, int CustomData) {
         EntityDeathEvent event0 = (EntityDeathEvent) event;
         Player player = (Player) event0.getEntity();
+        if (player.getKiller() == null) return;
         Bukkit.broadcastMessage(String.format(ChatColor.RED +
                 "%s님의 미러링 능력이 발동되었습니다.", player.getName()));
+
         Ability assimilation = AbilityRegistry.findByType("흡수", player.getKiller());
         if (assimilation != null) {
             Bukkit.broadcastMessage(ChatColor.GREEN + "흡수 능력에 의해 미러링 능력이 무력화 되었습니다.");
             return;
         }
+
         Ability aegis = AbilityRegistry.findByType("이지스", player.getKiller());
         if (aegis != null && aegis.isDurationRunning()) {
             Bukkit.broadcastMessage(ChatColor.GREEN + "이지스 능력에 의해 미러링 능력이 무력화 되었습니다.");
             return;
         }
+
         Objects.requireNonNull(player.getKiller()).damage(5000);
         Bukkit.broadcastMessage(String.format(ChatColor.RED + "%s님의 미러링에 의해 %s님이 죽었습니다.",
                 player.getName(), player.getKiller().getName()));

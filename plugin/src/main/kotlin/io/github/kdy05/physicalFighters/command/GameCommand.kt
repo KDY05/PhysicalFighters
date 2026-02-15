@@ -129,7 +129,7 @@ class GameCommand(
 
         for (i in startIndex until endIndex) {
             val type = types[i]
-            sender.sendMessage("${ChatColor.GREEN}${type.name} ${ChatColor.GRAY}${type.rank}")
+            sender.sendMessage("${type.name} ${type.rank}")
         }
 
         if (totalAbilities == 0) {

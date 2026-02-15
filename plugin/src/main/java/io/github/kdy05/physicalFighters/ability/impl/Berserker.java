@@ -7,6 +7,7 @@ import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+
 import java.util.UUID;
 
 public class Berserker extends Ability {

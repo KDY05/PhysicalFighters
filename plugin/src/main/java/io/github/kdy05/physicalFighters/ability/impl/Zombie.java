@@ -1,15 +1,16 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import org.bukkit.entity.Player;
-import io.github.kdy05.physicalFighters.game.EventManager;
+import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
+import io.github.kdy05.physicalFighters.game.EventManager;
+import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import io.github.kdy05.physicalFighters.ability.Ability;
-import io.github.kdy05.physicalFighters.util.EventData;
+
 import java.util.UUID;
 
 public class Zombie extends Ability {

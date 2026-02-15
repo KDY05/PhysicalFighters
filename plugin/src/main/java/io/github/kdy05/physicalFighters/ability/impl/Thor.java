@@ -2,12 +2,11 @@ package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.InvincibilityManager;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
+import io.github.kdy05.physicalFighters.game.EventManager;
+import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,6 +17,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.UUID;
@@ -99,11 +99,13 @@ public class Thor extends Ability implements BaseItem {
         }
     }
 
+    @NotNull
     @Override
     public ItemStack[] getBaseItem() {
         return new ItemStack[] { mjolnir };
     }
 
+    @NotNull
     @Override
     public String getItemName() {
         return "묠니르";

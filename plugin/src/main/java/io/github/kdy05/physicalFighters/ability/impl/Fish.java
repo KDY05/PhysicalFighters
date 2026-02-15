@@ -12,6 +12,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -81,6 +82,7 @@ public class Fish extends Ability implements BaseItem {
         }
     }
 
+    @NotNull
     @Override
     public ItemStack[] getBaseItem() {
         return new ItemStack[] {
@@ -88,6 +90,7 @@ public class Fish extends Ability implements BaseItem {
         };
     }
 
+    @NotNull
     @Override
     public String getItemName() {
         return "낚싯대";

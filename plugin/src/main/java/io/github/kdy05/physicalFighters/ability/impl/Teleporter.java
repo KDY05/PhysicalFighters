@@ -2,11 +2,10 @@ package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.game.EventManager;
+import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -17,6 +16,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 public class Teleporter extends Ability implements BaseItem {
@@ -91,6 +92,7 @@ public class Teleporter extends Ability implements BaseItem {
         }
     }
 
+    @NotNull
     @Override
     public ItemStack[] getBaseItem() {
         return new ItemStack[] {
@@ -98,6 +100,7 @@ public class Teleporter extends Ability implements BaseItem {
         };
     }
 
+    @NotNull
     @Override
     public String getItemName() {
         return "눈덩이";

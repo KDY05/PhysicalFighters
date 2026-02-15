@@ -1,23 +1,24 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import io.github.kdy05.physicalFighters.game.InvincibilityManager;
-import org.bukkit.Sound;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.scheduler.BukkitRunnable;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
+import io.github.kdy05.physicalFighters.game.EventManager;
+import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 public class Kijaru extends Ability {
@@ -90,7 +91,7 @@ public class Kijaru extends Ability {
     }
 
     @Override
-    public void onActivate(Player p) {
+    public void onActivate(@NotNull Player p) {
         teleportManager.reset();
     }
 
@@ -107,8 +108,8 @@ public class Kijaru extends Ability {
     }
 
     static class KizaruTask extends BukkitRunnable {
-        Player caster;
-        LivingEntity target;
+        final Player caster;
+        final LivingEntity target;
 
         KizaruTask(Player caster, LivingEntity target) {
             this.caster = caster;

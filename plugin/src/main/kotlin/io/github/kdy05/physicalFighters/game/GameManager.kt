@@ -158,11 +158,10 @@ class GameManager(private val plugin: PhysicalFighters) {
         broadcastMessage("${ChatColor.DARK_RED}Physical Fighters")
         broadcastMessage("${ChatColor.GRAY}VER. ${BuildConfig.BUILD_NUMBER}")
         if (full) {
-            broadcastMessage("${ChatColor.GREEN}제작: ${ChatColor.WHITE}염료")
+            broadcastMessage("${ChatColor.GREEN}제작: ${ChatColor.WHITE}어라랍, 염료")
             broadcastMessage("${ChatColor.GREEN}원작(VisualAbility): ${ChatColor.WHITE}제온")
-            broadcastMessage("${ChatColor.AQUA}업데이트: ${ChatColor.WHITE}어라랍")
-            broadcastMessage("원작자 카페: https://cafe.naver.com/craftproducer")
-            broadcastMessage("공식 배포처: https://github.com/KDY05/PhysicalFighters")
+            broadcastMessage("${ChatColor.AQUA}공식 배포처: ${ChatColor.WHITE}https://github.com/KDY05/PhysicalFighters")
+            broadcastMessage("${ChatColor.AQUA}원작자 카페: ${ChatColor.WHITE}https://cafe.naver.com/craftproducer")
         }
     }
 
@@ -242,7 +241,6 @@ class GameManager(private val plugin: PhysicalFighters) {
         }
     }
 
-    /** playerList의 UUID를 현재 온라인 Player 객체로 변환 */
     private fun onlinePlayers(): List<Player> =
         playerList.mapNotNull { Bukkit.getPlayer(it) }
 
