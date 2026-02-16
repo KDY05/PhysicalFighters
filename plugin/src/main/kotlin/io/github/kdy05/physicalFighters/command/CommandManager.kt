@@ -65,6 +65,11 @@ class CommandManager(vararg handlers: CommandInterface) : CommandExecutor, TabCo
                     Bukkit.getOnlinePlayers()
                         .filter { it.name.lowercase().startsWith(input) }
                         .mapTo(completions) { it.name }
+                } else if (sub == "book" && sender.hasPermission("va.operate")) {
+                    val input = args[1].lowercase()
+                    AbilityRegistry.getAllTypes()
+                        .map { it.name.replace(' ', '_') }
+                        .filterTo(completions) { it.lowercase().startsWith(input) }
                 }
             }
 

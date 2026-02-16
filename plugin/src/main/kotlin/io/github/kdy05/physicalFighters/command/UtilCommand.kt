@@ -97,10 +97,11 @@ class UtilCommand(
         playerCommand(sender) { player ->
             if (args.size != 2) {
                 player.sendMessage("${ChatColor.RED}명령이 올바르지 않습니다. [/va book [능력이름]]")
+                player.sendMessage("${ChatColor.RED}띄어쓰기가 포함된 능력은 _로 대체합니다. (예: 갓_에넬)")
                 return@playerCommand
             }
 
-            val abilityName = args[1]
+            val abilityName = args[1].replace('_', ' ')
             val stack = AbilityBook.create(abilityName)
             if (stack == null) {
                 player.sendMessage("${ChatColor.RED}존재하지 않는 능력입니다.")
