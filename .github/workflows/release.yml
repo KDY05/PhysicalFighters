@@ -46,7 +46,7 @@ jobs:
           echo "short_sha=$SHORT_SHA" >> "$GITHUB_OUTPUT"
 
       - name: Build
-        run: ./gradlew clean build
+        run: chmod +x gradlew && ./gradlew clean build
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
