@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class PoisonArrow extends Ability implements BaseItem {
+public final class PoisonArrow extends Ability implements BaseItem {
     public PoisonArrow(UUID playerUuid) {
         super(AbilitySpec.builder("독화살", Type.PassiveManual, Rank.B)
                 .guide("화살에 맞은 적은 6초간 독에걸립니다.",
@@ -34,17 +34,15 @@ public class PoisonArrow extends Ability implements BaseItem {
     public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-            if (event0.getDamager() instanceof Arrow) {
-                Arrow a = (Arrow) event0.getDamager();
-                if (a.getShooter() instanceof Player) {
-                    Player p = (Player) a.getShooter();
-                    if (isOwner(p) && event0.getEntity() instanceof LivingEntity) {
-                        LivingEntity e = (LivingEntity) event0.getEntity();
-                        if (p != e) {
-                            return 0;
-                        }
-                    }
-                }
+            if (!(event0.getDamager() instanceof Arrow)) return -1;
+
+            Arrow a = (Arrow) event0.getDamager();
+            if (!(a.getShooter() instanceof Player)) return -1;
+
+            Player p = (Player) a.getShooter();
+            if (isOwner(p) && event0.getEntity() instanceof LivingEntity) {
+                LivingEntity e = (LivingEntity) event0.getEntity();
+                if (p != e) return 0;
             }
         }
         return -1;

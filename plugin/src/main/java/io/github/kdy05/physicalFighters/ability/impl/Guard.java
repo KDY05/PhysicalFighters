@@ -5,6 +5,7 @@ import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -15,7 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.UUID;
 
-public class Guard extends Ability {
+public final class Guard extends Ability {
     // 박스 크기 관련 상수
     private static final int BOX_RADIUS = 5;
     private static final int BOX_HEIGHT = 9;
@@ -28,7 +29,8 @@ public class Guard extends Ability {
     public Guard(UUID playerUuid) {
         super(AbilitySpec.builder("목둔", Type.ActiveImmediately, Rank.A)
                 .cooldown(30)
-                .guide(Usage.IronLeft + "바라보는 위치에 나무벽을 설치합니다. 주위에 플레이어가 있으면 가둡니다.")
+                .guide(Usage.IronLeft + "바라보는 위치에 나무벽을 설치합니다.",
+                        "주위에 플레이어가 있으면 가두고, 채굴 피로를 부여합니다.")
                 .build(), playerUuid);
     }
 
@@ -42,17 +44,13 @@ public class Guard extends Ability {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
         Player caster = event0.getPlayer();
 
-        if (!isOwner(event0.getPlayer()) || !isValidItem(Ability.DefaultItem))
+        if (!isOwner(event0.getPlayer()) || !isValidItem(Ability.DefaultItem) || InvincibilityManager.isDamageGuard())
             return -1;
 
         targetLocation = AbilityUtils.getTargetLocation(caster, 40);
         if (targetLocation == null) {
+            SoundUtils.playErrorSound(caster);
             caster.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
-            return -1;
-        }
-
-        if (InvincibilityManager.isDamageGuard()) {
-            caster.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
             return -1;
         }
 
@@ -85,7 +83,7 @@ public class Guard extends Ability {
                 teleportLoc.setYaw(playerLoc.getYaw());
                 teleportLoc.setPitch(playerLoc.getPitch());
                 player.teleport(teleportLoc);
-                player.addPotionEffect(PotionEffectFactory.createMiningFatigue(15 * 20, 1));
+                player.addPotionEffect(PotionEffectFactory.createMiningFatigue(5 * 20, 1));
             }
         }
     }

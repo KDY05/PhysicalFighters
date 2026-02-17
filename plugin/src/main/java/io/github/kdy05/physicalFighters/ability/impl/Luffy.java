@@ -17,7 +17,7 @@ import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
-public class Luffy extends Ability {
+public final class Luffy extends Ability {
     public Luffy(UUID playerUuid) {
         super(AbilitySpec.builder("루피", Type.ActiveImmediately, Rank.S)
                 .showText(ShowText.CustomText)

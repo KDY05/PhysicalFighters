@@ -4,6 +4,7 @@ import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,13 +17,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
-public class Gaara extends Ability {
+public final class Gaara extends Ability {
     private Location targetLocation = null;
 
     public Gaara(UUID playerUuid) {
-        super(AbilitySpec.builder("가아라", Type.ActiveImmediately, Rank.B)
+        super(AbilitySpec.builder("가아라", Type.ActiveImmediately, Rank.S)
                 .guide(Usage.IronLeft + "바라보는 방향에 모래를 떨어뜨리고, 잠시 후 폭발시킵니다.")
-                .cooldown(45)
+                .cooldown(30)
                 .build(), playerUuid);
     }
 
@@ -42,6 +43,7 @@ public class Gaara extends Ability {
 
         targetLocation = AbilityUtils.getTargetLocation(caster, 30);
         if (targetLocation == null) {
+            SoundUtils.playErrorSound(caster);
             caster.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
             return -1;
         }
@@ -59,7 +61,7 @@ public class Gaara extends Ability {
             return;
         }
 
-        Location center = targetLocation.clone().add(0, 4, 0); // 4블록 위로 올림
+        Location center = targetLocation.clone().add(0, 4, 0);
         Block targetBlock = caster.getWorld().getBlockAt(targetLocation);
         new Exploder(targetBlock).runTaskLater(plugin, 80L);
 

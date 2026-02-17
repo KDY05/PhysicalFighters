@@ -11,15 +11,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.util.Vector;
 
 import java.util.Random;
 import java.util.UUID;
 
-public class Booster extends Ability {
+public final class Booster extends Ability {
     public Booster(UUID playerUuid) {
-        super(AbilitySpec.builder("부스터", Type.PassiveAutoMatic, Rank.A)
-                .guide("폭주 - 매우 낮은 딜레이로 상대를 공격합니다. 단 당신의 대미지는 3~6로 랜덤입니다.",
-                        "무통증 - 피격 시 80% 확률로 넉백을 무시합니다.")
+        super(AbilitySpec.builder("부스터", Type.PassiveAutoMatic, Rank.SS)
+                .guide("매우 낮은 딜레이로 상대를 공격합니다. 단 대미지는 2-5으로 랜덤입니다.",
+                        "피격 시 60% 확률로 넉백을 무시합니다.")
                 .build(), playerUuid);
     }
 
@@ -34,7 +35,7 @@ public class Booster extends Ability {
         if (isOwner(event0.getDamager()) && event0.getEntity() instanceof LivingEntity) {
             return 0;
         }
-        else if (isOwner(event0.getEntity()) && Math.random() <= 0.8D && !InvincibilityManager.isDamageGuard()
+        else if (isOwner(event0.getEntity()) && Math.random() <= 0.60 && !InvincibilityManager.isDamageGuard()
                 && (event0.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK
                 || event0.getCause() == EntityDamageEvent.DamageCause.PROJECTILE)) {
             return 1;
@@ -48,15 +49,14 @@ public class Booster extends Ability {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             LivingEntity entity = (LivingEntity) event0.getEntity();
             Random rand = new Random();
-            event0.setDamage(3 + rand.nextDouble() * 3);
+            event0.setDamage(2 + rand.nextDouble() * 3);
             Bukkit.getScheduler().runTaskLater(plugin, () ->
                     entity.setNoDamageTicks(6), 1);
         } else if (CustomData == 1) {
             EntityDamageByEntityEvent event1 = (EntityDamageByEntityEvent) event;
             Player player = (Player) event1.getEntity();
-            double damage = event1.getDamage();
-            player.damage(damage);
-            event1.setCancelled(true);
+            Vector velocity = player.getVelocity();
+            Bukkit.getScheduler().runTaskLater(plugin, () -> player.setVelocity(velocity), 1);
         }
     }
 }

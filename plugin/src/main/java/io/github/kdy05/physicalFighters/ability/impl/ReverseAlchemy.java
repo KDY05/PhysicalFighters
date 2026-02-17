@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.ability.impl;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.util.AttributeUtils;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.UUID;
 
-public class ReverseAlchemy extends Ability {
+public final class ReverseAlchemy extends Ability {
     // 상수 정의
     private static final int GOLD_FOR_HEALING = 1;
     private static final int GOLD_FOR_DIAMOND = 3;
@@ -66,7 +67,8 @@ public class ReverseAlchemy extends Ability {
             player.getInventory().removeItem(new ItemStack(Material.GOLD_INGOT, GOLD_FOR_DIAMOND));
             player.getInventory().addItem(new ItemStack(Material.DIAMOND, 1));
             player.sendMessage(ChatColor.GREEN + "금괴 " + GOLD_FOR_DIAMOND + "개로 다이아몬드를 만들었습니다.");
-        } else if (CustomData == 1) {
+        }
+        else if (CustomData == 1) {
             player.getInventory().removeItem(new ItemStack(Material.GOLD_INGOT, GOLD_FOR_HEALING));
             double maxHealthValue = AttributeUtils.getMaxHealth(player);
 
@@ -76,10 +78,8 @@ public class ReverseAlchemy extends Ability {
                 player.setHealth(maxHealthValue / 2);
             }
 
+            SoundUtils.playSuccessSound(player);
             player.sendMessage(ChatColor.GREEN + "체력을 회복하였습니다.");
-        } else {
-            player.sendMessage(ChatColor.RED + "알 수 없는 오류가 발생했습니다.");
         }
     }
-
 }

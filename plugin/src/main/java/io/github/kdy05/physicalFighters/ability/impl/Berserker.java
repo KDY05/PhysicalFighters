@@ -4,13 +4,14 @@ import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.UUID;
 
-public class Berserker extends Ability {
+public final class Berserker extends Ability {
     public Berserker(UUID playerUuid) {
         super(AbilitySpec.builder("광전사", Type.PassiveManual, Rank.A)
                 .guide("체력이 낮아질수록 대미지가 증폭됩니다.",
@@ -40,10 +41,13 @@ public class Berserker extends Ability {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         if (CustomData == 0) {
             event0.setDamage(event0.getDamage() * 4.0);
+            SoundUtils.playBreakSound(event0.getEntity());
         } else if (CustomData == 1) {
             event0.setDamage(event0.getDamage() * 3.0);
+            SoundUtils.playBreakSound(event0.getEntity());
         } else if (CustomData == 2) {
             event0.setDamage(event0.getDamage() * 2);
+            SoundUtils.playBreakSound(event0.getEntity());
         } else if (CustomData == 3) {
             event0.setDamage(event0.getDamage() * 1.5);
         }

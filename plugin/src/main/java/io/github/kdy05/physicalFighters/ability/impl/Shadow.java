@@ -6,6 +6,7 @@ import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
@@ -13,51 +14,46 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
-public class Shadow extends Ability {
-    // 백스텝 각도 범위 (도 단위)
-    private static final double BACKSTAB_ANGLE_THRESHOLD = 90.0; // 90도 = 후방 180도 범위
+public final class Shadow extends Ability {
+    private static final double AVOID_CHANCE = 0.05;
+    private static final double AVOID_HEAL_AMOUNT = 4.0;
+    private static final double BACKSTAB_ANGLE_THRESHOLD = 30.0;
+    private static final double BACKSTAB_MULTIPLIER = 2.0;
 
     public Shadow(UUID playerUuid) {
         super(AbilitySpec.builder("그림자", Type.PassiveAutoMatic, Rank.A)
-                .guide("은신 - 몹에게 절대로 공격받지 않습니다.",
-                        "회피 - 피격 시 10% 확률로 회피하며, 체력 4를 회복합니다.",
-                        "기습 - 뒤에서 공격할 시 대미지를 2배로 입히고, 일시적으로 추가 이동속도를 얻습니다.")
+                .guide("회피 - 피격 시 5% 확률로 회피하며, 체력 4를 회복합니다.",
+                        "기습 - 뒤에서 공격할 시 대미지를 2배로 입히고, 상대에게 일시적으로 실명을 부여합니다.")
                 .build(), playerUuid);
     }
 
     @Override
     public void registerEvents() {
-        EventManager.registerEntityTarget(new EventData(this, 0));
-        EventManager.registerEntityDamage(new EventData(this, 1));
-        EventManager.registerEntityDamageByEntity(new EventData(this, 2));
+        EventManager.registerEntityDamage(new EventData(this, 0));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 1));
     }
 
     @Override
     public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
-            EntityTargetEvent event0 = (EntityTargetEvent) event;
-            if (event0.getTarget() != null && isOwner(event0.getTarget()))
+            EntityDamageEvent event0 = (EntityDamageEvent) event;
+            if (isOwner(event0.getEntity()) && Math.random() < AVOID_CHANCE
+                    && event0.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
                 return 0;
-        } else if (CustomData == 1) {
-            EntityDamageEvent event1 = (EntityDamageEvent) event;
-            if (isOwner(event1.getEntity()) && Math.random() < 0.10
-                    && event1.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-                return 1;
             }
-        } else if (CustomData == 2) {
-            EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
-            if (!isOwner(event2.getDamager()) || !(event2.getEntity() instanceof LivingEntity)) {
+        } else if (CustomData == 1) {
+            EntityDamageByEntityEvent event1 = (EntityDamageByEntityEvent) event;
+            if (!isOwner(event1.getDamager()) || !(event1.getEntity() instanceof LivingEntity)) {
                 return -1;
             }
-            LivingEntity target = (LivingEntity) event2.getEntity();
-            Player attacker = (Player) event2.getDamager();
+            LivingEntity target = (LivingEntity) event1.getEntity();
+            Player attacker = (Player) event1.getDamager();
             if (isBackstabAttack(attacker, target)) {
-                return 2;
+                return 1;
             }
             return -1;
         }
@@ -67,23 +63,20 @@ public class Shadow extends Ability {
     @Override
     public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
-            EntityTargetEvent event0 = (EntityTargetEvent) event;
-            event0.setTarget(null);
-            event0.setCancelled(true);
-        } else if (CustomData == 1) {
-            EntityDamageEvent event1 = (EntityDamageEvent) event;
-            event1.setDamage(0);
+            EntityDamageEvent event0 = (EntityDamageEvent) event;
+            event0.setDamage(0);
             if (getPlayer() == null) return;
-            AbilityUtils.healEntity(getPlayer(), 4);
+            AbilityUtils.healEntity(getPlayer(), AVOID_HEAL_AMOUNT);
+            SoundUtils.playSuccessSound(getPlayer());
             sendMessage(ChatColor.GREEN + "회피하였습니다!");
-        } else if (CustomData == 2) {
-            EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
-            LivingEntity target = (LivingEntity) event2.getEntity();
-            Player attacker = (Player) event2.getDamager();
-            event2.setDamage(event2.getDamage() * 2.0D);
-            attacker.addPotionEffect(PotionEffectFactory.createSpeed(20 * 4, 0));
+        } else if (CustomData == 1) {
+            EntityDamageByEntityEvent event1 = (EntityDamageByEntityEvent) event;
+            LivingEntity target = (LivingEntity) event1.getEntity();
+            Player attacker = (Player) event1.getDamager();
+            event1.setDamage(event1.getDamage() * BACKSTAB_MULTIPLIER);
+            target.addPotionEffect(PotionEffectFactory.createBlindness(20 * 3, 0));
+            SoundUtils.playSuccessSound(getPlayer());
             attacker.sendMessage(ChatColor.GREEN + "기습 성공!");
-            target.sendMessage(ChatColor.RED + "기습에 당했습니다!");
         }
     }
 

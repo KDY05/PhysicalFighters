@@ -16,7 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.UUID;
 
-public class Roclee extends Ability {
+public final class Roclee extends Ability {
     private boolean fallDamageImmune = false;
 
     public Roclee(UUID playerUuid) {
@@ -70,7 +70,7 @@ public class Roclee extends Ability {
         Bukkit.getScheduler().runTaskLater(plugin, () -> fallDamageImmune = false, 100);
 
         target.getWorld().createExplosion(targetNewLoc, 1.0F);
-        target.damage(8);
+        target.damage(10);
     }
 
     private Location findSafeTeleportLocation(Location originalLoc) {

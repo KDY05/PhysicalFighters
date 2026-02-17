@@ -5,8 +5,10 @@ import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -18,10 +20,10 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Fish extends Ability implements BaseItem {
+public final class Fish extends Ability implements BaseItem {
     // 능력 설정 상수
     private static final double FISHING_ROD_DAMAGE = 6.0;
-    private static final double FISH_DAMAGE = 8.0;
+    private static final double FISH_DAMAGE = 9.0;
     private static final double FISH_DROP_RATE = 0.03;
 
     private final ItemStack fish = createFish();
@@ -59,7 +61,7 @@ public class Fish extends Ability implements BaseItem {
     public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
-            if (!isOwner(damageEvent.getDamager()) || !(damageEvent.getEntity() instanceof Player)) return -1;
+            if (!isOwner(damageEvent.getDamager()) || !(damageEvent.getEntity() instanceof LivingEntity)) return -1;
             Player player = (Player) damageEvent.getDamager();
 
             if (isValidItem(Material.FISHING_ROD)) return 0;
@@ -73,8 +75,9 @@ public class Fish extends Ability implements BaseItem {
         if (CustomData == 0) {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
             damageEvent.setDamage(damageEvent.getDamage() * FISHING_ROD_DAMAGE);
-            if (Math.random() < FISH_DROP_RATE) {
+            if (damageEvent.getEntity() instanceof Player && Math.random() < FISH_DROP_RATE) {
                 Objects.requireNonNull(getPlayer()).getInventory().addItem(fish.clone());
+                SoundUtils.playSuccessSound(getPlayer());
             }
         } else if (CustomData == 1) {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;

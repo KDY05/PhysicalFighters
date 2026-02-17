@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.UUID;
 
-public class Cuma extends Ability {
+public final class Cuma extends Ability {
     public Cuma(UUID playerUuid) {
         super(AbilitySpec.builder("바솔로뮤 쿠마", Type.PassiveAutoMatic, Rank.S)
                 .guide("피격 시 상대를 넉백시키며, 일정 확률로 받은 공격을 상대에게 되돌려줍니다.")

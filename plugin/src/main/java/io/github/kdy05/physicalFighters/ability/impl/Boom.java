@@ -4,19 +4,24 @@ import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Objects;
 import java.util.UUID;
 
-public class Boom extends Ability {
+public final class Boom extends Ability {
+    private Exploder exploder;
+    private BukkitRunnable rangeIndicator;
+
     public Boom(UUID playerUuid) {
         super(AbilitySpec.builder("붐포인트", Type.ActiveContinue, Rank.S)
-                .cooldown(60)
+                .cooldown(40)
                 .duration(20)
-                .guide(Usage.IronLeft + "20초간 10m 안에 있는 적을 폭발시킵니다.")
+                .guide(Usage.IronLeft + "지속 시간동안 10m 안에 있는 적을 폭발시킵니다.")
                 .build(), playerUuid);
     }
 
@@ -40,7 +45,20 @@ public class Boom extends Ability {
 
     @Override
     public void onDurationStart() {
-        new Exploder(getPlayer()).runTaskTimer(plugin, 10L, 30L);
+        exploder = new Exploder(getPlayer());
+        exploder.runTaskTimer(plugin, 10L, 30L);
+        rangeIndicator = AbilityUtils.createCircleIndicator(Objects.requireNonNull(
+                getPlayer()), 10.0, Particle.EXPLOSION_NORMAL);
+    }
+
+    @Override
+    public void onDurationFinalize() {
+        if (exploder != null && !exploder.isCancelled()) {
+            exploder.cancel();
+        }
+        if (rangeIndicator != null && !rangeIndicator.isCancelled()) {
+            rangeIndicator.cancel();
+        }
     }
 
     static class Exploder extends BukkitRunnable {

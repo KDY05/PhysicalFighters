@@ -21,6 +21,8 @@ public class Temari extends Ability {
     private static final int MAX_COUNT = 13;
     private static final long INTERVAL = 30L;
 
+    private WindBlastTask windBlastTask;
+
     public Temari(UUID playerUuid) {
         super(AbilitySpec.builder("테마리", Type.ActiveContinue, Rank.S)
                 .cooldown(60)
@@ -52,7 +54,15 @@ public class Temari extends Ability {
     @Override
     public void onDurationStart() {
         if (getPlayer() == null) return;
-        new WindBlastTask(getPlayer()).runTaskTimer(plugin, 10L, INTERVAL);
+        windBlastTask = new WindBlastTask(getPlayer());
+        windBlastTask.runTaskTimer(plugin, 10L, INTERVAL);
+    }
+
+    @Override
+    public void onDurationFinalize() {
+        if (windBlastTask != null && !windBlastTask.isCancelled()) {
+            windBlastTask.cancel();
+        }
     }
 
     @Override

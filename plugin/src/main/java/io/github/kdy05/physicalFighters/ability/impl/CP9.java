@@ -6,6 +6,7 @@ import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
@@ -19,10 +20,10 @@ import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
-public class CP9 extends Ability {
+public final class CP9 extends Ability {
     public CP9(UUID playerUuid) {
-        super(AbilitySpec.builder("CP9", Type.ActiveImmediately, Rank.SS)
-                .guide(Usage.IronAttack + "상대에게 6의 고정 대미지를 줍니다.",
+        super(AbilitySpec.builder("CP9", Type.ActiveImmediately, Rank.S)
+                .guide(Usage.IronAttack + "상대에게 고정 대미지를 줍니다.",
                         Usage.IronRight + "바라보는 방향으로 빠르게 도약합니다.",
                         Usage.Passive + "낙하 대미지를 무시합니다.")
                 .cooldown(20)
@@ -53,6 +54,7 @@ public class CP9 extends Ability {
             EntityDamageEvent event2 = (EntityDamageEvent) event;
             if (isOwner(event2.getEntity()) && event2.getCause() == DamageCause.FALL) {
                 event2.setCancelled(true);
+                SoundUtils.playSuccessSound(getPlayer());
                 sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 대미지를 받지 않았습니다.");
             }
         }
@@ -65,6 +67,7 @@ public class CP9 extends Ability {
             EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
             LivingEntity entity = (LivingEntity) event0.getEntity();
             AbilityUtils.piercingDamage(entity, 6);
+            SoundUtils.playBreakSound(entity);
             sendMessage(String.format(ChatColor.RED + "%s에게 지건을 사용했습니다.", entity.getName()));
         } else if (CustomData == 1) {
             PlayerInteractEvent event1 = (PlayerInteractEvent) event;

@@ -22,6 +22,8 @@ public class Haki extends Ability {
     private static final long INTERVAL = 40L;
     private static final long DELAY = 10L;
 
+    private ConquerorHakiTask hakiTask;
+
     public Haki(UUID playerUuid) {
         super(AbilitySpec.builder("패기", Type.ActiveContinue, Rank.SS)
                 .cooldown(160)
@@ -52,7 +54,15 @@ public class Haki extends Ability {
     @Override
     public void onDurationStart() {
         if (getPlayer() == null) return;
-        new ConquerorHakiTask(getPlayer()).runTaskTimer(PhysicalFighters.getPlugin(), DELAY, INTERVAL);
+        hakiTask = new ConquerorHakiTask(getPlayer());
+        hakiTask.runTaskTimer(PhysicalFighters.getPlugin(), DELAY, INTERVAL);
+    }
+
+    @Override
+    public void onDurationFinalize() {
+        if (hakiTask != null && !hakiTask.isCancelled()) {
+            hakiTask.cancel();
+        }
     }
 
     @Override

@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.UUID;
 
-public class Trash extends Ability {
+public final class Trash extends Ability {
     public Trash(UUID playerUuid) {
         super(AbilitySpec.builder("쓰레기", Type.ActiveImmediately, Rank.F)
                 .cooldown(10)

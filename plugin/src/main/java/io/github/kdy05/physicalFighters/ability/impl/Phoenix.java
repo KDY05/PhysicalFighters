@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class Phoenix extends Ability {
+public final class Phoenix extends Ability {
     private int ReviveCounter = 0;
     private boolean AbilityUse = false;
     private final HashMap<UUID, ItemStack[]> invsave = new HashMap<>();
@@ -76,7 +76,8 @@ public class Phoenix extends Ability {
                 this.AbilityUse = true;
             }
             this.ReviveCounter += 1;
-        } else if (CustomData == 1) {
+        }
+        else if (CustomData == 1) {
             PlayerRespawnEvent event1 = (PlayerRespawnEvent) event;
             Player player = event1.getPlayer();
             UUID uuid = player.getUniqueId();

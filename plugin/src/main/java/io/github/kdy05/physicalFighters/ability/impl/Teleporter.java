@@ -4,23 +4,20 @@ import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
-import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class Teleporter extends Ability implements BaseItem {
+public final class Teleporter extends Ability {
     // 표지판 정보 저장 필드
     private String signName = null;
     private Location signLoc = null;
@@ -28,7 +25,8 @@ public class Teleporter extends Ability implements BaseItem {
     public Teleporter(UUID playerUuid) {
         super(AbilitySpec.builder("소환술사", Type.ActiveImmediately, Rank.A)
                 .cooldown(300)
-                .guide(Usage.IronLeft + "표지판을 설치하고 첫 줄에 플레이어의 이름(자신도 가능)을 적으면,",
+                .minimumPlayers(10)
+                .guide(Usage.IronLeft + "표지판을 설치하고 첫 줄에 플레이어의 이름을 적으면,",
                         "능력 사용 시 이름이 적힌 플레이어가 표지판으로 이동합니다.")
                 .build(), playerUuid);
     }
@@ -64,7 +62,8 @@ public class Teleporter extends Ability implements BaseItem {
                     }
                     signName = target.getName();
                     signLoc = event1.getBlock().getLocation();
-                    event1.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "철괴를 휘두르면 " + ChatColor.WHITE + signName
+                    SoundUtils.playSuccessSound(getPlayer());
+                    sendMessage(ChatColor.LIGHT_PURPLE + "철괴를 휘두르면 " + ChatColor.WHITE + signName
                             + ChatColor.LIGHT_PURPLE + "님은 이곳으로 텔레포트됩니다.");
                 }
             }
@@ -90,20 +89,6 @@ public class Teleporter extends Ability implements BaseItem {
             signName = null;
             signLoc = null;
         }
-    }
-
-    @NotNull
-    @Override
-    public ItemStack[] getBaseItem() {
-        return new ItemStack[] {
-                new ItemStack(Material.OAK_SIGN, 3)
-        };
-    }
-
-    @NotNull
-    @Override
-    public String getItemName() {
-        return "눈덩이";
     }
 
 }

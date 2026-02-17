@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class Lockdown extends Ability implements CommandInterface {
+public final class Lockdown extends Ability implements CommandInterface {
     // 능력 설정 상수
     private static final double MAX_RANGE = 60.0;          // 최대 사용 거리 (60블록)
     private static final int LOCKDOWN_DURATION = 60;      // 봉인 지속시간 (60초)
@@ -87,7 +87,7 @@ public class Lockdown extends Ability implements CommandInterface {
 
     @Override
     public void applyEffect(Event event, int CustomData) {
-        // A_DurationStart에서 실제 효과 처리
+        // onDurationStart에서 실제 효과 처리
     }
 
     @Override

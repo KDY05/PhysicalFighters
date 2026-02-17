@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.UUID;
 
-public class Demigod extends Ability {
+public final class Demigod extends Ability {
     public Demigod(UUID playerUuid) {
         super(AbilitySpec.builder("데미갓", Type.PassiveAutoMatic, Rank.S)
                 .guide("반은 인간, 반은 신인 능력자입니다.",
@@ -39,17 +39,17 @@ public class Demigod extends Ability {
     public void applyEffect(Event event, int CustomData) {
         EntityDamageEvent event0 = (EntityDamageEvent) event;
         Player player = (Player) event0.getEntity();
-        if (Math.random() <= 0.05D)
+        if (Math.random() <= 0.05)
             AbilityUtils.healEntity(player, 2);
-        if (Math.random() <= 0.05D)
+        if (Math.random() <= 0.05)
             player.addPotionEffect(PotionEffectFactory.createResistance(200, 0));
-        if (Math.random() <= 0.05D)
+        if (Math.random() <= 0.05)
             player.addPotionEffect(PotionEffectFactory.createRegeneration(200, 0));
-        if (Math.random() <= 0.1D)
+        if (Math.random() <= 0.1)
             player.addPotionEffect(PotionEffectFactory.createJumpBoost(200, 0));
-        if (Math.random() <= 0.1D)
+        if (Math.random() <= 0.1)
             player.addPotionEffect(PotionEffectFactory.createHaste(200, 0));
-        if (Math.random() <= 0.1D)
+        if (Math.random() <= 0.1)
             player.addPotionEffect(PotionEffectFactory.createSpeed(200, 0));
     }
 }

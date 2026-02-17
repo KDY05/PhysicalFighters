@@ -12,7 +12,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.UUID;
 
-public class ShockWave extends Ability {
+public final class ShockWave extends Ability {
     public ShockWave(UUID playerUuid) {
         super(AbilitySpec.builder("쇼크웨이브", Type.ActiveImmediately, Rank.A)
                 .cooldown(45)

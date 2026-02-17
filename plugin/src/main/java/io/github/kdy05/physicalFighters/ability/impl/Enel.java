@@ -13,7 +13,7 @@ import org.bukkit.util.Vector;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Enel extends Ability {
+public final class Enel extends Ability {
     public Enel(UUID playerUuid) {
         super(AbilitySpec.builder("갓 에넬", Type.ActiveImmediately, Rank.S)
                 .cooldown(30)

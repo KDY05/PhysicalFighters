@@ -11,12 +11,13 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.util.Vector;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class SuperFan extends Ability {
+public final class SuperFan extends Ability {
     public SuperFan(UUID playerUuid) {
         super(AbilitySpec.builder("선풍기", Type.ActiveImmediately, Rank.C)
                 .cooldown(20)
@@ -44,56 +45,27 @@ public class SuperFan extends Ability {
     public void applyEffect(Event event, int CustomData) {
         Player caster = getPlayer();
         if (caster == null) return;
-        
-        Location casterLocation = caster.getLocation();
-        Location knockbackOrigin = casterLocation.clone();
-        knockbackOrigin.setY(knockbackOrigin.getY() - 1.0);
-        
-        // 플레이어가 바라보는 방향으로 바람 효과 생성
-        createWindEffect(caster, casterLocation, knockbackOrigin);
-    }
-    
-    private void createWindEffect(Player caster, Location origin, Location knockbackOrigin) {
-        double yawRadians = Math.toRadians(-(origin.getYaw() % 360.0F));
-        double pitchRadians = Math.toRadians(-(origin.getPitch() % 360.0F));
-        
-        Set<LivingEntity> affectedEntities = new HashSet<>();
-        
-        // 모든 step 위치에서 영향받을 엔티티들 수집
+
+        Location origin = caster.getLocation();
+        Vector direction = origin.getDirection();
+        Location knockbackOrigin = origin.clone().subtract(0, 1, 0);
+
+        // 시선 방향으로 10단계에 걸쳐 범위 내 엔티티 수집
+        Set<LivingEntity> affected = new HashSet<>();
         for (int step = 1; step < 10; step++) {
-            Location windLocation = calculateWindLocation(origin, yawRadians, pitchRadians, step);
-            
-            caster.getWorld().getNearbyEntities(windLocation, 3.0, 3.0, 3.0).stream()
-                .filter(entity -> entity instanceof LivingEntity)
-                .map(entity -> (LivingEntity) entity)
-                .filter(entity -> entity != caster)
-                .forEach(affectedEntities::add);
+            Location windLoc = origin.clone().add(direction.clone().multiply(step + 2));
+            caster.getWorld().getNearbyEntities(windLoc, 3, 3, 3).stream()
+                    .filter(e -> e instanceof LivingEntity && e != caster)
+                    .forEach(e -> affected.add((LivingEntity) e));
         }
-        
-        // 수집된 엔티티들에게 한 번씩만 효과 적용
-        affectedEntities.forEach(entity -> applyWindEffects(entity, knockbackOrigin));
-    }
-    
-    private Location calculateWindLocation(Location origin, double yawRadians, double pitchRadians, int step) {
-        Location windLocation = origin.clone();
-        
-        double horizontalDistance = step + 2.0;
-        double xOffset = horizontalDistance * (Math.sin(yawRadians) * Math.cos(pitchRadians));
-        double yOffset = horizontalDistance * Math.sin(pitchRadians);
-        double zOffset = horizontalDistance * (Math.cos(yawRadians) * Math.cos(pitchRadians));
-        
-        windLocation.add(xOffset, yOffset, zOffset);
-        return windLocation;
-    }
-    
-    private void applyWindEffects(LivingEntity target, Location knockbackOrigin) {
-        AbilityUtils.goVelocity(target, knockbackOrigin, -2.5);
-        
-        target.addPotionEffect(PotionEffectFactory.createRegeneration(100, 0));
-        target.addPotionEffect(PotionEffectFactory.createBlindness(200, 2));
-        target.addPotionEffect(PotionEffectFactory.createNausea(200, 2));
-        target.addPotionEffect(PotionEffectFactory.createWeakness(200, 2));
-        
-        target.sendMessage(ChatColor.LIGHT_PURPLE + "앗! 바람이 강하지만 시원해~♥");
+
+        for (LivingEntity target : affected) {
+            AbilityUtils.goVelocity(target, knockbackOrigin, -2.5);
+            target.addPotionEffect(PotionEffectFactory.createRegeneration(100, 0));
+            target.addPotionEffect(PotionEffectFactory.createBlindness(200, 2));
+            target.addPotionEffect(PotionEffectFactory.createNausea(200, 2));
+            target.addPotionEffect(PotionEffectFactory.createWeakness(200, 2));
+            target.sendMessage(ChatColor.LIGHT_PURPLE + "앗! 바람이 강하지만 시원해~♥");
+        }
     }
 }

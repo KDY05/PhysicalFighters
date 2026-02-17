@@ -7,9 +7,13 @@ import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Directional;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -18,7 +22,7 @@ import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
-public class Gladiator extends Ability {
+public final class Gladiator extends Ability {
     private static final int ARENA_SIZE = 5;
     private static final int ARENA_HEIGHT = 8;
     private static final int ARENA_Y_OFFSET = 50;
@@ -63,9 +67,20 @@ public class Gladiator extends Ability {
         Location arenaBase = originalTargetLoc.clone();
         arenaBase.setY(arenaBase.getY() + ARENA_Y_OFFSET);
 
-        // 아레나 생성 후 마주 보도록 텔레포트
         createArena(arenaBase);
+        teleportPlayers(arenaBase, attacker);
 
+        // 원상 복구
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            target.teleport(originalTargetLoc);
+            attacker.teleport(originalAttackerLoc);
+            removeArena(arenaBase);
+        }, DURATION_TICKS);
+
+        SoundUtils.broadcastWarningSound();
+    }
+
+    private void teleportPlayers(Location arenaBase, Player attacker) {
         Location targetArenaLoc = arenaBase.clone().add(2, 2, 2);
         Location attackerArenaLoc = arenaBase.clone().add(-2, 2, -2);
 
@@ -82,17 +97,6 @@ public class Gladiator extends Ability {
         target.addPotionEffect(PotionEffectFactory.createBlindness(DURATION_TICKS, 0));
         attacker.addPotionEffect(PotionEffectFactory.createResistance(DURATION_TICKS, 0));
         attacker.addPotionEffect(PotionEffectFactory.createStrength(DURATION_TICKS, 0));
-
-        // 원상 복구
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            target.teleport(originalTargetLoc);
-            attacker.teleport(originalAttackerLoc);
-            removeArena(arenaBase);
-        }, DURATION_TICKS);
-    }
-
-    @Override
-    public void applyEffect(Event event, int CustomData) {
     }
 
     private void createArena(Location base) {
@@ -100,14 +104,26 @@ public class Gladiator extends Ability {
         AbilityUtils.createBox(base.clone().add(0, 1, 0), Material.AIR,
                 ARENA_SIZE - 1, ARENA_HEIGHT - 2, true);
         int torchY = ARENA_HEIGHT - 2;
-        base.clone().add(ARENA_SIZE - 1, torchY, ARENA_SIZE - 1).getBlock().setType(Material.TORCH);
-        base.clone().add(ARENA_SIZE - 1, torchY, -(ARENA_SIZE - 1)).getBlock().setType(Material.TORCH);
-        base.clone().add(-(ARENA_SIZE - 1), torchY, ARENA_SIZE - 1).getBlock().setType(Material.TORCH);
-        base.clone().add(-(ARENA_SIZE - 1), torchY, -(ARENA_SIZE - 1)).getBlock().setType(Material.TORCH);
+        // 벽 안쪽을 향하도록 벽면 횃불 설치
+        placeWallTorch(base.clone().add(ARENA_SIZE - 1, torchY, 0), BlockFace.WEST);
+        placeWallTorch(base.clone().add(-(ARENA_SIZE - 1), torchY, 0), BlockFace.EAST);
+        placeWallTorch(base.clone().add(0, torchY, ARENA_SIZE - 1), BlockFace.NORTH);
+        placeWallTorch(base.clone().add(0, torchY, -(ARENA_SIZE - 1)), BlockFace.SOUTH);
+    }
+
+    private void placeWallTorch(Location loc, BlockFace facing) {
+        Block block = loc.getBlock();
+        block.setType(Material.WALL_TORCH);
+        Directional data = (Directional) block.getBlockData();
+        data.setFacing(facing);
+        block.setBlockData(data);
     }
 
     private void removeArena(Location base) {
         AbilityUtils.createBox(base, Material.AIR, ARENA_SIZE, ARENA_HEIGHT, true);
     }
+
+    @Override
+    public void applyEffect(Event event, int CustomData) {}
 
 }

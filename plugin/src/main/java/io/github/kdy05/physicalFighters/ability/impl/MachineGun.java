@@ -6,6 +6,7 @@ import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-public class MachineGun extends Ability {
+public final class MachineGun extends Ability {
     // 능력 설정 필드
     private static final int MAGAZINE_SIZE = 30;
     private static final int RELOAD_TIME_TICKS = 60;
@@ -85,9 +86,12 @@ public class MachineGun extends Ability {
                 return ACTION_SHOOT;
             if (player.getInventory().contains(AMMO_ITEM))
                 return ACTION_RELOAD;
+            SoundUtils.playErrorSound(player);
             player.sendMessage(ChatColor.RED + "탄창이 없습니다.");
-            if (isReloading)
+            if (isReloading) {
+                SoundUtils.playErrorSound(player);
                 player.sendMessage(ChatColor.RED + "장전중입니다.");
+            }
         }
         return -1;
     }
@@ -131,7 +135,7 @@ public class MachineGun extends Ability {
             LivingEntity target = (LivingEntity) e.getEntity();
             target.getWorld().createExplosion(target.getLocation(), 0.0F);
             AbilityUtils.piercingDamage(target, CRITICAL_DAMAGE);
-            sendMessage(ChatColor.GREEN + "크리티컬");
+            SoundUtils.playSuccessSound(getPlayer());
         }
     }
 

@@ -11,11 +11,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.UUID;
 
-public class Sasuke extends Ability {
+public final class Sasuke extends Ability {
     public Sasuke(UUID playerUuid) {
         super(AbilitySpec.builder("사스케", Type.ActiveImmediately, Rank.S)
                 .cooldown(30)
-                .guide(Usage.IronAttack + "치도리 - 엄청난 대미지로 감전시킵니다.")
+                .guide(Usage.IronAttack + "엄청난 대미지로 감전시킵니다.")
                 .build(), playerUuid);
     }
 

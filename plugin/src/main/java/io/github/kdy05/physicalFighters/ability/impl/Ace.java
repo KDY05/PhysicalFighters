@@ -12,6 +12,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.UUID;
 
 public class Ace extends Ability {
+    private SplashFire splashFire;
+
     public Ace(UUID playerUuid) {
         super(AbilitySpec.builder("에이스", Type.ActiveContinue, Rank.S)
                 .cooldown(40)
@@ -37,7 +39,15 @@ public class Ace extends Ability {
     @Override
     public void onDurationStart() {
         if (getPlayer() == null) return;
-        new SplashFire(getPlayer()).runTaskTimer(plugin, 10L, 30L);
+        splashFire = new SplashFire(getPlayer());
+        splashFire.runTaskTimer(plugin, 10L, 30L);
+    }
+
+    @Override
+    public void onDurationFinalize() {
+        if (splashFire != null && !splashFire.isCancelled()) {
+            splashFire.cancel();
+        }
     }
 
     @Override

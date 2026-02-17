@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class Multishot extends Ability implements BaseItem {
+public final class Multishot extends Ability implements BaseItem {
     public Multishot(UUID playerUuid) {
         super(AbilitySpec.builder("멀티샷", Type.ActiveImmediately, Rank.A)
                 .cooldown(3)
@@ -36,13 +36,13 @@ public class Multishot extends Ability implements BaseItem {
     public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             ProjectileLaunchEvent event0 = (ProjectileLaunchEvent) event;
-            if (event0.getEntity() instanceof Arrow) {
-                Arrow a = (Arrow) event0.getEntity();
-                if (a.getShooter() instanceof Player) {
-                    Player p = (Player) a.getShooter();
-                    if (isOwner(p) && isValidItem(Material.BOW)) {
-                        return 0;
-                    }
+            if (!(event0.getEntity() instanceof Arrow)) return -1;
+
+            Arrow a = (Arrow) event0.getEntity();
+            if (a.getShooter() instanceof Player) {
+                Player p = (Player) a.getShooter();
+                if (isOwner(p) && isValidItem(Material.BOW)) {
+                    return 0;
                 }
             }
         }
