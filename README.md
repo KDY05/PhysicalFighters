@@ -28,8 +28,8 @@
 
 ## Download
 
-- [최신 릴리즈](https://github.com/KDY05/PhysicalFighters/releases/latest): 1.21.8-1.21.11 지원
-- [최신 스냅샷](https://github.com/KDY05/PhysicalFighters/releases/tag/snapshot): 1.16.5-1.21.11 지원
+- [최신 릴리즈](https://github.com/KDY05/PhysicalFighters/releases/latest): Spigot/Paper, 1.21.8-1.21.11
+- [최신 스냅샷](https://github.com/KDY05/PhysicalFighters/releases/tag/snapshot): Spigot/Paper, 1.16.5-1.21.11
 
 ## Usage
 
