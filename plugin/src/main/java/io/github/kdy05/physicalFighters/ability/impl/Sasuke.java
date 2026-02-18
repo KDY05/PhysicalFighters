@@ -39,6 +39,6 @@ public final class Sasuke extends Ability {
         EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
         LivingEntity entity = (LivingEntity) event0.getEntity();
         entity.getWorld().strikeLightning(entity.getLocation());
-        entity.damage(25);
+        entity.damage(20);
     }
 }

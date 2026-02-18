@@ -95,7 +95,7 @@ public final class Shadow extends Ability {
                 attackerLoc.getZ() - targetLoc.getZ()).normalize();
 
         double dotProduct = targetDirection.dot(attackVector);
-        return dotProduct <= Math.cos(Math.toRadians(BACKSTAB_ANGLE_THRESHOLD));
+        return dotProduct <= -Math.cos(Math.toRadians(BACKSTAB_ANGLE_THRESHOLD));
     }
 
 }

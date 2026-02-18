@@ -110,14 +110,15 @@ class EventManager(private val plugin: PhysicalFighters) : Listener {
 
     @EventHandler
     fun onEntityDeath(event: EntityDeathEvent) {
-        if (plugin.gameManager.scenario == GameManager.ScriptStatus.GameStart
-            && event is PlayerDeathEvent
-        ) {
+        if (event is PlayerDeathEvent) {
             val victim = event.entity
-            val killer = victim.killer
+            AbilityRegistry.findAbilities(victim).forEach { it.cancelDTimer() }
 
-            handleVictim(victim)
-            printDeathMessage(event, killer, victim)
+            if (plugin.gameManager.scenario == GameManager.ScriptStatus.GameStart) {
+                val killer = victim.killer
+                handleVictim(victim)
+                printDeathMessage(event, killer, victim)
+            }
         }
         executeAbility(onEntityDeath, event)
     }

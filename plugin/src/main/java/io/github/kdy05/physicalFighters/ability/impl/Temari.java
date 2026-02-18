@@ -83,7 +83,7 @@ public final class Temari extends Ability {
                 Location liftLoc = entity.getLocation().clone();
                 liftLoc.setY(entity.getLocation().getY() + LIFT_HEIGHT);
                 AbilityUtils.goVelocity(entity, liftLoc, 1);
-                if (entity instanceof Player && Math.random() <= 0.05) {
+                if (entity instanceof Player && Math.random() <= 0.02) {
                     Player player = (Player) entity;
                     ItemStack item = player.getInventory().getItemInMainHand();
                     caster.getWorld().dropItem(player.getLocation(), item);

@@ -72,7 +72,7 @@ public final class Boom extends Ability {
         public void run() {
             if (caster == null) return;
             AbilityUtils.splashTask(caster, caster.getLocation(), 10, entity
-                    -> entity.getWorld().createExplosion(entity.getLocation(), 0.5f));
+                    -> entity.getWorld().createExplosion(entity.getLocation(), 0.4f));
         }
     }
 

@@ -45,7 +45,7 @@ public final class Enel extends Ability {
         for (int i = 3; i <= 10; i++) {
             Location lightningLoc = startLoc.clone().add(direction.clone().multiply(i));
             Objects.requireNonNull(lightningLoc.getWorld()).strikeLightning(lightningLoc);
-            AbilityUtils.splashDamage(caster, lightningLoc, 2, 20);
+            AbilityUtils.splashDamage(caster, lightningLoc, 2, 15);
         }
     }
 }
