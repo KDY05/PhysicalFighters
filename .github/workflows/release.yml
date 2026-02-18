@@ -24,7 +24,7 @@ jobs:
       - name: Extract version info
         id: version
         run: |
-          BASE_VERSION=$(grep -oP "version\s*=\s*'\K[^']+" build.gradle)
+          BASE_VERSION=$(grep -oP "^version=\K.+" gradle.properties)
           COMMIT_COUNT=$(git rev-list --count HEAD)
           SHORT_SHA=$(git rev-parse --short HEAD)
 
