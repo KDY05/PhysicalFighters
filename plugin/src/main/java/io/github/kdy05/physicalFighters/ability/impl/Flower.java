@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.UUID;
 
-public class Flower extends Ability {
+public final class Flower extends Ability {
     public Flower(UUID playerUuid) {
         super(AbilitySpec.builder("흡혈초", Type.ActiveImmediately, Rank.SS)
                 .cooldown(30)
@@ -65,7 +65,8 @@ public class Flower extends Ability {
                     + "%s(이)가 당신의 체력을 흡수했습니다.", player.getName()));
             sendMessage(String.format(ChatColor.RED
                     + "%s의 체력을 흡수했습니다.", entity.getName()));
-        } else if (CustomData == 1) {
+        }
+        else if (CustomData == 1) {
             PlayerInteractEvent event1 = (PlayerInteractEvent) event;
             Player player = event1.getPlayer();
             player.setLevel(player.getLevel() + 1);

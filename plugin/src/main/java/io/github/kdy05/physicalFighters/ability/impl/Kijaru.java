@@ -6,8 +6,11 @@ import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -16,21 +19,21 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
 
+import java.util.Objects;
 import java.util.UUID;
 
-public class Kijaru extends Ability {
-
-    private final TeleportChargeManager teleportManager = new TeleportChargeManager();
-
+public final class Kijaru extends Ability {
     public Kijaru(UUID playerUuid) {
         super(AbilitySpec.builder("키자루", Type.ActiveImmediately, Rank.SS)
                 .cooldown(45)
                 .guide(Usage.IronAttack + "타격한 상대를 빛의 속도로 타격합니다.",
                         "상대는 엄청난 속도로 멀리 날라갑니다. 당신도 상대를 따라 근접하게 날라갑니다.",
-                        Usage.IronRight + "바라보는 곳으로 순간이동합니다. (충전시간: 120초 / 최대 충전량 2회)",
+                        Usage.IronRight + "바라보는 곳으로 순간이동합니다.",
                         Usage.Passive + "낙하 대미지를 받지 않습니다.")
                 .build(), playerUuid);
     }
@@ -51,26 +54,11 @@ public class Kijaru extends Ability {
                 return 0;
         } else if (CustomData == 1) {
             PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-            if (!isOwner(event1.getPlayer()) || !isValidItem(Ability.DefaultItem)) return -1;
-
-            if (!teleportManager.canUse()) {
-                int timeLeft = teleportManager.getTimeToNextCharge();
-                sendMessage(ChatColor.RED + "충전 중 (다음 충전까지 " + timeLeft + "초)");
-                return -1;
-            }
-
-            Player caster = event1.getPlayer();
-            Location targetLocation = AbilityUtils.getTargetLocation(caster, 80);
-            if (targetLocation == null) {
-                sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
-                return -1;
-            }
-
-            executeTeleport(caster, targetLocation);
-            return -1;
+            if (isOwner(event1.getPlayer()) && isValidItem(Ability.DefaultItem)) return 1;
         } else if (CustomData == 2) {
             EntityDamageEvent event2 = (EntityDamageEvent) event;
             if (isOwner(event2.getEntity()) && event2.getCause() == DamageCause.FALL) {
+                SoundUtils.playSuccessSound(getPlayer());
                 sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 대미지를 받지 않았습니다.");
                 event2.setCancelled(true);
             }
@@ -80,31 +68,47 @@ public class Kijaru extends Ability {
 
     @Override
     public void applyEffect(Event event, int CustomData) {
-        EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-        LivingEntity entity = (LivingEntity) event0.getEntity();
-        if (getPlayer() == null) return;
+        if (CustomData == 0) {
+            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+            LivingEntity entity = (LivingEntity) event0.getEntity();
+            if (getPlayer() == null) return;
+            spawnParticlePath(getPlayer().getLocation(), entity.getLocation());
+            AbilityUtils.goVelocity(entity, getPlayer().getLocation().clone().add(0, -0.25, 0), -4);
+            new KizaruTask(getPlayer(), entity).runTaskLater(plugin, 20L);
+            event0.setCancelled(true);
+        } else if (CustomData == 1) {
+            PlayerInteractEvent event1 = (PlayerInteractEvent) event;
+            Player caster = event1.getPlayer();
+            Location origin = caster.getEyeLocation();
+            Vector direction = origin.getDirection().normalize();
 
-        AbilityUtils.goVelocity(entity, getPlayer().getLocation().clone().add(0, -0.5, 0), -5);
-        new KizaruTask(getPlayer(), entity).runTaskLater(plugin, 20L);
-        entity.damage(8);
-        event0.setCancelled(true);
+            RayTraceResult result = caster.getWorld().rayTraceBlocks(
+                    origin, direction, 80, FluidCollisionMode.NEVER, true);
+
+            Location dest;
+            if (result != null) {
+                dest = result.getHitPosition().subtract(direction).toLocation(caster.getWorld());
+            } else {
+                dest = origin.clone().add(direction.multiply(80));
+            }
+
+            spawnParticlePath(origin, dest);
+            dest.setPitch(caster.getLocation().getPitch());
+            dest.setYaw(caster.getLocation().getYaw());
+            caster.teleport(dest);
+            caster.getWorld().playSound(caster.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
+        }
     }
 
-    @Override
-    public void onActivate(@NotNull Player p) {
-        teleportManager.reset();
-    }
-
-    private void executeTeleport(Player caster, Location targetLocation) {
-        targetLocation.setY(caster.getWorld().getHighestBlockYAt(targetLocation) + 1.0);
-        targetLocation.setPitch(caster.getLocation().getPitch());
-        targetLocation.setYaw(caster.getLocation().getYaw());
-        caster.teleport(targetLocation);
-        caster.getWorld().playSound(caster.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
-
-        teleportManager.use();
-        int remainingCharges = teleportManager.getCurrentCharges();
-        sendMessage(ChatColor.YELLOW + "순간이동! (" + remainingCharges + "/2)");
+    private void spawnParticlePath(Location from, Location to) {
+        Vector direction = to.toVector().subtract(from.toVector()).normalize();
+        double distance = from.distance(to);
+        Particle.DustOptions dust = new Particle.DustOptions(Color.YELLOW, 1.0f);
+        for (double d = 0; d <= distance; d += 0.5) {
+            Objects.requireNonNull(from.getWorld()).spawnParticle(Particle.REDSTONE,
+                    from.clone().add(direction.clone().multiply(d)),
+                    1, 0, 0, 0, 0, dust);
+        }
     }
 
     static class KizaruTask extends BukkitRunnable {
@@ -121,69 +125,8 @@ public class Kijaru extends Ability {
             Location loc2 = target.getLocation();
             loc2.setY(loc2.getY() + 2.0D);
             this.caster.teleport(loc2);
+            target.damage(8, caster);
             caster.getWorld().createExplosion(caster.getLocation(), 0.0f);
         }
     }
-
-    static class TeleportChargeManager {
-        private static final int MAX_CHARGES = 2;
-        private static final int CHARGE_COOLDOWN_SECONDS = 120;
-
-        private int charges = MAX_CHARGES;
-        private int remainingCooldown = 0;
-        private BukkitRunnable cooldownTask;
-
-        public boolean canUse() {
-            return charges > 0;
-        }
-
-        public void use() {
-            if (charges > 0) {
-                charges--;
-                // cooldownTask가 null이거나 취소된 경우에만 새로 시작
-                if (charges < MAX_CHARGES && (cooldownTask == null || cooldownTask.isCancelled())) {
-                    startCooldown();
-                }
-            }
-        }
-
-        public int getCurrentCharges() {
-            return charges;
-        }
-
-        public int getTimeToNextCharge() {
-            return remainingCooldown;
-        }
-
-        public void reset() {
-            charges = MAX_CHARGES;
-            remainingCooldown = 0;
-            if (cooldownTask != null && !cooldownTask.isCancelled()) {
-                cooldownTask.cancel();
-                cooldownTask = null;
-            }
-        }
-
-        private void startCooldown() {
-            remainingCooldown = CHARGE_COOLDOWN_SECONDS;
-            cooldownTask = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    remainingCooldown--;
-                    if (remainingCooldown <= 0) {
-                        charges++;
-                        if (charges < MAX_CHARGES) {
-                            remainingCooldown = CHARGE_COOLDOWN_SECONDS;
-                        } else {
-                            // 최대 충전량에 도달하면 태스크 종료
-                            this.cancel();
-                            cooldownTask = null;
-                        }
-                    }
-                }
-            };
-            cooldownTask.runTaskTimer(plugin, 0L, 20L);
-        }
-    }
-
 }

@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class Assimilation extends Ability implements CommandInterface {
+public final class Assimilation extends Ability implements CommandInterface {
     private boolean ActiveAss = false;
 
     public Assimilation(UUID playerUuid) {
@@ -36,40 +36,39 @@ public class Assimilation extends Ability implements CommandInterface {
 
     @Override
     public int checkCondition(Event event, int CustomData) {
-        if (CustomData == 0) {
-            EntityDeathEvent event0 = (EntityDeathEvent) event;
-            if (event0.getEntity() instanceof Player && event0.getEntity().getKiller() != null
-                    && isOwner(event0.getEntity().getKiller()))
-                return 0;
-        }
+        EntityDeathEvent event0 = (EntityDeathEvent) event;
+        if (event0.getEntity() instanceof Player && event0.getEntity().getKiller() != null
+                && isOwner(event0.getEntity().getKiller())) return 0;
         return -1;
     }
 
     @Override
     public void applyEffect(Event event, int CustomData) {
-        if (CustomData == 0) {
-            EntityDeathEvent event0 = (EntityDeathEvent) event;
-            if (!(event0.getEntity() instanceof Player) || event0.getEntity().getKiller() == null) return;
-            Player victim = (Player) event0.getEntity();
-            Ability ability = AbilityUtils.findAbility(victim);
-            Player player = event0.getEntity().getKiller();
-            if (ability == null || player  == null) return;
-            String absorbedTypeName = ability.getAbilityName();
-            if (ability.getAbilityType() == Type.PassiveAutoMatic || ability.getAbilityType() == Type.PassiveManual) {
-                AbilityRegistry.deactivate(ability, false);
-                AbilityRegistry.createAndActivate(absorbedTypeName, player, false);
-                player.sendMessage(ChatColor.GREEN + "새로운 패시브 능력을 흡수하였습니다.");
-                player.sendMessage(ChatColor.YELLOW + "새로운 능력 : " + ChatColor.WHITE + absorbedTypeName);
-            } else if (!this.ActiveAss) {
-                AbilityRegistry.deactivate(ability, false);
-                AbilityRegistry.createAndActivate(absorbedTypeName, player, false);
-                player.sendMessage(ChatColor.GREEN + "새로운 액티브 능력을 흡수하였습니다.");
-                player.sendMessage(ChatColor.YELLOW + "새로운 능력 : " + ChatColor.WHITE + absorbedTypeName);
-                player.sendMessage(ChatColor.RED + "더이상 액티브 흡수는 불가능합니다.");
-                this.ActiveAss = true;
-            } else {
-                sendMessage(ChatColor.RED + "흡수할 수 없는 능력입니다.");
-            }
+        EntityDeathEvent event0 = (EntityDeathEvent) event;
+        if (!(event0.getEntity() instanceof Player) || event0.getEntity().getKiller() == null) return;
+
+        Player victim = (Player) event0.getEntity();
+        Ability ability = AbilityUtils.findAbility(victim);
+        Player player = event0.getEntity().getKiller();
+        if (ability == null || player  == null) return;
+
+        String absorbedTypeName = ability.getAbilityName();
+        if (ability.getAbilityType() == Type.PassiveAutoMatic || ability.getAbilityType() == Type.PassiveManual) {
+            AbilityRegistry.deactivate(ability, false);
+            AbilityRegistry.createAndActivate(absorbedTypeName, player, false);
+            player.sendMessage(ChatColor.GREEN + "새로운 패시브 능력을 흡수하였습니다.");
+            player.sendMessage(ChatColor.YELLOW + "새로운 능력 : " + ChatColor.WHITE + absorbedTypeName);
+        }
+        else if (!this.ActiveAss) {
+            AbilityRegistry.deactivate(ability, false);
+            AbilityRegistry.createAndActivate(absorbedTypeName, player, false);
+            player.sendMessage(ChatColor.GREEN + "새로운 액티브 능력을 흡수하였습니다.");
+            player.sendMessage(ChatColor.YELLOW + "새로운 능력 : " + ChatColor.WHITE + absorbedTypeName);
+            player.sendMessage(ChatColor.RED + "더이상 액티브 흡수는 불가능합니다.");
+            this.ActiveAss = true;
+        }
+        else {
+            sendMessage(ChatColor.RED + "흡수할 수 없는 능력입니다.");
         }
     }
 

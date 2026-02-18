@@ -59,7 +59,7 @@ public final class Luffy extends Ability {
                     Bukkit.getScheduler().runTaskLater(plugin,
                             () -> targetBlock.setType(originalType), 5L);
                 }
-                AbilityUtils.splashTask(caster, blockLoc, 2.5, entity -> entity.damage(2));
+                AbilityUtils.splashDamage(caster, blockLoc, 2.5, 2, true);
             }
         } else if (CustomData == 2) {
             AbilityUtils.piercingDamage(caster, 5.0);

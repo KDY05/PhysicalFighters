@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class Tranceball extends Ability implements BaseItem {
+public final class Tranceball extends Ability implements BaseItem {
 
     private enum Mode {
         Swap("스왑"), Grab("그랩"), Chase("추격");
@@ -67,17 +67,18 @@ public class Tranceball extends Ability implements BaseItem {
     public int checkCondition(Event event, int CustomData) {
         if (CustomData == 0) {
             ProjectileHitEvent event0 = (ProjectileHitEvent) event;
-            if (event0.getEntity() instanceof Snowball) {
-                Snowball s = (Snowball) event0.getEntity();
-                if (s.getShooter() instanceof Player) {
-                    Player p = (Player) s.getShooter();
-                    if (isOwner(p) && s.getShooter() != event0.getHitEntity()
-                            && event0.getHitEntity() instanceof LivingEntity) {
-                        return 0;
-                    }
-                }
+            if (!(event0.getEntity() instanceof Snowball)) return -1;
+
+            Snowball snowball = (Snowball) event0.getEntity();
+            if (!(snowball.getShooter() instanceof Player)) return -1;
+
+            Player shooter = (Player) snowball.getShooter();
+            if (isOwner(shooter) && snowball.getShooter() != event0.getHitEntity()
+                    && event0.getHitEntity() instanceof LivingEntity) {
+                return 0;
             }
-        } else if (CustomData == 1) {
+        }
+        else if (CustomData == 1) {
             PlayerInteractEvent event1 = (PlayerInteractEvent) event;
             if (isValidItem(Material.SNOWBALL) && isOwner(event1.getPlayer()) && event1.getPlayer().isSneaking()) {
                 switchMode();
@@ -95,8 +96,10 @@ public class Tranceball extends Ability implements BaseItem {
             LivingEntity target = (LivingEntity) event0.getHitEntity();
             if (getPlayer() == null) return;
             if (target == null) return;
+
             Location casterLoc = getPlayer().getLocation();
             Location targetLoc = target.getLocation();
+
             if (this.mode == Mode.Swap) {
                 target.teleport(casterLoc);
                 getPlayer().teleport(targetLoc);
@@ -105,6 +108,7 @@ public class Tranceball extends Ability implements BaseItem {
             } else if (this.mode == Mode.Chase) {
                 getPlayer().teleport(targetLoc);
             }
+
             getPlayer().getInventory().addItem(new ItemStack(Material.SNOWBALL, 1));
         }
     }

@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.UUID;
 
-public class Ckyomi extends Ability {
+public final class Ckyomi extends Ability {
     public Ckyomi(UUID playerUuid) {
         super(AbilitySpec.builder("츠쿠요미", Type.PassiveAutoMatic, Rank.A)
                 .guide("상대를 공격하면 상대에게 5초간 혼란 효과와 디버프를 줍니다.")

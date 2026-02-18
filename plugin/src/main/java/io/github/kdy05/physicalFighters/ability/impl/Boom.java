@@ -62,18 +62,17 @@ public final class Boom extends Ability {
     }
 
     static class Exploder extends BukkitRunnable {
-        private int count = 0;
         private final Player caster;
+
         public Exploder(Player caster) {
             this.caster = caster;
         }
+
+        @Override
         public void run() {
-            Player caster = this.caster;
             if (caster == null) return;
             AbilityUtils.splashTask(caster, caster.getLocation(), 10, entity
                     -> entity.getWorld().createExplosion(entity.getLocation(), 0.5f));
-            count++;
-            if (count >= 13) cancel();
         }
     }
 

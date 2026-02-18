@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.UUID;
 
-public class Poseidon extends Ability {
+public final class Poseidon extends Ability {
     // 능력 설정 상수
     private static final int GLASS_RANGE = 4;
     private static final int WATER_RANGE = 2;
@@ -47,7 +47,7 @@ public class Poseidon extends Ability {
         if (CustomData == 0) {
             PlayerInteractEvent event0 = (PlayerInteractEvent) event;
             Player player = event0.getPlayer();
-            if (!isOwner(player) || !isValidItem(Ability.DefaultItem)) {
+            if (!isOwner(player) || !isValidItem(Ability.DefaultItem) || InvincibilityManager.isDamageGuard()) {
                 return -1;
             }
 
@@ -57,12 +57,9 @@ public class Poseidon extends Ability {
                 return -1;
             }
 
-            if (InvincibilityManager.isDamageGuard()) {
-                player.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
-                return -1;
-            }
             return 0;
-        } else if (CustomData == 1) {
+        }
+        else if (CustomData == 1) {
             PlayerMoveEvent event1 = (PlayerMoveEvent) event;
             Player caster = event1.getPlayer();
             if (!isOwner(caster)) return -1;

@@ -5,6 +5,7 @@ import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -12,12 +13,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.UUID;
 
-public class Aegis extends Ability {
+public final class Aegis extends Ability {
     public Aegis(UUID playerUuid) {
         super(AbilitySpec.builder("이지스", Type.ActiveContinue, Rank.A)
-                .cooldown(28)
+                .cooldown(20)
                 .duration(6)
-                .guide(Usage.IronLeft + "6초 동안 무적이 됩니다.",
+                .guide(Usage.IronLeft + "능력 지속 시간동안 무적이 됩니다.",
                         "능력 사용 중엔 미러링 능력도 무시합니다.")
                 .build(), playerUuid);
     }
@@ -45,6 +46,7 @@ public class Aegis extends Ability {
             if (isOwner(event1.getEntity())) {
                 Player p = (Player) event1.getEntity();
                 p.setFireTicks(0);
+                SoundUtils.playShieldSound(getPlayer());
                 event1.setCancelled(true);
             }
         }

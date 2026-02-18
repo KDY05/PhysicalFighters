@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class FallArrow extends Ability implements BaseItem {
+public final class FallArrow extends Ability implements BaseItem {
     public FallArrow(UUID playerUuid) {
         super(AbilitySpec.builder("중력화살", Type.PassiveManual, Rank.S)
                 .guide("화살에 맞은 플레이어는 공중으로 뜹니다. [추가타 가능]")
@@ -33,21 +33,20 @@ public class FallArrow extends Ability implements BaseItem {
 
     @Override
     public int checkCondition(Event event, int CustomData) {
-        if (CustomData == 0) {
-            EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
-            if (event0.getDamager() instanceof Arrow) {
-                Arrow a = (Arrow) event0.getDamager();
-                if (a.getShooter() instanceof Player) {
-                    Player player = (Player) a.getShooter();
-                    if (isOwner(player) && event0.getEntity() instanceof LivingEntity) {
-                        LivingEntity entity = (LivingEntity) event0.getEntity();
-                        if (entity != player && !InvincibilityManager.isDamageGuard()) {
-                            return 0;
-                        }
-                    }
-                }
+        EntityDamageByEntityEvent event0 = (EntityDamageByEntityEvent) event;
+        if (!(event0.getDamager() instanceof Arrow)) return -1;
+
+        Arrow a = (Arrow) event0.getDamager();
+        if (!(a.getShooter() instanceof Player)) return -1;
+
+        Player player = (Player) a.getShooter();
+        if (isOwner(player) && event0.getEntity() instanceof LivingEntity) {
+            LivingEntity entity = (LivingEntity) event0.getEntity();
+            if (entity != player && !InvincibilityManager.isDamageGuard()) {
+                return 0;
             }
         }
+
         return -1;
     }
 

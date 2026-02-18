@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class Kimimaro extends Ability implements BaseItem {
+public final class Kimimaro extends Ability implements BaseItem {
     public Kimimaro(UUID playerUuid) {
         super(AbilitySpec.builder("키미마로", Type.PassiveManual, Rank.SS)
                 .guide("뼈다귀로 상대를 공격할 시에 강한 대미지를 주고,",

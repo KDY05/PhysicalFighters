@@ -4,6 +4,7 @@ import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,13 +14,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.UUID;
 
-public class Apollon extends Ability {
+public final class Apollon extends Ability {
     // 타겟 위치 저장
     private Location targetLocation = null;
 
     public Apollon(UUID playerUuid) {
-        super(AbilitySpec.builder("아폴론", Type.ActiveImmediately, Rank.S)
-                .cooldown(45)
+        super(AbilitySpec.builder("아폴론", Type.ActiveImmediately, Rank.SS)
+                .cooldown(40)
                 .guide(Usage.IronLeft + "바라보는 방향에 불구덩이를 만듭니다.")
                 .build(), playerUuid);
     }
@@ -32,20 +33,16 @@ public class Apollon extends Ability {
     @Override
     public int checkCondition(Event event, int CustomData) {
         PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-        Player p = event0.getPlayer();
+        Player caster = event0.getPlayer();
 
-        if (!isOwner(p) || !isValidItem(Ability.DefaultItem)) {
+        if (!isOwner(caster) || !isValidItem(Ability.DefaultItem) || InvincibilityManager.isDamageGuard()) {
             return -1;
         }
 
-        if (InvincibilityManager.isDamageGuard()) {
-            p.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
-            return -1;
-        }
-
-        targetLocation = AbilityUtils.getTargetLocation(p, 40);
+        targetLocation = AbilityUtils.getTargetLocation(caster, 40);
         if (targetLocation == null) {
-            p.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
+            SoundUtils.playErrorSound(caster);
+            caster.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
             return -1;
         }
 

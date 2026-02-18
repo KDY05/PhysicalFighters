@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class Clocking extends Ability {
+public final class Clocking extends Ability {
     public Clocking(UUID playerUuid) {
         super(AbilitySpec.builder("클로킹", Type.ActiveContinue, Rank.A)
                 .cooldown(30)

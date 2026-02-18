@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class Kaiji extends Ability implements BaseItem {
+public final class Kaiji extends Ability implements BaseItem {
     public Kaiji(UUID playerUuid) {
         super(AbilitySpec.builder("카이지", Type.PassiveManual, Rank.S)
                 .cooldown(20)

@@ -6,6 +6,7 @@ import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,7 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Akainu extends Ability {
+public final class Akainu extends Ability {
     // 범위 설정 상수
     private static final int OUTER_RADIUS = 3;      // 외부 범위 반지름
     private static final int INNER_RADIUS = 2;      // 내부 용암 반지름
@@ -37,7 +38,7 @@ public class Akainu extends Ability {
 
     public Akainu(UUID playerUuid) {
         super(AbilitySpec.builder("아카이누", Type.ActiveImmediately, Rank.SS)
-                .cooldown(45)
+                .cooldown(60)
                 .guide(Usage.IronLeft + "바라보는 곳의 땅을 용암으로 바꿉니다.",
                         "4초 뒤에 용암이 다시 굳으며 적을 땅속에 가둡니다.",
                         Usage.Passive + "화염 및 용암 대미지를 무시합니다.")
@@ -56,23 +57,20 @@ public class Akainu extends Ability {
             PlayerInteractEvent event0 = (PlayerInteractEvent) event;
             Player caster = event0.getPlayer();
 
-            if (!isOwner(caster) || !isValidItem(Ability.DefaultItem)) {
-                return -1;
-            }
-
-            if (InvincibilityManager.isDamageGuard()) {
-                caster.sendMessage(ChatColor.RED + "현재 사용할 수 없습니다.");
+            if (!isOwner(caster) || !isValidItem(Ability.DefaultItem) || InvincibilityManager.isDamageGuard()) {
                 return -1;
             }
 
             targetLocation = AbilityUtils.getTargetLocation(caster, 40);
             if (targetLocation == null) {
+                SoundUtils.playErrorSound(caster);
                 caster.sendMessage(ChatColor.RED + "거리가 너무 멉니다.");
                 return -1;
             }
 
             return 0;
-        } else if (CustomData == 1) {
+        }
+        else if (CustomData == 1) {
             EntityDamageEvent event1 = (EntityDamageEvent) event;
             if (isOwner(event1.getEntity()) && isLavaFireDamage(event1.getCause())) {
                 event1.setCancelled(true);

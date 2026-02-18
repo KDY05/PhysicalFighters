@@ -4,6 +4,7 @@ import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -12,7 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.UUID;
 
-public class Fly extends Ability {
+public final class Fly extends Ability {
     public Fly(UUID playerUuid) {
         super(AbilitySpec.builder("플라이", Type.ActiveContinue, Rank.GOD)
                 .cooldown(60)
@@ -38,6 +39,7 @@ public class Fly extends Ability {
         } else if (CustomData == 1) {
             EntityDamageEvent event1 = (EntityDamageEvent) event;
             if (isOwner(event1.getEntity()) && event1.getCause() == DamageCause.FALL) {
+                SoundUtils.playSuccessSound(getPlayer());
                 sendMessage(ChatColor.GREEN + "사뿐하게 떨어져 대미지를 받지 않았습니다.");
                 event1.setCancelled(true);
             }

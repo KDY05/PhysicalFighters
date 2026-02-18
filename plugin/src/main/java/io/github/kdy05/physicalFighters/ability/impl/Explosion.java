@@ -11,7 +11,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.UUID;
 
-public class Explosion extends Ability {
+public final class Explosion extends Ability {
     public Explosion(UUID playerUuid) {
         super(AbilitySpec.builder("익스플로젼", Type.PassiveManual, Rank.B)
                 .guide("사망 시 엄청난 연쇄 폭발을 일으킵니다.")
@@ -37,7 +37,7 @@ public class Explosion extends Ability {
         if (CustomData == 0) {
             PlayerDeathEvent event0 = (PlayerDeathEvent) event;
             Player killed = event0.getEntity();
-            killed.getWorld().createExplosion(killed.getLocation(), 8.0F, false);
+            killed.getWorld().createExplosion(killed.getLocation(), 14.0F, false);
         }
     }
 }

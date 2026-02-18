@@ -7,13 +7,11 @@ import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -21,22 +19,24 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
-public class Aokizi extends Ability {
+public final class Aokizi extends Ability {
+    private static final double SLOW_CHANCE = 0.30;
+    private static final int SLOW_DURATION = 60;
+    private static final int SLOW_AMPLIFIER = 0;
+
     public Aokizi(UUID playerUuid) {
         super(AbilitySpec.builder("아오키지", Type.ActiveImmediately, Rank.S)
                 .cooldown(1)
                 .showText(ShowText.CustomText)
                 .guide(Usage.IronLeft + "자신이 보고있는 방향으로 얼음을 날립니다.",
-                        Usage.IronRight + "바라보고 있는 5칸 이내의 물을 얼립니다.",
-                        Usage.Passive + "자신이 공격한 적을 2초간 느리게 만듭니다.")
+                        Usage.Passive + "자신이 공격한 적을 30% 확률로 3초간 느리게 만듭니다.")
                 .build(), playerUuid);
     }
 
     @Override
     public void registerEvents() {
         registerLeftClickEvent();
-        registerRightClickEvent();
-        EventManager.registerEntityDamageByEntity(new EventData(this, 2));
+        EventManager.registerEntityDamageByEntity(new EventData(this, 1));
     }
 
     @Override
@@ -46,24 +46,11 @@ public class Aokizi extends Ability {
             if (isOwner(event0.getPlayer()) && isValidItem(DefaultItem) && !InvincibilityManager.isDamageGuard())
                 return 0;
         } else if (CustomData == 1) {
-            PlayerInteractEvent event1 = (PlayerInteractEvent) event;
-            if (isOwner(event1.getPlayer()) && isValidItem(DefaultItem) && !InvincibilityManager.isDamageGuard()) {
-                Player p = event1.getPlayer();
-                Location location = AbilityUtils.getTargetLocation(p, 5);
-                if (location == null) {
-                    event1.getPlayer().sendMessage(ChatColor.GREEN + "5칸 이내의 물만 얼릴 수 있습니다.");
-                    return -1;
-                }
-                Block block = location.getBlock();
-                if (block.getType() != Material.WATER) return -1;
-                block.setType(Material.ICE);
-            }
-        } else if (CustomData == 2) {
-            EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
-            if (isOwner(event2.getDamager()) && !InvincibilityManager.isDamageGuard()
-                    && event2.getEntity() instanceof LivingEntity) {
-                LivingEntity entity = (LivingEntity) event2.getEntity();
-                entity.addPotionEffect(PotionEffectFactory.createSlowness(40, 0));
+            EntityDamageByEntityEvent event1 = (EntityDamageByEntityEvent) event;
+            if (isOwner(event1.getDamager()) && Math.random() < SLOW_CHANCE
+                    && event1.getEntity() instanceof LivingEntity) {
+                LivingEntity entity = (LivingEntity) event1.getEntity();
+                entity.addPotionEffect(PotionEffectFactory.createSlowness(SLOW_DURATION, SLOW_AMPLIFIER));
             }
         }
         return -1;
@@ -84,7 +71,7 @@ public class Aokizi extends Ability {
             if (block.getType() != Material.ICE)
                 new ExplosionTimer(block.getType(), block).runTaskLater(plugin, 15L);
             block.setType(Material.ICE);
-            AbilityUtils.splashTask(event0.getPlayer(), block.getLocation(), 2.5, entity -> entity.damage(8));
+            AbilityUtils.splashDamage(event0.getPlayer(), block.getLocation(), 2.5, 8, true);
         }
     }
 

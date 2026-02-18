@@ -11,7 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.UUID;
 
-public class Poison extends Ability {
+public final class Poison extends Ability {
     public Poison(UUID playerUuid) {
         super(AbilitySpec.builder("포이즌", Type.PassiveAutoMatic, Rank.A)
                 .guide("자신에게 공격받은 사람은 3초간 독에 감염됩니다.")

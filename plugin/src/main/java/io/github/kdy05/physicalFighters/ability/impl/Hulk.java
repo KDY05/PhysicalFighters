@@ -6,6 +6,7 @@ import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -14,7 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.UUID;
 
-public class Hulk extends Ability {
+public final class Hulk extends Ability {
 
     private double originalHealth = 20;
 
@@ -22,7 +23,7 @@ public class Hulk extends Ability {
         super(AbilitySpec.builder("헐크", Type.ActiveContinue, Rank.SSS)
                 .cooldown(180)
                 .duration(30)
-                .guide(Usage.IronRight + "30초간 각종 버프를 받으며 주는 대미지가 1.5배, 받는 대미지가 절반이 됩니다.")
+                .guide(Usage.IronRight + "지속 시간동안 각종 버프를 받으며 주는 대미지가 1.5배, 받는 대미지가 절반이 됩니다.")
                 .build(), playerUuid);
     }
 
@@ -63,6 +64,7 @@ public class Hulk extends Ability {
     public void onDurationStart() {
         Player caster = getPlayer();
         if (caster == null) return;
+        SoundUtils.broadcastWarningSound();
         caster.setHealth(20);
         caster.getWorld().createExplosion(caster.getLocation(), 0.0F);
         caster.addPotionEffect(PotionEffectFactory.createResistance(600, 0));

@@ -13,10 +13,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.util.Random;
 import java.util.UUID;
 
-// TODO: 리메이크, 대미지 계수로 조정(1.0~1.8배), 시간 지날 수록 0.1배수씩 자동 하락
-
-public class Zoro extends Ability {
-    private double dmg = 0;
+public final class Zoro extends Ability {
+    private double dmg = 5;
 
     public Zoro(UUID playerUuid) {
         super(AbilitySpec.builder("조로", Type.ActiveImmediately, Rank.S)

@@ -7,6 +7,7 @@ import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
+import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -41,12 +42,15 @@ public final class Trash extends Ability {
                 Ability casterAbility = AbilityUtils.findAbility(caster);
                 Ability targetAbility = AbilityUtils.findAbility(target);
                 if (casterAbility == null || targetAbility == null) return -1;
+
                 String casterTypeName = casterAbility.getAbilityName();
                 String targetTypeName = targetAbility.getAbilityName();
                 AbilityRegistry.deactivate(casterAbility, false);
                 AbilityRegistry.deactivate(targetAbility, false);
                 AbilityRegistry.createAndActivate(targetTypeName, caster, false);
                 AbilityRegistry.createAndActivate(casterTypeName, target, false);
+
+                SoundUtils.playSuccessSound(getPlayer());
                 caster.sendMessage("당신은 쓰레기 능력을 사용해 상대방과 능력을 바꿨습니다.");
                 target.sendMessage("당신은 쓰레기 능력에 의해 쓰레기가 되었습니다.");
             }

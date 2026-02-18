@@ -27,4 +27,9 @@ object SoundUtils {
         Bukkit.getOnlinePlayers().forEach { player -> player.playSound(player.location,
             Sound.ENTITY_ENDER_DRAGON_GROWL, 1f, 1f) }
     }
+
+    @JvmStatic
+    fun playShieldSound(player: Player?) {
+        player?.world?.playSound(player.location, Sound.ITEM_SHIELD_BLOCK, 1f, 1f)
+    }
 }

@@ -176,7 +176,7 @@ object AbilityRegistry {
         register { Trash(it) }               // 쓰레기
         // ㅇ
         register { Aokizi(it) }              // 아오키지
-        register { Archer(it) }              // 아쳐
+//        register { Archer(it) }              // 아쳐
         register { Akainu(it) }              // 아카이누
         register { Apollon(it) }             // 아폴론
         register { Ace(it) }                 // 에이스
@@ -190,7 +190,7 @@ object AbilityRegistry {
         register { Ckyomi(it) }              // 츠쿠요미
         // ㅋ
         register { Kaiji(it) }               // 카이지
-        register { Crocodile(it) }           // 크로커다일
+//        register { Crocodile(it) }           // 크로커다일
         register { Clocking(it) }            // 클로킹
         register { Kimimaro(it) }            // 키미마로
         register { Kijaru(it) }              // 키자루
@@ -206,7 +206,7 @@ object AbilityRegistry {
         register { Fly(it) }                 // 플라이
         // ㅎ
         register { NuclearPunch(it) }        // 핵펀치
-        register { Hulk(it) }               // 헐크
+        register { Hulk(it) }                // 헐크
         register { Assimilation(it) }        // 흡수
         register { Flower(it) }              // 흡혈초
     }

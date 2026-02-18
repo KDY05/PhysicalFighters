@@ -11,11 +11,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.UUID;
 
-public class NuclearPunch extends Ability {
+public final class NuclearPunch extends Ability {
     public NuclearPunch(UUID playerUuid) {
         super(AbilitySpec.builder("핵펀치", Type.ActiveImmediately, Rank.A)
                 .cooldown(45)
-                .guide(Usage.IronAttack + "대미지 20을 주며 매우 멀리 밀쳐버립니다.")
+                .guide(Usage.IronAttack + "강한 대미지를 주며 매우 멀리 밀쳐버립니다.")
                 .build(), playerUuid);
     }
 

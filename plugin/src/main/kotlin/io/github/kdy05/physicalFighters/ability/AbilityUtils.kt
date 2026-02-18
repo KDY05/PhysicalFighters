@@ -67,11 +67,20 @@ object AbilityUtils {
     }
 
     @JvmStatic
-    fun splashDamage(caster: Player, location: Location, bound: Double, damage: Double) {
+    @JvmOverloads
+    fun splashDamage(caster: Player, location: Location, bound: Double, damage: Double, cancelKnockback: Boolean = false) {
         caster.world.getNearbyEntities(location, bound, bound, bound)
             .filterIsInstance<LivingEntity>()
             .filter { it !== caster && isDifferentTeam(caster, it) }
-            .forEach { it.damage(damage, caster) }
+            .forEach { entity ->
+                if (cancelKnockback) {
+                    val vel = entity.velocity.clone()
+                    entity.damage(damage, caster)
+                    Bukkit.getScheduler().runTaskLater(PhysicalFighters.plugin, Runnable { entity.velocity = vel }, 1L)
+                } else {
+                    entity.damage(damage, caster)
+                }
+            }
     }
 
     @JvmStatic
@@ -92,10 +101,12 @@ object AbilityUtils {
     private const val INTERVAL_TICKS = 5L
 
     @JvmStatic
+    @JvmOverloads
     fun createCircleIndicator(
         player: Player,
         radius: Double,
         particle: Particle,
+        data: Any? = null,
     ): BukkitRunnable {
         val points = maxOf(8, (2 * Math.PI * radius * POINTS_PER_BLOCK).toInt())
         val task = object : BukkitRunnable() {
@@ -110,7 +121,7 @@ object AbilityUtils {
                     val angle = 2 * Math.PI * i / points
                     val x = center.x + radius * cos(angle)
                     val z = center.z + radius * sin(angle)
-                    world.spawnParticle(particle, x, center.y + 0.5, z, 1, 0.0, 0.0, 0.0, 0.0)
+                    world.spawnParticle(particle, x, center.y + 0.5, z, 1, 0.0, 0.0, 0.0, 0.0, data)
                 }
             }
         }
