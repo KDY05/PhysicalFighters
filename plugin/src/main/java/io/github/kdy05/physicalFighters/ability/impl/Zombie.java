@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.event.Event;
@@ -20,7 +19,7 @@ public final class Zombie extends Ability {
 
     @Override
     public void registerEvents() {
-        EventManager.registerEntityDamage(new EventData(this));
+        registerEntityDamage(new EventData(this));
     }
 
     @Override

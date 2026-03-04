@@ -4,7 +4,6 @@ import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import io.github.kdy05.physicalFighters.util.SoundUtils;
@@ -26,7 +25,7 @@ public final class Trash extends Ability {
 
     @Override
     public void registerEvents() {
-        EventManager.registerEntityDamageByEntity(new EventData(this));
+        registerEntityDamageByEntity(new EventData(this));
         registerRightClickEvent();
     }
 

@@ -3,7 +3,6 @@ package io.github.kdy05.physicalFighters.ability.impl;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.SoundUtils;
@@ -48,7 +47,7 @@ public final class Akainu extends Ability {
     @Override
     public void registerEvents() {
         registerLeftClickEvent();
-        EventManager.registerEntityDamage(new EventData(this, 1));
+        registerEntityDamage(new EventData(this, 1));
     }
 
     @Override

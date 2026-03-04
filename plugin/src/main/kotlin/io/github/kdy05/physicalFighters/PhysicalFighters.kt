@@ -40,7 +40,9 @@ class PhysicalFighters : JavaPlugin() {
         }
 
         configManager = ConfigManager(this)
-        server.pluginManager.registerEvents(EventManager(this), this)
+        val eventManager = EventManager(this)
+        AbilityRegistry.eventRegistry = eventManager.registry
+        server.pluginManager.registerEvents(eventManager, this)
 
         logger.info("능력 ${AbilityRegistry.getTypeCount()}개가 등록되었습니다.")
 

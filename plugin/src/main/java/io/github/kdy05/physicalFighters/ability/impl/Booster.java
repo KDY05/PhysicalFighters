@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.Bukkit;
@@ -26,7 +25,7 @@ public final class Booster extends Ability {
 
     @Override
     public void registerEvents() {
-        EventManager.registerEntityDamageByEntity(new EventData(this));
+        registerEntityDamageByEntity(new EventData(this));
     }
 
     @Override

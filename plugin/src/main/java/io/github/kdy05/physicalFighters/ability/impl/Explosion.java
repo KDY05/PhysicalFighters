@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -20,7 +19,7 @@ public final class Explosion extends Ability {
 
     @Override
     public void registerEvents() {
-        EventManager.registerEntityDeath(new EventData(this, 0));
+        registerEntityDeath(new EventData(this, 0));
     }
 
     @Override

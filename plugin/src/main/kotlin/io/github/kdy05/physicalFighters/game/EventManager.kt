@@ -20,52 +20,53 @@ import org.bukkit.inventory.ItemStack
 
 class EventManager(private val plugin: PhysicalFighters) : Listener {
 
-    companion object {
-        private val leftClickHandlers = mutableListOf<Ability>()
-        private val rightClickHandlers = mutableListOf<Ability>()
+    // --- Instance fields (이전 companion object의 정적 mutableList들) ---
 
-        private val onEntityTarget = mutableListOf<EventData>()
-        private val onEntityDamage = mutableListOf<EventData>()
-        private val onEntityDamageByEntity = mutableListOf<EventData>()
-        private val onEntityDeath = mutableListOf<EventData>()
-        private val onPlayerRespawn = mutableListOf<EventData>()
-        private val onBlockBreakEvent = mutableListOf<EventData>()
-        private val onSignChangeEvent = mutableListOf<EventData>()
-        private val onProjectileLaunchEvent = mutableListOf<EventData>()
-        private val onPlayerDropItem = mutableListOf<EventData>()
-        private val onPlayerMoveEvent = mutableListOf<EventData>()
-        private val onProjectileHitEvent = mutableListOf<EventData>()
+    private val leftClickHandlers = mutableListOf<Ability>()
+    private val rightClickHandlers = mutableListOf<Ability>()
 
-        private val allEventDataLists = listOf(
-            onEntityTarget, onEntityDamage, onEntityDamageByEntity, onEntityDeath,
-            onPlayerRespawn, onBlockBreakEvent, onSignChangeEvent,
-            onProjectileLaunchEvent, onPlayerDropItem, onPlayerMoveEvent, onProjectileHitEvent
-        )
+    private val onEntityTarget = mutableListOf<EventData>()
+    private val onEntityDamage = mutableListOf<EventData>()
+    private val onEntityDamageByEntity = mutableListOf<EventData>()
+    private val onEntityDeath = mutableListOf<EventData>()
+    private val onPlayerRespawn = mutableListOf<EventData>()
+    private val onBlockBreakEvent = mutableListOf<EventData>()
+    private val onSignChangeEvent = mutableListOf<EventData>()
+    private val onProjectileLaunchEvent = mutableListOf<EventData>()
+    private val onPlayerDropItem = mutableListOf<EventData>()
+    private val onPlayerMoveEvent = mutableListOf<EventData>()
+    private val onProjectileHitEvent = mutableListOf<EventData>()
 
-        // --- 이벤트 등록 API ---
+    private val allEventDataLists = listOf(
+        onEntityTarget, onEntityDamage, onEntityDamageByEntity, onEntityDeath,
+        onPlayerRespawn, onBlockBreakEvent, onSignChangeEvent,
+        onProjectileLaunchEvent, onPlayerDropItem, onPlayerMoveEvent, onProjectileHitEvent
+    )
 
-        @JvmStatic fun registerLeftClick(ability: Ability) { leftClickHandlers.add(ability) }
-        @JvmStatic fun registerRightClick(ability: Ability) { rightClickHandlers.add(ability) }
-
-        @JvmStatic fun registerEntityTarget(data: EventData) { onEntityTarget.add(data) }
-        @JvmStatic fun registerEntityDamage(data: EventData) { onEntityDamage.add(data) }
-        @JvmStatic fun registerEntityDamageByEntity(data: EventData) { onEntityDamageByEntity.add(data) }
-        @JvmStatic fun registerEntityDeath(data: EventData) { onEntityDeath.add(data) }
-        @JvmStatic fun registerPlayerRespawn(data: EventData) { onPlayerRespawn.add(data) }
-        @JvmStatic fun registerBlockBreak(data: EventData) { onBlockBreakEvent.add(data) }
-        @JvmStatic fun registerSignChange(data: EventData) { onSignChangeEvent.add(data) }
-        @JvmStatic fun registerProjectileLaunch(data: EventData) { onProjectileLaunchEvent.add(data) }
-        @JvmStatic fun registerPlayerDropItem(data: EventData) { onPlayerDropItem.add(data) }
-        @JvmStatic fun registerPlayerMove(data: EventData) { onPlayerMoveEvent.add(data) }
-        @JvmStatic fun registerProjectileHit(data: EventData) { onProjectileHitEvent.add(data) }
-
-        @JvmStatic
-        fun unregisterAll(ability: Ability) {
+    // EventManager가 EventRegistry를 직접 구현하면 @JvmStatic companion shim과
+    // JVM 시그니처가 충돌하므로, 익명 구현체를 val registry로 노출한다.
+    val registry: EventRegistry = object : EventRegistry {
+        override fun registerLeftClick(ability: Ability) { leftClickHandlers.add(ability) }
+        override fun registerRightClick(ability: Ability) { rightClickHandlers.add(ability) }
+        override fun registerEntityTarget(data: EventData) { onEntityTarget.add(data) }
+        override fun registerEntityDamage(data: EventData) { onEntityDamage.add(data) }
+        override fun registerEntityDamageByEntity(data: EventData) { onEntityDamageByEntity.add(data) }
+        override fun registerEntityDeath(data: EventData) { onEntityDeath.add(data) }
+        override fun registerPlayerRespawn(data: EventData) { onPlayerRespawn.add(data) }
+        override fun registerBlockBreak(data: EventData) { onBlockBreakEvent.add(data) }
+        override fun registerSignChange(data: EventData) { onSignChangeEvent.add(data) }
+        override fun registerProjectileLaunch(data: EventData) { onProjectileLaunchEvent.add(data) }
+        override fun registerPlayerDropItem(data: EventData) { onPlayerDropItem.add(data) }
+        override fun registerPlayerMove(data: EventData) { onPlayerMoveEvent.add(data) }
+        override fun registerProjectileHit(data: EventData) { onProjectileHitEvent.add(data) }
+        override fun unregisterAll(ability: Ability) {
             leftClickHandlers.remove(ability)
             rightClickHandlers.remove(ability)
             allEventDataLists.forEach { list -> list.removeAll { it.ability === ability } }
         }
     }
+
+    // --- @EventHandler ---
 
     @EventHandler
     fun onPlayerItemDamage(event: PlayerItemDamageEvent) {

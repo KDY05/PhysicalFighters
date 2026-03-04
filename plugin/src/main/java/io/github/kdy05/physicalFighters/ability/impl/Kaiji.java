@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
@@ -27,7 +26,7 @@ public final class Kaiji extends Ability implements BaseItem {
 
     @Override
     public void registerEvents() {
-        EventManager.registerEntityDamageByEntity(new EventData(this, 0));
+        registerEntityDamageByEntity(new EventData(this, 0));
     }
 
     @Override

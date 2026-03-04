@@ -5,7 +5,6 @@ import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.command.CommandInterface;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -31,7 +30,7 @@ public final class Assimilation extends Ability implements CommandInterface {
 
     @Override
     public void registerEvents() {
-        EventManager.registerEntityDeath(new EventData(this, 0));
+        registerEntityDeath(new EventData(this, 0));
     }
 
     @Override

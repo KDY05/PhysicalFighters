@@ -2,12 +2,17 @@ package io.github.kdy05.physicalFighters.ability
 
 import io.github.kdy05.physicalFighters.ability.impl.*
 import io.github.kdy05.physicalFighters.command.CommandInterface
+import io.github.kdy05.physicalFighters.game.EventRegistry
+import io.github.kdy05.physicalFighters.game.NoOpEventRegistry
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import java.util.*
 
 object AbilityRegistry {
+
+    @JvmField
+    var eventRegistry: EventRegistry = NoOpEventRegistry
 
     private val typesByName = LinkedHashMap<String, AbilityType>()
     private val typeList = mutableListOf<AbilityType>()
@@ -49,6 +54,7 @@ object AbilityRegistry {
     @JvmStatic
     @JvmOverloads
     fun activate(ability: Ability, textout: Boolean = true) {
+        ability.eventRegistry = eventRegistry
         ability.activate(textout)
         if (ability is CommandInterface) commandHandlers.add(ability)
     }

@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.Bukkit;
@@ -29,8 +28,8 @@ public final class Roclee extends Ability {
 
     @Override
     public void registerEvents() {
-        EventManager.registerEntityDamageByEntity(new EventData(this, 0));
-        EventManager.registerEntityDamage(new EventData(this, 1));
+        registerEntityDamageByEntity(new EventData(this, 0));
+        registerEntityDamage(new EventData(this, 1));
     }
 
     @Override

@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.BaseItem;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.ChatColor;
@@ -59,7 +58,7 @@ public final class Tranceball extends Ability implements BaseItem {
 
     @Override
     public void registerEvents() {
-        EventManager.registerProjectileHit(new EventData(this, 0));
+        registerProjectileHit(new EventData(this, 0));
         registerRightClickEvent();
     }
 

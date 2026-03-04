@@ -3,7 +3,6 @@ package io.github.kdy05.physicalFighters.ability.impl;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.ChatColor;
@@ -26,7 +25,7 @@ public final class Medic extends Ability {
 
     @Override
     public void registerEvents() {
-        EventManager.registerEntityDamageByEntity(new EventData(this));
+        registerEntityDamageByEntity(new EventData(this));
         registerRightClickEvent();
     }
 

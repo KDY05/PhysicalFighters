@@ -2,7 +2,6 @@ package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.SoundUtils;
@@ -34,8 +33,8 @@ public final class Teleporter extends Ability {
     @Override
     public void registerEvents() {
         registerLeftClickEvent();
-        EventManager.registerSignChange(new EventData(this, 1));
-        EventManager.registerBlockBreak(new EventData(this, 2));
+        registerSignChange(new EventData(this, 1));
+        registerBlockBreak(new EventData(this, 2));
     }
 
     @Override

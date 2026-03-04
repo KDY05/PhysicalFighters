@@ -3,7 +3,6 @@ package io.github.kdy05.physicalFighters.ability.impl;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.SoundUtils;
@@ -51,8 +50,8 @@ public final class MachineGun extends Ability {
     @Override
     public void registerEvents() {
         registerRightClickEvent();
-        EventManager.registerEntityDamageByEntity(new EventData(this, EVENT_DAMAGE));
-        EventManager.registerProjectileHit(new EventData(this, EVENT_PROJECTILE_HIT));
+        registerEntityDamageByEntity(new EventData(this, EVENT_DAMAGE));
+        registerProjectileHit(new EventData(this, EVENT_PROJECTILE_HIT));
     }
 
     @Override

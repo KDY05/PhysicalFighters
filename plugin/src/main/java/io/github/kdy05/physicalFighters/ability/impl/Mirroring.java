@@ -3,7 +3,6 @@ package io.github.kdy05.physicalFighters.ability.impl;
 import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilityRegistry;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.game.EventManager;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.Bukkit;
@@ -25,7 +24,7 @@ public final class Mirroring extends Ability {
 
     @Override
     public void registerEvents() {
-        EventManager.registerEntityDeath(new EventData(this));
+        registerEntityDeath(new EventData(this));
     }
 
     @Override

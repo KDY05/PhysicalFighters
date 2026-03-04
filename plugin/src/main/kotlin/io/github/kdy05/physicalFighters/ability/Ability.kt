@@ -1,7 +1,8 @@
 package io.github.kdy05.physicalFighters.ability
 
 import io.github.kdy05.physicalFighters.PhysicalFighters
-import io.github.kdy05.physicalFighters.game.EventManager
+import io.github.kdy05.physicalFighters.game.EventRegistry
+import io.github.kdy05.physicalFighters.game.NoOpEventRegistry
 import io.github.kdy05.physicalFighters.util.BaseItem
 import io.github.kdy05.physicalFighters.util.EventData
 import io.github.kdy05.physicalFighters.util.TimerBase
@@ -25,6 +26,8 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
     val minimumPlayers: Int get() = spec.minimumPlayers
     val isDeathExempt: Boolean get() = spec.isDeathExempt
     val isInfoPrimary: Boolean get() = spec.isInfoPrimary
+
+    var eventRegistry: EventRegistry = NoOpEventRegistry
 
     private val cTimer = CoolDownTimer(this)
     private val dTimer = DurationTimer(this, cTimer)
@@ -102,13 +105,21 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
 
     // --- Final methods ---
 
-    fun registerLeftClickEvent() {
-        EventManager.registerLeftClick(this)
-    }
+    fun registerLeftClickEvent() = eventRegistry.registerLeftClick(this)
+    fun registerRightClickEvent() = eventRegistry.registerRightClick(this)
 
-    fun registerRightClickEvent() {
-        EventManager.registerRightClick(this)
-    }
+    // Java 능력 파일에서 EventManager. 없이 직접 호출하기 위한 헬퍼
+    fun registerEntityTarget(data: EventData) = eventRegistry.registerEntityTarget(data)
+    fun registerEntityDamage(data: EventData) = eventRegistry.registerEntityDamage(data)
+    fun registerEntityDamageByEntity(data: EventData) = eventRegistry.registerEntityDamageByEntity(data)
+    fun registerEntityDeath(data: EventData) = eventRegistry.registerEntityDeath(data)
+    fun registerPlayerRespawn(data: EventData) = eventRegistry.registerPlayerRespawn(data)
+    fun registerBlockBreak(data: EventData) = eventRegistry.registerBlockBreak(data)
+    fun registerSignChange(data: EventData) = eventRegistry.registerSignChange(data)
+    fun registerProjectileLaunch(data: EventData) = eventRegistry.registerProjectileLaunch(data)
+    fun registerPlayerDropItem(data: EventData) = eventRegistry.registerPlayerDropItem(data)
+    fun registerPlayerMove(data: EventData) = eventRegistry.registerPlayerMove(data)
+    fun registerProjectileHit(data: EventData) = eventRegistry.registerProjectileHit(data)
 
     fun isValidItem(material: Material): Boolean {
         val player = player ?: return false
@@ -171,9 +182,9 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
     fun activate(textout: Boolean) {
         registerEvents()
         if (this is BaseItem) {
-            EventManager.registerPlayerDropItem(EventData(this, BaseItem.ITEM_DROP_EVENT))
-            EventManager.registerPlayerRespawn(EventData(this, BaseItem.ITEM_RESPAWN_EVENT))
-            EventManager.registerEntityDeath(EventData(this, BaseItem.ITEM_DEATH_EVENT))
+            eventRegistry.registerPlayerDropItem(EventData(this, BaseItem.ITEM_DROP_EVENT))
+            eventRegistry.registerPlayerRespawn(EventData(this, BaseItem.ITEM_RESPAWN_EVENT))
+            eventRegistry.registerEntityDeath(EventData(this, BaseItem.ITEM_DEATH_EVENT))
         }
         val player = player
         if (player != null) {
@@ -203,9 +214,7 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
         unregisterEvents()
     }
 
-    fun unregisterEvents() {
-        EventManager.unregisterAll(this)
-    }
+    fun unregisterEvents() = eventRegistry.unregisterAll(this)
 
     // Timer Managing
 
