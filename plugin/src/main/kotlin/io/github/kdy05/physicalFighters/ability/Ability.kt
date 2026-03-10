@@ -14,7 +14,11 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import java.util.*
 
-abstract class Ability protected constructor(val spec: AbilitySpec, private val playerUuid: UUID) {
+abstract class Ability @JvmOverloads protected constructor(
+    val spec: AbilitySpec,
+    private val playerUuid: UUID,
+    @JvmField val plugin: PhysicalFighters = PhysicalFighters.plugin
+) {
 
     val abilityName: String = spec.name
     val abilityType: Type = spec.type
@@ -75,9 +79,6 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
     }
 
     companion object {
-        @JvmField
-        val plugin: PhysicalFighters = PhysicalFighters.plugin
-
         @JvmField
         val DefaultItem: Material = Material.IRON_INGOT
     }
@@ -212,7 +213,7 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
 
     // --- Timer Classes ---
 
-    private class CoolDownTimer(private val ability: Ability) : TimerBase() {
+    private class CoolDownTimer(private val ability: Ability) : TimerBase(ability.plugin) {
 
         override fun onTimerStart() {
             ability.onCooldownStart()
@@ -238,7 +239,7 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
     private class DurationTimer(
         private val ability: Ability,
         private val ctimer: CoolDownTimer
-    ) : TimerBase() {
+    ) : TimerBase(ability.plugin) {
 
         override fun onTimerStart() {
             ability.onDurationStart()

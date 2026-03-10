@@ -250,7 +250,7 @@ class GameManager(private val plugin: PhysicalFighters) {
 
     // =========================== Timer Class ===========================
 
-    private inner class GameTimer(private val type: TimerType) : TimerBase() {
+    private inner class GameTimer(private val type: TimerType) : TimerBase(plugin) {
 
         override fun onTimerStart() {
             if (type == TimerType.START) {

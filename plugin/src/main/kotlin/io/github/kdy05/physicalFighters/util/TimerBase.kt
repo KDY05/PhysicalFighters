@@ -1,10 +1,10 @@
 package io.github.kdy05.physicalFighters.util
 
-import io.github.kdy05.physicalFighters.PhysicalFighters
+import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 
-abstract class TimerBase {
+abstract class TimerBase(private val plugin: Plugin) {
     private var task: BukkitTask? = null
     private var reverse = false
     private var maxCount = 0
@@ -37,7 +37,7 @@ abstract class TimerBase {
                     count += if (this@TimerBase.reverse) -1 else 1
                 }
             }
-        }.runTaskTimer(PhysicalFighters.plugin, 0L, 20L)
+        }.runTaskTimer(plugin, 0L, 20L)
 
         onTimerStart()
     }

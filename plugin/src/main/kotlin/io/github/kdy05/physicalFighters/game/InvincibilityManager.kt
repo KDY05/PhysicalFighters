@@ -12,7 +12,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
-class InvincibilityManager(plugin: PhysicalFighters) : Listener {
+class InvincibilityManager(private val plugin: PhysicalFighters) : Listener {
 
     private var invincibilityBar: BossBar? = null
     private var timer: InvincibilityTimer? = null
@@ -108,7 +108,7 @@ class InvincibilityManager(plugin: PhysicalFighters) : Listener {
         invincibilityBar?.removePlayer(event.player)
     }
 
-    private inner class InvincibilityTimer : TimerBase() {
+    private inner class InvincibilityTimer : TimerBase(plugin) {
         override fun onTimerStart() {}
 
         override fun onTimerRunning(count: Int) {
