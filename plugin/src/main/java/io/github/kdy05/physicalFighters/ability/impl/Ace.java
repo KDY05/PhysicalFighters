@@ -4,9 +4,12 @@ import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
+import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -22,22 +25,35 @@ public final class Ace extends Ability {
         super(AbilitySpec.builder("에이스", Type.ActiveContinue, Rank.S)
                 .cooldown(40)
                 .duration(20)
-                .guide(Usage.IronLeft + "능력 지속시간 동안 자신의 주변에 있는 적들을 불태웁니다.")
+                .guide(Usage.IronLeft + "능력 지속시간 동안 자신의 주변에 있는 적들을 불태웁니다.",
+                        Usage.Passive + "화염 대미지를 무시합니다.")
                 .build(), playerUuid);
     }
 
     @Override
     public void registerEvents() {
         eventRegistry.registerLeftClick(this);
+        eventRegistry.registerEntityDamage(new EventData(this, 1));
     }
 
     @Override
     public int checkCondition(Event event, int CustomData) {
-        PlayerInteractEvent event0 = (PlayerInteractEvent) event;
-        if (!InvincibilityManager.isDamageGuard() && isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
-            return 0;
+        if (CustomData == 0) {
+            PlayerInteractEvent event0 = (PlayerInteractEvent) event;
+            if (!InvincibilityManager.isDamageGuard() && isOwner(event0.getPlayer()) && isValidItem(Ability.DefaultItem)) {
+                return 0;
+            }
+        } else if (CustomData == 1) {
+            EntityDamageEvent event1 = (EntityDamageEvent) event;
+            if (isOwner(event1.getEntity()) && isFireDamage(event1.getCause())) {
+                event1.setCancelled(true);
+            }
         }
         return -1;
+    }
+
+    private boolean isFireDamage(DamageCause cause) {
+        return cause == DamageCause.FIRE || cause == DamageCause.FIRE_TICK;
     }
 
     @Override

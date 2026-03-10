@@ -72,14 +72,16 @@ public final class Fish extends BaseItemAbility {
     public void applyEffect(Event event, int CustomData) {
         if (CustomData == 0) {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
-            damageEvent.setDamage(damageEvent.getDamage() * FISHING_ROD_DAMAGE);
+            Player player = (Player) damageEvent.getDamager();
+            damageEvent.setDamage(player.getAttackCooldown() * FISHING_ROD_DAMAGE);
             if (damageEvent.getEntity() instanceof Player && Math.random() < FISH_DROP_RATE) {
                 Objects.requireNonNull(getPlayer()).getInventory().addItem(fish.clone());
                 SoundUtils.playSuccessSound(getPlayer());
             }
         } else if (CustomData == 1) {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
-            damageEvent.setDamage(damageEvent.getDamage() * FISH_DAMAGE);
+            Player player = (Player) damageEvent.getDamager();
+            damageEvent.setDamage(player.getAttackCooldown() * FISH_DAMAGE);
         }
     }
 
