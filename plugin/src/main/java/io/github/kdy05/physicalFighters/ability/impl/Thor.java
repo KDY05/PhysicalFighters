@@ -21,7 +21,7 @@ public final class Thor extends Ability {
     public Thor(UUID playerUuid) {
         super(AbilitySpec.builder("토르", Type.ActiveImmediately, Rank.S)
                 .cooldown(30)
-                .guide("바라보는 지점에 번개를 떨어뜨립니다.",
+                .guide(Usage.IronLeft + "바라보는 지점에 번개를 떨어뜨립니다.",
                         "번개가 떨어진 지점에 강한 폭발이 일어납니다.")
                 .build(), playerUuid);
     }

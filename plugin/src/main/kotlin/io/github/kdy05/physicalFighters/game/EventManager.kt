@@ -18,9 +18,7 @@ import org.bukkit.event.entity.*
 import org.bukkit.event.player.*
 import org.bukkit.inventory.ItemStack
 
-class EventManager(private val plugin: PhysicalFighters) : Listener {
-
-    // --- Instance fields (이전 companion object의 정적 mutableList들) ---
+class EventManager(private val plugin: PhysicalFighters) : Listener, EventRegistry {
 
     private val leftClickHandlers = mutableListOf<Ability>()
     private val rightClickHandlers = mutableListOf<Ability>()
@@ -43,27 +41,26 @@ class EventManager(private val plugin: PhysicalFighters) : Listener {
         onProjectileLaunchEvent, onPlayerDropItem, onPlayerMoveEvent, onProjectileHitEvent
     )
 
-    // EventManager가 EventRegistry를 직접 구현하면 @JvmStatic companion shim과
-    // JVM 시그니처가 충돌하므로, 익명 구현체를 val registry로 노출한다.
-    val registry: EventRegistry = object : EventRegistry {
-        override fun registerLeftClick(ability: Ability) { leftClickHandlers.add(ability) }
-        override fun registerRightClick(ability: Ability) { rightClickHandlers.add(ability) }
-        override fun registerEntityTarget(data: EventData) { onEntityTarget.add(data) }
-        override fun registerEntityDamage(data: EventData) { onEntityDamage.add(data) }
-        override fun registerEntityDamageByEntity(data: EventData) { onEntityDamageByEntity.add(data) }
-        override fun registerEntityDeath(data: EventData) { onEntityDeath.add(data) }
-        override fun registerPlayerRespawn(data: EventData) { onPlayerRespawn.add(data) }
-        override fun registerBlockBreak(data: EventData) { onBlockBreakEvent.add(data) }
-        override fun registerSignChange(data: EventData) { onSignChangeEvent.add(data) }
-        override fun registerProjectileLaunch(data: EventData) { onProjectileLaunchEvent.add(data) }
-        override fun registerPlayerDropItem(data: EventData) { onPlayerDropItem.add(data) }
-        override fun registerPlayerMove(data: EventData) { onPlayerMoveEvent.add(data) }
-        override fun registerProjectileHit(data: EventData) { onProjectileHitEvent.add(data) }
-        override fun unregisterAll(ability: Ability) {
-            leftClickHandlers.remove(ability)
-            rightClickHandlers.remove(ability)
-            allEventDataLists.forEach { list -> list.removeAll { it.ability === ability } }
-        }
+    // --- EventRegistry 구현 ---
+
+    override fun registerLeftClick(ability: Ability) { leftClickHandlers.add(ability) }
+    override fun registerRightClick(ability: Ability) { rightClickHandlers.add(ability) }
+    override fun registerEntityTarget(data: EventData) { onEntityTarget.add(data) }
+    override fun registerEntityDamage(data: EventData) { onEntityDamage.add(data) }
+    override fun registerEntityDamageByEntity(data: EventData) { onEntityDamageByEntity.add(data) }
+    override fun registerEntityDeath(data: EventData) { onEntityDeath.add(data) }
+    override fun registerPlayerRespawn(data: EventData) { onPlayerRespawn.add(data) }
+    override fun registerBlockBreak(data: EventData) { onBlockBreakEvent.add(data) }
+    override fun registerSignChange(data: EventData) { onSignChangeEvent.add(data) }
+    override fun registerProjectileLaunch(data: EventData) { onProjectileLaunchEvent.add(data) }
+    override fun registerPlayerDropItem(data: EventData) { onPlayerDropItem.add(data) }
+    override fun registerPlayerMove(data: EventData) { onPlayerMoveEvent.add(data) }
+    override fun registerProjectileHit(data: EventData) { onProjectileHitEvent.add(data) }
+
+    override fun unregisterAll(ability: Ability) {
+        leftClickHandlers.remove(ability)
+        rightClickHandlers.remove(ability)
+        allEventDataLists.forEach { list -> list.removeAll { it.ability === ability } }
     }
 
     // --- @EventHandler ---
@@ -115,13 +112,19 @@ class EventManager(private val plugin: PhysicalFighters) : Listener {
             val victim = event.entity
             AbilityRegistry.findAbilities(victim).forEach { it.cancelDTimer() }
 
+            // executeAbility를 handleVictim보다 먼저 실행해야 함:
+            // handleVictim → applyDeathPenalty → kickPlayer()가 동기 실행되면
+            // Bukkit.getPlayer(uuid)가 null을 반환하여 능력(미러링 등)이 발동 안 됨.
+            executeAbility(onEntityDeath, event)
+
             if (plugin.gameManager.scenario == GameManager.ScriptStatus.GameStart) {
                 val killer = victim.killer
                 handleVictim(victim)
                 printDeathMessage(event, killer, victim)
             }
+        } else {
+            executeAbility(onEntityDeath, event)
         }
-        executeAbility(onEntityDeath, event)
     }
 
     private fun handleVictim(victim: Player) {

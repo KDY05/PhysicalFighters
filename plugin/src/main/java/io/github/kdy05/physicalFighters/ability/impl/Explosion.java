@@ -36,7 +36,7 @@ public final class Explosion extends Ability {
         if (CustomData == 0) {
             PlayerDeathEvent event0 = (PlayerDeathEvent) event;
             Player killed = event0.getEntity();
-            killed.getWorld().createExplosion(killed.getLocation(), 14.0F, false);
+            killed.getWorld().createExplosion(killed.getLocation(), 7.0F, false);
         }
     }
 }
