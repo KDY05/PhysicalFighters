@@ -90,8 +90,7 @@ object AbilityRegistry {
     /** 선택 단계에서 인스턴스를 등록 (activate 하지 않음) */
     @JvmStatic
     fun addActive(ability: Ability) {
-        val player = ability.player ?: return
-        addToIndex(ability, player)
+        abilitiesByPlayer.getOrPut(ability.playerUuid) { mutableListOf() }.add(ability)
     }
 
     @JvmStatic
@@ -135,11 +134,10 @@ object AbilityRegistry {
     }
 
     private fun removeFromIndex(ability: Ability) {
-        val player = ability.player ?: return
-        val list = abilitiesByPlayer[player.uniqueId] ?: return
+        val list = abilitiesByPlayer[ability.playerUuid] ?: return
         list.remove(ability)
         if (list.isEmpty()) {
-            abilitiesByPlayer.remove(player.uniqueId)
+            abilitiesByPlayer.remove(ability.playerUuid)
         }
     }
 
@@ -182,7 +180,6 @@ object AbilityRegistry {
         register { Trash(it) }               // 쓰레기
         // ㅇ
         register { Aokizi(it) }              // 아오키지
-//        register { Archer(it) }              // 아쳐
         register { Akainu(it) }              // 아카이누
         register { Apollon(it) }             // 아폴론
         register { Ace(it) }                 // 에이스
@@ -196,7 +193,6 @@ object AbilityRegistry {
         register { Ckyomi(it) }              // 츠쿠요미
         // ㅋ
         register { Kaiji(it) }               // 카이지
-//        register { Crocodile(it) }           // 크로커다일
         register { Clocking(it) }            // 클로킹
         register { Kimimaro(it) }            // 키미마로
         register { Kijaru(it) }              // 키자루

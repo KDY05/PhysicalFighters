@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public final class Mirroring extends Ability {
@@ -56,8 +55,9 @@ public final class Mirroring extends Ability {
             return;
         }
 
-        Objects.requireNonNull(player.getKiller()).damage(5000);
+        Player killer = player.getKiller();
+        killer.damage(5000);
         Bukkit.broadcastMessage(String.format(ChatColor.RED + "%s님의 미러링에 의해 %s님이 죽었습니다.",
-                player.getName(), player.getKiller().getName()));
+                player.getName(), killer.getName()));
     }
 }

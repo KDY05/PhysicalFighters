@@ -16,7 +16,7 @@ import java.util.*
 
 abstract class Ability @JvmOverloads protected constructor(
     val spec: AbilitySpec,
-    private val playerUuid: UUID,
+    val playerUuid: UUID,
     @JvmField val plugin: PhysicalFighters = PhysicalFighters.plugin
 ) {
 

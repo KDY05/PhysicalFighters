@@ -61,18 +61,16 @@ public final class Phoenix extends Ability {
             PlayerDeathEvent event0 = (PlayerDeathEvent) event;
             Player killed = event0.getEntity();
 
-            invsave.put(killed.getUniqueId(), killed.getInventory().getContents());
-            event0.getDrops().clear();
-
             if (this.AbilityUse) {
                 Bukkit.broadcastMessage(ChatColor.RED + "불사조가 죽었습니다. 더 이상 부활할수 없습니다.");
                 GameUtils.applyDeathPenalty(killed);
             } else {
+                invsave.put(killed.getUniqueId(), killed.getInventory().getContents());
+                event0.getDrops().clear();
                 Bukkit.broadcastMessage(ChatColor.RED + "불사조가 죽었습니다. 다시 부활할 수 있습니다.");
-            }
-
-            if (killed.getKiller() != null) {
-                this.AbilityUse = true;
+                if (killed.getKiller() != null) {
+                    this.AbilityUse = true;
+                }
             }
             this.ReviveCounter += 1;
         }
@@ -82,8 +80,10 @@ public final class Phoenix extends Ability {
             UUID uuid = player.getUniqueId();
             ItemStack[] inv = invsave.get(uuid);
 
+            if (inv == null) return;
+
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                if (inv != null && player.isOnline()) {
+                if (player.isOnline()) {
                     player.getInventory().setContents(inv);
                 }
                 invsave.remove(uuid);
