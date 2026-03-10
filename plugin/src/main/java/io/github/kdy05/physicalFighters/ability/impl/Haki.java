@@ -35,7 +35,7 @@ public final class Haki extends Ability {
 
     @Override
     public void registerEvents() {
-        registerLeftClickEvent();
+        eventRegistry.registerLeftClick(this);
     }
 
     @Override

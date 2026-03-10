@@ -39,9 +39,9 @@ public final class Kijaru extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDamageByEntity(new EventData(this));
-        registerRightClickEvent();
-        registerEntityDamage(new EventData(this, 2));
+        eventRegistry.registerEntityDamageByEntity(new EventData(this));
+        eventRegistry.registerRightClick(this);
+        eventRegistry.registerEntityDamage(new EventData(this, 2));
     }
 
     @Override

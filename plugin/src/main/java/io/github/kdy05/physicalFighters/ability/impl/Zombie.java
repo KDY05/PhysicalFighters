@@ -19,7 +19,7 @@ public final class Zombie extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDamage(new EventData(this));
+        eventRegistry.registerEntityDamage(new EventData(this));
     }
 
     @Override

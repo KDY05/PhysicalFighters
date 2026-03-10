@@ -58,8 +58,8 @@ public final class Tranceball extends Ability implements BaseItem {
 
     @Override
     public void registerEvents() {
-        registerProjectileHit(new EventData(this, 0));
-        registerRightClickEvent();
+        eventRegistry.registerProjectileHit(new EventData(this, 0));
+        eventRegistry.registerRightClick(this);
     }
 
     @Override

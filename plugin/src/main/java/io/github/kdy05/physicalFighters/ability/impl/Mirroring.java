@@ -24,7 +24,7 @@ public final class Mirroring extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDeath(new EventData(this));
+        eventRegistry.registerEntityDeath(new EventData(this));
     }
 
     @Override

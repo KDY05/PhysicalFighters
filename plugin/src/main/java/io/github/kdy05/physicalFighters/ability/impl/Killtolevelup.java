@@ -30,8 +30,8 @@ public final class Killtolevelup extends Ability implements BaseItem {
 
     @Override
     public void registerEvents() {
-        registerEntityDamageByEntity(new EventData(this, 0));
-        registerEntityDeath(new EventData(this, 1));
+        eventRegistry.registerEntityDamageByEntity(new EventData(this, 0));
+        eventRegistry.registerEntityDeath(new EventData(this, 1));
     }
 
     @Override

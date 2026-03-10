@@ -37,8 +37,8 @@ public final class Poseidon extends Ability {
 
     @Override
     public void registerEvents() {
-        registerLeftClickEvent();
-        registerPlayerMove(new EventData(this, 1));
+        eventRegistry.registerLeftClick(this);
+        eventRegistry.registerPlayerMove(new EventData(this, 1));
     }
 
     @Override

@@ -22,7 +22,7 @@ public final class Clocking extends Ability {
 
     @Override
     public void registerEvents() {
-        registerLeftClickEvent();
+        eventRegistry.registerLeftClick(this);
     }
 
     @Override

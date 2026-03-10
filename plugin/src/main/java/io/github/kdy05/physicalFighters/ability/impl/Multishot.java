@@ -28,7 +28,7 @@ public final class Multishot extends Ability implements BaseItem {
 
     @Override
     public void registerEvents() {
-        registerProjectileLaunch(new EventData(this, 0));
+        eventRegistry.registerProjectileLaunch(new EventData(this, 0));
     }
 
     @Override

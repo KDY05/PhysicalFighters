@@ -25,8 +25,8 @@ public final class Flower extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDamageByEntity(new EventData(this));
-        registerRightClickEvent();
+        eventRegistry.registerEntityDamageByEntity(new EventData(this));
+        eventRegistry.registerRightClick(this);
     }
 
     @Override

@@ -36,7 +36,7 @@ public final class Guard extends Ability {
 
     @Override
     public void registerEvents() {
-        registerLeftClickEvent();
+        eventRegistry.registerLeftClick(this);
     }
 
     @Override

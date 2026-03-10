@@ -20,7 +20,7 @@ public final class Sasuke extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDamageByEntity(new EventData(this));
+        eventRegistry.registerEntityDamageByEntity(new EventData(this));
     }
 
     @Override

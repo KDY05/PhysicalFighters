@@ -19,7 +19,7 @@ public final class Explosion extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDeath(new EventData(this, 0));
+        eventRegistry.registerEntityDeath(new EventData(this, 0));
     }
 
     @Override

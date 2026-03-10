@@ -28,8 +28,8 @@ public final class Hulk extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDamageByEntity(new EventData(this, 0));
-        registerRightClickEvent();
+        eventRegistry.registerEntityDamageByEntity(new EventData(this, 0));
+        eventRegistry.registerRightClick(this);
     }
 
     @Override

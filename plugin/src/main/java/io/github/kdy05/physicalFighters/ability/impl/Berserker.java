@@ -20,7 +20,7 @@ public final class Berserker extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDamageByEntity(new EventData(this, 0));
+        eventRegistry.registerEntityDamageByEntity(new EventData(this, 0));
     }
 
     @Override

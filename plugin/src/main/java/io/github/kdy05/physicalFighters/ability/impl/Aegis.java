@@ -24,8 +24,8 @@ public final class Aegis extends Ability {
 
     @Override
     public void registerEvents() {
-        registerLeftClickEvent();
-        registerEntityDamage(new EventData(this, 1));
+        eventRegistry.registerLeftClick(this);
+        eventRegistry.registerEntityDamage(new EventData(this, 1));
     }
 
     @Override

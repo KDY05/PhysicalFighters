@@ -34,8 +34,8 @@ public final class Aokizi extends Ability {
 
     @Override
     public void registerEvents() {
-        registerLeftClickEvent();
-        registerEntityDamageByEntity(new EventData(this, 1));
+        eventRegistry.registerLeftClick(this);
+        eventRegistry.registerEntityDamageByEntity(new EventData(this, 1));
     }
 
     @Override

@@ -32,8 +32,8 @@ public final class Shadow extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDamage(new EventData(this, 0));
-        registerEntityDamageByEntity(new EventData(this, 1));
+        eventRegistry.registerEntityDamage(new EventData(this, 0));
+        eventRegistry.registerEntityDamageByEntity(new EventData(this, 1));
     }
 
     @Override

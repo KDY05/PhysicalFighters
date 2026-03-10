@@ -25,8 +25,8 @@ public final class Trash extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDamageByEntity(new EventData(this));
-        registerRightClickEvent();
+        eventRegistry.registerEntityDamageByEntity(new EventData(this));
+        eventRegistry.registerRightClick(this);
     }
 
     @Override

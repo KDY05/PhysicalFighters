@@ -30,7 +30,7 @@ public final class Assimilation extends Ability implements CommandInterface {
 
     @Override
     public void registerEvents() {
-        registerEntityDeath(new EventData(this, 0));
+        eventRegistry.registerEntityDeath(new EventData(this, 0));
     }
 
     @Override

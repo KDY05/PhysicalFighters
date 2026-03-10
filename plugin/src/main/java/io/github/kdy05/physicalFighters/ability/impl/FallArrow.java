@@ -27,7 +27,7 @@ public final class FallArrow extends Ability implements BaseItem {
 
     @Override
     public void registerEvents() {
-        registerEntityDamageByEntity(new EventData(this, 0));
+        eventRegistry.registerEntityDamageByEntity(new EventData(this, 0));
     }
 
     @Override

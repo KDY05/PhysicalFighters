@@ -37,8 +37,8 @@ public class Crocodile extends Ability {
 
     @Override
     public void registerEvents() {
-        registerLeftClickEvent();
-        registerRightClickEvent();
+        eventRegistry.registerLeftClick(this);
+        eventRegistry.registerRightClick(this);
     }
 
     @Override

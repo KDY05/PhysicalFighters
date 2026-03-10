@@ -23,7 +23,7 @@ public final class ShockWave extends Ability {
 
     @Override
     public void registerEvents() {
-        registerLeftClickEvent();
+        eventRegistry.registerLeftClick(this);
     }
 
     @Override

@@ -31,9 +31,9 @@ public final class CP9 extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDamageByEntity(new EventData(this, 0));
-        registerRightClickEvent();
-        registerEntityDamage(new EventData(this, 2));
+        eventRegistry.registerEntityDamageByEntity(new EventData(this, 0));
+        eventRegistry.registerRightClick(this);
+        eventRegistry.registerEntityDamage(new EventData(this, 2));
     }
 
     @Override

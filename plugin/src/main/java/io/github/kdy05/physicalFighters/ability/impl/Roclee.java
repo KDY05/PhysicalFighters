@@ -28,8 +28,8 @@ public final class Roclee extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDamageByEntity(new EventData(this, 0));
-        registerEntityDamage(new EventData(this, 1));
+        eventRegistry.registerEntityDamageByEntity(new EventData(this, 0));
+        eventRegistry.registerEntityDamage(new EventData(this, 1));
     }
 
     @Override

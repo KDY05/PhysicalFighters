@@ -46,8 +46,8 @@ public final class Akainu extends Ability {
 
     @Override
     public void registerEvents() {
-        registerLeftClickEvent();
-        registerEntityDamage(new EventData(this, 1));
+        eventRegistry.registerLeftClick(this);
+        eventRegistry.registerEntityDamage(new EventData(this, 1));
     }
 
     @Override

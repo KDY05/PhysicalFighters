@@ -28,7 +28,7 @@ public final class Ace extends Ability {
 
     @Override
     public void registerEvents() {
-        registerLeftClickEvent();
+        eventRegistry.registerLeftClick(this);
     }
 
     @Override

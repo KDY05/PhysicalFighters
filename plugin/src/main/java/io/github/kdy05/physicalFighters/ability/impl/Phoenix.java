@@ -34,8 +34,8 @@ public final class Phoenix extends Ability {
 
     @Override
     public void registerEvents() {
-        registerEntityDeath(new EventData(this, 0));
-        registerPlayerRespawn(new EventData(this, 1));
+        eventRegistry.registerEntityDeath(new EventData(this, 0));
+        eventRegistry.registerPlayerRespawn(new EventData(this, 1));
     }
 
     @Override

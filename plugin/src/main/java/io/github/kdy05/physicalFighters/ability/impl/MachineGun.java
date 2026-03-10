@@ -49,9 +49,9 @@ public final class MachineGun extends Ability {
 
     @Override
     public void registerEvents() {
-        registerRightClickEvent();
-        registerEntityDamageByEntity(new EventData(this, EVENT_DAMAGE));
-        registerProjectileHit(new EventData(this, EVENT_PROJECTILE_HIT));
+        eventRegistry.registerRightClick(this);
+        eventRegistry.registerEntityDamageByEntity(new EventData(this, EVENT_DAMAGE));
+        eventRegistry.registerProjectileHit(new EventData(this, EVENT_PROJECTILE_HIT));
     }
 
     @Override

@@ -32,9 +32,9 @@ public final class Teleporter extends Ability {
 
     @Override
     public void registerEvents() {
-        registerLeftClickEvent();
-        registerSignChange(new EventData(this, 1));
-        registerBlockBreak(new EventData(this, 2));
+        eventRegistry.registerLeftClick(this);
+        eventRegistry.registerSignChange(new EventData(this, 1));
+        eventRegistry.registerBlockBreak(new EventData(this, 2));
     }
 
     @Override

@@ -32,8 +32,8 @@ public final class ReverseAlchemy extends Ability {
 
     @Override
     public void registerEvents() {
-        registerLeftClickEvent();
-        registerRightClickEvent();
+        eventRegistry.registerLeftClick(this);
+        eventRegistry.registerRightClick(this);
     }
 
     @Override

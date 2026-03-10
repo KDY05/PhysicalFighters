@@ -27,6 +27,7 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
     val isDeathExempt: Boolean get() = spec.isDeathExempt
     val isInfoPrimary: Boolean get() = spec.isInfoPrimary
 
+    @JvmField
     var eventRegistry: EventRegistry = NoOpEventRegistry
 
     private val cTimer = CoolDownTimer(this)
@@ -104,22 +105,6 @@ abstract class Ability protected constructor(val spec: AbilitySpec, private val 
     open fun onDurationFinalize() {}
 
     // --- Final methods ---
-
-    fun registerLeftClickEvent() = eventRegistry.registerLeftClick(this)
-    fun registerRightClickEvent() = eventRegistry.registerRightClick(this)
-
-    // Java 능력 파일에서 EventManager. 없이 직접 호출하기 위한 헬퍼
-    fun registerEntityTarget(data: EventData) = eventRegistry.registerEntityTarget(data)
-    fun registerEntityDamage(data: EventData) = eventRegistry.registerEntityDamage(data)
-    fun registerEntityDamageByEntity(data: EventData) = eventRegistry.registerEntityDamageByEntity(data)
-    fun registerEntityDeath(data: EventData) = eventRegistry.registerEntityDeath(data)
-    fun registerPlayerRespawn(data: EventData) = eventRegistry.registerPlayerRespawn(data)
-    fun registerBlockBreak(data: EventData) = eventRegistry.registerBlockBreak(data)
-    fun registerSignChange(data: EventData) = eventRegistry.registerSignChange(data)
-    fun registerProjectileLaunch(data: EventData) = eventRegistry.registerProjectileLaunch(data)
-    fun registerPlayerDropItem(data: EventData) = eventRegistry.registerPlayerDropItem(data)
-    fun registerPlayerMove(data: EventData) = eventRegistry.registerPlayerMove(data)
-    fun registerProjectileHit(data: EventData) = eventRegistry.registerProjectileHit(data)
 
     fun isValidItem(material: Material): Boolean {
         val player = player ?: return false
