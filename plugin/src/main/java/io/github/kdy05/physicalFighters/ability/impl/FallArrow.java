@@ -1,10 +1,9 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
-import io.github.kdy05.physicalFighters.util.BaseItem;
+import io.github.kdy05.physicalFighters.util.BaseItemAbility;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public final class FallArrow extends Ability implements BaseItem {
+public final class FallArrow extends BaseItemAbility {
     public FallArrow(UUID playerUuid) {
         super(AbilitySpec.builder("중력화살", Type.PassiveManual, Rank.S)
                 .guide("화살에 맞은 플레이어는 공중으로 뜹니다. [추가타 가능]")
@@ -26,7 +25,7 @@ public final class FallArrow extends Ability implements BaseItem {
     }
 
     @Override
-    public void registerEvents() {
+    public void registerAbilityEvents() {
         eventRegistry.registerEntityDamageByEntity(new EventData(this, 0));
     }
 

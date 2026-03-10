@@ -1,8 +1,7 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.util.BaseItem;
+import io.github.kdy05.physicalFighters.util.BaseItemAbility;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import org.bukkit.Material;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public final class PoisonArrow extends Ability implements BaseItem {
+public final class PoisonArrow extends BaseItemAbility {
     public PoisonArrow(UUID playerUuid) {
         super(AbilitySpec.builder("독화살", Type.PassiveManual, Rank.B)
                 .guide("화살에 맞은 적은 6초간 독에걸립니다.",
@@ -25,7 +24,7 @@ public final class PoisonArrow extends Ability implements BaseItem {
     }
 
     @Override
-    public void registerEvents() {
+    public void registerAbilityEvents() {
         eventRegistry.registerEntityDamageByEntity(new EventData(this, 0));
     }
 

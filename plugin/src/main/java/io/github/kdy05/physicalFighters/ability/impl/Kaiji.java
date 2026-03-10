@@ -1,9 +1,8 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
-import io.github.kdy05.physicalFighters.util.BaseItem;
+import io.github.kdy05.physicalFighters.util.BaseItemAbility;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public final class Kaiji extends Ability implements BaseItem {
+public final class Kaiji extends BaseItemAbility {
     public Kaiji(UUID playerUuid) {
         super(AbilitySpec.builder("카이지", Type.PassiveManual, Rank.S)
                 .cooldown(20)
@@ -25,7 +24,7 @@ public final class Kaiji extends Ability implements BaseItem {
     }
 
     @Override
-    public void registerEvents() {
+    public void registerAbilityEvents() {
         eventRegistry.registerEntityDamageByEntity(new EventData(this, 0));
     }
 

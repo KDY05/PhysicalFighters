@@ -1,8 +1,7 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.util.BaseItem;
+import io.github.kdy05.physicalFighters.util.BaseItemAbility;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.ChatColor;
@@ -19,7 +18,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.UUID;
 
-public final class Fish extends Ability implements BaseItem {
+public final class Fish extends BaseItemAbility {
     // 능력 설정 상수
     private static final double FISHING_ROD_DAMAGE = 6.0;
     private static final double FISH_DAMAGE = 9.0;
@@ -52,7 +51,7 @@ public final class Fish extends Ability implements BaseItem {
     }
 
     @Override
-    public void registerEvents() {
+    public void registerAbilityEvents() {
         eventRegistry.registerEntityDamageByEntity(new EventData(this, 0));
     }
 

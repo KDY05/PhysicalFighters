@@ -1,8 +1,7 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.util.BaseItem;
+import io.github.kdy05.physicalFighters.util.BaseItemAbility;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory;
 import org.bukkit.Material;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public final class Kimimaro extends Ability implements BaseItem {
+public final class Kimimaro extends BaseItemAbility {
     public Kimimaro(UUID playerUuid) {
         super(AbilitySpec.builder("키미마로", Type.PassiveManual, Rank.SS)
                 .guide("뼈다귀로 상대를 공격할 시에 강한 대미지를 주고,",
@@ -23,7 +22,7 @@ public final class Kimimaro extends Ability implements BaseItem {
     }
 
     @Override
-    public void registerEvents() {
+    public void registerAbilityEvents() {
         eventRegistry.registerEntityDamageByEntity(new EventData(this, 0));
     }
 

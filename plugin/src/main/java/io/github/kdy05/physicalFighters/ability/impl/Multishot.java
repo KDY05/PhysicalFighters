@@ -1,8 +1,7 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.util.BaseItem;
+import io.github.kdy05.physicalFighters.util.BaseItemAbility;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public final class Multishot extends Ability implements BaseItem {
+public final class Multishot extends BaseItemAbility {
     public Multishot(UUID playerUuid) {
         super(AbilitySpec.builder("멀티샷", Type.ActiveImmediately, Rank.A)
                 .cooldown(3)
@@ -27,7 +26,7 @@ public final class Multishot extends Ability implements BaseItem {
     }
 
     @Override
-    public void registerEvents() {
+    public void registerAbilityEvents() {
         eventRegistry.registerProjectileLaunch(new EventData(this, 0));
     }
 

@@ -1,8 +1,7 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.util.BaseItem;
+import io.github.kdy05.physicalFighters.util.BaseItemAbility;
 import io.github.kdy05.physicalFighters.util.EventData;
 import io.github.kdy05.physicalFighters.util.SoundUtils;
 import org.bukkit.Bukkit;
@@ -17,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public final class Killtolevelup extends Ability implements BaseItem {
+public final class Killtolevelup extends BaseItemAbility {
 
     private int damage = 5;
 
@@ -29,7 +28,7 @@ public final class Killtolevelup extends Ability implements BaseItem {
     }
 
     @Override
-    public void registerEvents() {
+    public void registerAbilityEvents() {
         eventRegistry.registerEntityDamageByEntity(new EventData(this, 0));
         eventRegistry.registerEntityDeath(new EventData(this, 1));
     }

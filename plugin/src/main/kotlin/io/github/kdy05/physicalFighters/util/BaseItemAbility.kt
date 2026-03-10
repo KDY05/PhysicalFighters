@@ -1,19 +1,58 @@
 package io.github.kdy05.physicalFighters.util
 
+import io.github.kdy05.physicalFighters.PhysicalFighters
+import io.github.kdy05.physicalFighters.ability.Ability
+import io.github.kdy05.physicalFighters.ability.AbilitySpec
 import org.bukkit.ChatColor
-import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.inventory.ItemStack
+import java.util.UUID
 
-interface BaseItem {
-    val player: Player?
-    fun getBaseItem(): Array<ItemStack>
-    fun getItemName(): String
-    fun isOwner(e: Entity): Boolean
+abstract class BaseItemAbility @JvmOverloads protected constructor(
+    spec: AbilitySpec,
+    playerUuid: UUID,
+    plugin: PhysicalFighters = PhysicalFighters.plugin
+) : Ability(spec, playerUuid, plugin) {
+
+    abstract fun getBaseItem(): Array<ItemStack>
+    abstract fun getItemName(): String
+
+    // Template method: registers item events automatically, then delegates to subclass
+    final override fun registerEvents() {
+        registerAbilityEvents()
+        eventRegistry.registerPlayerDropItem(EventData(this, ITEM_DROP_EVENT))
+        eventRegistry.registerPlayerRespawn(EventData(this, ITEM_RESPAWN_EVENT))
+        eventRegistry.registerEntityDeath(EventData(this, ITEM_DEATH_EVENT))
+    }
+
+    // Subclasses implement this instead of registerEvents()
+    abstract fun registerAbilityEvents()
+
+    override fun onActivate(p: Player) {
+        super.onActivate(p)
+        giveBaseItem(p)
+    }
+
+    override fun onDeactivate(p: Player) {
+        super.onDeactivate(p)
+        removeBaseItem(p)
+    }
+
+    // Intercepts item events before delegating to normal execute() flow
+    override fun execute(event: Event?, customData: Int) {
+        if (event != null) {
+            when (customData) {
+                ITEM_DROP_EVENT -> { handleItemDrop(event); return }
+                ITEM_RESPAWN_EVENT -> { handleItemRespawn(event); return }
+                ITEM_DEATH_EVENT -> { handleItemDeath(event); return }
+            }
+        }
+        super.execute(event, customData)
+    }
 
     fun handleItemDrop(event: Event) {
         val dropEvent = event as PlayerDropItemEvent

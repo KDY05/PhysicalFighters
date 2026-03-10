@@ -1,8 +1,7 @@
 package io.github.kdy05.physicalFighters.ability.impl;
 
-import io.github.kdy05.physicalFighters.ability.Ability;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
-import io.github.kdy05.physicalFighters.util.BaseItem;
+import io.github.kdy05.physicalFighters.util.BaseItemAbility;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -18,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public final class Tranceball extends Ability implements BaseItem {
+public final class Tranceball extends BaseItemAbility {
 
     private enum Mode {
         Swap("스왑"), Grab("그랩"), Chase("추격");
@@ -57,7 +56,7 @@ public final class Tranceball extends Ability implements BaseItem {
     }
 
     @Override
-    public void registerEvents() {
+    public void registerAbilityEvents() {
         eventRegistry.registerProjectileHit(new EventData(this, 0));
         eventRegistry.registerRightClick(this);
     }
@@ -114,6 +113,7 @@ public final class Tranceball extends Ability implements BaseItem {
 
     @Override
     public void onActivate(@NotNull Player p) {
+        super.onActivate(p);
         this.mode = Mode.Swap;
     }
 

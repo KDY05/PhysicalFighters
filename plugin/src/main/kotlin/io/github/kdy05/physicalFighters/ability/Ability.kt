@@ -3,8 +3,6 @@ package io.github.kdy05.physicalFighters.ability
 import io.github.kdy05.physicalFighters.PhysicalFighters
 import io.github.kdy05.physicalFighters.game.EventRegistry
 import io.github.kdy05.physicalFighters.game.NoOpEventRegistry
-import io.github.kdy05.physicalFighters.util.BaseItem
-import io.github.kdy05.physicalFighters.util.EventData
 import io.github.kdy05.physicalFighters.util.TimerBase
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -120,16 +118,8 @@ abstract class Ability @JvmOverloads protected constructor(
         player?.sendMessage(message)
     }
 
-    fun execute(event: Event?, customData: Int) {
+    open fun execute(event: Event?, customData: Int) {
         val player = player ?: return
-
-        if (this is BaseItem && event != null) {
-            when (customData) {
-                BaseItem.ITEM_DROP_EVENT -> { handleItemDrop(event); return }
-                BaseItem.ITEM_RESPAWN_EVENT -> { handleItemRespawn(event); return }
-                BaseItem.ITEM_DEATH_EVENT -> { handleItemDeath(event); return }
-            }
-        }
 
         val data = checkCondition(event, customData)
         if (data < 0) return
@@ -167,20 +157,12 @@ abstract class Ability @JvmOverloads protected constructor(
 
     fun activate(textout: Boolean) {
         registerEvents()
-        if (this is BaseItem) {
-            eventRegistry.registerPlayerDropItem(EventData(this, BaseItem.ITEM_DROP_EVENT))
-            eventRegistry.registerPlayerRespawn(EventData(this, BaseItem.ITEM_RESPAWN_EVENT))
-            eventRegistry.registerEntityDeath(EventData(this, BaseItem.ITEM_DEATH_EVENT))
-        }
         val player = player
         if (player != null) {
             if (textout) {
                 player.sendMessage("${ChatColor.GREEN}$abilityName${ChatColor.WHITE} 능력이 설정되었습니다.")
             }
             onActivate(player)
-            if (this is BaseItem) {
-                giveBaseItem(player)
-            }
         }
     }
 
@@ -191,9 +173,6 @@ abstract class Ability @JvmOverloads protected constructor(
         if (player != null) {
             if (textout) {
                 player.sendMessage("${ChatColor.RED}$abilityName${ChatColor.WHITE} 능력이 해제되었습니다.")
-            }
-            if (this is BaseItem) {
-                removeBaseItem(player)
             }
             onDeactivate(player)
         }
