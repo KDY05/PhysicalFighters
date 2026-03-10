@@ -2,7 +2,7 @@ package io.github.kdy05.physicalFighters.ability.impl;
 
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
-import io.github.kdy05.physicalFighters.util.BaseItemAbility;
+import io.github.kdy05.physicalFighters.ability.BaseItemAbility;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

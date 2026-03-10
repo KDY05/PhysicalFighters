@@ -1,8 +1,7 @@
-package io.github.kdy05.physicalFighters.util
+package io.github.kdy05.physicalFighters.ability
 
 import io.github.kdy05.physicalFighters.PhysicalFighters
-import io.github.kdy05.physicalFighters.ability.Ability
-import io.github.kdy05.physicalFighters.ability.AbilitySpec
+import io.github.kdy05.physicalFighters.util.EventData
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.Event

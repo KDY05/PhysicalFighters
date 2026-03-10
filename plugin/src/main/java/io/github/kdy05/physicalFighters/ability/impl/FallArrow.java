@@ -3,7 +3,7 @@ package io.github.kdy05.physicalFighters.ability.impl;
 import io.github.kdy05.physicalFighters.ability.AbilitySpec;
 import io.github.kdy05.physicalFighters.ability.AbilityUtils;
 import io.github.kdy05.physicalFighters.game.InvincibilityManager;
-import io.github.kdy05.physicalFighters.util.BaseItemAbility;
+import io.github.kdy05.physicalFighters.ability.BaseItemAbility;
 import io.github.kdy05.physicalFighters.util.EventData;
 import org.bukkit.Location;
 import org.bukkit.Material;
