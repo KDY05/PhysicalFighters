@@ -9,12 +9,15 @@ configurations {
 
 dependencies {
     implementation project(':compatibility:api')
+    implementation project(':abilities')
 
     versionModules project(':compatibility:v1_16_5')
     versionModules project(':compatibility:v1_20_5')
     versionModules project(':compatibility:v1_21_3')
 
     compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+    compileOnly("io.github.kdy05:ability-api:0.3.0")
+    compileOnly("org.jetbrains.kotlin:kotlin-stdlib")
 }
 
 shadowJar {
@@ -29,6 +32,13 @@ shadowJar {
 
     from(rootProject.file('README.md')) { into 'META-INF' }
     from(rootProject.file('LICENSE')) { into 'META-INF' }
+
+    // AbilityAPI가 Kotlin 런타임을 제공하므로 중복 번들링 제외
+    exclude 'kotlin/**'
+    exclude 'kotlinx/**'
+    exclude 'META-INF/kotlin*'
+    exclude 'META-INF/com.android*'
+    exclude 'META-INF/services/kotlin*'
 }
 
 kotlin {

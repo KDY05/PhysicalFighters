@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters
 
-import io.github.kdy05.physicalFighters.ability.AbilityRegistry
+import io.github.kdy05.abilityAPI.AbilityAPI
+import io.github.kdy05.abilityAPI.AbilityProvider
 import io.github.kdy05.physicalFighters.api.AdapterRegistry
 import io.github.kdy05.physicalFighters.api.AttributeAdapter
 import io.github.kdy05.physicalFighters.api.PotionEffectTypeAdapter
@@ -10,11 +11,13 @@ import io.github.kdy05.physicalFighters.command.GameCommand
 import io.github.kdy05.physicalFighters.command.UtilCommand
 import io.github.kdy05.physicalFighters.config.ConfigManager
 import io.github.kdy05.physicalFighters.game.BaseKitManager
-import io.github.kdy05.physicalFighters.game.EventManager
+import io.github.kdy05.physicalFighters.game.GameEventListener
 import io.github.kdy05.physicalFighters.game.GameManager
 import io.github.kdy05.physicalFighters.game.InvincibilityManager
 import io.github.kdy05.physicalFighters.util.ServerVersionDetector
+import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
+import java.util.ServiceLoader
 
 class PhysicalFighters : JavaPlugin() {
 
@@ -40,17 +43,15 @@ class PhysicalFighters : JavaPlugin() {
         }
 
         configManager = ConfigManager(this)
-        val eventManager = EventManager(this)
-        AbilityRegistry.eventRegistry = eventManager
-        server.pluginManager.registerEvents(eventManager, this)
+        server.pluginManager.registerEvents(GameEventListener(this), this)
 
-        logger.info("능력 ${AbilityRegistry.getTypeCount()}개가 등록되었습니다.")
+        PFContext.plugin = this
+        registerAbilities()
 
         gameManager = GameManager(this)
         val commandManager = CommandManager(
             GameCommand(this, gameManager),
-            UtilCommand(this, configManager),
-            AbilityRegistry::dispatchCommand
+            UtilCommand(this, configManager)
         )
 
         getCommand("va")!!.setExecutor(commandManager)
@@ -61,8 +62,17 @@ class PhysicalFighters : JavaPlugin() {
     }
 
     override fun onDisable() {
-        AbilityRegistry.deactivateAll()
+        Bukkit.getOnlinePlayers().forEach { AbilityAPI.service.clearAbilities(it) }
         logger.info("플러그인을 종료합니다.")
+    }
+
+    private fun registerAbilities() {
+        ServiceLoader.load(AbilityProvider::class.java, javaClass.classLoader).forEach { provider ->
+            val abilities = provider.provide()
+            AbilityAPI.service.registrar.register(*abilities.toTypedArray())
+            logger.info("능력팩 '${provider.namespace()}' — ${abilities.size}개 능력 로드")
+        }
+        logger.info("총 ${AbilityAPI.service.registrar.getCount()}개 능력이 등록되었습니다.")
     }
 
     private fun initializeAdapter(): Boolean {

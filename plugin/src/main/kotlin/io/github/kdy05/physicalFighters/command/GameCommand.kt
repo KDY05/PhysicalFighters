@@ -1,10 +1,10 @@
 package io.github.kdy05.physicalFighters.command
 
+import io.github.kdy05.abilityAPI.AbilityAPI
+import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.physicalFighters.PhysicalFighters
-import io.github.kdy05.physicalFighters.ability.AbilityRegistry
 import io.github.kdy05.physicalFighters.game.GameManager
 import io.github.kdy05.physicalFighters.game.GameUtils
-import io.github.kdy05.physicalFighters.game.InvincibilityManager
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
@@ -20,12 +20,15 @@ class GameCommand(
     override fun onCommandEvent(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         when (args[0].lowercase()) {
             "help" -> { handleHelp(sender); return true }
-            "check" -> { playerCommand(sender) { GameUtils.showInfo(it, plugin.configManager.isAbilityOverLap) }; return true }
+            "check" -> { playerCommand(sender) {
+                val pending = if (gameManager.scenario == GameManager.ScriptStatus.AbilitySelect)
+                    gameManager.getPendingAbility(it) else null
+                GameUtils.showInfo(it, pending)
+            }; return true }
             "yes" -> { playerCommand(sender) { gameManager.handleYes(it) }; return true }
             "no" -> { playerCommand(sender) { gameManager.handleNo(it) }; return true }
         }
 
-        // 운영자 권한 필터
         if (!sender.hasPermission("va.operate")) return false
 
         when (args[0].lowercase()) {
@@ -80,8 +83,8 @@ class GameCommand(
             return
         }
         gameManager.stopGame()
-        InvincibilityManager.isDamageGuard = false
-        AbilityRegistry.deactivateAll()
+        AbilityAPI.service.damageGuard = false
+        Bukkit.getOnlinePlayers().forEach { AbilityAPI.service.clearAbilities(it) }
         listOf(
             "${ChatColor.GRAY}------------------------------",
             "${ChatColor.YELLOW}관리자 ${sender.name}님이 게임 카운터를 중단시켰습니다.",
@@ -105,12 +108,11 @@ class GameCommand(
                 sender.sendMessage("${ChatColor.RED}페이지가 올바르지 않습니다.")
                 return
             }
-        } else {
-            1
-        }
+        } else 1
 
+        val registrar = AbilityAPI.service.registrar
         val itemsPerPage = 8
-        val totalAbilities = AbilityRegistry.getTypeCount()
+        val totalAbilities = registrar.getCount()
         val maxPage = max(1, (totalAbilities + itemsPerPage - 1) / itemsPerPage)
 
         if (page !in 1..maxPage) {
@@ -123,18 +125,16 @@ class GameCommand(
             "${ChatColor.AQUA}페이지 $page/$maxPage (총 ${totalAbilities}개 능력)"
         )
 
-        val types = AbilityRegistry.getAllTypes()
+        val types = registrar.getAll()
         val startIndex = (page - 1) * itemsPerPage
         val endIndex = min(startIndex + itemsPerPage, totalAbilities)
 
         for (i in startIndex until endIndex) {
-            val type = types[i]
-            sender.sendMessage("${type.name} ${type.rank}")
+            val meta = types[i].getAnnotation(AbilityMeta::class.java)
+            sender.sendMessage("${meta?.name ?: types[i].simpleName} ${meta?.rank ?: ""}")
         }
 
-        if (totalAbilities == 0) {
-            sender.sendMessage("${ChatColor.YELLOW}등록된 능력이 없습니다.")
-        }
+        if (totalAbilities == 0) sender.sendMessage("${ChatColor.YELLOW}등록된 능력이 없습니다.")
     }
 
     private fun handleAssign(sender: CommandSender, args: Array<String>) {
@@ -147,9 +147,8 @@ class GameCommand(
         }
 
         val target = requireOnlinePlayer(sender, args[1]) ?: return
-
         val abilityName = args[2].replace('_', ' ')
-        GameUtils.assignAbility(sender, abilityName, target, plugin.configManager.isAbilityOverLap)
+        GameUtils.assignAbility(sender, abilityName, target)
     }
 
     private fun handleReset(sender: CommandSender, args: Array<String>) {
@@ -159,8 +158,7 @@ class GameCommand(
         }
 
         val target = requireOnlinePlayer(sender, args[1]) ?: return
-
-        AbilityRegistry.deactivateAll(target)
+        AbilityAPI.service.clearAbilities(target)
         target.sendMessage("${ChatColor.RED}당신의 능력이 모두 해제되었습니다.")
         sender.sendMessage("${ChatColor.GREEN}${target.name}${ChatColor.WHITE}님의 능력을 모두 해제했습니다.")
     }

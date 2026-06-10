@@ -42,8 +42,7 @@ class ConfigManager(private val plugin: PhysicalFighters) {
             earlyInvincibleTime = earlyInvincibleTime,
             restrictionTime = restrictionTime,
             clearInventory = fileConfig.getBoolean("ClearInventory", true),
-            noAbilitySetting = fileConfig.getBoolean("NoAbilitySetting", false),
-            abilityOverLap = fileConfig.getBoolean("AbilityOverLap", false)
+            noAbilitySetting = fileConfig.getBoolean("NoAbilitySetting", false)
         )
     }
 
@@ -54,7 +53,6 @@ class ConfigManager(private val plugin: PhysicalFighters) {
     val restrictionTime: Int get() = config.restrictionTime
     val isClearInventory: Boolean get() = config.clearInventory
     val isNoAbilitySetting: Boolean get() = config.noAbilitySetting
-    val isAbilityOverLap: Boolean get() = config.abilityOverLap
 
     private data class Config(
         val onKill: Int,
@@ -63,7 +61,6 @@ class ConfigManager(private val plugin: PhysicalFighters) {
         val earlyInvincibleTime: Int,
         val restrictionTime: Int,
         val clearInventory: Boolean,
-        val noAbilitySetting: Boolean,
-        val abilityOverLap: Boolean
+        val noAbilitySetting: Boolean
     )
 }

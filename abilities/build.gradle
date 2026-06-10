@@ -1,0 +1,17 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+    compileOnly("io.github.kdy05:ability-api:0.3.0")
+    compileOnly("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation project(':compatibility:api')
+}
+
+kotlin {
+    jvmToolchain(8)
+    compilerOptions {
+        freeCompilerArgs.add('-Xjvm-default=all')
+    }
+}

@@ -1,8 +1,9 @@
 package io.github.kdy05.physicalFighters.game
 
+import io.github.kdy05.abilityAPI.AbilityAPI
+import io.github.kdy05.abilityAPI.ability.Ability
+import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.physicalFighters.PhysicalFighters
-import io.github.kdy05.physicalFighters.ability.Ability
-import io.github.kdy05.physicalFighters.ability.AbilityRegistry
 import org.bukkit.BanList
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -13,65 +14,54 @@ import org.bukkit.entity.Player
 object GameUtils {
 
     @JvmStatic
-    fun assignAbility(sender: CommandSender, abilityName: String, target: Player, abilityOverLap: Boolean) {
-        val type = AbilityRegistry.getType(abilityName)
+    fun assignAbility(sender: CommandSender, abilityName: String, target: Player) {
+        val type = AbilityAPI.service.registrar.getByName(abilityName)
         if (type == null) {
             sender.sendMessage("${ChatColor.RED}존재하지 않는 능력입니다.")
             return
         }
 
-        // 기존 능력 해제
-        if (abilityOverLap) {
-            // 중복 모드에서 액티브 능력 중복은 불가함.
-            if (type.type.isActive) {
-                AbilityRegistry.findAbilities(target)
-                    .filter { it.abilityType.isActive }
-                    .forEach { AbilityRegistry.deactivate(it) }
-            }
-        } else {
-            AbilityRegistry.deactivateAll(target)
-        }
+        AbilityAPI.service.clearAbilities(target)
+        AbilityAPI.service.giveAbility(target, type)
 
-        // 새로운 능력 적용
-        val ability = AbilityRegistry.createAndActivate(abilityName, target)!!
+        val name = type.getAnnotation(AbilityMeta::class.java)?.name ?: type.simpleName ?: "Unknown"
         sender.sendMessage(
             "${ChatColor.GREEN}${target.name}${ChatColor.WHITE}님에게 " +
-                "${ChatColor.GREEN}${ability.abilityName}${ChatColor.WHITE} 능력 할당이 완료되었습니다."
+                "${ChatColor.GREEN}${name}${ChatColor.WHITE} 능력 할당이 완료되었습니다."
         )
         val senderName = if (sender is Player) sender.name else "Console"
         PhysicalFighters.plugin.logger.info(
-            "${senderName}님이 ${target.name}님에게 ${ability.abilityName} 능력을 할당했습니다."
+            "${senderName}님이 ${target.name}님에게 $name 능력을 할당했습니다."
         )
     }
 
     @JvmStatic
-    fun showInfo(player: Player, abilityOverLap: Boolean) {
-        val ability = AbilityRegistry.findPrimaryAbility(player)
-            ?: AbilityRegistry.findAbility(player)
-        if (ability == null) {
-            player.sendMessage("${ChatColor.RED}능력이 없거나 옵저버입니다.")
-            return
+    fun showInfo(player: Player, pendingType: Class<out Ability>? = null) {
+        val abilityClass: Class<out Ability>
+        if (pendingType != null) {
+            abilityClass = pendingType
+        } else {
+            val ability = AbilityAPI.service.getPrimaryAbility(player)
+                ?: AbilityAPI.service.getAbilities(player).firstOrNull()
+            if (ability == null) {
+                player.sendMessage("${ChatColor.RED}능력이 없거나 옵저버입니다.")
+                return
+            }
+            abilityClass = ability.javaClass
         }
+
+        val meta = abilityClass.getAnnotation(AbilityMeta::class.java)
         buildList {
             add("${ChatColor.GREEN}---------------")
             add("${ChatColor.GOLD}- 능력 정보 -")
-            if (abilityOverLap) {
-                add("${ChatColor.DARK_AQUA}참고 : 능력 리스트중 가장 상단의 능력만 보여줍니다.")
+            if (meta != null) {
+                add("${ChatColor.AQUA}${meta.name} ${ChatColor.WHITE}| ${ChatColor.GOLD}${meta.rank}")
+                addAll(meta.guide.toList())
+            } else {
+                add("${ChatColor.AQUA}${abilityClass.simpleName}")
             }
-            add(
-                "${ChatColor.AQUA}${ability.abilityName}${ChatColor.WHITE}" +
-                    " [${ability.abilityType}] ${ability.rank}"
-            )
-            addAll(ability.guide)
-            add(getTimerText(ability))
             add("${ChatColor.GREEN}---------------")
         }.forEach { player.sendMessage(it) }
-    }
-
-    private fun getTimerText(ability: Ability): String {
-        val cooldown = if (ability.abilityType.isActive) "${ability.coolDown}초" else "없음"
-        val duration = if (ability.abilityType == Ability.Type.ActiveContinue) "${ability.duration}초" else "없음"
-        return "${ChatColor.RED}쿨타임 : ${ChatColor.WHITE}$cooldown / ${ChatColor.RED}지속시간 : ${ChatColor.WHITE}$duration"
     }
 
     /**
@@ -97,9 +87,7 @@ object GameUtils {
                     )
                 }, 1L)
             }
-
             2 -> victim.kickPlayer("당신은 죽었습니다. 게임에서 퇴장합니다.")
-
             3 -> {
                 if (!victim.isOp) {
                     Bukkit.getBanList(BanList.Type.NAME).addBan(
@@ -112,5 +100,18 @@ object GameUtils {
                 }
             }
         }
+    }
+
+    enum class Rank(private val s: String) {
+        SSS("${ChatColor.DARK_PURPLE}Special Rank"),
+        SS("${ChatColor.GOLD}SS Rank"),
+        S("${ChatColor.RED}S Rank"),
+        A("${ChatColor.GREEN}A Rank"),
+        B("${ChatColor.BLUE}B Rank"),
+        C("${ChatColor.YELLOW}C Rank"),
+        F("${ChatColor.BLACK}F Rank"),
+        GOD("${ChatColor.WHITE}신");
+
+        override fun toString(): String = "$s${ChatColor.WHITE}"
     }
 }

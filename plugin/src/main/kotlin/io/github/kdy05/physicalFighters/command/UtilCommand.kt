@@ -1,7 +1,8 @@
 package io.github.kdy05.physicalFighters.command
 
+import io.github.kdy05.abilityAPI.AbilityAPI
+import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.physicalFighters.PhysicalFighters
-import io.github.kdy05.physicalFighters.ability.AbilityRegistry
 import io.github.kdy05.physicalFighters.config.ConfigManager
 import io.github.kdy05.physicalFighters.util.AbilityBook
 import org.bukkit.Bukkit
@@ -86,9 +87,8 @@ class UtilCommand(
     }
 
     private fun handleTc(sender: CommandSender) {
-        for (ability in AbilityRegistry.getActiveAbilities()) {
-            ability.cancelDTimer()
-            ability.cancelCTimer()
+        for (player in Bukkit.getOnlinePlayers()) {
+            AbilityAPI.service.resetAllCooldowns(player)
         }
         Bukkit.broadcastMessage("${ChatColor.GRAY}관리자 ${sender.name}님이 쿨타임 및 지속시간을 초기화했습니다.")
     }
@@ -119,17 +119,18 @@ class UtilCommand(
             "${ChatColor.GREEN}---------------"
         )
         var count = 0
-        for (ability in AbilityRegistry.getActiveAbilities()) {
-            val player = ability.player ?: continue
-            sender.sendMessage(
-                "${ChatColor.GREEN}${count+1}. ${ChatColor.WHITE}${player.name} : " +
-                    "${ChatColor.RED}${ability.abilityName} ${ChatColor.WHITE}[${ability.abilityType}]"
-            )
-            count++
+        for (player in Bukkit.getOnlinePlayers()) {
+            for (ability in AbilityAPI.service.getAbilities(player)) {
+                val meta = ability.javaClass.getAnnotation(AbilityMeta::class.java)
+                val name = meta?.name ?: ability.javaClass.simpleName ?: "Unknown"
+                val rank = meta?.rank?.let { " $it" } ?: ""
+                sender.sendMessage(
+                    "${ChatColor.GREEN}${count + 1}. ${ChatColor.WHITE}${player.name} : ${ChatColor.RED}$name$rank"
+                )
+                count++
+            }
         }
-        if (count == 0) {
-            sender.sendMessage("아직 능력자가 없습니다.")
-        }
+        if (count == 0) sender.sendMessage("아직 능력자가 없습니다.")
         sender.sendMessage("${ChatColor.GREEN}---------------")
     }
 

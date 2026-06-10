@@ -1,12 +1,14 @@
 package io.github.kdy05.physicalFighters.command
 
-import io.github.kdy05.physicalFighters.ability.AbilityRegistry
+import io.github.kdy05.abilityAPI.AbilityAPI
+import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
+import org.bukkit.entity.Player
 
 class CommandManager(vararg handlers: CommandInterface) : CommandExecutor, TabCompleter {
 
@@ -22,6 +24,15 @@ class CommandManager(vararg handlers: CommandInterface) : CommandExecutor, TabCo
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         if (command.name != "va") return false
+
+        // CommandInterface를 구현하는 능력에 먼저 dispatch (Assimilation, Lockdown 등)
+        if (args.isNotEmpty() && sender is Player) {
+            for (ability in AbilityAPI.service.getAbilities(sender)) {
+                if (ability is CommandInterface) {
+                    if (ability.onCommandEvent(sender, command, label, args)) return true
+                }
+            }
+        }
 
         if (args.isNotEmpty()) {
             for (handler in handlers) {
@@ -51,13 +62,10 @@ class CommandManager(vararg handlers: CommandInterface) : CommandExecutor, TabCo
         when (args.size) {
             1 -> {
                 val available = BASIC_COMMANDS.toMutableList()
-                if (sender.hasPermission("va.operate")) {
-                    available.addAll(OPERATOR_COMMANDS)
-                }
+                if (sender.hasPermission("va.operate")) available.addAll(OPERATOR_COMMANDS)
                 val input = args[0].lowercase()
                 available.filterTo(completions) { it.lowercase().startsWith(input) }
             }
-
             2 -> {
                 val sub = args[0].lowercase()
                 if ((sub == "assign" || sub == "reset") && sender.hasPermission("va.operate")) {
@@ -67,17 +75,16 @@ class CommandManager(vararg handlers: CommandInterface) : CommandExecutor, TabCo
                         .mapTo(completions) { it.name }
                 } else if (sub == "book" && sender.hasPermission("va.operate")) {
                     val input = args[1].lowercase()
-                    AbilityRegistry.getAllTypes()
-                        .map { it.name.replace(' ', '_') }
+                    AbilityAPI.service.registrar.getAll()
+                        .mapNotNull { it.getAnnotation(AbilityMeta::class.java)?.name?.replace(' ', '_') }
                         .filterTo(completions) { it.lowercase().startsWith(input) }
                 }
             }
-
             3 -> {
                 if (args[0].lowercase() == "assign" && sender.hasPermission("va.operate")) {
                     val input = args[2].lowercase()
-                    AbilityRegistry.getAllTypes()
-                        .map { it.name.replace(' ', '_') }
+                    AbilityAPI.service.registrar.getAll()
+                        .mapNotNull { it.getAnnotation(AbilityMeta::class.java)?.name?.replace(' ', '_') }
                         .filterTo(completions) { it.lowercase().startsWith(input) }
                 }
             }

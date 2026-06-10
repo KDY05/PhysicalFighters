@@ -1,7 +1,7 @@
 package io.github.kdy05.physicalFighters.game
 
+import io.github.kdy05.abilityAPI.AbilityAPI
 import io.github.kdy05.physicalFighters.PhysicalFighters
-import io.github.kdy05.physicalFighters.util.TimerBase
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.boss.BarColor
@@ -11,11 +11,13 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.scheduler.BukkitTask
 
 class InvincibilityManager(private val plugin: PhysicalFighters) : Listener {
 
     private var invincibilityBar: BossBar? = null
-    private var timer: InvincibilityTimer? = null
+    private var timerTask: BukkitTask? = null
+    private var timerCount = 0
     private var isActive = false
     private var customMinutes = 0
 
@@ -35,18 +37,26 @@ class InvincibilityManager(private val plugin: PhysicalFighters) : Listener {
 
         customMinutes = minutes
         isActive = true
-        isDamageGuard = true
+        AbilityAPI.service.damageGuard = true
 
         invincibilityBar = Bukkit.createBossBar("무적 시간", BarColor.GREEN, BarStyle.SEGMENTED_12).apply {
             progress = 1.0
             Bukkit.getOnlinePlayers().forEach { addPlayer(it) }
         }
 
-        timer = InvincibilityTimer().apply {
-            startTimer(minutes * 60, false)
-        }
+        timerCount = 0
+        timerTask = Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
+            val remaining = customMinutes * 60 - timerCount
+            updateBossBar(remaining)
+            when (remaining) {
+                0 -> stopInvincibility()
+                in 1..5 -> broadcast("${ChatColor.YELLOW}${remaining}초 후${ChatColor.WHITE} 무적이 해제됩니다.")
+                60 -> broadcast("${ChatColor.YELLOW}무적이 ${ChatColor.WHITE}1분 후 해제됩니다.")
+            }
+            timerCount++
+        }, 0L, 20L)
 
-        broadcast("${ChatColor.GREEN}${minutes}분간 무적이 설정되었니다.")
+        broadcast("${ChatColor.GREEN}${minutes}분간 무적이 설정되었습니다.")
     }
 
     fun stopInvincibility() {
@@ -62,23 +72,25 @@ class InvincibilityManager(private val plugin: PhysicalFighters) : Listener {
     }
 
     fun toggle() {
-        if (isDamageGuard) {
+        if (AbilityAPI.service.damageGuard) {
             if (isActive) {
                 forceStop()
             } else {
-                isDamageGuard = false
+                AbilityAPI.service.damageGuard = false
                 broadcast("${ChatColor.GREEN}OP에 의해 무적이 해제되었습니다. 이제 대미지를 입습니다.")
             }
         } else {
-            isDamageGuard = true
+            AbilityAPI.service.damageGuard = true
             broadcast("${ChatColor.GREEN}OP에 의해 무적이 설정되었습니다. 이제 대미지를 입지않습니다.")
         }
     }
 
     private fun deactivate() {
         isActive = false
-        isDamageGuard = false
-        timer?.stopTimer()
+        AbilityAPI.service.damageGuard = false
+        timerTask?.cancel()
+        timerTask = null
+        timerCount = 0
         invincibilityBar?.removeAll()
         invincibilityBar = null
     }
@@ -86,7 +98,6 @@ class InvincibilityManager(private val plugin: PhysicalFighters) : Listener {
     private fun updateBossBar(remainingSeconds: Int) {
         val bar = invincibilityBar ?: return
         val totalSeconds = customMinutes * 60
-
         bar.progress = (remainingSeconds.toDouble() / totalSeconds).coerceAtLeast(0.0)
         bar.setTitle("무적 시간 %02d:%02d".format(remainingSeconds / 60, remainingSeconds % 60))
         bar.color = when {
@@ -106,27 +117,5 @@ class InvincibilityManager(private val plugin: PhysicalFighters) : Listener {
     @EventHandler
     fun onPlayerQuit(event: PlayerQuitEvent) {
         invincibilityBar?.removePlayer(event.player)
-    }
-
-    private inner class InvincibilityTimer : TimerBase(plugin) {
-        override fun onTimerStart() {}
-
-        override fun onTimerRunning(count: Int) {
-            val remaining = customMinutes * 60 - count
-            updateBossBar(remaining)
-
-            when (remaining) {
-                0 -> stopInvincibility()
-                in 1..5 -> broadcast("${ChatColor.YELLOW}${remaining}초 후${ChatColor.WHITE} 무적이 해제됩니다.")
-                60 -> broadcast("${ChatColor.YELLOW}무적이 ${ChatColor.WHITE}1분 후 해제됩니다.")
-            }
-        }
-
-        override fun onTimerEnd() = stopInvincibility()
-    }
-
-    companion object {
-        @JvmStatic
-        var isDamageGuard: Boolean = false
     }
 }

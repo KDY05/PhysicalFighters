@@ -15,6 +15,3 @@ RestrictionTime: 15
 ClearInventory: true
 # 시작 시 능력 추첨 생략
 NoAbilitySetting: false
-
-# 능력 중복 가능
-AbilityOverLap: false

@@ -3,6 +3,7 @@ version: ${version}
 main: io.github.kdy05.physicalFighters.PhysicalFighters
 api-version: '1.16'
 authors: [ Xeon, Yeomryo, Ararab ]
+depend: [AbilityAPI]
 website: https://github.com/KDY05
 commands:
   va:

@@ -1,17 +1,17 @@
 package io.github.kdy05.physicalFighters.game
 
+import io.github.kdy05.abilityAPI.AbilityAPI
+import io.github.kdy05.abilityAPI.ability.Ability
 import io.github.kdy05.physicalFighters.BuildConfig
 import io.github.kdy05.physicalFighters.PhysicalFighters
-import io.github.kdy05.physicalFighters.util.TimerBase
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitTask
 import java.util.*
 
 class GameManager(private val plugin: PhysicalFighters) {
-
-    private val abilityDistributor = AbilityDistributor()
 
     // Game state
     var scenario: ScriptStatus = ScriptStatus.NoPlay
@@ -19,6 +19,7 @@ class GameManager(private val plugin: PhysicalFighters) {
     private val exceptionList = mutableListOf<UUID>()
     private val playerList = mutableListOf<UUID>()
     private val okSign = mutableListOf<UUID>()
+    private val pendingAbilities = mutableMapOf<UUID, Class<out Ability>>()
 
     // Timers
     private val gameReadyTimer = GameTimer(TimerType.READY)
@@ -67,6 +68,7 @@ class GameManager(private val plugin: PhysicalFighters) {
         plugin.invincibilityManager.forceStop()
         okSign.clear()
         playerList.clear()
+        pendingAbilities.clear()
     }
 
     // Player actions
@@ -97,16 +99,15 @@ class GameManager(private val plugin: PhysicalFighters) {
     }
 
     fun handleNo(player: Player) {
-        if (isValidAbilitySelection(player)) {
-            if (abilityDistributor.reassignRandomAbility(player, playerList.size)) {
-                GameUtils.showInfo(player, plugin.configManager.isAbilityOverLap)
-                confirmPlayerAbility(player)
-                checkAllPlayersConfirmed()
-            } else {
-                player.sendMessage("${ChatColor.RED}(!) 능력의 개수가 부족하여 재추첨이 불가합니다.")
-            }
-        }
+        if (!isValidAbilitySelection(player)) return
+        val newType = AbilityAPI.service.reassignAbility(player)
+        pendingAbilities[player.uniqueId] = newType
+        GameUtils.showInfo(player, newType)
+        confirmPlayerAbility(player)
+        checkAllPlayersConfirmed()
     }
+
+    fun getPendingAbility(player: Player): Class<out Ability>? = pendingAbilities[player.uniqueId]
 
     // =========================== Private Helper Methods ===========================
 
@@ -168,13 +169,13 @@ class GameManager(private val plugin: PhysicalFighters) {
     private fun handleAbilitySetup() {
         if (!plugin.configManager.isNoAbilitySetting) {
             broadcastMessage("${ChatColor.GRAY}능력 설정 초기화 및 추첨 준비...")
-            abilityDistributor.resetAllAbilities()
+            Bukkit.getOnlinePlayers().forEach { AbilityAPI.service.clearAbilities(it) }
         } else {
             broadcastMessage("${ChatColor.GOLD}능력을 추첨하지 않습니다.")
             broadcastMessage("시작전에 능력이 이미 부여되었다면 보존됩니다.")
             okSign.clear()
             okSign.addAll(playerList)
-            abilityDistributor.enableAllAbilities()
+            AbilityAPI.service.distributeAbilities()
             startGame()
         }
     }
@@ -187,10 +188,13 @@ class GameManager(private val plugin: PhysicalFighters) {
 
     private fun distributeAbilitiesWithChoice() {
         val players = onlinePlayers()
-        if (!abilityDistributor.distributeAbilities(players)) {
+        val preview = AbilityAPI.service.previewAbilities(players)
+        if (preview.isEmpty()) {
             broadcastMessage("${ChatColor.RED}경고, 할당 가능한 능력이 없습니다.")
             return
         }
+        pendingAbilities.clear()
+        pendingAbilities.putAll(preview.mapKeys { it.key.uniqueId })
         for (player in players) {
             player.sendMessage("${ChatColor.YELLOW}(!) /va check ${ChatColor.WHITE}= 능력 확인")
             player.sendMessage("${ChatColor.YELLOW}(!) /va yes ${ChatColor.WHITE}= 능력 사용.")
@@ -205,7 +209,7 @@ class GameManager(private val plugin: PhysicalFighters) {
         broadcastMessage("${ChatColor.GREEN}게임이 시작되었습니다.")
         plugin.invincibilityManager.startInvincibility(plugin.configManager.earlyInvincibleTime)
         setPlayerBase()
-        abilityDistributor.enableAllAbilities()
+        AbilityAPI.service.distributeAbilities()
         gameProgressTimer.startTimer(MAX_TIMER_DURATION, false)
     }
 
@@ -250,15 +254,30 @@ class GameManager(private val plugin: PhysicalFighters) {
 
     // =========================== Timer Class ===========================
 
-    private inner class GameTimer(private val type: TimerType) : TimerBase(plugin) {
+    private inner class GameTimer(private val type: TimerType) {
+        private var task: BukkitTask? = null
+        var count: Int = 0
+            private set
 
-        override fun onTimerStart() {
-            if (type == TimerType.START) {
-                scenario = ScriptStatus.GameStart
-            }
+        fun startTimer(duration: Int, repeat: Boolean) {
+            stopTimer()
+            count = 0
+            if (type == TimerType.START) scenario = ScriptStatus.GameStart
+            task = Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
+                dispatch(count)
+                if (!repeat && count >= duration) stopTimer()
+                count++
+            }, 0L, 20L)
         }
 
-        override fun onTimerRunning(count: Int) {
+        fun stopTimer() {
+            task?.cancel()
+            task = null
+        }
+
+        fun endTimer() = stopTimer()
+
+        private fun dispatch(count: Int) {
             when (type) {
                 TimerType.READY -> handleReadyTimer(count)
                 TimerType.START -> handleStartTimer(count)
@@ -266,8 +285,6 @@ class GameManager(private val plugin: PhysicalFighters) {
                 TimerType.WARNING -> handleWarningTimer(count)
             }
         }
-
-        override fun onTimerEnd() {}
 
         private fun handleReadyTimer(count: Int) {
             when (count) {

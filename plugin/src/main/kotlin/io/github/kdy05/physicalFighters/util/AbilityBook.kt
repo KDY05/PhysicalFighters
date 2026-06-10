@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.util
 
-import io.github.kdy05.physicalFighters.ability.AbilityRegistry
+import io.github.kdy05.abilityAPI.AbilityAPI
+import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
@@ -10,13 +11,14 @@ object AbilityBook {
     private val PREFIX = "${ChatColor.GOLD}[능력서]${ChatColor.WHITE}"
 
     fun create(abilityName: String): ItemStack? {
-        val type = AbilityRegistry.getType(abilityName) ?: return null
+        val type = AbilityAPI.service.registrar.getByName(abilityName) ?: return null
+        val meta = type.getAnnotation(AbilityMeta::class.java) ?: return null
 
         val stack = ItemStack(Material.ENCHANTED_BOOK)
-        val meta = stack.itemMeta ?: return null
-        meta.setDisplayName("$PREFIX$abilityName")
-        meta.lore = type.guide
-        stack.itemMeta = meta
+        val itemMeta = stack.itemMeta ?: return null
+        itemMeta.setDisplayName("$PREFIX$abilityName")
+        itemMeta.lore = meta.guide.toList()
+        stack.itemMeta = itemMeta
         return stack
     }
 
@@ -41,6 +43,6 @@ object AbilityBook {
             }
         }
 
-        return if (AbilityRegistry.getType(afterPrefix) != null) afterPrefix else null
+        return if (AbilityAPI.service.registrar.getByName(afterPrefix) != null) afterPrefix else null
     }
 }
