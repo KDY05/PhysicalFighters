@@ -67,5 +67,5 @@ class CP9Ability(owner: Player, context: SkillContext) : PFAbility(owner, contex
         }
     }
 
-    override fun skills() = listOf(activeSkill, passiveSkill)
+    override fun buildSkills() = listOf(activeSkill, passiveSkill)
 }

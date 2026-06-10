@@ -14,7 +14,7 @@ import org.bukkit.entity.Player
     guide = ["피격 시 상대를 넉백시키며, 일정 확률로 받은 공격을 상대에게 되돌려줍니다."]
 )
 class CumaAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
-    override fun skills() = listOf(object : PassiveSkill() {
+    override fun buildSkills() = listOf(object : PassiveSkill() {
         override fun register() {
             onEntityDamaged { e ->
                 val attacker = e.damager as? LivingEntity ?: return@onEntityDamaged

@@ -18,7 +18,7 @@ class CommandManager(vararg handlers: CommandInterface) : CommandExecutor, TabCo
         private val BASIC_COMMANDS = listOf("help", "check", "yes", "no")
         private val OPERATOR_COMMANDS = listOf(
             "start", "stop", "skip", "ob", "list",
-            "assign", "reset", "util", "inv", "hung", "dura", "tc", "book", "scan", "reload", "kit"
+            "assign", "reset", "util", "config", "inv", "tc", "book", "scan", "reload", "kit"
         )
     }
 

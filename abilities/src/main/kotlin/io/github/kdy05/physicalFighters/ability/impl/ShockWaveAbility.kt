@@ -20,7 +20,7 @@ import kotlin.math.sin
     ]
 )
 class ShockWaveAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
-    override fun skills() = listOf(object : ActiveSkill() {
+    override fun buildSkills() = listOf(object : ActiveSkill() {
         override val cooldownTicks = 900L
 
         override fun register() {

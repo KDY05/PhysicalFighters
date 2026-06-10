@@ -102,5 +102,5 @@ class KijaruAbility(owner: Player, context: SkillContext) : PFAbility(owner, con
         }
     }
 
-    override fun skills() = listOf(activeSkill, passiveSkill)
+    override fun buildSkills() = listOf(activeSkill, passiveSkill)
 }

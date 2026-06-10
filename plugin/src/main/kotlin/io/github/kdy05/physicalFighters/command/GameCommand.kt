@@ -3,6 +3,7 @@ package io.github.kdy05.physicalFighters.command
 import io.github.kdy05.abilityAPI.AbilityAPI
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.physicalFighters.PhysicalFighters
+import io.github.kdy05.physicalFighters.util.toDisplayString
 import io.github.kdy05.physicalFighters.game.GameManager
 import io.github.kdy05.physicalFighters.game.GameUtils
 import org.bukkit.Bukkit
@@ -131,7 +132,7 @@ class GameCommand(
 
         for (i in startIndex until endIndex) {
             val meta = types[i].getAnnotation(AbilityMeta::class.java)
-            sender.sendMessage("${meta?.name ?: types[i].simpleName} ${meta?.rank ?: ""}")
+            sender.sendMessage("${meta?.name ?: types[i].simpleName} ${meta?.rank?.toDisplayString() ?: ""}")
         }
 
         if (totalAbilities == 0) sender.sendMessage("${ChatColor.YELLOW}등록된 능력이 없습니다.")

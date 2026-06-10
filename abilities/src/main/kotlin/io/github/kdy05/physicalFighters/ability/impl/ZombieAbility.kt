@@ -14,7 +14,7 @@ import org.bukkit.event.entity.EntityDamageEvent
     guide = ["모든 대미지의 반을 흡수합니다. 단, 화염 대미지를 8배로 받습니다."]
 )
 class ZombieAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
-    override fun skills() = listOf(object : PassiveSkill() {
+    override fun buildSkills() = listOf(object : PassiveSkill() {
         override fun register() {
             on(EntityDamageEvent::class) { e ->
                 if (e.entity.uniqueId != owner.uniqueId) return@on

@@ -3,7 +3,9 @@ package io.github.kdy05.physicalFighters.command
 import io.github.kdy05.abilityAPI.AbilityAPI
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.physicalFighters.PhysicalFighters
+import io.github.kdy05.physicalFighters.util.toDisplayString
 import io.github.kdy05.physicalFighters.config.ConfigManager
+import io.github.kdy05.physicalFighters.config.ConfigSettingsGUI
 import io.github.kdy05.physicalFighters.util.AbilityBook
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -15,14 +17,15 @@ class UtilCommand(
     private val configManager: ConfigManager
 ) : CommandInterface {
 
+    private val configSettingsGUI = ConfigSettingsGUI(plugin, configManager)
+
     override fun onCommandEvent(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         if (!sender.hasPermission("va.operate")) return false
 
         when (args[0].lowercase()) {
             "util" -> handleUtil(sender)
+            "config" -> playerCommand(sender) { configSettingsGUI.open(it) }
             "inv" -> handleInv(sender, args)
-            "hung" -> handleHung()
-            "dura" -> handleDura()
             "tc" -> handleTc(sender)
             "book" -> handleBook(sender, args)
             "scan" -> handleScan(sender)
@@ -39,10 +42,9 @@ class UtilCommand(
             "",
             "${ChatColor.YELLOW}■ 게임 설정",
             "${ChatColor.GOLD}/va reload${ChatColor.WHITE} - 플러그인 설정(config.yml)을 다시 로드합니다.",
+            "${ChatColor.GOLD}/va config${ChatColor.WHITE} - 게임 설정을 GUI로 조정합니다.",
             "${ChatColor.GOLD}/va kit${ChatColor.WHITE} - 게임 시작 시 기본템을 설정합니다.",
             "${ChatColor.GOLD}/va inv [시간(분)]${ChatColor.WHITE} - 무적 모드를 토글하거나 지정 시간동안 무적을 시작합니다.",
-            "${ChatColor.GOLD}/va hung${ChatColor.WHITE} - 배고픔 무한 모드를 토글합니다.",
-            "${ChatColor.GOLD}/va dura${ChatColor.WHITE} - 내구도 무한 모드를 토글합니다.",
             "",
             "${ChatColor.YELLOW}■ 기타",
             "${ChatColor.GOLD}/va scan${ChatColor.WHITE} - 현재 능력자 목록을 확인합니다.",
@@ -65,24 +67,6 @@ class UtilCommand(
                 plugin.invincibilityManager.startInvincibility(minutes)
             }
             else -> sender.sendMessage("${ChatColor.RED}명령어 사용법: /va inv [시간(분)]")
-        }
-    }
-
-    private fun handleHung() {
-        configManager.isNoFoodMode = !configManager.isNoFoodMode
-        if (configManager.isNoFoodMode) {
-            Bukkit.broadcastMessage("${ChatColor.GREEN}OP에 의해 배고픔무한이 설정되었습니다.")
-        } else {
-            Bukkit.broadcastMessage("${ChatColor.RED}OP에 의해 배고픔무한이 해제되었습니다.")
-        }
-    }
-
-    private fun handleDura() {
-        configManager.isInfinityDur = !configManager.isInfinityDur
-        if (configManager.isInfinityDur) {
-            Bukkit.broadcastMessage("${ChatColor.GREEN}OP에 의해 내구도무한이 설정되었습니다.")
-        } else {
-            Bukkit.broadcastMessage("${ChatColor.RED}OP에 의해 내구도무한이 해제되었습니다.")
         }
     }
 
@@ -123,7 +107,7 @@ class UtilCommand(
             for (ability in AbilityAPI.service.getAbilities(player)) {
                 val meta = ability.javaClass.getAnnotation(AbilityMeta::class.java)
                 val name = meta?.name ?: ability.javaClass.simpleName ?: "Unknown"
-                val rank = meta?.rank?.let { " $it" } ?: ""
+                val rank = meta?.rank?.let { " ${it.toDisplayString()}" } ?: ""
                 sender.sendMessage(
                     "${ChatColor.GREEN}${count + 1}. ${ChatColor.WHITE}${player.name} : ${ChatColor.RED}$name$rank"
                 )

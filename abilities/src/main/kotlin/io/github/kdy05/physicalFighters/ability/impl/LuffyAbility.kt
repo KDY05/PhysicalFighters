@@ -21,7 +21,7 @@ import org.bukkit.entity.Player
     ]
 )
 class LuffyAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
-    override fun skills() = listOf(object : PassiveSkill() {
+    override fun buildSkills() = listOf(object : PassiveSkill() {
         override fun register() {
             onLeftClick {
                 when (owner.inventory.itemInMainHand.type) {

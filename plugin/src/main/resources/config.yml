@@ -4,14 +4,15 @@
 OnKill: 2
 # 사망 시 죽인 사람 공개
 KillerOutput: true
-
 # 기본 지급 레벨 (0 이상 정수)
 SetLev: 60
 # 초반 무적 시간 (분 단위, 0 이상 정수)
 EarlyInvincibleTime: 10
-# 일부 능력 금지 시간 (분 단위, 0 이상 정수)
-RestrictionTime: 15
 # 시작 시 인벤토리 초기화
 ClearInventory: true
 # 시작 시 능력 추첨 생략
 NoAbilitySetting: false
+# 배고픔 무한
+NoFoodMode: false
+# 내구도 무한
+InfinityDur: false

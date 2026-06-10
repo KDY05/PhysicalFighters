@@ -4,6 +4,7 @@ import io.github.kdy05.abilityAPI.AbilityAPI
 import io.github.kdy05.abilityAPI.ability.Ability
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.physicalFighters.PhysicalFighters
+import io.github.kdy05.physicalFighters.util.toDisplayString
 import org.bukkit.BanList
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -55,7 +56,7 @@ object GameUtils {
             add("${ChatColor.GREEN}---------------")
             add("${ChatColor.GOLD}- 능력 정보 -")
             if (meta != null) {
-                add("${ChatColor.AQUA}${meta.name} ${ChatColor.WHITE}| ${ChatColor.GOLD}${meta.rank}")
+                add("${ChatColor.AQUA}${meta.name} ${ChatColor.WHITE}| ${meta.rank.toDisplayString()}")
                 addAll(meta.guide.toList())
             } else {
                 add("${ChatColor.AQUA}${abilityClass.simpleName}")
@@ -100,18 +101,5 @@ object GameUtils {
                 }
             }
         }
-    }
-
-    enum class Rank(private val s: String) {
-        SSS("${ChatColor.DARK_PURPLE}Special Rank"),
-        SS("${ChatColor.GOLD}SS Rank"),
-        S("${ChatColor.RED}S Rank"),
-        A("${ChatColor.GREEN}A Rank"),
-        B("${ChatColor.BLUE}B Rank"),
-        C("${ChatColor.YELLOW}C Rank"),
-        F("${ChatColor.BLACK}F Rank"),
-        GOD("${ChatColor.WHITE}신");
-
-        override fun toString(): String = "$s${ChatColor.WHITE}"
     }
 }

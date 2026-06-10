@@ -16,7 +16,7 @@ import org.bukkit.entity.Player
     ]
 )
 class BerserkerAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
-    override fun skills() = listOf(object : PassiveSkill() {
+    override fun buildSkills() = listOf(object : PassiveSkill() {
         override fun register() {
             onEntityDamage { e ->
                 when {

@@ -1,6 +1,7 @@
 package io.github.kdy05.physicalFighters.game
 
 import io.github.kdy05.abilityAPI.AbilityAPI
+import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.physicalFighters.PhysicalFighters
 import io.github.kdy05.physicalFighters.util.AbilityBook
 import org.bukkit.ChatColor
@@ -57,7 +58,7 @@ class GameEventListener(private val plugin: PhysicalFighters) : Listener {
 
     private fun handleVictim(victim: Player) {
         val hasDeathExempt = AbilityAPI.service.getAbilities(victim)
-            .any { it.javaClass.getAnnotation(io.github.kdy05.abilityAPI.ability.AbilityMeta::class.java)?.isDeathExempt == true }
+            .any { it.javaClass.getAnnotation(AbilityMeta::class.java)?.isDeathExempt == true }
         if (!hasDeathExempt) {
             GameUtils.applyDeathPenalty(victim)
         }

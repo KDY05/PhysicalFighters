@@ -23,7 +23,7 @@ import org.bukkit.util.Vector
     ]
 )
 class ShadowAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
-    override fun skills() = listOf(object : PassiveSkill() {
+    override fun buildSkills() = listOf(object : PassiveSkill() {
         override fun register() {
             onEntityDamaged { e ->
                 if (e.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK) return@onEntityDamaged
