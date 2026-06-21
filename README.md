@@ -5,7 +5,7 @@
 
 유명한 추억의 능력들이 포함되어 있습니다. (미러링, 반 연금술, 이지스, 글레디에이터, 헐크 등)
 
-버그 제보: [Github Issues](https://github.com/KDY05/PhysicalFighters/issues) / Discord(@kdy05_)
+버그 제보: [Discord Server](https://discord.gg/G3uRK54KtT) / [Github Issues](https://github.com/KDY05/PhysicalFighters/issues)
 
 ## LICENSE
 

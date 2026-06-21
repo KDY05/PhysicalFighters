@@ -3,8 +3,8 @@
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.abilityAPI.rank.Rank
 import io.github.kdy05.abilityAPI.skill.SkillContext
+import io.github.kdy05.abilityAPI.AbilityAPI
 import io.github.kdy05.physicalFighters.ability.PFAbility
-import io.github.kdy05.physicalFighters.PFContext
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -30,11 +30,11 @@ class Clocking(owner: Player, context: SkillContext) : PFAbility(owner, context)
         }
 
         override fun onActivate() {
-            Bukkit.getOnlinePlayers().forEach { it.hidePlayer(PFContext.plugin, owner) }
+            Bukkit.getOnlinePlayers().forEach { it.hidePlayer(AbilityAPI.plugin, owner) }
         }
 
         override fun onDeactivate() {
-            Bukkit.getOnlinePlayers().forEach { it.showPlayer(PFContext.plugin, owner) }
+            Bukkit.getOnlinePlayers().forEach { it.showPlayer(AbilityAPI.plugin, owner) }
         }
     })
 }

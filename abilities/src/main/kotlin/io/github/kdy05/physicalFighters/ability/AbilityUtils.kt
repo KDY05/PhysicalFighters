@@ -1,6 +1,6 @@
 package io.github.kdy05.physicalFighters.ability
 
-import io.github.kdy05.physicalFighters.PFContext
+import io.github.kdy05.abilityAPI.AbilityAPI
 import io.github.kdy05.physicalFighters.util.AttributeUtils
 import org.bukkit.Bukkit
 import org.bukkit.FluidCollisionMode
@@ -73,7 +73,7 @@ object AbilityUtils {
                 if (cancelKnockback) {
                     val vel = entity.velocity.clone()
                     entity.damage(damage, caster)
-                    Bukkit.getScheduler().runTaskLater(PFContext.plugin, Runnable { entity.velocity = vel }, 1L)
+                    Bukkit.getScheduler().runTaskLater(AbilityAPI.plugin, Runnable { entity.velocity = vel }, 1L)
                 } else {
                     entity.damage(damage, caster)
                 }
@@ -122,7 +122,7 @@ object AbilityUtils {
                 }
             }
         }
-        task.runTaskTimer(PFContext.plugin, 0L, INTERVAL_TICKS)
+        task.runTaskTimer(AbilityAPI.plugin, 0L, INTERVAL_TICKS)
         return task
     }
 

@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
-    compileOnly("io.github.kdy05:ability-api:0.3.1")
+    compileOnly("io.github.kdy05:ability-api:0.3.2")
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib")
     implementation project(':compatibility:api')
 }

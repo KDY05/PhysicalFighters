@@ -3,7 +3,7 @@
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.abilityAPI.rank.Rank
 import io.github.kdy05.abilityAPI.skill.SkillContext
-import io.github.kdy05.physicalFighters.PFContext
+import io.github.kdy05.abilityAPI.AbilityAPI
 import io.github.kdy05.physicalFighters.ability.PFAbility
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory
 import org.bukkit.Bukkit
@@ -58,7 +58,7 @@ class Phoenix(owner: Player, context: SkillContext) : PFAbility(owner, context) 
                         "${ChatColor.GREEN}불사조가 부활하였습니다. 부활 횟수 : ${reviveCounter}회")
                 }
 
-                Bukkit.getScheduler().runTaskLater(PFContext.plugin, Runnable {
+                Bukkit.getScheduler().runTaskLater(AbilityAPI.plugin, Runnable {
                     if (player.isOnline) {
                         player.inventory.contents = inv
                     }

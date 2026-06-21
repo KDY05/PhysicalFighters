@@ -45,7 +45,6 @@ class PhysicalFighters : JavaPlugin() {
         configManager = ConfigManager(this)
         server.pluginManager.registerEvents(GameEventListener(this), this)
 
-        PFContext.plugin = this
         registerAbilities()
 
         gameManager = GameManager(this)

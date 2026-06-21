@@ -3,8 +3,8 @@
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.abilityAPI.rank.Rank
 import io.github.kdy05.abilityAPI.skill.SkillContext
+import io.github.kdy05.abilityAPI.AbilityAPI
 import io.github.kdy05.physicalFighters.ability.PFAbility
-import io.github.kdy05.physicalFighters.PFContext
 import io.github.kdy05.physicalFighters.ability.AbilityUtils
 import io.github.kdy05.physicalFighters.util.SoundUtils
 import org.bukkit.Bukkit
@@ -71,7 +71,7 @@ class Akainu(owner: Player, context: SkillContext) : PFAbility(owner, context) {
             }
             AbilityUtils.createBox(center.clone().add(0.0, -LAVA_DEPTH.toDouble(), 0.0), Material.LAVA, INNER_RADIUS, LAVA_DEPTH)
 
-            Bukkit.getScheduler().runTaskLater(PFContext.plugin, Runnable {
+            Bukkit.getScheduler().runTaskLater(AbilityAPI.plugin, Runnable {
                 for ((loc, mat) in originalBlocks) {
                     loc.world?.getBlockAt(loc)?.type = mat
                 }

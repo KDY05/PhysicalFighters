@@ -3,8 +3,8 @@
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.abilityAPI.rank.Rank
 import io.github.kdy05.abilityAPI.skill.SkillContext
+import io.github.kdy05.abilityAPI.AbilityAPI
 import io.github.kdy05.physicalFighters.ability.PFAbility
-import io.github.kdy05.physicalFighters.PFContext
 import io.github.kdy05.physicalFighters.ability.AbilityUtils
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory
 import org.bukkit.Bukkit
@@ -50,7 +50,7 @@ class Aokizi(owner: Player, context: SkillContext) : PFAbility(owner, context) {
                 if (block.type != Material.ICE) {
                     val original = block.type
                     val loc = block.location.clone()
-                    Bukkit.getScheduler().runTaskLater(PFContext.plugin, Runnable {
+                    Bukkit.getScheduler().runTaskLater(AbilityAPI.plugin, Runnable {
                         loc.world?.getBlockAt(loc)?.type = original
                     }, 15L)
                 }

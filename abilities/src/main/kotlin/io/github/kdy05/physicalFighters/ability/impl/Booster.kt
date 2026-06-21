@@ -3,8 +3,8 @@ package io.github.kdy05.physicalFighters.ability.impl
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.abilityAPI.rank.Rank
 import io.github.kdy05.abilityAPI.skill.SkillContext
+import io.github.kdy05.abilityAPI.AbilityAPI
 import io.github.kdy05.physicalFighters.ability.PFAbility
-import io.github.kdy05.physicalFighters.PFContext
 import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -24,7 +24,7 @@ class Booster(owner: Player, context: SkillContext) : PFAbility(owner, context) 
             onEntityDamage { e ->
                 val entity = e.entity as? LivingEntity ?: return@onEntityDamage
                 e.damage = 2.0 + Math.random() * 3.0
-                Bukkit.getScheduler().runTaskLater(PFContext.plugin, Runnable {
+                Bukkit.getScheduler().runTaskLater(AbilityAPI.plugin, Runnable {
                     entity.noDamageTicks = 6
                 }, 1L)
             }
@@ -33,7 +33,7 @@ class Booster(owner: Player, context: SkillContext) : PFAbility(owner, context) 
                     e.cause != EntityDamageEvent.DamageCause.PROJECTILE) return@onEntityDamaged
                 if (Math.random() > 0.60) return@onEntityDamaged
                 val velocity = owner.velocity.clone()
-                Bukkit.getScheduler().runTaskLater(PFContext.plugin, Runnable {
+                Bukkit.getScheduler().runTaskLater(AbilityAPI.plugin, Runnable {
                     owner.velocity = velocity
                 }, 1L)
             }
