@@ -26,6 +26,10 @@ class Aokizi(owner: Player, context: SkillContext) : PFAbility(owner, context) {
     private val activeSkill = object : ActiveSkill() {
         override val cooldownTicks = 20L
 
+        override fun onCooldownRunning(remainingSeconds: Int) {}
+        override fun onPostActivate() {}
+        override fun onCooldownEnd() {}
+
         override fun register() {
             onLeftClick {
                 if (owner.inventory.itemInMainHand.type != Material.IRON_INGOT) return@onLeftClick

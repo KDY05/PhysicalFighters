@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack
         "(철괴 좌클릭) 금괴 3개를 다이아몬드 1개로 변환합니다.",
         "(금괴 우클릭) 금괴를 소모하여 자신의 체력을 회복합니다.",
         "이때 체력이 최대 채력의 절반 이상이라면 체력을 전부 회복하며,",
-        "절반 이하라면 최대 체력의 절반까지 회복합니다."
+        "절반 미만이라면 최대 체력의 절반까지 회복합니다."
     ]
 )
 class ReverseAlchemy(owner: Player, context: SkillContext) : PFAbility(owner, context) {

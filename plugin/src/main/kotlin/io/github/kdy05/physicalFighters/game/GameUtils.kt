@@ -3,6 +3,9 @@ package io.github.kdy05.physicalFighters.game
 import io.github.kdy05.abilityAPI.AbilityAPI
 import io.github.kdy05.abilityAPI.ability.Ability
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
+import io.github.kdy05.abilityAPI.skill.ActiveContinueSkill
+import io.github.kdy05.abilityAPI.skill.CooldownSkillBase
+import io.github.kdy05.abilityAPI.skill.SkillContext
 import io.github.kdy05.physicalFighters.PhysicalFighters
 import io.github.kdy05.physicalFighters.util.toDisplayString
 import org.bukkit.BanList
@@ -11,6 +14,8 @@ import org.bukkit.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.event.Event
+import kotlin.reflect.KClass
 
 object GameUtils {
 
@@ -39,8 +44,13 @@ object GameUtils {
     @JvmStatic
     fun showInfo(player: Player, pendingType: Class<out Ability>? = null) {
         val abilityClass: Class<out Ability>
+        val abilityInstance: Ability?
         if (pendingType != null) {
             abilityClass = pendingType
+            abilityInstance = runCatching {
+                abilityClass.getDeclaredConstructor(Player::class.java, SkillContext::class.java)
+                    .newInstance(player, StubSkillContext)
+            }.getOrNull()
         } else {
             val ability = AbilityAPI.service.getPrimaryAbility(player)
                 ?: AbilityAPI.service.getAbilities(player).firstOrNull()
@@ -49,6 +59,7 @@ object GameUtils {
                 return
             }
             abilityClass = ability.javaClass
+            abilityInstance = ability
         }
 
         val meta = abilityClass.getAnnotation(AbilityMeta::class.java)
@@ -63,8 +74,26 @@ object GameUtils {
             } else {
                 add("${ChatColor.AQUA}${abilityClass.simpleName}")
             }
+            if (abilityInstance != null) {
+                val skills = abilityInstance.skills()
+                val cooldownSkill = skills.filterIsInstance<CooldownSkillBase>().firstOrNull()
+                val continueSkill = skills.filterIsInstance<ActiveContinueSkill>().firstOrNull()
+                val cooldown = if (cooldownSkill != null) "${cooldownSkill.cooldownTicks / 20}초" else "없음"
+                val duration = if (continueSkill != null) "${continueSkill.durationTicks / 20}초" else "없음"
+                add("${ChatColor.RED}쿨타임 : ${ChatColor.WHITE}$cooldown / ${ChatColor.RED}지속시간 : ${ChatColor.WHITE}$duration")
+            }
             add("${ChatColor.GREEN}---------------")
         }.forEach { player.sendMessage(it) }
+    }
+
+    private object StubSkillContext : SkillContext {
+        override fun <T : Event> subscribe(eventClass: KClass<T>, handler: (T) -> Unit): Any = Unit
+        override fun unsubscribe(token: Any) {}
+        override fun scheduleOnce(delayTicks: Long, task: () -> Unit): Any = Unit
+        override fun scheduleRepeat(periodTicks: Long, task: () -> Unit): Any = Unit
+        override fun cancelSchedule(token: Any) {}
+        override fun isSilenced(player: Player): Boolean = false
+        override fun <T : Event> callEvent(event: T): T = event
     }
 
     /**

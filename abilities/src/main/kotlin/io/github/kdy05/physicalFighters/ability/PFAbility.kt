@@ -32,6 +32,10 @@ abstract class PFAbility(owner: Player, context: SkillContext) : Ability(owner, 
         override fun onCooldownEnd() {
             owner.sendMessage("${ChatColor.AQUA}다시 능력을 사용할 수 있습니다.")
         }
+
+        override fun onPostActivate() {
+            owner.sendMessage("${ChatColor.LIGHT_PURPLE}능력을 사용했습니다.")
+        }
     }
 
     abstract inner class ActiveContinueSkill : APIActiveContinueSkill(owner, context) {
@@ -49,6 +53,10 @@ abstract class PFAbility(owner: Player, context: SkillContext) : Ability(owner, 
 
         override fun onCooldownEnd() {
             owner.sendMessage("${ChatColor.AQUA}다시 능력을 사용할 수 있습니다.")
+        }
+
+        override fun onPostActivate() {
+            owner.sendMessage("${ChatColor.LIGHT_PURPLE}능력을 사용했습니다.")
         }
 
         override fun onActiveAttempt(remainingSeconds: Int) {
