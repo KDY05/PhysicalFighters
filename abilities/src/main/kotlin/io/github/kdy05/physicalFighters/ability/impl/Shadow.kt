@@ -8,18 +8,18 @@ import io.github.kdy05.physicalFighters.ability.AbilityUtils
 import io.github.kdy05.physicalFighters.util.PotionEffectFactory
 import io.github.kdy05.physicalFighters.util.SoundUtils
 import org.bukkit.ChatColor
-import org.bukkit.Location
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.util.Vector
+import kotlin.math.cos
 
 @AbilityMeta(
     name = "그림자",
     rank = Rank.A,
     guide = [
         "회피 - 피격 시 5% 확률로 회피하며, 체력 4를 회복합니다.",
-        "기습 - 뒤에서 공격할 시 대미지를 2배로 입히고, 상대에게 일시적으로 실명을 부여합니다."
+        "기습 - 뒤에서 공격할 시 대미지를 1.5배로 입히고, 상대에게 일시적으로 실명을 부여합니다."
     ]
 )
 class Shadow(owner: Player, context: SkillContext) : PFAbility(owner, context) {
@@ -36,7 +36,7 @@ class Shadow(owner: Player, context: SkillContext) : PFAbility(owner, context) {
             onEntityDamage { e ->
                 val target = e.entity as? LivingEntity ?: return@onEntityDamage
                 if (!isBackstab(owner, target)) return@onEntityDamage
-                e.damage = e.damage * 2.0
+                e.damage *= 1.5
                 target.addPotionEffect(PotionEffectFactory.createBlindness(60, 0))
                 SoundUtils.playSuccessSound(owner)
                 owner.sendMessage("${ChatColor.GREEN}기습 성공!")
@@ -51,6 +51,6 @@ class Shadow(owner: Player, context: SkillContext) : PFAbility(owner, context) {
             0.0,
             attacker.location.z - target.location.z
         ).normalize()
-        return targetDir.dot(attackVec) <= -Math.cos(Math.toRadians(30.0))
+        return targetDir.dot(attackVec) <= -cos(Math.toRadians(45.0))
     }
 }

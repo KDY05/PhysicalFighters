@@ -12,8 +12,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerMoveEvent
-import java.util.function.Consumer
-import java.util.function.Predicate
+import kotlin.math.abs
 
 @AbilityMeta(
     name = "포세이돈",
@@ -53,8 +52,8 @@ class Poseidon(owner: Player, context: SkillContext) : PFAbility(owner, context)
                 owner.addPotionEffect(PotionEffectFactory.createResistance(60, 0))
                 AbilityUtils.splashTask(
                     owner, owner.location, SLOW_RANGE,
-                    Predicate { it.location.block.type == Material.WATER },
-                    Consumer { it.addPotionEffect(PotionEffectFactory.createSlowness(60, 0)) }
+                    { it.location.block.type == Material.WATER },
+                    { it.addPotionEffect(PotionEffectFactory.createSlowness(60, 0)) }
                 )
             }
         }
@@ -74,9 +73,9 @@ class Poseidon(owner: Player, context: SkillContext) : PFAbility(owner, context)
             for (player in Bukkit.getOnlinePlayers()) {
                 if (player == owner) continue
                 val loc = player.location
-                val dx = Math.abs(loc.x - center.x)
+                val dx = abs(loc.x - center.x)
                 val dy = loc.y - center.y
-                val dz = Math.abs(loc.z - center.z)
+                val dz = abs(loc.z - center.z)
                 if (dx <= GLASS_RANGE && dy >= 0 && dy <= 2 * GLASS_RANGE + 1 && dz <= GLASS_RANGE) {
                     val teleportLoc = center.clone().add(0.0, TELEPORT_HEIGHT.toDouble(), 0.0)
                     teleportLoc.yaw = loc.yaw

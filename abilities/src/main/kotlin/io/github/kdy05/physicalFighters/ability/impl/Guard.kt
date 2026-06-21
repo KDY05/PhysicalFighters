@@ -12,6 +12,7 @@ import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import kotlin.math.abs
 
 @AbilityMeta(
     name = "목둔",
@@ -59,9 +60,9 @@ class Guard(owner: Player, context: SkillContext) : PFAbility(owner, context) {
             for (player in Bukkit.getOnlinePlayers()) {
                 if (player == owner) continue
                 val loc = player.location
-                val dx = Math.abs(loc.x - center.x)
+                val dx = abs(loc.x - center.x)
                 val dy = loc.y - center.y
-                val dz = Math.abs(loc.z - center.z)
+                val dz = abs(loc.z - center.z)
                 if (dx <= BOX_RADIUS && dy >= 0 && dy <= BOX_HEIGHT && dz <= BOX_RADIUS) {
                     val teleportLoc = center.clone().add(0.0, TELEPORT_HEIGHT.toDouble(), 0.0)
                     teleportLoc.yaw = loc.yaw

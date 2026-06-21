@@ -94,7 +94,7 @@ class Gladiator(owner: Player, context: SkillContext) : PFAbility(owner, context
             block.type = Material.WALL_TORCH
             val data = block.blockData as? Directional ?: return
             data.facing = facing
-            block.setBlockData(data)
+            block.blockData = data
         }
     })
 }

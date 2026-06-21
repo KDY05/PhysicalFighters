@@ -32,7 +32,7 @@ class Phoenix(owner: Player, context: SkillContext) : PFAbility(owner, context) 
     override fun buildSkills() = listOf(object : PassiveSkill() {
         override fun register() {
             on(PlayerDeathEvent::class) { e ->
-                val killed = e.entity as? Player ?: return@on
+                val killed = e.entity
                 if (killed.uniqueId != owner.uniqueId) return@on
 
                 if (abilityUse) {
@@ -60,18 +60,18 @@ class Phoenix(owner: Player, context: SkillContext) : PFAbility(owner, context) 
 
                 Bukkit.getScheduler().runTaskLater(PFContext.plugin, Runnable {
                     if (player.isOnline) {
-                        player.inventory.setContents(inv)
+                        player.inventory.contents = inv
                     }
                     invsave.remove(uuid)
-                }, 1L)
 
-                player.addPotionEffect(PotionEffectFactory.createHaste(600, 0))
-                player.addPotionEffect(PotionEffectFactory.createFireResistance(600, 0))
-                player.addPotionEffect(PotionEffectFactory.createJumpBoost(600, 0))
-                player.addPotionEffect(PotionEffectFactory.createSpeed(600, 0))
-                player.addPotionEffect(PotionEffectFactory.createWaterBreathing(600, 0))
-                player.addPotionEffect(PotionEffectFactory.createRegeneration(600, 0))
-                player.addPotionEffect(PotionEffectFactory.createResistance(600, 0))
+                    player.addPotionEffect(PotionEffectFactory.createHaste(600, 0))
+                    player.addPotionEffect(PotionEffectFactory.createFireResistance(600, 0))
+                    player.addPotionEffect(PotionEffectFactory.createJumpBoost(600, 0))
+                    player.addPotionEffect(PotionEffectFactory.createSpeed(600, 0))
+                    player.addPotionEffect(PotionEffectFactory.createWaterBreathing(600, 0))
+                    player.addPotionEffect(PotionEffectFactory.createRegeneration(600, 0))
+                    player.addPotionEffect(PotionEffectFactory.createResistance(600, 0))
+                }, 1L)
             }
         }
     })
