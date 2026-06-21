@@ -1,4 +1,4 @@
-package io.github.kdy05.physicalFighters.ability.impl
+﻿package io.github.kdy05.physicalFighters.ability.impl
 
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.abilityAPI.rank.Rank
@@ -15,11 +15,11 @@ import kotlin.math.sin
     name = "쇼크웨이브",
     rank = Rank.A,
     guide = [
-        "[철괴 좌클릭] 철괴를 소모하여 보고있는 방향으로 막강한 직선 충격포를 쏩니다.",
+        "(철괴 좌클릭) 철괴를 소모하여 보고있는 방향으로 막강한 직선 충격포를 쏩니다.",
         "충격포는 물과 벽 건너편까지 통과할 수 있습니다."
     ]
 )
-class ShockWaveAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
+class ShockWave(owner: Player, context: SkillContext) : PFAbility(owner, context) {
     override fun buildSkills() = listOf(object : ActiveSkill() {
         override val cooldownTicks = 900L
 
@@ -47,6 +47,5 @@ class ShockWaveAbility(owner: Player, context: SkillContext) : PFAbility(owner, 
                 owner.world.createExplosion(l2, 5.0f)
             }
         }
-
     })
 }

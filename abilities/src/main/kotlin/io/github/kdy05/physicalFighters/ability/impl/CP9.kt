@@ -1,4 +1,4 @@
-package io.github.kdy05.physicalFighters.ability.impl
+﻿package io.github.kdy05.physicalFighters.ability.impl
 
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.abilityAPI.rank.Rank
@@ -16,12 +16,12 @@ import org.bukkit.event.entity.EntityDamageEvent
     name = "CP9",
     rank = Rank.S,
     guide = [
-        "[철괴 공격] 상대에게 고정 대미지를 줍니다.",
-        "[철괴 우클릭] 바라보는 방향으로 빠르게 도약합니다.",
-        "[패시브] 낙하 대미지를 무시합니다."
+        "(철괴 공격) 상대에게 고정 대미지를 줍니다.",
+        "(철괴 우클릭) 바라보는 방향으로 빠르게 도약합니다.",
+        "(패시브) 낙하 대미지를 무시합니다."
     ]
 )
-class CP9Ability(owner: Player, context: SkillContext) : PFAbility(owner, context) {
+class CP9(owner: Player, context: SkillContext) : PFAbility(owner, context) {
     private val activeSkill = object : ActiveSkill() {
         override val cooldownTicks = 400L
         private var pendingAction: (() -> Unit)? = null
@@ -52,7 +52,6 @@ class CP9Ability(owner: Player, context: SkillContext) : PFAbility(owner, contex
             pendingAction?.invoke()
             pendingAction = null
         }
-
     }
 
     private val passiveSkill = object : PassiveSkill() {

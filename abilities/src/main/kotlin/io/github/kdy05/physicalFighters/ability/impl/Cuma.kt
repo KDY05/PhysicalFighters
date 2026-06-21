@@ -13,7 +13,7 @@ import org.bukkit.entity.Player
     rank = Rank.S,
     guide = ["피격 시 상대를 넉백시키며, 일정 확률로 받은 공격을 상대에게 되돌려줍니다."]
 )
-class CumaAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
+class Cuma(owner: Player, context: SkillContext) : PFAbility(owner, context) {
     override fun buildSkills() = listOf(object : PassiveSkill() {
         override fun register() {
             onEntityDamaged { e ->

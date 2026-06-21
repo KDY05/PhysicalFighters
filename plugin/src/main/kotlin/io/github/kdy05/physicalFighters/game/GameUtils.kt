@@ -57,7 +57,9 @@ object GameUtils {
             add("${ChatColor.GOLD}- 능력 정보 -")
             if (meta != null) {
                 add("${ChatColor.AQUA}${meta.name} ${ChatColor.WHITE}| ${meta.rank.toDisplayString()}")
-                addAll(meta.guide.toList())
+                addAll(meta.guide.map { line ->
+                    line.replace(Regex("\\(([^)]+)\\)"), "${ChatColor.GRAY}($1)${ChatColor.WHITE}")
+                })
             } else {
                 add("${ChatColor.AQUA}${abilityClass.simpleName}")
             }

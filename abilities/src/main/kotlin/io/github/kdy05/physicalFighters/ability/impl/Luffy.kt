@@ -1,4 +1,4 @@
-package io.github.kdy05.physicalFighters.ability.impl
+﻿package io.github.kdy05.physicalFighters.ability.impl
 
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.abilityAPI.rank.Rank
@@ -16,11 +16,11 @@ import org.bukkit.entity.Player
     name = "루피",
     rank = Rank.S,
     guide = [
-        "[철괴 좌클릭] 사거리가 긴 주먹질을 합니다.",
-        "[금괴 좌클릭] 체력을 5 소모하여 30초간 여러 버프를 얻습니다."
+        "(철괴 좌클릭) 사거리가 긴 주먹질을 합니다.",
+        "(금괴 좌클릭) 체력을 5 소모하여 30초간 여러 버프를 얻습니다."
     ]
 )
-class LuffyAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
+class Luffy(owner: Player, context: SkillContext) : PFAbility(owner, context) {
     override fun buildSkills() = listOf(object : PassiveSkill() {
         override fun register() {
             onLeftClick {

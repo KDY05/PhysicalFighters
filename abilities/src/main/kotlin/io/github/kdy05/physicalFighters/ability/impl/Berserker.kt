@@ -15,7 +15,7 @@ import org.bukkit.entity.Player
         "6칸 ↓ - 1.5배, 4칸 ↓ - 2배, 2칸 ↓ - 3배, 반 칸 ↓ - 4배"
     ]
 )
-class BerserkerAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
+class Berserker(owner: Player, context: SkillContext) : PFAbility(owner, context) {
     override fun buildSkills() = listOf(object : PassiveSkill() {
         override fun register() {
             onEntityDamage { e ->

@@ -22,7 +22,7 @@ import org.bukkit.util.Vector
         "기습 - 뒤에서 공격할 시 대미지를 2배로 입히고, 상대에게 일시적으로 실명을 부여합니다."
     ]
 )
-class ShadowAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
+class Shadow(owner: Player, context: SkillContext) : PFAbility(owner, context) {
     override fun buildSkills() = listOf(object : PassiveSkill() {
         override fun register() {
             onEntityDamaged { e ->

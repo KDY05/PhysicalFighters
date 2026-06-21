@@ -1,4 +1,4 @@
-package io.github.kdy05.physicalFighters.ability.impl
+﻿package io.github.kdy05.physicalFighters.ability.impl
 
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.abilityAPI.rank.Rank
@@ -18,11 +18,11 @@ import kotlin.math.sin
     name = "아오키지",
     rank = Rank.S,
     guide = [
-        "[철괴 좌클릭] 자신이 보고있는 방향으로 얼음을 날립니다.",
-        "[패시브] 자신이 공격한 적을 30% 확률로 3초간 느리게 만듭니다."
+        "(철괴 좌클릭) 자신이 보고있는 방향으로 얼음을 날립니다.",
+        "(패시브) 자신이 공격한 적을 30% 확률로 3초간 느리게 만듭니다."
     ]
 )
-class AokiziAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
+class Aokizi(owner: Player, context: SkillContext) : PFAbility(owner, context) {
     private val activeSkill = object : ActiveSkill() {
         override val cooldownTicks = 20L
 
@@ -54,7 +54,6 @@ class AokiziAbility(owner: Player, context: SkillContext) : PFAbility(owner, con
                 AbilityUtils.splashDamage(owner, block.location, 2.5, 8.0, true)
             }
         }
-
     }
 
     private val passiveSkill = object : PassiveSkill() {

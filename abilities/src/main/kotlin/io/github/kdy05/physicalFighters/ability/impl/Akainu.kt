@@ -1,4 +1,4 @@
-package io.github.kdy05.physicalFighters.ability.impl
+﻿package io.github.kdy05.physicalFighters.ability.impl
 
 import io.github.kdy05.abilityAPI.ability.AbilityMeta
 import io.github.kdy05.abilityAPI.rank.Rank
@@ -18,12 +18,12 @@ import org.bukkit.event.entity.EntityDamageEvent
     name = "아카이누",
     rank = Rank.SS,
     guide = [
-        "[철괴 좌클릭] 바라보는 곳의 땅을 용암으로 바꿉니다.",
+        "(철괴 좌클릭) 바라보는 곳의 땅을 용암으로 바꿉니다.",
         "4초 뒤에 용암이 다시 굳으며 적을 땅속에 가둡니다.",
-        "[패시브] 화염 및 용암 대미지를 무시합니다."
+        "(패시브) 화염 및 용암 대미지를 무시합니다."
     ]
 )
-class AkainuAbility(owner: Player, context: SkillContext) : PFAbility(owner, context) {
+class Akainu(owner: Player, context: SkillContext) : PFAbility(owner, context) {
     companion object {
         private const val OUTER_RADIUS = 3
         private const val INNER_RADIUS = 2
