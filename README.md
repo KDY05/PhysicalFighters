@@ -3,7 +3,7 @@
 [VisualAbility](https://cafe.naver.com/craftproducer/5066)의 가장 유명한 포크인
 [PhysicalFighters](https://github.com/outstanding1301/PhysicalFighters)의 리부트 프로젝트입니다.
 
-유명한 추억의 능력들이 포함되어 있습니다. (미러링, 반 연금술, 이지스, 글레디에이터, 조로, 카이지, 헐크 등)
+유명한 추억의 능력들이 포함되어 있습니다. (미러링, 반 연금술, 이지스, 글레디에이터, 헐크 등)
 
 버그 제보: [Github Issues](https://github.com/KDY05/PhysicalFighters/issues) / Discord(@kdy05_)
 
@@ -26,10 +26,17 @@
 
 본 프로젝트는 VisualAbility의 라이선스를 준수하며, 염료님의 동의하에 제작되었습니다.
 
+## Dependencies
+
+2.0 이후의 버전은 AbilityAPI 플러그인에 의존합니다. 
+[본 디스코드 서버](https://discord.gg/G3uRK54KtT)에서 구매 가능합니다.
+
+**1.2.1 이전 버전은 의존성 플러그인 없이 단독으로 사용 가능합니다.**
+
 ## Download
 
-- [최신 릴리즈](https://github.com/KDY05/PhysicalFighters/releases/latest): Spigot/Paper, 1.16.5-1.21.11
-- [최신 스냅샷](https://github.com/KDY05/PhysicalFighters/releases/tag/snapshot): Spigot/Paper, 1.16.5-1.21.11
+- [최신 릴리즈](https://github.com/KDY05/PhysicalFighters/releases/latest): Spigot/Paper, 1.16.5 - 최신 버전
+- [최신 스냅샷](https://github.com/KDY05/PhysicalFighters/releases/tag/snapshot): Spigot/Paper, 1.16.5 - 최신 버전
 
 ## Usage
 
