@@ -15,3 +15,7 @@ kotlin {
         freeCompilerArgs.add('-Xjvm-default=all')
     }
 }
+
+jar {
+    archiveFileName = "PFAbilityPack-${version}.jar"
+}
